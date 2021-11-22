@@ -31,30 +31,30 @@ const MAGNOLIA_LIGHT = "FFFBFF";
 
 const ERROR = "CE2525";
 
-int _getColorFromHex(String hexColor) {
+Color getColorFromHex(String hexColor) {
   hexColor = hexColor.toUpperCase().replaceAll("#", "");
   if (hexColor.length == 6) {
     hexColor = "FF" + hexColor;
   }
-  return int.parse(hexColor, radix: 16);
+  return Color(int.parse(hexColor, radix: 16));
 }
 
 class CustomColorScheme {
   static ColorScheme get lightColorScheme {
     return ColorScheme(
       //primary: Color(0XC5D1EB),
-      primary: Color(_getColorFromHex(CG_BLUE_HEX)),
-      primaryVariant: Color(_getColorFromHex(CG_BLUE_HEX_DARK)),
-      secondary: Color(_getColorFromHex(YELLOW_GREEN)),
-      secondaryVariant: Color(_getColorFromHex(YELLOW_GREEN_DARK)),
-      surface: Color(_getColorFromHex(MAGNOLIA_LIGHT)),
-      background: Color(_getColorFromHex(PLATINUM)),
-      error: Color(_getColorFromHex(ERROR)),
-      onPrimary: Color(_getColorFromHex(MAGNOLIA_LIGHT)),
-      onSecondary: Color(_getColorFromHex(MAGNOLIA_LIGHT)),
-      onSurface: Color(_getColorFromHex(PLATINUM)),
-      onBackground: Color(_getColorFromHex(PLATINUM)),
-      onError: Color(_getColorFromHex(MAGNOLIA_LIGHT)),
+      primary: getColorFromHex(CG_BLUE_HEX),
+      primaryVariant: getColorFromHex(CG_BLUE_HEX_DARK),
+      secondary: getColorFromHex(YELLOW_GREEN),
+      secondaryVariant: getColorFromHex(YELLOW_GREEN_DARK),
+      surface: getColorFromHex(MAGNOLIA_LIGHT),
+      background: getColorFromHex(PLATINUM),
+      error: getColorFromHex(ERROR),
+      onPrimary: getColorFromHex(MAGNOLIA_LIGHT),
+      onSecondary: getColorFromHex(MAGNOLIA_LIGHT),
+      onSurface: getColorFromHex(PLATINUM),
+      onBackground: getColorFromHex(PLATINUM),
+      onError: getColorFromHex(MAGNOLIA_LIGHT),
       brightness: Brightness.light,
     );
   }
