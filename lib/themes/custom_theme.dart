@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import './colors.dart';
+import 'custom_colors.dart';
 
 class CustomTheme {
   static ThemeData get lightTheme {
     return ThemeData(
         textTheme: GoogleFonts.robotoTextTheme(),
         colorScheme: CustomColorScheme.lightColorScheme,
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: getColorFromHex(PLATINUM),
         //fontFamily: 'Montserrat',
+        primaryColor: getColorFromHex(CG_BLUE_HEX),
+        unselectedWidgetColor: getColorFromHex(SILVER_CHALICE),
+        backgroundColor: getColorFromHex(MAGNOLIA),
         buttonTheme: ButtonThemeData(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),

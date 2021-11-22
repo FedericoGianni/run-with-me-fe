@@ -26,10 +26,15 @@ const PLATINUM_DARK = "B0B0B0";
 const PLATINUM = "EBEBEB";
 const PLATINUM_LIGHT = "F0F0F0";
 
-const MAGNOLIA = "FFFAFF";
-const MAGNOLIA_LIGHT = "FFFBFF";
+const MAGNOLIA = "FDFDFD";
+const MAGNOLIA_LIGHT = "FCFCFC";
 
 const ERROR = "CE2525";
+
+final primaryColor = getColorFromHex(CG_BLUE_HEX);
+final secondaryColor = getColorFromHex(YELLOW_GREEN);
+final primaryTextColor = getColorFromHex(JET_BLACK);
+final secondaryTextColor = getColorFromHex(SILVER_CHALICE);
 
 Color getColorFromHex(String hexColor) {
   hexColor = hexColor.toUpperCase().replaceAll("#", "");
