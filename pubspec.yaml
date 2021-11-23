@@ -36,6 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^2.1.0
   intl: ^0.17.0
+  flutter_launcher_icons: ^0.9.1
+
+flutter_icons:
+  image_path: "assets/icons/icon.png"
+  android: true
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +64,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+
+  assets:
+    - "assets/icons/icon.png"
+    - "assets/icons/logo_white.png"
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -89,3 +98,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+

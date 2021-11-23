@@ -5,6 +5,9 @@ import 'widgets/event_card_text_only.dart';
 import 'dummy_data/dummy_events.dart';
 import 'screens/events_screen.dart';
 import 'screens/tabs_screen.dart';
+import 'screens/add_event_screen.dart';
+import 'screens/user_screen.dart';
+import 'screens/booked_events_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +26,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (ctx) => TabsScreen(),
         EventsScreen.routeName: (ctx) => EventsScreen(),
+        AddEventScreen.routeName: (ctx) => AddEventScreen(),
+        BookedEventsScreen.routeName: (ctx) => BookedEventsScreen(),
+        UserScreen.routeName: (ctx) => UserScreen(),
       },
       onGenerateRoute: (settings) {},
       // onUnknownRoute: (settings) {

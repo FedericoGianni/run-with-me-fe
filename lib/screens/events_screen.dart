@@ -9,17 +9,19 @@ class EventsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView(
       padding: const EdgeInsets.all(25),
-      children: dummy
-          .asMap()
-          .entries
-          .map(
-            (eventData) => EventItem(
-                eventData.value, eventData.key, dummy.length.toDouble()),
-          )
-          .toList(),
+      // children: dummy
+      //     .map(
+      //       (eventData) => EventItem(eventData, 1, dummy.length.toDouble()),
+      //     )
+      //     .toList(),
+      children: [
+        ...List.generate(dummy.length, (index) {
+          return EventItem(dummy[index], index, dummy.length.toDouble());
+        })
+      ],
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200,
-        childAspectRatio: 3 / 2,
+        childAspectRatio: 3 / 2.5,
         crossAxisSpacing: 20,
         mainAxisSpacing: 20,
       ),
