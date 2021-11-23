@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
 import '../themes/custom_colors.dart';
 import '../models/event.dart';
+import 'rating.dart';
 
 // ignore: camel_case_types
 class EventItem extends StatelessWidget {
@@ -13,8 +14,10 @@ class EventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorGradient = Color.lerp(
-        primaryColor, secondaryColor, (index / 2).toDouble() / totAmount);
+    Color colorGradient = (Color.lerp(
+        primaryColor, secondaryColor, (index / 2).toDouble() / totAmount))!;
+    String name = event.name;
+    name = name.replaceRange(5, name.length, '...');
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -31,7 +34,7 @@ class EventItem extends StatelessWidget {
           ),
           visualDensity: const VisualDensity(horizontal: -4, vertical: -1),
           title: Text(
-            event.name,
+            name,
             style: TextStyle(
                 color: primaryTextColor,
                 fontSize: 18,
@@ -41,18 +44,19 @@ class EventItem extends StatelessWidget {
         ListTile(
           leading: SizedBox(
             height: double.infinity,
+            width: 75,
             child: Column(
               children: [
                 Text(
                   event.date,
                   style: TextStyle(color: secondaryTextColor),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  // event.difficultyLevel.toString(),
-                  '* * * * *',
-                  style: TextStyle(color: secondaryTextColor),
-                )
+                const SizedBox(height: 12),
+                Rating(
+                  value: event.difficultyLevel,
+                  color: colorGradient,
+                  size: 12,
+                ),
               ],
             ),
           ),

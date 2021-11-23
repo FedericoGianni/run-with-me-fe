@@ -5,7 +5,7 @@ class Event {
   final String date;
   final double startingPintLong;
   final double startingPintLat;
-  final int difficultyLevel;
+  final double difficultyLevel;
   final double averagePace;
   final int averageDuration;
   final int averageLength;
