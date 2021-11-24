@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'themes/custom_theme.dart';
 import 'widgets/event_card_text_only.dart';
 import 'dummy_data/dummy_events.dart';
-import 'screens/events_screen.dart';
+import 'screens/events_result_screen.dart';
 import 'screens/tabs_screen.dart';
 import 'screens/add_event_screen.dart';
 import 'screens/user_screen.dart';
 import 'screens/booked_events_screen.dart';
+import 'screens/home_screen.dart';
+import '../widgets/slide.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
         AddEventScreen.routeName: (ctx) => AddEventScreen(),
         BookedEventsScreen.routeName: (ctx) => BookedEventsScreen(),
         UserScreen.routeName: (ctx) => UserScreen(),
+        HomeScreen.routeName: (ctx) => HomeScreen(),
       },
       onGenerateRoute: (settings) {},
       // onUnknownRoute: (settings) {

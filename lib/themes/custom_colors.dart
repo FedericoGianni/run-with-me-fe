@@ -35,6 +35,8 @@ final primaryColor = getColorFromHex(CG_BLUE_HEX);
 final secondaryColor = getColorFromHex(YELLOW_GREEN);
 final primaryTextColor = getColorFromHex(JET_BLACK);
 final secondaryTextColor = getColorFromHex(SILVER_CHALICE);
+final onPrimary = getColorFromHex(MAGNOLIA);
+final background = getColorFromHex(PLATINUM);
 
 Color getColorFromHex(String hexColor) {
   hexColor = hexColor.toUpperCase().replaceAll("#", "");
