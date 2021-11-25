@@ -7,7 +7,7 @@ import '../widgets/gradientAppbar.dart';
 import '../themes/custom_colors.dart';
 
 class BookedEventsScreen extends StatefulWidget {
-  static const routeName = '/events';
+  static const routeName = '/event';
 
   const BookedEventsScreen({Key? key}) : super(key: key);
 
@@ -69,7 +69,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
           // Display a placeholder widget to visualize the shrinking size.
           pinned: true,
           snap: false,
-          elevation: 0,
+          elevation: 2,
           flexibleSpace: FlexibleSpaceBar(
             title: Row(
               mainAxisSize: MainAxisSize.max,
@@ -138,7 +138,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 List suggested =
-                    dummy.where((i) => i.difficultyLevel <= 3).toList();
+                    dummy.where((i) => i.difficultyLevel <= 5).toList();
                 return EventItem(
                   suggested[index],
                   index,
@@ -146,7 +146,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 );
               },
               childCount:
-                  dummy.where((i) => i.difficultyLevel <= 3).toList().length,
+                  dummy.where((i) => i.difficultyLevel <= 5).toList().length,
             ),
           ),
         ),

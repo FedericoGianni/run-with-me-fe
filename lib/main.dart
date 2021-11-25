@@ -8,6 +8,7 @@ import 'screens/tabs_screen.dart';
 import 'screens/add_event_screen.dart';
 import 'screens/user_screen.dart';
 import 'screens/booked_events_screen.dart';
+import 'screens/event_details_screen.dart';
 import 'screens/home_screen.dart';
 import '../widgets/slide.dart';
 
@@ -29,9 +30,10 @@ class MyApp extends StatelessWidget {
         '/': (ctx) => TabsScreen(),
         EventsScreen.routeName: (ctx) => EventsScreen(),
         AddEventScreen.routeName: (ctx) => AddEventScreen(),
-        BookedEventsScreen.routeName: (ctx) => BookedEventsScreen(),
+        BookedEventsScreen.routeName: (ctx) => const BookedEventsScreen(),
         UserScreen.routeName: (ctx) => UserScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen(),
+        EventDetailsScreen.routeName: (ctx) => const EventDetailsScreen(),
       },
       onGenerateRoute: (settings) {},
       // onUnknownRoute: (settings) {
