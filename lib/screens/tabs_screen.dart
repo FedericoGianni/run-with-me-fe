@@ -33,28 +33,27 @@ class _TabsScreenState extends State<TabsScreen> {
       {
         'title': 'Home',
         'page': HomeScreen(),
-        'icon': 'logo_white.png',
-        'appbar': DefaultAppbar(),
+        'appbar': const DefaultAppbar(),
       },
       {
         'title': 'Events',
         'page': EventsScreen(),
-        'appbar': SizedBox.shrink(),
+        'appbar': const SizedBox.shrink(),
       },
       {
         'title': 'My Events',
         'page': AddEventScreen(),
-        'appbar': DefaultAppbar(),
+        'appbar': const DefaultAppbar(),
       },
       {
-        'title': 'My Events',
-        'page': BookedEventsScreen(),
-        'appbar': DefaultAppbar(),
+        'title': 'Booked Events',
+        'page': const BookedEventsScreen(),
+        'appbar': const SizedBox.shrink(),
       },
       {
         'title': 'My Events',
         'page': UserScreen(),
-        'appbar': UserAppbar(),
+        'appbar': const UserAppbar(),
       },
     ];
     super.initState();
@@ -86,27 +85,27 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.home_outlined),
-            title: Text('Home'),
+            title: const Text('Home'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.search),
-            title: Text('Browse'),
+            title: const Text('Browse'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.add_box_outlined),
-            title: Text('New'),
+            icon: const Icon(Icons.add_box_outlined),
+            title: const Text('New'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.event_outlined),
-            title: Text('Events'),
+            title: const Text('Events'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.person_outline),
-            title: Text('User'),
+            icon: const Icon(Icons.person_outline),
+            title: const Text('User'),
           ),
         ],
       ),

@@ -39,24 +39,7 @@ class _EventsScreenState extends State<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return GridView.builder(
-    //   itemCount: dummy.length,
-    //   padding: const EdgeInsets.all(25),
-    //   itemBuilder: (BuildContext ctx, index) {
-    //     return EventItem(
-    //       dummy[index],
-    //       index,
-    //       dummy.length.toDouble(),
-    //     );
-    //   },
-    //   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-    //     maxCrossAxisExtent: 200,
-    //     childAspectRatio: 3 / 2.5,
-    //     crossAxisSpacing: 20,
-    //     mainAxisSpacing: 20,
-    //   ),
-    // );
-
+    var _newEventList = dummy.where((i) => i.difficultyLevel <= 3).toList();
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -103,7 +86,7 @@ class _EventsScreenState extends State<EventsScreen> {
                   ), // set rounded corner radius
                 ),
                 child: const TextField(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Search',
                     hintStyle: TextStyle(color: secondaryTextColor),
                     border: InputBorder.none,
@@ -145,7 +128,7 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                 ),
                 Text(
-                  dummy.length.toString() + " results",
+                  _newEventList.length.toString() + " results",
                   style:
                       const TextStyle(color: secondaryTextColor, fontSize: 10),
                 ),
@@ -178,12 +161,13 @@ class _EventsScreenState extends State<EventsScreen> {
           // Make the initial height of the SliverAppBar larger than normal.
         ),
         SliverPadding(
-          padding: EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+          padding:
+              const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
           sliver: SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   "Suggested",
                   style: TextStyle(
                       color: primaryTextColor,
@@ -219,16 +203,13 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                List suggested =
-                    dummy.where((i) => i.difficultyLevel <= 3).toList();
                 return EventItem(
-                  suggested[index],
+                  _newEventList[index],
                   index,
                   dummy.length.toDouble(),
                 );
               },
-              childCount:
-                  dummy.where((i) => i.difficultyLevel <= 3).toList().length,
+              childCount: _newEventList.length,
             ),
           ),
         ),
@@ -288,52 +269,3 @@ class _EventsScreenState extends State<EventsScreen> {
     );
   }
 }
-
-// class EventsAppbar extends StatelessWidget {
-//   const EventsAppbar({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GradientAppBar(
-//       180,
-//       [
-//         SizedBox(
-//           height: 10,
-//         ),
-//         Image.asset(
-//           "assets/icons/logo_white.png",
-//           width: MediaQuery.of(context).size.width / 3,
-//         ),
-//         SizedBox(
-//           height: MediaQuery.of(context).size.height / 30,
-//         ),
-//         Container(
-//           margin: EdgeInsets.only(
-//             left: MediaQuery.of(context).size.width / 16,
-//             right: MediaQuery.of(context).size.width / 6,
-//           ),
-//           height: 45,
-//           // padding: EdgeInsets.only(left: 5),
-//           decoration: BoxDecoration(
-//             color: onPrimary,
-//             // set border width
-//             borderRadius: const BorderRadius.all(
-//               Radius.circular(10.0),
-//             ), // set rounded corner radius
-//           ),
-//           child: TextField(
-//             decoration: InputDecoration(
-//               hintText: 'Search',
-//               hintStyle: TextStyle(color: secondaryTextColor),
-//               border: InputBorder.none,
-//               prefixIcon: Icon(
-//                 Icons.search,
-//                 color: secondaryTextColor,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
