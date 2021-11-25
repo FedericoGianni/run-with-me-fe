@@ -8,11 +8,11 @@ class CustomTheme {
     return ThemeData(
         textTheme: GoogleFonts.robotoTextTheme(),
         colorScheme: CustomColorScheme.lightColorScheme,
-        scaffoldBackgroundColor: getColorFromHex(PLATINUM),
+        scaffoldBackgroundColor: const Color(PLATINUM),
         //fontFamily: 'Montserrat',
-        primaryColor: getColorFromHex(CG_BLUE_HEX),
-        unselectedWidgetColor: getColorFromHex(SILVER_CHALICE),
-        backgroundColor: getColorFromHex(MAGNOLIA),
+        primaryColor: const Color(CG_BLUE_HEX),
+        unselectedWidgetColor: const Color(SILVER_CHALICE),
+        backgroundColor: const Color(MAGNOLIA),
         buttonTheme: ButtonThemeData(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),

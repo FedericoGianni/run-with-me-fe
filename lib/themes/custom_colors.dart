@@ -6,64 +6,64 @@ import 'package:flutter/material.dart';
 // const PERIWINKLE_CRAYOLA = "C5D1EB";
 // const PURPLE_HEX = "5603AD";
 
-const YELLOW_GREEN_DARK = "759B1C";
-const YELLOW_GREEN = "9CCF26";
-const YELLOW_GREEN_LIGHT = "B7E057";
+const YELLOW_GREEN_DARK = 0xFF759B1C;
+const YELLOW_GREEN = 0xFF9CCF26;
+const YELLOW_GREEN_LIGHT = 0xFFB7E057;
 
-const JET_BLACK_DARK = "262626";
-const JET_BLACK = "333333";
-const JET_BLACK_LIGHT = "666666";
+const JET_BLACK_DARK = 0xFF262626;
+const JET_BLACK = 0xFF333333;
+const JET_BLACK_LIGHT = 0xFF666666;
 
-const CG_BLUE_HEX_DARK = "1C637D";
-const CG_BLUE_HEX = "2584A7";
-const CG_BLUE_HEX_LIGHT = "43AFD6";
+const CG_BLUE_HEX_DARK = 0xFF1C637D;
+const CG_BLUE_HEX = 0xFF2584A7;
+const CG_BLUE_HEX_LIGHT = 0xFF43AFD6;
 
-const SILVER_CHALICE_DARK = "808080";
-const SILVER_CHALICE = "AAAAAA";
-const SILVER_CHALICE_LIGHT = "C0C0C0";
+const SILVER_CHALICE_DARK = 0xFF808080;
+const SILVER_CHALICE = 0xFFAAAAAA;
+const SILVER_CHALICE_LIGHT = 0xFFC0C0C0;
 
-const PLATINUM_DARK = "B0B0B0";
-const PLATINUM = "EBEBEB";
-const PLATINUM_LIGHT = "F5F5F5";
+const PLATINUM_DARK = 0xFFB0B0B0;
+const PLATINUM = 0xFFEBEBEB;
+const PLATINUM_LIGHT = 0xFFF5F5F5;
 
-const MAGNOLIA = "FDFDFD";
-const MAGNOLIA_LIGHT = "FCFCFC";
+const MAGNOLIA = 0xFFFDFDFD;
+const MAGNOLIA_LIGHT = 0xFFFCFCFC;
 
-const ERROR = "CE2525";
+const ERROR = 0xFFCE2525;
 
-final primaryColor = getColorFromHex(CG_BLUE_HEX);
-final secondaryColor = getColorFromHex(YELLOW_GREEN);
-final primaryTextColor = getColorFromHex(JET_BLACK);
-final secondaryTextColor = getColorFromHex(SILVER_CHALICE);
-final tertiaryTextColor = getColorFromHex(PLATINUM_DARK);
-final onPrimary = getColorFromHex(MAGNOLIA);
-final background = getColorFromHex(PLATINUM_LIGHT);
-final errorColor = getColorFromHex(ERROR);
+const primaryColor = Color(CG_BLUE_HEX);
+const secondaryColor = Color(YELLOW_GREEN);
+const primaryTextColor = Color(JET_BLACK);
+const secondaryTextColor = Color(SILVER_CHALICE);
+const tertiaryTextColor = Color(PLATINUM_DARK);
+const onPrimary = Color(MAGNOLIA);
+const background = Color(PLATINUM_LIGHT);
+const errorColor = Color(ERROR);
 
-Color getColorFromHex(String hexColor) {
-  hexColor = hexColor.toUpperCase().replaceAll("#", "");
-  if (hexColor.length == 6) {
-    hexColor = "FF" + hexColor;
-  }
-  return Color(int.parse(hexColor, radix: 16));
-}
+// Color getColorFromHex(int hexColor) {
+//   hexColor = hexColor.toUpperCase().replaceAll("#", "");
+//   if (hexColor.length == 6) {
+//     hexColor = "FF" + hexColor;
+//   }
+//   return Color(int.parse(hexColor, radix: 16));
+// }
 
 class CustomColorScheme {
   static ColorScheme get lightColorScheme {
-    return ColorScheme(
+    return const ColorScheme(
       //primary: Color(0XC5D1EB),
-      primary: getColorFromHex(CG_BLUE_HEX),
-      primaryVariant: getColorFromHex(CG_BLUE_HEX_DARK),
-      secondary: getColorFromHex(YELLOW_GREEN),
-      secondaryVariant: getColorFromHex(YELLOW_GREEN_DARK),
-      surface: getColorFromHex(MAGNOLIA_LIGHT),
-      background: getColorFromHex(YELLOW_GREEN),
-      error: getColorFromHex(ERROR),
-      onPrimary: getColorFromHex(MAGNOLIA_LIGHT),
-      onSecondary: getColorFromHex(MAGNOLIA_LIGHT),
-      onSurface: getColorFromHex(PLATINUM_LIGHT),
-      onBackground: getColorFromHex(PLATINUM_LIGHT),
-      onError: getColorFromHex(MAGNOLIA_LIGHT),
+      primary: Color(CG_BLUE_HEX),
+      primaryVariant: Color(CG_BLUE_HEX_DARK),
+      secondary: Color(YELLOW_GREEN),
+      secondaryVariant: Color(YELLOW_GREEN_DARK),
+      surface: Color(MAGNOLIA_LIGHT),
+      background: Color(YELLOW_GREEN),
+      error: Color(ERROR),
+      onPrimary: Color(MAGNOLIA_LIGHT),
+      onSecondary: Color(MAGNOLIA_LIGHT),
+      onSurface: Color(PLATINUM_LIGHT),
+      onBackground: Color(PLATINUM_LIGHT),
+      onError: Color(MAGNOLIA_LIGHT),
       brightness: Brightness.light,
     );
   }

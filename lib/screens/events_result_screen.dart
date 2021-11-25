@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runwithme/models/event.dart';
 
 import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';
@@ -94,15 +95,15 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
                 height: 45,
                 padding: const EdgeInsets.only(left: 5),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: onPrimary,
                   // set border width
-                  borderRadius: const BorderRadius.all(
+                  borderRadius: BorderRadius.all(
                     Radius.circular(10.0),
                   ), // set rounded corner radius
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
+                child: const TextField(
+                  decoration: const InputDecoration(
                     hintText: 'Search',
                     hintStyle: TextStyle(color: secondaryTextColor),
                     border: InputBorder.none,
@@ -138,31 +139,32 @@ class _EventsScreenState extends State<EventsScreen> {
                         backgroundColor: primaryColor,
                         primary: onPrimary,
                         textStyle: const TextStyle(fontSize: 10),
-                        padding: EdgeInsets.all(0)),
+                        padding: const EdgeInsets.all(0)),
                     onPressed: () => {},
                     child: const Text('Filter'),
                   ),
                 ),
                 Text(
                   dummy.length.toString() + " results",
-                  style: TextStyle(color: secondaryTextColor, fontSize: 10),
+                  style:
+                      const TextStyle(color: secondaryTextColor, fontSize: 10),
                 ),
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.table_rows_outlined),
+                      icon: const Icon(Icons.table_rows_outlined),
                       color: _rowColor,
                       onPressed: __selectListView,
                       padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(),
+                      constraints: const BoxConstraints(),
                       splashRadius: 10,
                     ),
                     IconButton(
-                      icon: Icon(Icons.grid_view_outlined),
+                      icon: const Icon(Icons.grid_view_outlined),
                       color: _gridColor,
                       onPressed: __selectGridView,
                       padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(),
+                      constraints: const BoxConstraints(),
                       splashRadius: 10,
                     ),
                   ],
@@ -170,14 +172,44 @@ class _EventsScreenState extends State<EventsScreen> {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
-            titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            titlePadding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           ),
           // Make the initial height of the SliverAppBar larger than normal.
         ),
-
+        SliverPadding(
+          padding: EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Suggested",
+                  style: TextStyle(
+                      color: primaryTextColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900),
+                ),
+                SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                        backgroundColor: onPrimary,
+                        primary: primaryColor,
+                        textStyle: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500),
+                        padding: const EdgeInsets.all(0)),
+                    onPressed: () => {},
+                    child: const Text('View all'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         SliverPadding(
           padding:
-              const EdgeInsets.only(bottom: 40, top: 20, left: 15, right: 15),
+              const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
           sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               childAspectRatio: _aspectRatio,
@@ -187,17 +219,71 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
+                List suggested =
+                    dummy.where((i) => i.difficultyLevel <= 3).toList();
                 return EventItem(
-                  dummy[index],
+                  suggested[index],
                   index,
                   dummy.length.toDouble(),
                 );
               },
-              childCount: 16,
+              childCount:
+                  dummy.where((i) => i.difficultyLevel <= 3).toList().length,
             ),
           ),
-        )
+        ),
         // Next, create a SliverList
+        SliverPadding(
+          padding:
+              const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Recently viewed",
+                  style: TextStyle(
+                      color: primaryTextColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: onPrimary,
+                      primary: primaryColor,
+                      textStyle: const TextStyle(fontSize: 10),
+                      padding: const EdgeInsets.all(0)),
+                  onPressed: () => {},
+                  child: const Text('View all'),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 15),
+
+            // margin: EdgeInsets.only(bottom: 20, left: 15, right: 15),
+            height: (380.0 / _view) / _aspectRatio,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: const EdgeInsets.only(left: 5),
+                  width: 380.0 / _view,
+                  height: (380 / _view) / _aspectRatio,
+                  child: EventItem(
+                    dummy[index],
+                    index,
+                    dummy.length.toDouble(),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -28,10 +28,7 @@ class EventItem extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 2,
-      margin: const EdgeInsets.symmetric(
-        vertical: 4,
-        horizontal: 3,
-      ),
+      margin: const EdgeInsets.all(0),
       child: Column(children: [
         ListTile(
           // leading: SizedBox(
@@ -42,9 +39,9 @@ class EventItem extends StatelessWidget {
           title: Text(
             name,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: const TextStyle(
                 color: primaryTextColor,
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.w900),
           ),
         ),
@@ -58,7 +55,7 @@ class EventItem extends StatelessWidget {
                   DateFormat.MEd().format(
                     DateTime.parse(event.date),
                   ),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: secondaryTextColor,
                     fontWeight: FontWeight.w600,
                   ),

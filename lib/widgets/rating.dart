@@ -35,14 +35,17 @@ class Rating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ..._addScore(),
-        value % 1 != 0.0
-            ? HalfFilledIcon(icon: Icons.circle, size: size, color: color)
-            : const SizedBox.shrink(),
-        ..._addEmpty()
-      ],
+    return Container(
+      padding: const EdgeInsets.only(left: 5, top: 2),
+      child: Row(
+        children: [
+          ..._addScore(),
+          value % 1 != 0.0
+              ? HalfFilledIcon(icon: Icons.circle, size: size, color: color)
+              : const SizedBox.shrink(),
+          ..._addEmpty()
+        ],
+      ),
     );
   }
 }
