@@ -25,7 +25,7 @@ class HalfFilledIcon extends StatelessWidget {
       child: SizedBox(
         width: size,
         height: size,
-        child: Icon(icon, size: size, color: secondaryTextColor),
+        child: Icon(icon, size: size, color: tertiaryTextColor),
       ),
     );
   }

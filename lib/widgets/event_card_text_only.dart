@@ -27,7 +27,7 @@ class EventItem extends StatelessWidget {
     }
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 3,
+      elevation: 2,
       margin: const EdgeInsets.symmetric(
         vertical: 4,
         horizontal: 3,
@@ -44,8 +44,8 @@ class EventItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 color: primaryTextColor,
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
+                fontSize: 20,
+                fontWeight: FontWeight.w900),
           ),
         ),
         ListTile(
@@ -58,7 +58,10 @@ class EventItem extends StatelessWidget {
                   DateFormat.MEd().format(
                     DateTime.parse(event.date),
                   ),
-                  style: TextStyle(color: secondaryTextColor),
+                  style: TextStyle(
+                    color: secondaryTextColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Rating(
@@ -79,12 +82,19 @@ class EventItem extends StatelessWidget {
                   event.currentParticipants.toString() +
                       '/' +
                       event.maxParticipants.toString(),
-                  style: TextStyle(color: _participantsColor),
+                  style: TextStyle(
+                    color: _participantsColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   event.averageLength.toString() + ' km',
-                  style: TextStyle(color: colorGradient),
+                  style: TextStyle(
+                    color: colorGradient,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 )
               ],
             ),

@@ -28,7 +28,7 @@ class Rating extends StatelessWidget {
       return Icon(
         Icons.circle,
         size: size,
-        color: secondaryTextColor,
+        color: tertiaryTextColor,
       );
     });
   }

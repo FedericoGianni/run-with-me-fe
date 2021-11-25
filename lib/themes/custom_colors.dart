@@ -35,6 +35,7 @@ final primaryColor = getColorFromHex(CG_BLUE_HEX);
 final secondaryColor = getColorFromHex(YELLOW_GREEN);
 final primaryTextColor = getColorFromHex(JET_BLACK);
 final secondaryTextColor = getColorFromHex(SILVER_CHALICE);
+final tertiaryTextColor = getColorFromHex(PLATINUM_DARK);
 final onPrimary = getColorFromHex(MAGNOLIA);
 final background = getColorFromHex(PLATINUM_LIGHT);
 final errorColor = getColorFromHex(ERROR);

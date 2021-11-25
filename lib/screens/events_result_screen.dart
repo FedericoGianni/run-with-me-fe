@@ -171,7 +171,6 @@ class _EventsScreenState extends State<EventsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
             titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            collapseMode: CollapseMode.none,
           ),
           // Make the initial height of the SliverAppBar larger than normal.
         ),
@@ -180,11 +179,11 @@ class _EventsScreenState extends State<EventsScreen> {
           padding:
               const EdgeInsets.only(bottom: 40, top: 20, left: 15, right: 15),
           sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: _view,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               childAspectRatio: _aspectRatio,
               mainAxisSpacing: 15.0,
               crossAxisSpacing: 15.0,
+              maxCrossAxisExtent: 400 / _view,
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
