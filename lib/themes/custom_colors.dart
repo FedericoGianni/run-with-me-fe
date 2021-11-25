@@ -24,7 +24,7 @@ const SILVER_CHALICE_LIGHT = "C0C0C0";
 
 const PLATINUM_DARK = "B0B0B0";
 const PLATINUM = "EBEBEB";
-const PLATINUM_LIGHT = "F0F0F0";
+const PLATINUM_LIGHT = "F5F5F5";
 
 const MAGNOLIA = "FDFDFD";
 const MAGNOLIA_LIGHT = "FCFCFC";
@@ -36,7 +36,8 @@ final secondaryColor = getColorFromHex(YELLOW_GREEN);
 final primaryTextColor = getColorFromHex(JET_BLACK);
 final secondaryTextColor = getColorFromHex(SILVER_CHALICE);
 final onPrimary = getColorFromHex(MAGNOLIA);
-final background = getColorFromHex(PLATINUM);
+final background = getColorFromHex(PLATINUM_LIGHT);
+final errorColor = getColorFromHex(ERROR);
 
 Color getColorFromHex(String hexColor) {
   hexColor = hexColor.toUpperCase().replaceAll("#", "");
@@ -55,12 +56,12 @@ class CustomColorScheme {
       secondary: getColorFromHex(YELLOW_GREEN),
       secondaryVariant: getColorFromHex(YELLOW_GREEN_DARK),
       surface: getColorFromHex(MAGNOLIA_LIGHT),
-      background: getColorFromHex(PLATINUM),
+      background: getColorFromHex(YELLOW_GREEN),
       error: getColorFromHex(ERROR),
       onPrimary: getColorFromHex(MAGNOLIA_LIGHT),
       onSecondary: getColorFromHex(MAGNOLIA_LIGHT),
-      onSurface: getColorFromHex(PLATINUM),
-      onBackground: getColorFromHex(PLATINUM),
+      onSurface: getColorFromHex(PLATINUM_LIGHT),
+      onBackground: getColorFromHex(PLATINUM_LIGHT),
       onError: getColorFromHex(MAGNOLIA_LIGHT),
       brightness: Brightness.light,
     );

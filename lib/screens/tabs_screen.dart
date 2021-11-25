@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';
+import 'package:runwithme/themes/custom_colors.dart';
 import '/models/event.dart';
 
 // import '../widgets/main_drawer.dart';
@@ -68,6 +69,7 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       appBar: PreferredSize(
         child: _pages[_selectedPageIndex]['appbar'],
         preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
@@ -75,7 +77,7 @@ class _TabsScreenState extends State<TabsScreen> {
       body: _pages[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: onPrimary,
         unselectedItemColor: Theme.of(context).unselectedWidgetColor,
         selectedItemColor: Theme.of(context).primaryColor,
         currentIndex: _selectedPageIndex,

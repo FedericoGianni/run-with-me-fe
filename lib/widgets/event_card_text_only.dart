@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
 import '../themes/custom_colors.dart';
 import '../models/event.dart';
@@ -17,8 +18,13 @@ class EventItem extends StatelessWidget {
     Color colorGradient = (Color.lerp(
         primaryColor, secondaryColor, (index / 2).toDouble() / totAmount))!;
     String name = event.name;
-    name = name.replaceRange(5, name.length, '...');
-
+    // name = name.replaceRange(5, name.length, '...');
+    Color _participantsColor;
+    if (event.currentParticipants < event.maxParticipants) {
+      _participantsColor = secondaryTextColor;
+    } else {
+      _participantsColor = errorColor;
+    }
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 3,
@@ -28,13 +34,14 @@ class EventItem extends StatelessWidget {
       ),
       child: Column(children: [
         ListTile(
-          leading: SizedBox(
-            height: double.infinity,
-            child: CircleAvatar(radius: 10, backgroundColor: colorGradient),
-          ),
+          // leading: SizedBox(
+          //   height: double.infinity,
+          //   child: CircleAvatar(radius: 10, backgroundColor: colorGradient),
+          // ),
           visualDensity: const VisualDensity(horizontal: -4, vertical: -1),
           title: Text(
             name,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 color: primaryTextColor,
                 fontSize: 18,
@@ -48,7 +55,9 @@ class EventItem extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  event.date,
+                  DateFormat.MEd().format(
+                    DateTime.parse(event.date),
+                  ),
                   style: TextStyle(color: secondaryTextColor),
                 ),
                 const SizedBox(height: 12),
@@ -70,7 +79,7 @@ class EventItem extends StatelessWidget {
                   event.currentParticipants.toString() +
                       '/' +
                       event.maxParticipants.toString(),
-                  style: TextStyle(color: secondaryTextColor),
+                  style: TextStyle(color: _participantsColor),
                 ),
                 const SizedBox(height: 10),
                 Text(

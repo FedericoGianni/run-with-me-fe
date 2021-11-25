@@ -5,8 +5,37 @@ import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../themes/custom_colors.dart';
 
-class EventsScreen extends StatelessWidget {
+class EventsScreen extends StatefulWidget {
   static const routeName = '/events';
+
+  @override
+  State<EventsScreen> createState() => _EventsScreenState();
+}
+
+class _EventsScreenState extends State<EventsScreen> {
+  int _view = 2;
+  double _aspectRatio = 1.4;
+  Color _rowColor = secondaryTextColor;
+  Color _gridColor = primaryColor;
+
+  void __selectListView() {
+    setState(() {
+      _view = 1;
+      _aspectRatio = 3;
+      _rowColor = primaryColor;
+      _gridColor = secondaryTextColor;
+    });
+  }
+
+  void __selectGridView() {
+    setState(() {
+      _view = 2;
+      _aspectRatio = 1.4;
+      _gridColor = primaryColor;
+      _rowColor = secondaryTextColor;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // return GridView.builder(
@@ -29,52 +58,42 @@ class EventsScreen extends StatelessWidget {
 
     return CustomScrollView(
       slivers: [
-        // Add the app bar to the CustomScrollView.
         SliverAppBar(
-          // Provide a standard title.
           stretch: false,
-          toolbarHeight: 100,
+          primary: true,
+          toolbarHeight: 93,
+          titleSpacing: 0,
           title: GradientAppBar(
-            100,
+            95,
             [
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 25,
+              const SizedBox(
+                height: 40,
+                width: double.infinity,
               ),
               Image.asset(
                 "assets/icons/logo_white.png",
-                width: MediaQuery.of(context).size.width / 3,
+                width: 130,
               ),
-              // SizedBox(
-              //   height: MediaQuery.of(context).size.height / 30,
-              // ),
             ],
-            end: 0.8,
           ),
-          titleSpacing: 0,
-          backgroundColor: background,
-          stretchTriggerOffset: 10,
-          // back up the list of items.
           floating: false,
-          // Display a placeholder widget to visualize the shrinking size.
           pinned: false,
           snap: false,
-          // Make the initial height of the SliverAppBar larger than normal.
         ),
         SliverAppBar(
-          // Provide a standard title.
           stretch: false,
-          toolbarHeight: 90,
+          toolbarHeight: 103,
           title: GradientAppBar(
-            90,
+            105,
             [
               Container(
                 margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 6,
-                  right: MediaQuery.of(context).size.width / 6,
-                  top: 30,
+                  left: MediaQuery.of(context).size.width / 10,
+                  right: MediaQuery.of(context).size.width / 10,
+                  top: 45,
                 ),
                 height: 45,
-                padding: EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 5),
                 decoration: BoxDecoration(
                   color: onPrimary,
                   // set border width
@@ -95,44 +114,75 @@ class EventsScreen extends StatelessWidget {
                 ),
               ),
             ],
-            start: -0.09,
-            end: 0,
           ),
+
           titleSpacing: 0,
           expandedHeight: 150,
           backgroundColor: background,
-          stretchTriggerOffset: 10,
 
           // back up the list of items.
           floating: true,
           // Display a placeholder widget to visualize the shrinking size.
           pinned: true,
           snap: false,
+          elevation: 0,
           flexibleSpace: FlexibleSpaceBar(
             title: Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
-                Icon(
-                  Icons.table_rows_outlined,
-                  color: primaryColor,
+                SizedBox(
+                  height: 20,
+                  width: 50,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        primary: onPrimary,
+                        textStyle: const TextStyle(fontSize: 10),
+                        padding: EdgeInsets.all(0)),
+                    onPressed: () => {},
+                    child: const Text('Filter'),
+                  ),
                 ),
-                Icon(
-                  Icons.card_travel_outlined,
-                  color: secondaryTextColor,
+                Text(
+                  dummy.length.toString() + " results",
+                  style: TextStyle(color: secondaryTextColor, fontSize: 10),
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.table_rows_outlined),
+                      color: _rowColor,
+                      onPressed: __selectListView,
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
+                      splashRadius: 10,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.grid_view_outlined),
+                      color: _gridColor,
+                      onPressed: __selectGridView,
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
+                      splashRadius: 10,
+                    ),
+                  ],
                 ),
               ],
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
+            titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             collapseMode: CollapseMode.none,
           ),
           // Make the initial height of the SliverAppBar larger than normal.
         ),
 
         SliverPadding(
-          padding: EdgeInsets.only(bottom: 40, top: 20, left: 10, right: 10),
+          padding:
+              const EdgeInsets.only(bottom: 40, top: 20, left: 15, right: 15),
           sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.50,
+              crossAxisCount: _view,
+              childAspectRatio: _aspectRatio,
               mainAxisSpacing: 15.0,
               crossAxisSpacing: 15.0,
             ),
@@ -154,51 +204,51 @@ class EventsScreen extends StatelessWidget {
   }
 }
 
-class EventsAppbar extends StatelessWidget {
-  const EventsAppbar({Key? key}) : super(key: key);
+// class EventsAppbar extends StatelessWidget {
+//   const EventsAppbar({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return GradientAppBar(
-      180,
-      [
-        SizedBox(
-          height: MediaQuery.of(context).size.height / 20,
-        ),
-        Image.asset(
-          "assets/icons/logo_white.png",
-          width: MediaQuery.of(context).size.width / 3,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height / 30,
-        ),
-        Container(
-          margin: EdgeInsets.only(
-            left: MediaQuery.of(context).size.width / 6,
-            right: MediaQuery.of(context).size.width / 6,
-          ),
-          height: 45,
-          padding: EdgeInsets.only(left: 5),
-          decoration: BoxDecoration(
-            color: onPrimary,
-            // set border width
-            borderRadius: const BorderRadius.all(
-              Radius.circular(10.0),
-            ), // set rounded corner radius
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Search',
-              hintStyle: TextStyle(color: secondaryTextColor),
-              border: InputBorder.none,
-              prefixIcon: Icon(
-                Icons.search,
-                color: secondaryTextColor,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return GradientAppBar(
+//       180,
+//       [
+//         SizedBox(
+//           height: 10,
+//         ),
+//         Image.asset(
+//           "assets/icons/logo_white.png",
+//           width: MediaQuery.of(context).size.width / 3,
+//         ),
+//         SizedBox(
+//           height: MediaQuery.of(context).size.height / 30,
+//         ),
+//         Container(
+//           margin: EdgeInsets.only(
+//             left: MediaQuery.of(context).size.width / 16,
+//             right: MediaQuery.of(context).size.width / 6,
+//           ),
+//           height: 45,
+//           // padding: EdgeInsets.only(left: 5),
+//           decoration: BoxDecoration(
+//             color: onPrimary,
+//             // set border width
+//             borderRadius: const BorderRadius.all(
+//               Radius.circular(10.0),
+//             ), // set rounded corner radius
+//           ),
+//           child: TextField(
+//             decoration: InputDecoration(
+//               hintText: 'Search',
+//               hintStyle: TextStyle(color: secondaryTextColor),
+//               border: InputBorder.none,
+//               prefixIcon: Icon(
+//                 Icons.search,
+//                 color: secondaryTextColor,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

@@ -5,11 +5,8 @@ import '../themes/custom_colors.dart';
 class GradientAppBar extends StatelessWidget {
   final List<Widget> children;
   final double barHeight;
-  double start;
-  double end;
 
-  GradientAppBar(this.barHeight, this.children,
-      {this.start = 0.0, this.end = 0.0});
+  GradientAppBar(this.barHeight, this.children);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +30,8 @@ class GradientAppBar extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
             colors: [secondaryColor, primaryColor],
-            begin: FractionalOffset(start, 0),
-            end: FractionalOffset(0.6, end),
+            begin: FractionalOffset(-0.2, 0),
+            end: FractionalOffset(0.9, 0),
             stops: const [0.0, 1.0],
             tileMode: TileMode.clamp),
       ),
