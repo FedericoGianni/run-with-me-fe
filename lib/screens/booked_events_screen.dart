@@ -142,7 +142,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 return EventItem(
                   suggested[index],
                   index,
-                  dummy.length.toDouble(),
+                  dummy.length,
                 );
               },
               childCount:
