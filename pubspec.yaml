@@ -37,6 +37,8 @@ dependencies:
   google_fonts: ^2.1.0
   intl: ^0.17.0
   flutter_launcher_icons: ^0.9.1
+  google_maps_flutter: ^2.1.1
+  custom_info_window: ^1.0.1
 
 flutter_icons:
   image_path: "assets/icons/icon.png"

@@ -7,6 +7,6 @@ class DefaultAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GradientAppBar(100, [SizedBox.shrink()]);
+    return GradientAppBar(100, const [SizedBox.shrink()]);
   }
 }
