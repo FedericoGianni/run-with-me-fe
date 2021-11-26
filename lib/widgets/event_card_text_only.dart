@@ -10,7 +10,7 @@ import '../screens/event_details_screen.dart';
 class EventItem extends StatelessWidget {
   final Event event;
   final int index;
-  final double totAmount;
+  final int totAmount;
 
   const EventItem(this.event, this.index, this.totAmount);
 

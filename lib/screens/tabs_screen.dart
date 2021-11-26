@@ -9,8 +9,10 @@ import '/models/event.dart';
 import 'events_result_screen.dart';
 import 'add_event_screen.dart';
 import 'user_screen.dart';
-import 'booked_events_screen.dart';
 import 'home_screen.dart';
+import 'search_screen.dart';
+import 'booked_events_screen.dart';
+import '../widgets/custom_maps.dart';
 import '../widgets/default_appbar.dart';
 // import '../models/meal.dart';
 
@@ -37,7 +39,7 @@ class _TabsScreenState extends State<TabsScreen> {
       },
       {
         'title': 'Events',
-        'page': EventsScreen(),
+        'page': SearchScreen(),
         'appbar': const SizedBox.shrink(),
       },
       {
@@ -81,31 +83,32 @@ class _TabsScreenState extends State<TabsScreen> {
         selectedItemColor: Theme.of(context).primaryColor,
         currentIndex: _selectedPageIndex,
         type: BottomNavigationBarType.fixed,
+        elevation: 2,
         items: [
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.home_outlined),
-            title: const Text('Home'),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.search),
-            title: const Text('Browse'),
+            label: 'Browse',
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.add_box_outlined),
-            title: const Text('New'),
+            label: 'New',
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.event_outlined),
-            title: const Text('Events'),
+            label: 'Events',
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.person_outline),
-            title: const Text('User'),
+            label: 'User',
           ),
         ],
       ),

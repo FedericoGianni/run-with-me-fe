@@ -10,6 +10,8 @@ class CustomTheme {
         colorScheme: CustomColorScheme.lightColorScheme,
         scaffoldBackgroundColor: const Color(PLATINUM),
         //fontFamily: 'Montserrat',
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         primaryColor: const Color(CG_BLUE_HEX),
         unselectedWidgetColor: const Color(SILVER_CHALICE),
         backgroundColor: const Color(MAGNOLIA),
