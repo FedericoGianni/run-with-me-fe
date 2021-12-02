@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
 import '../themes/custom_colors.dart';
-import '../models/event.dart';
+import '../providers/event.dart';
 import 'rating.dart';
 import '../screens/event_details_screen.dart';
 

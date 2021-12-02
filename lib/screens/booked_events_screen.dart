@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:runwithme/models/event.dart';
+import 'package:runwithme/providers/event.dart';
 
 import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';

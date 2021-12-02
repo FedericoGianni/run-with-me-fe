@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:runwithme/models/event.dart';
+import 'package:runwithme/providers/event.dart';
 
 import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../themes/custom_colors.dart';
-import '../widgets/custom_maps.dart';
+import '../widgets/custom_map_search.dart';
 import '../widgets/search_event_bottomsheet.dart';
+import '../widgets/search_button.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
@@ -49,18 +50,6 @@ class _SearchScreenState extends State<SearchScreen> {
       _rowColor = secondaryTextColor;
       _mapColor = primaryColor;
     });
-  }
-
-  void _openSearchMenu(BuildContext ctx) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-            borderRadius:
-                const BorderRadius.vertical(top: const Radius.circular(15))),
-        context: ctx,
-        builder: (_) {
-          return const SearchEventBottomSheet();
-        });
   }
 
   List<Widget> _buildContent(BuildContext context, List _eventList) {
@@ -178,45 +167,15 @@ class _SearchScreenState extends State<SearchScreen> {
       title: GradientAppBar(
         105,
         [
-          GestureDetector(
-            onTap: () {
-              _openSearchMenu(context);
-            },
-            child: Container(
-              margin: const EdgeInsets.only(
-                // left: MediaQuery.of(context).size.width / 10,
-                // right: MediaQuery.of(context).size.width / 10,
-                top: 45,
+          SearchButton(
+              const Icon(
+                Icons.search,
+                color: secondaryTextColor,
               ),
-              height: 45,
-              width: MediaQuery.of(context).size.width / 1.5,
-              padding: const EdgeInsets.only(left: 25),
-              decoration: const BoxDecoration(
-                color: onPrimary,
-                // set border width
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ), // set rounded corner radius
-              ),
-              // set rounded corner radius
-              child: Row(
-                children: const [
-                  Icon(
-                    Icons.search,
-                    color: secondaryTextColor,
-                    size: 18,
-                  ),
-                  Text(
-                    '   Search',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: secondaryTextColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+              const Text(
+                '    Search',
+                style: TextStyle(color: secondaryTextColor),
+              ))
 
           // Container(
           //   margin: EdgeInsets.only(
@@ -338,7 +297,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
           SizedBox(
-            child: CustomMaps(),
+            child: CustomMapsSearch(),
             width: double.infinity,
             height: MediaQuery.of(context).size.height - 150 - 60,
           ),

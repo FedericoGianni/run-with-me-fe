@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:runwithme/themes/custom_colors.dart';
-import '/models/event.dart';
+import '../providers/event.dart';
 
 // import '../widgets/main_drawer.dart';
 // import './favorites_screen.dart';
@@ -12,7 +12,7 @@ import 'user_screen.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
 import 'booked_events_screen.dart';
-import '../widgets/custom_maps.dart';
+import '../widgets/custom_map_search.dart';
 import '../widgets/default_appbar.dart';
 // import '../models/meal.dart';
 
@@ -45,7 +45,7 @@ class _TabsScreenState extends State<TabsScreen> {
       {
         'title': 'My Events',
         'page': AddEventScreen(),
-        'appbar': const DefaultAppbar(),
+        'appbar': const AddEventAppbar(),
       },
       {
         'title': 'Booked Events',
