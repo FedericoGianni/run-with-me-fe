@@ -7,15 +7,17 @@ import 'default_appbar.dart';
 import '../models/map_style.dart';
 import '../classes/markers.dart';
 
-class CustomMaps extends StatelessWidget {
+class CustomMapsSearch extends StatelessWidget {
   late GoogleMapController mapController;
-  final CustomInfoWindowController _customInfoWindowController =
-      CustomInfoWindowController();
-  final LatLng _center = const LatLng(0, 0);
+  late Set<Marker> markers;
 
+  CustomInfoWindowController customInfoWindowController =
+      CustomInfoWindowController();
+
+  final LatLng _center = const LatLng(0, 0);
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    _customInfoWindowController.googleMapController = controller;
+    customInfoWindowController.googleMapController = controller;
     // mapController.setMapStyle(_mapThemes[5]['style']);
   }
 
@@ -24,23 +26,23 @@ class CustomMaps extends StatelessWidget {
     return Stack(
       children: [
         GoogleMap(
-          onTap: (_center) => {_customInfoWindowController.hideInfoWindow!()},
+          onTap: (_center) => {customInfoWindowController.hideInfoWindow!()},
           onMapCreated: _onMapCreated,
           onCameraMove: (position) {
-            _customInfoWindowController.onCameraMove!();
+            customInfoWindowController.onCameraMove!();
           },
           mapType: MapType.normal,
           zoomControlsEnabled: false,
           myLocationButtonEnabled: true,
           markers: Set<Marker>.of(
-              markerGenerator(dummy, _customInfoWindowController).values),
+              markerGenerator(dummy, customInfoWindowController).values),
           initialCameraPosition: CameraPosition(
             target: _center,
             zoom: 5.0,
           ),
         ),
         CustomInfoWindow(
-          controller: _customInfoWindowController,
+          controller: customInfoWindowController,
           height: MediaQuery.of(context).size.height * 0.3,
           width: MediaQuery.of(context).size.width * 0.7,
           offset: 60.0,

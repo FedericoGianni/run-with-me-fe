@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:runwithme/models/event.dart';
+import 'package:runwithme/providers/event.dart';
 
 import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../themes/custom_colors.dart';
-import '../widgets/custom_maps.dart';
+import '../widgets/custom_map_search.dart';
 
 class EventsScreen extends StatefulWidget {
   static const routeName = '/events';
@@ -277,7 +277,7 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
           ),
           SizedBox(
-            child: CustomMaps(),
+            child: CustomMapsSearch(),
             width: double.infinity,
             height: MediaQuery.of(context).size.height - 150 - 60,
           ),

@@ -35,3 +35,19 @@ class CustomTheme {
         ));
   }
 }
+
+InputDecoration textFormDecoration(String label) {
+  return InputDecoration(
+    label: Text(label),
+    fillColor: onPrimary,
+    filled: true,
+    focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: secondaryTextColor),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    enabledBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: secondaryTextColor),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+  );
+}

@@ -1,4 +1,6 @@
-class Event {
+import 'package:flutter/cupertino.dart';
+
+class Event with ChangeNotifier {
   final int id;
   final String createdAt;
   final String name;
@@ -13,7 +15,7 @@ class Event {
   final int currentParticipants;
   final int maxParticipants;
 
-  const Event(
+  Event(
       {required this.id,
       required this.createdAt,
       required this.name,
