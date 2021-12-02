@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import '../widgets/custom_info_window.dart';
-import '../models/event.dart';
+import '../providers/event.dart';
 import '../themes/custom_colors.dart';
 import '../widgets/event_card_text_only.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../themes/custom_colors.dart';
-import '../models/event.dart';
+import '../providers/event.dart';
 
 class EventDetailsScreen extends StatelessWidget {
   static const routeName = '/details';

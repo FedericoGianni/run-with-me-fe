@@ -1,6 +1,6 @@
-import '../models/event.dart';
+import '../providers/event.dart';
 
-const dummy = [
+List<Event> dummy = [
   Event(
     adminId: 1,
     averageDuration: 55,
