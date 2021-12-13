@@ -8,12 +8,16 @@ import 'default_appbar.dart';
 import '../models/map_style.dart';
 import '../classes/markers.dart';
 import '../methods/custom_alert_dialog.dart';
-import 'package:geolocator/geolocator.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class CustomMapsNew extends StatefulWidget {
-  LatLng position;
+  LatLng markerPosition;
+  LatLng centerPosition;
 
-  CustomMapsNew({Key? key, required this.position}) : super(key: key);
+  CustomMapsNew(
+      {Key? key, required this.markerPosition, required this.centerPosition})
+      : super(key: key);
 
   @override
   State<CustomMapsNew> createState() => _CustomMapsNewState();
@@ -33,7 +37,7 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
 
   void _handleTap(LatLng point) {
     setState(() {
-      widget.position = const LatLng(0, 0);
+      widget.markerPosition = const LatLng(0, 0);
       markers.clear();
       markers.add(
         Marker(
@@ -44,7 +48,7 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
             snippet: 'Press to delete',
             onTap: () {
               setState(() {
-                widget.position = const LatLng(0, 0);
+                widget.markerPosition = const LatLng(0, 0);
                 markers.clear();
               });
             },
@@ -60,9 +64,11 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.position != const LatLng(45, 9)) {
-      _handleTap(widget.position);
+    if (widget.markerPosition != const LatLng(0, 0)) {
+      _handleTap(widget.markerPosition);
     }
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -78,8 +84,8 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
             myLocationButtonEnabled: false,
             markers: markers,
             initialCameraPosition: CameraPosition(
-              target: widget.position,
-              zoom: 5.0,
+              target: widget.centerPosition,
+              zoom: 14.0,
             ),
           ),
           CustomInfoWindow(
@@ -97,20 +103,20 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back,
                     size: 30,
-                    color: primaryTextColor,
+                    color: colors.primaryTextColor,
                   ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
                 IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.check,
                     size: 30,
-                    color: primaryColor,
+                    color: colors.primaryColor,
                   ),
                   onPressed: () {
                     if (markers.length == 1) {
@@ -118,18 +124,19 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
                     } else {
                       customAlertDialog(
                           context,
-                          const Text(
+                          Text(
                             'Attention!',
-                            style: TextStyle(color: errorColor),
+                            style: TextStyle(color: colors.errorColor),
                           ),
                           [
-                            const Text(
+                            Text(
                               'You must select a starting point before confirming.',
-                              style: TextStyle(color: primaryTextColor),
+                              style: TextStyle(color: colors.primaryTextColor),
                             ),
-                            const Text(
+                            Text(
                               '\nTo do so, long press on the map.',
-                              style: TextStyle(color: secondaryTextColor),
+                              style:
+                                  TextStyle(color: colors.secondaryTextColor),
                             ),
                           ]);
                     }

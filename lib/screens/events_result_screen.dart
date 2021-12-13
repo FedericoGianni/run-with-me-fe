@@ -6,6 +6,8 @@ import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../themes/custom_colors.dart';
 import '../widgets/custom_map_search.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class EventsScreen extends StatefulWidget {
   static const routeName = '/events';
@@ -17,40 +19,42 @@ class EventsScreen extends StatefulWidget {
 class _EventsScreenState extends State<EventsScreen> {
   int _view = 2;
   double _aspectRatio = 1.4;
-  Color _rowColor = secondaryTextColor;
-  Color _gridColor = primaryColor;
-  Color _mapColor = secondaryTextColor;
+  late Color _rowColor;
+  late Color _gridColor;
+  late Color _mapColor;
 
-  void __selectListView() {
+  void __selectListView(colors) {
     setState(() {
       _view = 1;
       _aspectRatio = 3;
-      _rowColor = primaryColor;
-      _gridColor = secondaryTextColor;
-      _mapColor = secondaryTextColor;
+      _rowColor = colors.primaryColor;
+      _gridColor = colors.secondaryTextColor;
+      _mapColor = colors.secondaryTextColor;
     });
   }
 
-  void __selectGridView() {
+  void __selectGridView(colors) {
     setState(() {
       _view = 2;
       _aspectRatio = 1.4;
-      _gridColor = primaryColor;
-      _rowColor = secondaryTextColor;
-      _mapColor = secondaryTextColor;
+      _gridColor = colors.primaryColor;
+      _rowColor = colors.secondaryTextColor;
+      _mapColor = colors.secondaryTextColor;
     });
   }
 
-  void __selectMapView() {
+  void __selectMapView(colors) {
     setState(() {
       _view = 3;
-      _gridColor = secondaryTextColor;
-      _rowColor = secondaryTextColor;
-      _mapColor = primaryColor;
+      _gridColor = colors.secondaryTextColor;
+      _rowColor = colors.secondaryTextColor;
+      _mapColor = colors.primaryColor;
     });
   }
 
   List<Widget> buildContent(BuildContext context, List _eventList) {
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return [
       SliverPadding(
         padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
@@ -58,10 +62,10 @@ class _EventsScreenState extends State<EventsScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Suggested",
                 style: TextStyle(
-                    color: primaryTextColor,
+                    color: colors.primaryTextColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
@@ -69,8 +73,8 @@ class _EventsScreenState extends State<EventsScreen> {
                 height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                      backgroundColor: onPrimary,
-                      primary: primaryColor,
+                      backgroundColor: colors.onPrimary,
+                      primary: colors.primaryColor,
                       textStyle: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                       padding: const EdgeInsets.all(0)),
@@ -111,17 +115,17 @@ class _EventsScreenState extends State<EventsScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Recently viewed",
                 style: TextStyle(
-                    color: primaryTextColor,
+                    color: colors.primaryTextColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                    backgroundColor: onPrimary,
-                    primary: primaryColor,
+                    backgroundColor: colors.onPrimary,
+                    primary: colors.primaryColor,
                     textStyle: const TextStyle(fontSize: 10),
                     padding: const EdgeInsets.all(0)),
                 onPressed: () => {},
@@ -161,6 +165,7 @@ class _EventsScreenState extends State<EventsScreen> {
   @override
   Widget build(BuildContext context) {
     var _newEventList = dummy.where((i) => i.difficultyLevel <= 3).toList();
+    final colors = Provider.of<CustomColorScheme>(context);
     if (_view == 3) {
       return Column(
         children: [
@@ -182,22 +187,23 @@ class _EventsScreenState extends State<EventsScreen> {
                           top: 45,
                         ),
                         height: 45,
-                        padding: const EdgeInsets.only(left: 5),
-                        decoration: const BoxDecoration(
-                          color: onPrimary,
+                        padding: EdgeInsets.only(left: 5),
+                        decoration: BoxDecoration(
+                          color: colors.onPrimary,
                           // set border width
                           borderRadius: BorderRadius.all(
                             Radius.circular(10.0),
                           ), // set rounded corner radius
                         ),
-                        child: const TextField(
+                        child: TextField(
                           decoration: InputDecoration(
                             hintText: 'Search',
-                            hintStyle: TextStyle(color: secondaryTextColor),
+                            hintStyle:
+                                TextStyle(color: colors.secondaryTextColor),
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               Icons.search,
-                              color: secondaryTextColor,
+                              color: colors.secondaryTextColor,
                             ),
                           ),
                         ),
@@ -207,7 +213,7 @@ class _EventsScreenState extends State<EventsScreen> {
 
                   titleSpacing: 0,
                   expandedHeight: 150,
-                  backgroundColor: background,
+                  backgroundColor: colors.background,
 
                   // back up the list of items.
                   floating: true,
@@ -224,8 +230,8 @@ class _EventsScreenState extends State<EventsScreen> {
                           width: 50,
                           child: TextButton(
                             style: TextButton.styleFrom(
-                                backgroundColor: primaryColor,
-                                primary: onPrimary,
+                                backgroundColor: colors.primaryColor,
+                                primary: colors.onPrimary,
                                 textStyle: const TextStyle(fontSize: 10),
                                 padding: const EdgeInsets.all(0)),
                             onPressed: () => {},
@@ -234,15 +240,17 @@ class _EventsScreenState extends State<EventsScreen> {
                         ),
                         Text(
                           _newEventList.length.toString() + " results",
-                          style: const TextStyle(
-                              color: secondaryTextColor, fontSize: 10),
+                          style: TextStyle(
+                              color: colors.secondaryTextColor, fontSize: 10),
                         ),
                         Row(
                           children: [
                             IconButton(
                               icon: const Icon(Icons.map_outlined),
                               color: _mapColor,
-                              onPressed: __selectMapView,
+                              onPressed: () {
+                                __selectMapView(colors);
+                              },
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               splashRadius: 10,
@@ -250,7 +258,9 @@ class _EventsScreenState extends State<EventsScreen> {
                             IconButton(
                               icon: const Icon(Icons.table_rows_outlined),
                               color: _rowColor,
-                              onPressed: __selectListView,
+                              onPressed: () {
+                                __selectListView(colors);
+                              },
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               splashRadius: 10,
@@ -258,7 +268,9 @@ class _EventsScreenState extends State<EventsScreen> {
                             IconButton(
                               icon: const Icon(Icons.grid_view_outlined),
                               color: _gridColor,
-                              onPressed: __selectGridView,
+                              onPressed: () {
+                                __selectGridView(colors);
+                              },
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               splashRadius: 10,
@@ -300,21 +312,21 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                   height: 45,
                   padding: const EdgeInsets.only(left: 5),
-                  decoration: const BoxDecoration(
-                    color: onPrimary,
+                  decoration: BoxDecoration(
+                    color: colors.onPrimary,
                     // set border width
                     borderRadius: BorderRadius.all(
                       Radius.circular(10.0),
                     ), // set rounded corner radius
                   ),
-                  child: const TextField(
+                  child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Search',
-                      hintStyle: TextStyle(color: secondaryTextColor),
+                      hintStyle: TextStyle(color: colors.secondaryTextColor),
                       border: InputBorder.none,
                       prefixIcon: Icon(
                         Icons.search,
-                        color: secondaryTextColor,
+                        color: colors.secondaryTextColor,
                       ),
                     ),
                   ),
@@ -324,7 +336,7 @@ class _EventsScreenState extends State<EventsScreen> {
 
             titleSpacing: 0,
             expandedHeight: 150,
-            backgroundColor: background,
+            backgroundColor: colors.background,
 
             // back up the list of items.
             floating: true,
@@ -341,8 +353,8 @@ class _EventsScreenState extends State<EventsScreen> {
                     width: 50,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          primary: onPrimary,
+                          backgroundColor: colors.primaryColor,
+                          primary: colors.onPrimary,
                           textStyle: const TextStyle(fontSize: 10),
                           padding: const EdgeInsets.all(0)),
                       onPressed: () => {},
@@ -351,15 +363,17 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                   Text(
                     _newEventList.length.toString() + " results",
-                    style: const TextStyle(
-                        color: secondaryTextColor, fontSize: 10),
+                    style: TextStyle(
+                        color: colors.secondaryTextColor, fontSize: 10),
                   ),
                   Row(
                     children: [
                       IconButton(
                         icon: const Icon(Icons.map_outlined),
                         color: _mapColor,
-                        onPressed: __selectMapView,
+                        onPressed: () {
+                          __selectMapView(colors);
+                        },
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         splashRadius: 10,
@@ -367,7 +381,9 @@ class _EventsScreenState extends State<EventsScreen> {
                       IconButton(
                         icon: const Icon(Icons.table_rows_outlined),
                         color: _rowColor,
-                        onPressed: __selectListView,
+                        onPressed: () {
+                          __selectListView(colors);
+                        },
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         splashRadius: 10,
@@ -375,7 +391,9 @@ class _EventsScreenState extends State<EventsScreen> {
                       IconButton(
                         icon: const Icon(Icons.grid_view_outlined),
                         color: _gridColor,
-                        onPressed: __selectGridView,
+                        onPressed: () {
+                          __selectGridView(colors);
+                        },
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         splashRadius: 10,

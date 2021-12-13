@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
-
-import '../themes/custom_colors.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
+// import '../themes/custom_colors.dart';
 
 class GradientAppBar extends StatelessWidget {
   final List<Widget> children;
@@ -12,6 +13,7 @@ class GradientAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final double statusbarHeight = MediaQuery.of(context).padding.top;
     // const double statusbarHeight = 10;
+    final colors = Provider.of<CustomColorScheme>(context);
 
     return Container(
       padding: EdgeInsets.only(top: statusbarHeight),
@@ -29,7 +31,7 @@ class GradientAppBar extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-            colors: [secondaryColor, primaryColor],
+            colors: [colors.secondaryColor, colors.primaryColor],
             begin: FractionalOffset(-0.2, 0),
             end: FractionalOffset(0.9, 0),
             stops: const [0.0, 1.0],

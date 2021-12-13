@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../themes/custom_colors.dart';
 import 'search_event_bottomsheet.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class SearchButton extends StatelessWidget {
   final Icon icon;
@@ -9,6 +11,8 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
@@ -30,8 +34,8 @@ class SearchButton extends StatelessWidget {
         height: 45,
         width: MediaQuery.of(context).size.width / 1.5,
         padding: const EdgeInsets.only(left: 25),
-        decoration: const BoxDecoration(
-          color: onPrimary,
+        decoration: BoxDecoration(
+          color: colors.onPrimary,
           // set border width
           borderRadius: BorderRadius.all(
             Radius.circular(10.0),
