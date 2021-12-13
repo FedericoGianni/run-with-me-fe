@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_const
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:runwithme/widgets/custom_map_search.dart';
@@ -13,6 +14,9 @@ import '../themes/custom_colors.dart';
 import '../themes/custom_theme.dart';
 import '../widgets/gradientAppbar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import '../providers/color_scheme.dart';
 
 class AddEventScreen extends StatefulWidget {
   static const routeName = '/add_event';
@@ -26,8 +30,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final _nameFocusNode = FocusNode();
   final _distanceFocusNode = FocusNode();
   final _durationFocusNode = FocusNode();
-  final _isLoading = false;
-  LatLng pos = const LatLng(45.48867812986885, 9.197411131341138);
+  var _isLoading = false;
+
+  LatLng defaultUserPos = const LatLng(44.48867812986885, 6.197411131341138);
+  LatLng markerPosition = const LatLng(0, 0);
 
   DateTime _userSelectedDate = DateTime.now();
 
@@ -40,24 +46,54 @@ class _AddEventScreenState extends State<AddEventScreen> {
     'imageUrl': '',
   };
 
+  Future<Position> _getLocation() async {
+    var currentLocation;
+    LocationPermission permission = await Geolocator.checkPermission();
+    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA     ' +
+        permission.toString());
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+    }
+    // sleep(const Duration(seconds: 2));
+    try {
+      currentLocation = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      _isLoading = false;
+      return Position(
+          longitude: defaultUserPos.longitude,
+          latitude: defaultUserPos.latitude,
+          timestamp: DateTime(2021),
+          accuracy: 0,
+          altitude: 0,
+          heading: 0,
+          speed: 0,
+          speedAccuracy: 0);
+    }
+    _isLoading = false;
+    return currentLocation;
+  }
+
   void _presentDatePicker() {
+    final colors = Provider.of<CustomColorScheme>(context);
     showDatePicker(
       context: context,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData(
-            splashColor: primaryTextColor,
-            textTheme: const TextTheme(
-              subtitle1: TextStyle(color: primaryTextColor),
-              button: TextStyle(color: primaryTextColor),
+            splashColor: colors.primaryTextColor,
+            textTheme: TextTheme(
+              subtitle1: TextStyle(color: colors.primaryTextColor),
+              button: TextStyle(color: colors.primaryTextColor),
             ),
-            accentColor: primaryTextColor,
-            colorScheme: const ColorScheme.light(
-              primary: primaryColor,
-              onPrimary: onPrimary,
-              onSurface: primaryTextColor,
+            accentColor: colors.primaryTextColor,
+            colorScheme: ColorScheme.light(
+              primary: colors.primaryColor,
+              onPrimary: colors.onPrimary,
+              onSurface: colors.primaryTextColor,
             ),
-            dialogBackgroundColor: onPrimary,
+            dialogBackgroundColor: colors.onPrimary,
           ),
           child: child ?? const Text(""),
         );
@@ -78,24 +114,26 @@ class _AddEventScreenState extends State<AddEventScreen> {
   TimeOfDay _time = const TimeOfDay(hour: 7, minute: 15);
 
   void _selectTime() async {
+    final colors = Provider.of<CustomColorScheme>(context);
+
     TimeOfDay? newTime = await showTimePicker(
       context: context,
       initialTime: _time,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData(
-            splashColor: primaryTextColor,
-            textTheme: const TextTheme(
-              subtitle1: TextStyle(color: primaryTextColor),
-              button: TextStyle(color: primaryTextColor),
+            splashColor: colors.primaryTextColor,
+            textTheme: TextTheme(
+              subtitle1: TextStyle(color: colors.primaryTextColor),
+              button: TextStyle(color: colors.primaryTextColor),
             ),
-            accentColor: primaryTextColor,
-            colorScheme: const ColorScheme.light(
-              primary: primaryColor,
-              onPrimary: onPrimary,
-              onSurface: primaryTextColor,
+            accentColor: colors.primaryTextColor,
+            colorScheme: ColorScheme.light(
+              primary: colors.primaryColor,
+              onPrimary: colors.onPrimary,
+              onSurface: colors.primaryTextColor,
             ),
-            dialogBackgroundColor: onPrimary,
+            dialogBackgroundColor: colors.onPrimary,
           ),
           child: child ?? const Text(""),
         );
@@ -118,7 +156,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("\n\nPOS: " + pos.toString());
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return _isLoading
         ? Center(
             child: Builder(builder: (context) {
@@ -140,14 +179,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             "Write event informations here",
-                            style: TextStyle(color: secondaryTextColor),
+                            style: TextStyle(color: colors.primaryTextColor),
                           ),
                           Icon(
                             Icons.info_outlined,
-                            color: secondaryTextColor,
+                            color: colors.secondaryTextColor,
                           )
                         ],
                       ),
@@ -157,9 +196,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   // Name
                   TextFormField(
                     initialValue: _initValues['name'],
-                    cursorColor: primaryTextColor,
-                    style: const TextStyle(color: primaryTextColor),
-                    decoration: textFormDecoration('Name'),
+                    cursorColor: colors.primaryTextColor,
+                    style: TextStyle(color: colors.primaryTextColor),
+                    decoration: textFormDecoration('Name', context),
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_nameFocusNode);
@@ -192,8 +231,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         child: Container(
                           width: MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
-                            color: onPrimary,
-                            border: Border.all(color: secondaryTextColor),
+                            color: colors.onPrimary,
+                            border:
+                                Border.all(color: colors.secondaryTextColor),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
                             ),
@@ -209,16 +249,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                         ? 'No Date Chosen!'
                                         : DateFormat.yMMMd()
                                             .format(_userSelectedDate),
-                                    style: const TextStyle(
-                                        color: primaryTextColor),
+                                    style: TextStyle(
+                                        color: colors.primaryTextColor),
                                   ),
                                 ),
                                 Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.calendar_today_outlined,
-                                      color: primaryColor,
+                                      color: colors.primaryColor,
                                     ))
                               ],
                             ),
@@ -230,8 +270,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         child: Container(
                           width: MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
-                            color: onPrimary,
-                            border: Border.all(color: secondaryTextColor),
+                            color: colors.onPrimary,
+                            border:
+                                Border.all(color: colors.secondaryTextColor),
                             borderRadius: const BorderRadius.all(
                               const Radius.circular(10.0),
                             ),
@@ -246,16 +287,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                     _userSelectedDate == null
                                         ? 'No Date Chosen!'
                                         : _time.format(context),
-                                    style: const TextStyle(
-                                        color: primaryTextColor),
+                                    style: TextStyle(
+                                        color: colors.primaryTextColor),
                                   ),
                                 ),
                                 Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.watch_later_outlined,
-                                      color: primaryColor,
+                                      color: colors.primaryColor,
                                     ))
                               ],
                             ),
@@ -310,26 +351,34 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   //   ),
                   // ),
                   TextFormField(
-                    key: Key(pos.toString()), //
-                    onTap: () async {
-                      var a = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CustomMapsNew(
-                                  position: pos,
-                                )),
-                      );
-                      setState(() {
-                        if (a != null) {
-                          pos = a;
-                        }
+                    key: Key(markerPosition.toString()), //
+                    onTap: () {
+                      _isLoading = true;
+                      _getLocation().then((value) async {
+                        var a = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CustomMapsNew(
+                                    markerPosition: markerPosition,
+                                    centerPosition:
+                                        markerPosition == LatLng(0, 0)
+                                            ? LatLng(
+                                                value.latitude, value.longitude)
+                                            : markerPosition,
+                                  )),
+                        );
+                        setState(() {
+                          if (a != null) {
+                            markerPosition = a;
+                          }
+                        });
                       });
                     },
-                    initialValue: pos.toString(),
+                    initialValue: markerPosition.toString(),
                     readOnly: true,
-                    cursorColor: primaryTextColor,
-                    style: const TextStyle(color: primaryTextColor),
-                    decoration: textFormDecoration('Name'),
+                    cursorColor: colors.primaryTextColor,
+                    style: TextStyle(color: colors.primaryTextColor),
+                    decoration: textFormDecoration('Name', context),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_nameFocusNode);
                     },
@@ -361,9 +410,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           initialValue: '',
-                          cursorColor: primaryTextColor,
-                          style: const TextStyle(color: primaryTextColor),
-                          decoration: textFormDecoration('Distance (km)'),
+                          cursorColor: colors.primaryTextColor,
+                          style: TextStyle(color: colors.primaryTextColor),
+                          decoration: textFormDecoration(
+                              'Dista, contextnce (km)', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context)
@@ -392,9 +442,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           focusNode: _durationFocusNode,
                           keyboardType: TextInputType.number,
                           initialValue: '',
-                          cursorColor: primaryTextColor,
-                          style: const TextStyle(color: primaryTextColor),
-                          decoration: textFormDecoration('Duration (minutes)'),
+                          cursorColor: colors.primaryTextColor,
+                          style: TextStyle(color: colors.primaryTextColor),
+                          decoration: textFormDecoration(
+                              'Durat, contextion (minutes)', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(_nameFocusNode);
@@ -429,9 +480,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           initialValue: '',
-                          cursorColor: primaryTextColor,
-                          style: const TextStyle(color: primaryTextColor),
-                          decoration: textFormDecoration('Pace (mins/km)'),
+                          cursorColor: colors.primaryTextColor,
+                          style: TextStyle(color: colors.primaryTextColor),
+                          decoration: textFormDecoration(
+                              'Pace , context(mins/km)', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context)
@@ -460,9 +512,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           // focusNode: _durationFocusNode,
                           keyboardType: TextInputType.number,
                           initialValue: '',
-                          cursorColor: primaryTextColor,
-                          style: const TextStyle(color: primaryTextColor),
-                          decoration: textFormDecoration('Max participants'),
+                          cursorColor: colors.primaryTextColor,
+                          style: TextStyle(color: colors.primaryTextColor),
+                          decoration: textFormDecoration(
+                              'Max p, contextarticipants', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(_nameFocusNode);
@@ -494,8 +547,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          primary: onPrimary,
+                          backgroundColor: colors.primaryColor,
+                          primary: colors.onPrimary,
                           textStyle: const TextStyle(fontSize: 16),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 10)),
@@ -519,6 +572,8 @@ class AddEventAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return GradientAppBar(
         ((MediaQuery.of(context).size.height / 16) + statusBarHeight), [
       Padding(
@@ -527,25 +582,25 @@ class AddEventAppbar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.replay_outlined,
-                color: onPrimary,
+                color: colors.onPrimary,
               ),
               onPressed: () => {},
             ),
-            const Center(
+            Center(
               heightFactor: 0.5,
-              child: const Text(
+              child: Text(
                 'Add new Event',
-                style: const TextStyle(
-                    color: onPrimary,
+                style: TextStyle(
+                    color: colors.onPrimary,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
             ),
-            const Icon(
+            Icon(
               Icons.save,
-              color: onPrimary,
+              color: colors.onPrimary,
             ),
           ],
         ),

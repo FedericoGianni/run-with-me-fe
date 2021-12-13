@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 import '../themes/custom_colors.dart';
 
 class HalfFilledIcon extends StatelessWidget {
@@ -14,6 +16,8 @@ class HalfFilledIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return ShaderMask(
       blendMode: BlendMode.srcATop,
       shaderCallback: (Rect rect) {
@@ -25,7 +29,7 @@ class HalfFilledIcon extends StatelessWidget {
       child: SizedBox(
         width: size,
         height: size,
-        child: Icon(icon, size: size, color: tertiaryTextColor),
+        child: Icon(icon, size: size, color: colors.tertiaryTextColor),
       ),
     );
   }

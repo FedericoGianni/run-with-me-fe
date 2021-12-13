@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 import 'halfFilledIcon.dart';
 import '../themes/custom_colors.dart';
 
@@ -22,19 +24,21 @@ class Rating extends StatelessWidget {
     });
   }
 
-  List _addEmpty() {
+  List _addEmpty(colors) {
     return List.generate(5 - value.ceil(), (index) {
       // return HalfFilledIcon(icon: Icons.circle, size: size, color: color);
       return Icon(
         Icons.circle,
         size: size,
-        color: tertiaryTextColor,
+        color: colors.tertiaryTextColor,
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return Container(
       padding: const EdgeInsets.only(left: 5, top: 2),
       child: Row(
@@ -43,7 +47,7 @@ class Rating extends StatelessWidget {
           value % 1 != 0.0
               ? HalfFilledIcon(icon: Icons.circle, size: size, color: color)
               : const SizedBox.shrink(),
-          ..._addEmpty()
+          ..._addEmpty(colors)
         ],
       ),
     );

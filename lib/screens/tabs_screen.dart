@@ -15,6 +15,8 @@ import 'booked_events_screen.dart';
 import '../widgets/custom_map_search.dart';
 import '../widgets/default_appbar.dart';
 // import '../models/meal.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -69,8 +71,10 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: colors.background,
       appBar: PreferredSize(
         child: _pages[_selectedPageIndex]['appbar'],
         preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
@@ -78,36 +82,36 @@ class _TabsScreenState extends State<TabsScreen> {
       body: _pages[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
-        backgroundColor: onPrimary,
+        backgroundColor: colors.onPrimary,
         unselectedItemColor: Theme.of(context).unselectedWidgetColor,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: colors.primaryColor,
         currentIndex: _selectedPageIndex,
         type: BottomNavigationBarType.fixed,
         elevation: 2,
         items: [
           BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: const Icon(Icons.home_outlined),
+            backgroundColor: colors.primaryColor,
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: const Icon(Icons.search),
+            backgroundColor: colors.primaryColor,
+            icon: Icon(Icons.search),
             label: 'Browse',
           ),
           BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: const Icon(Icons.add_box_outlined),
+            backgroundColor: colors.primaryColor,
+            icon: Icon(Icons.add_box_outlined),
             label: 'New',
           ),
           BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: const Icon(Icons.event_outlined),
+            backgroundColor: colors.primaryColor,
+            icon: Icon(Icons.event_outlined),
             label: 'Events',
           ),
           BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: const Icon(Icons.person_outline),
+            backgroundColor: colors.primaryColor,
+            icon: Icon(Icons.person_outline),
             label: 'User',
           ),
         ],

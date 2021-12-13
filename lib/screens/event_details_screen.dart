@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class EventDetailsScreen extends StatelessWidget {
   static const routeName = '/details';
@@ -9,8 +11,10 @@ class EventDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final event = ModalRoute.of(context)?.settings.arguments as Event;
+    final colors = Provider.of<CustomColorScheme>(context);
+
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: colors.background,
       appBar: PreferredSize(
         preferredSize: Size(
           MediaQuery.of(context).size.width,
@@ -19,7 +23,7 @@ class EventDetailsScreen extends StatelessWidget {
         child: Container(
           // ignore: prefer_const_constructors
 
-          color: onPrimary,
+          color: colors.onPrimary,
           width: double.infinity,
           margin: const EdgeInsets.only(
             top: 20,
@@ -44,17 +48,17 @@ class EventDetailsScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "Posted on Wed, 03/20",
                       style: TextStyle(
-                          color: secondaryTextColor,
+                          color: colors.secondaryTextColor,
                           fontSize: 10,
                           fontWeight: FontWeight.w600),
                     ),
                     Text(
                       'ID: ' + event.id.toString(),
-                      style: const TextStyle(
-                          color: secondaryTextColor,
+                      style: TextStyle(
+                          color: colors.secondaryTextColor,
                           fontSize: 10,
                           fontWeight: FontWeight.w600),
                     ),
@@ -75,8 +79,8 @@ class EventDetailsScreen extends StatelessWidget {
                     child: Text(
                       event.name,
                       overflow: TextOverflow.clip,
-                      style: const TextStyle(
-                          color: primaryTextColor,
+                      style: TextStyle(
+                          color: colors.primaryTextColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w900),
                     ),
@@ -95,15 +99,15 @@ class EventDetailsScreen extends StatelessWidget {
                   height: 40,
                   child: TextButton(
                     style: TextButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        primary: onPrimary,
+                        backgroundColor: colors.primaryColor,
+                        primary: colors.onPrimary,
                         textStyle: const TextStyle(fontSize: 10),
                         padding: const EdgeInsets.all(0)),
                     onPressed: () => {},
-                    child: const Text(
+                    child: Text(
                       'Subscribe',
                       style: TextStyle(
-                          color: onPrimary,
+                          color: colors.onPrimary,
                           fontSize: 20,
                           fontWeight: FontWeight.w600),
                     ),

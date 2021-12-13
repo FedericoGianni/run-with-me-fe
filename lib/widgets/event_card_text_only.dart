@@ -5,6 +5,8 @@ import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import 'rating.dart';
 import '../screens/event_details_screen.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 // ignore: camel_case_types
 class EventItem extends StatelessWidget {
@@ -23,19 +25,22 @@ class EventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color colorGradient = (Color.lerp(
-        primaryColor, secondaryColor, (index / 2).toDouble() / totAmount))!;
+    final colors = Provider.of<CustomColorScheme>(context);
+
+    Color colorGradient = (Color.lerp(colors.primaryColor,
+        colors.secondaryColor, (index / 2).toDouble() / totAmount))!;
     String name = event.name;
     // name = name.replaceRange(5, name.length, '...');
     Color _participantsColor;
     if (event.currentParticipants < event.maxParticipants) {
-      _participantsColor = secondaryTextColor;
+      _participantsColor = colors.secondaryTextColor;
     } else {
-      _participantsColor = errorColor;
+      _participantsColor = colors.errorColor;
     }
     return InkWell(
       onTap: () => selectEvent(context),
       child: Card(
+        color: colors.onPrimary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 2,
         margin: const EdgeInsets.all(0),
@@ -49,8 +54,8 @@ class EventItem extends StatelessWidget {
             title: Text(
               name,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                  color: primaryTextColor,
+              style: TextStyle(
+                  color: colors.primaryTextColor,
                   fontSize: 16,
                   fontWeight: FontWeight.w900),
             ),
@@ -65,8 +70,8 @@ class EventItem extends StatelessWidget {
                     DateFormat.MEd().format(
                       DateTime.parse(event.date),
                     ),
-                    style: const TextStyle(
-                      color: secondaryTextColor,
+                    style: TextStyle(
+                      color: colors.secondaryTextColor,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

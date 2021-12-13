@@ -3,13 +3,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import '../widgets/custom_info_window.dart';
 import '../providers/event.dart';
-import '../themes/custom_colors.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 import '../widgets/event_card_text_only.dart';
 
 Map<String, Marker> markerGenerator(List<Event> eventList,
-    CustomInfoWindowController _customInfoWindowController) {
+    CustomInfoWindowController _customInfoWindowController, ctx) {
   Map<String, Marker> _markers = {};
   BitmapDescriptor pinLocationIcon = BitmapDescriptor.defaultMarkerWithHue(197);
+  final colors = Provider.of<CustomColorScheme>(ctx);
 
   for (var i = 0; i < eventList.length; i++) {
     BitmapDescriptor.fromAssetImage(
@@ -33,16 +35,16 @@ Map<String, Marker> markerGenerator(List<Event> eventList,
                   padding: const EdgeInsets.all(15.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
-                    color: onPrimary,
+                    color: colors.onPrimary,
                   ),
                   child: EventItem(event, i, eventList.length)),
               Positioned(
                 top: 5.0,
                 left: 5.0,
                 child: IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
-                    color: secondaryTextColor,
+                    color: colors.secondaryTextColor,
                   ),
                   onPressed: () {
                     _customInfoWindowController.hideInfoWindow!();
