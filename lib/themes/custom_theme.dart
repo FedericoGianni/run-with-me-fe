@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'custom_colors.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class CustomTheme {
   static ThemeData get lightTheme {
     return ThemeData(
         textTheme: GoogleFonts.robotoTextTheme(),
-        colorScheme: CustomColorScheme.lightColorScheme,
+        // colorScheme: CustomColorScheme.lightColorScheme,
         scaffoldBackgroundColor: const Color(PLATINUM),
         //fontFamily: 'Montserrat',
         splashColor: Colors.transparent,
@@ -36,17 +38,19 @@ class CustomTheme {
   }
 }
 
-InputDecoration textFormDecoration(String label) {
+InputDecoration textFormDecoration(String label, ctx) {
+  final colors = Provider.of<CustomColorScheme>(ctx);
+
   return InputDecoration(
     label: Text(label),
-    fillColor: onPrimary,
+    fillColor: colors.onPrimary,
     filled: true,
-    focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: secondaryTextColor),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: colors.secondaryTextColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
-    enabledBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: secondaryTextColor),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: colors.secondaryTextColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
   );

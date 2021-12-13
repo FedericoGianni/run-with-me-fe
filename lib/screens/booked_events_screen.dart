@@ -4,7 +4,8 @@ import 'package:runwithme/providers/event.dart';
 import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
-import '../themes/custom_colors.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class BookedEventsScreen extends StatefulWidget {
   static const routeName = '/event';
@@ -18,36 +19,38 @@ class BookedEventsScreen extends StatefulWidget {
 class _BookedEventsScreenState extends State<BookedEventsScreen> {
   int _view = 2;
   double _aspectRatio = 1.4;
-  Color _rowColor = secondaryTextColor;
-  Color _gridColor = primaryColor;
+  late Color _rowColor;
+  late Color _gridColor;
 
-  void __selectListView() {
+  void __selectListView(colors) {
     setState(() {
       _view = 1;
       _aspectRatio = 3;
-      _rowColor = primaryColor;
-      _gridColor = secondaryTextColor;
+      _rowColor = colors.primaryColor;
+      _gridColor = colors.secondaryTextColor;
     });
   }
 
-  void __selectGridView() {
+  void __selectGridView(colors) {
     setState(() {
       _view = 2;
       _aspectRatio = 1.4;
-      _gridColor = primaryColor;
-      _rowColor = secondaryTextColor;
+      _gridColor = colors.primaryColor;
+      _rowColor = colors.secondaryTextColor;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Provider.of<CustomColorScheme>(context);
+    __selectGridView(colors);
     return CustomScrollView(
       slivers: [
         SliverAppBar(
           stretch: false,
           toolbarHeight: 103,
           title: Container(
-            color: onPrimary,
+            color: colors.onPrimary,
             height: 120,
             width: double.infinity,
             padding: const EdgeInsets.only(
@@ -62,7 +65,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
 
           titleSpacing: 0,
           expandedHeight: 160,
-          backgroundColor: background,
+          backgroundColor: colors.background,
 
           // back up the list of items.
           floating: true,
@@ -77,14 +80,16 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 Text(
                   dummy.length.toString() + " results",
                   style:
-                      const TextStyle(color: secondaryTextColor, fontSize: 10),
+                      TextStyle(color: colors.secondaryTextColor, fontSize: 10),
                 ),
                 Row(
                   children: [
                     IconButton(
                       icon: const Icon(Icons.table_rows_outlined),
                       color: _rowColor,
-                      onPressed: __selectListView,
+                      onPressed: () {
+                        __selectListView(colors);
+                      },
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                       splashRadius: 10,
@@ -92,7 +97,9 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                     IconButton(
                       icon: const Icon(Icons.grid_view_outlined),
                       color: _gridColor,
-                      onPressed: __selectGridView,
+                      onPressed: () {
+                        __selectGridView(colors);
+                      },
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                       splashRadius: 10,
@@ -113,11 +120,11 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
           sliver: SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   "Booked events",
                   style: TextStyle(
-                      color: primaryTextColor,
+                      color: colors.primaryTextColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w900),
                 ),

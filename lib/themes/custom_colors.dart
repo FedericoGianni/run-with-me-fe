@@ -14,6 +14,8 @@ const JET_BLACK_DARK = 0xFF262626;
 const JET_BLACK = 0xFF333333;
 const JET_BLACK_LIGHT = 0xFF666666;
 
+const dark1 = 0xFF383838;
+
 const CG_BLUE_HEX_DARK = 0xFF1C637D;
 const CG_BLUE_HEX = 0xFF2584A7;
 const CG_BLUE_HEX_LIGHT = 0xFF43AFD6;
@@ -31,14 +33,16 @@ const MAGNOLIA_LIGHT = 0xFFFCFCFC;
 
 const ERROR = 0xFFCE2525;
 
-const primaryColor = Color(CG_BLUE_HEX);
-const secondaryColor = Color(YELLOW_GREEN);
-const primaryTextColor = Color(JET_BLACK);
-const secondaryTextColor = Color(SILVER_CHALICE);
-const tertiaryTextColor = Color(PLATINUM_DARK);
-const onPrimary = Color(MAGNOLIA);
-const background = Color(PLATINUM_LIGHT);
-const errorColor = Color(ERROR);
+// class CustomColors {
+//   static const primaryColor = Color(CG_BLUE_HEX);
+//   static const secondaryColor = Color(YELLOW_GREEN);
+//   static const primaryTextColor = Color(JET_BLACK);
+//   static const secondaryTextColor = Color(SILVER_CHALICE);
+//   static const tertiaryTextColor = Color(PLATINUM_DARK);
+//   static const onPrimary = Color(MAGNOLIA);
+//   static const background = Color(PLATINUM_LIGHT);
+//   static const errorColor = Color(ERROR);
+// }
 
 // Color getColorFromHex(int hexColor) {
 //   hexColor = hexColor.toUpperCase().replaceAll("#", "");
@@ -48,23 +52,23 @@ const errorColor = Color(ERROR);
 //   return Color(int.parse(hexColor, radix: 16));
 // }
 
-class CustomColorScheme {
-  static ColorScheme get lightColorScheme {
-    return const ColorScheme(
-      //primary: Color(0XC5D1EB),
-      primary: Color(CG_BLUE_HEX),
-      primaryVariant: Color(CG_BLUE_HEX_DARK),
-      secondary: Color(YELLOW_GREEN),
-      secondaryVariant: Color(YELLOW_GREEN_DARK),
-      surface: Color(MAGNOLIA_LIGHT),
-      background: Color(YELLOW_GREEN),
-      error: Color(ERROR),
-      onPrimary: Color(MAGNOLIA_LIGHT),
-      onSecondary: Color(MAGNOLIA_LIGHT),
-      onSurface: Color(PLATINUM_LIGHT),
-      onBackground: Color(PLATINUM_LIGHT),
-      onError: Color(MAGNOLIA_LIGHT),
-      brightness: Brightness.light,
-    );
-  }
-}
+// class CustomColorScheme {
+//   static ColorScheme get lightColorScheme {
+//     return const ColorScheme(
+//       //primary: Color(0XC5D1EB),
+//       primary: Color(CG_BLUE_HEX),
+//       primaryVariant: Color(CG_BLUE_HEX_DARK),
+//       secondary: Color(YELLOW_GREEN),
+//       secondaryVariant: Color(YELLOW_GREEN_DARK),
+//       surface: Color(MAGNOLIA_LIGHT),
+//       background: Color(YELLOW_GREEN),
+//       error: Color(ERROR),
+//       onPrimary: Color(MAGNOLIA_LIGHT),
+//       onSecondary: Color(MAGNOLIA_LIGHT),
+//       onSurface: Color(PLATINUM_LIGHT),
+//       onBackground: Color(PLATINUM_LIGHT),
+//       onError: Color(MAGNOLIA_LIGHT),
+//       brightness: Brightness.light,
+//     );
+//   }
+// }

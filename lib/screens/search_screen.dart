@@ -4,10 +4,12 @@ import 'package:runwithme/providers/event.dart';
 import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
-import '../themes/custom_colors.dart';
+// import '../themes/custom_colors.dart';
 import '../widgets/custom_map_search.dart';
 import '../widgets/search_event_bottomsheet.dart';
 import '../widgets/search_button.dart';
+import '../providers/color_scheme.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
@@ -19,40 +21,44 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   int _view = 2;
   double _aspectRatio = 1.4;
-  Color _rowColor = secondaryTextColor;
-  Color _gridColor = primaryColor;
-  Color _mapColor = secondaryTextColor;
+  Color _rowColor = Colors.deepOrange.shade900;
+  Color _gridColor = Colors.deepOrange.shade900;
+  Color _mapColor = Colors.deepOrange.shade900;
 
-  void __selectListView() {
+  void __selectListView(colors) {
     setState(() {
       _view = 1;
       _aspectRatio = 3;
-      _rowColor = primaryColor;
-      _gridColor = secondaryTextColor;
-      _mapColor = secondaryTextColor;
+      _rowColor = colors.primaryColor;
+      _gridColor = colors.secondaryTextColor;
+      _mapColor = colors.secondaryTextColor;
     });
   }
 
-  void __selectGridView() {
+  void __selectGridView(colors) {
     setState(() {
       _view = 2;
       _aspectRatio = 1.4;
-      _gridColor = primaryColor;
-      _rowColor = secondaryTextColor;
-      _mapColor = secondaryTextColor;
+      _gridColor = colors.primaryColor;
+      _rowColor = colors.secondaryTextColor;
+      _mapColor = colors.secondaryTextColor;
     });
   }
 
-  void __selectMapView() {
+  void __selectMapView(colors) {
     setState(() {
       _view = 3;
-      _gridColor = secondaryTextColor;
-      _rowColor = secondaryTextColor;
-      _mapColor = primaryColor;
+      _gridColor = colors.secondaryTextColor;
+      _rowColor = colors.secondaryTextColor;
+      _mapColor = colors.primaryColor;
     });
   }
 
   List<Widget> _buildContent(BuildContext context, List _eventList) {
+    final colors = Provider.of<CustomColorScheme>(context);
+    if (_rowColor == Colors.deepOrange.shade900) {
+      __selectGridView(colors);
+    }
     return [
       SliverPadding(
         padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
@@ -60,10 +66,10 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Suggested",
                 style: TextStyle(
-                    color: primaryTextColor,
+                    color: colors.primaryTextColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
@@ -71,8 +77,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 height: 30,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                      backgroundColor: onPrimary,
-                      primary: primaryColor,
+                      backgroundColor: colors.onPrimary,
+                      primary: colors.primaryColor,
                       textStyle: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                       padding: const EdgeInsets.all(0)),
@@ -113,17 +119,17 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Recently viewed",
                 style: TextStyle(
-                    color: primaryTextColor,
+                    color: colors.primaryTextColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                    backgroundColor: onPrimary,
-                    primary: primaryColor,
+                    backgroundColor: colors.onPrimary,
+                    primary: colors.primaryColor,
                     textStyle: const TextStyle(fontSize: 10),
                     padding: const EdgeInsets.all(0)),
                 onPressed: () => {},
@@ -161,6 +167,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildAppbar(BuildContext context, int eventsQuantity) {
+    final colors = Provider.of<CustomColorScheme>(context);
+    if (_rowColor == Colors.deepOrange.shade900) {
+      __selectGridView(colors);
+    }
     return SliverAppBar(
       stretch: false,
       toolbarHeight: 103,
@@ -168,13 +178,13 @@ class _SearchScreenState extends State<SearchScreen> {
         105,
         [
           SearchButton(
-              const Icon(
+              Icon(
                 Icons.search,
-                color: secondaryTextColor,
+                color: colors.secondaryTextColor,
               ),
-              const Text(
+              Text(
                 '    Search',
-                style: TextStyle(color: secondaryTextColor),
+                style: TextStyle(color: colors.secondaryTextColor),
               ))
 
           // Container(
@@ -198,11 +208,11 @@ class _SearchScreenState extends State<SearchScreen> {
           //     },
           //     decoration: InputDecoration(
           //       hintText: 'Search',
-          //       hintStyle: TextStyle(color: secondaryTextColor),
+          //       hintStyle: TextStyle(color: colors.secondaryTextColor),
           //       border: InputBorder.none,
           //       prefixIcon: Icon(
           //         Icons.search,
-          //         color: secondaryTextColor,
+          //         color: colors.secondaryTextColor,
           //       ),
           //     ),
           //   ),
@@ -212,7 +222,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
       titleSpacing: 0,
       expandedHeight: 150,
-      backgroundColor: background,
+      backgroundColor: colors.background,
 
       // back up the list of items.
       floating: true,
@@ -229,8 +239,8 @@ class _SearchScreenState extends State<SearchScreen> {
               width: 50,
               child: TextButton(
                 style: TextButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    primary: onPrimary,
+                    backgroundColor: colors.primaryColor,
+                    primary: colors.onPrimary,
                     textStyle: const TextStyle(fontSize: 10),
                     padding: const EdgeInsets.all(0)),
                 onPressed: () => {},
@@ -239,14 +249,16 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Text(
               eventsQuantity.toString() + " results",
-              style: const TextStyle(color: secondaryTextColor, fontSize: 10),
+              style: TextStyle(color: colors.secondaryTextColor, fontSize: 10),
             ),
             Row(
               children: [
                 IconButton(
                   icon: const Icon(Icons.map_outlined),
                   color: _mapColor,
-                  onPressed: __selectMapView,
+                  onPressed: () {
+                    __selectMapView(colors);
+                  },
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   splashRadius: 10,
@@ -254,7 +266,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 IconButton(
                   icon: const Icon(Icons.table_rows_outlined),
                   color: _rowColor,
-                  onPressed: __selectListView,
+                  onPressed: () {
+                    __selectListView(colors);
+                  },
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   splashRadius: 10,
@@ -262,7 +276,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 IconButton(
                   icon: const Icon(Icons.grid_view_outlined),
                   color: _gridColor,
-                  onPressed: __selectGridView,
+                  onPressed: () {
+                    __selectGridView(colors);
+                  },
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   splashRadius: 10,
