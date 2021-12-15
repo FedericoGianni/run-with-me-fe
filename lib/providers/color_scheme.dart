@@ -2,15 +2,15 @@ import '../themes/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomColorScheme with ChangeNotifier {
-  Color primaryColor = Color(CG_BLUE_HEX);
-  Color secondaryColor = Color(YELLOW_GREEN);
-  Color primaryTextColor = Color(PLATINUM);
-  Color secondaryTextColor = Color(SILVER_CHALICE);
-  Color tertiaryTextColor = Color(PLATINUM_DARK);
-  Color onPrimary = Color(dark1);
-  Color background = Color(JET_BLACK_DARK);
-  Color errorColor = Color(ERROR);
-  String currentMode = 'dark';
+  Color primaryColor = Colors.amber.shade900;
+  Color secondaryColor = Colors.amber.shade900;
+  Color primaryTextColor = Colors.amber.shade900;
+  Color secondaryTextColor = Colors.amber.shade900;
+  Color tertiaryTextColor = Colors.amber.shade900;
+  Color onPrimary = Colors.amber.shade900;
+  Color background = Colors.amber.shade900;
+  Color errorColor = Colors.amber.shade900;
+  String currentMode = '';
 
   void setDarkMode() {
     primaryColor = Color(CG_BLUE_HEX);
@@ -22,6 +22,7 @@ class CustomColorScheme with ChangeNotifier {
     background = Color(JET_BLACK_DARK);
     errorColor = Color(ERROR);
     currentMode = 'dark';
+    print("DarkMode");
     notifyListeners();
   }
 
@@ -35,6 +36,8 @@ class CustomColorScheme with ChangeNotifier {
     background = Color(PLATINUM_LIGHT);
     errorColor = Color(ERROR);
     currentMode = 'light';
+    print("LightMode");
+
     notifyListeners();
   }
 }
