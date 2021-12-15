@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:runwithme/providers/user_settings.dart';
 
 import 'themes/custom_theme.dart';
 import 'widgets/event_card_text_only.dart';
@@ -20,42 +21,82 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  bool splash = true;
+  var customColorScheme = CustomColorScheme();
+  Widget routeWidget = MaterialApp(
+    home: Scaffold(
+      body: Container(
+        // width: 500,
+        // height: 500,
+        child: Center(
+          child: Image.asset(
+            "assets/icons/logo_gradient.png",
+            width: 150,
+          ),
+        ),
+      ),
+    ),
+  );
   @override
   Widget build(BuildContext context) {
-    var customColorScheme = CustomColorScheme();
-    customColorScheme.setDarkMode();
+    var userSettings = UserSettings(colors: customColorScheme);
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: customColorScheme,
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Run With Me',
-        theme: CustomTheme.lightTheme,
-        initialRoute: '/', // default is '/'
-        routes: {
-          '/': (ctx) => TabsScreen(),
-          EventsScreen.routeName: (ctx) => EventsScreen(),
-          AddEventScreen.routeName: (ctx) => AddEventScreen(),
-          BookedEventsScreen.routeName: (ctx) => const BookedEventsScreen(),
-          UserScreen.routeName: (ctx) => UserScreen(),
-          HomeScreen.routeName: (ctx) => HomeScreen(),
-          EventDetailsScreen.routeName: (ctx) => const EventDetailsScreen(),
-          SearchScreen.routeName: (ctx) => const EventDetailsScreen(),
-        },
-        onGenerateRoute: (settings) {},
-        // onUnknownRoute: (settings) {
-        //   return MaterialPageRoute(
-        //     builder: (ctx) => CategoriesScreen(),
-        //   );
-        // },
-      ),
+    // customColorScheme.setDarkMode();
+
+    if (splash == true) {
+      userSettings.loadSettings().then((value) {
+        setState(() {
+          splash = !value;
+          userSettings = userSettings;
+          routeWidget = MultiProvider(
+            providers: [
+              ChangeNotifierProvider.value(
+                value: customColorScheme,
+              ),
+              ChangeNotifierProvider.value(
+                value: userSettings,
+              ),
+            ],
+            child: MaterialApp(
+              title: 'Run With Me',
+              // theme: CustomTheme.lightTheme,
+              initialRoute: '/', // default is '/'
+              routes: {
+                '/': (ctx) => TabsScreen(),
+                EventsScreen.routeName: (ctx) => EventsScreen(),
+                AddEventScreen.routeName: (ctx) => AddEventScreen(),
+                BookedEventsScreen.routeName: (ctx) =>
+                    const BookedEventsScreen(),
+                UserScreen.routeName: (ctx) => UserScreen(),
+                HomeScreen.routeName: (ctx) => HomeScreen(),
+                EventDetailsScreen.routeName: (ctx) =>
+                    const EventDetailsScreen(),
+                SearchScreen.routeName: (ctx) => const EventDetailsScreen(),
+              },
+              onGenerateRoute: (settings) {},
+              // onUnknownRoute: (settings) {
+              //   return MaterialPageRoute(
+              //     builder: (ctx) => CategoriesScreen(),
+              //   );
+              // },
+            ),
+          );
+        });
+      });
+    }
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      switchInCurve: Curves.easeIn,
+      child: routeWidget,
     );
+    // theme: CustomTheme.lightTheme,
   }
 }

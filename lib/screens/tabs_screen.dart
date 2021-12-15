@@ -83,7 +83,7 @@ class _TabsScreenState extends State<TabsScreen> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         backgroundColor: colors.onPrimary,
-        unselectedItemColor: Theme.of(context).unselectedWidgetColor,
+        unselectedItemColor: colors.secondaryTextColor,
         selectedItemColor: colors.primaryColor,
         currentIndex: _selectedPageIndex,
         type: BottomNavigationBarType.fixed,
@@ -113,7 +113,7 @@ class _TabsScreenState extends State<TabsScreen> {
             backgroundColor: colors.primaryColor,
             icon: Icon(Icons.person_outline),
             label: 'User',
-          ),
+          )
         ],
       ),
     );

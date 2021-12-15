@@ -19,8 +19,8 @@ class BookedEventsScreen extends StatefulWidget {
 class _BookedEventsScreenState extends State<BookedEventsScreen> {
   int _view = 2;
   double _aspectRatio = 1.4;
-  late Color _rowColor;
-  late Color _gridColor;
+  Color _rowColor = Colors.deepOrange.shade900;
+  Color _gridColor = Colors.deepOrange.shade900;
 
   void __selectListView(colors) {
     setState(() {
@@ -43,7 +43,9 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-    __selectGridView(colors);
+    if (_rowColor == Colors.deepOrange.shade900) {
+      __selectGridView(colors);
+    }
     return CustomScrollView(
       slivers: [
         SliverAppBar(

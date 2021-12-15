@@ -3,6 +3,7 @@ import 'package:runwithme/themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/gradientAppbar.dart';
+import '../providers/user_settings.dart';
 
 class UserScreen extends StatefulWidget {
   static const routeName = '/user';
@@ -14,17 +15,10 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   List<bool> isSelected = [false, false];
 
-  void _setThemeMode(int index, CustomColorScheme colors) {
-    if (index == 0) {
-      colors.setLightMode();
-    } else if (index == 1) {
-      colors.setDarkMode();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    final settings = Provider.of<UserSettings>(context);
     if (colors.currentMode == 'dark') {
       isSelected = [false, true];
     } else if (colors.currentMode == 'light') {
@@ -50,7 +44,11 @@ class _UserScreenState extends State<UserScreen> {
                     isSelected[buttonIndex] = false;
                   }
                 }
-                _setThemeMode(index, colors);
+                if (index == 0) {
+                  settings.setThemeMode(CustomThemeMode.light);
+                } else {
+                  settings.setThemeMode(CustomThemeMode.dark);
+                }
               });
             },
             isSelected: isSelected,
