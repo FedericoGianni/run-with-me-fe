@@ -3,7 +3,7 @@ import 'package:runwithme/themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/gradientAppbar.dart';
-import '../providers/user_settings.dart';
+import '../providers/settings_manager.dart';
 
 class UserScreen extends StatefulWidget {
   static const routeName = '/user';

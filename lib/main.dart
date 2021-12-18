@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:runwithme/providers/user_settings.dart';
+import 'package:runwithme/providers/events.dart';
+import 'package:runwithme/providers/page_index.dart';
+import 'package:runwithme/providers/settings_manager.dart';
+import 'package:runwithme/widgets/splash.dart';
 
 import 'themes/custom_theme.dart';
 import 'widgets/event_card_text_only.dart';
@@ -14,8 +18,11 @@ import 'screens/booked_events_screen.dart';
 import 'screens/event_details_screen.dart';
 import 'screens/search_screen.dart';
 import 'widgets/custom_map_search.dart';
-import '../widgets/slide.dart';
+import 'widgets/slide_DEPRECATED.dart';
 import 'providers/color_scheme.dart';
+import 'providers/events.dart';
+import 'providers/page_index.dart';
+import 'widgets/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,21 +36,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
   bool splash = true;
   var customColorScheme = CustomColorScheme();
-  Widget routeWidget = MaterialApp(
-    home: Scaffold(
-      body: Container(
-        // width: 500,
-        // height: 500,
-        child: Center(
-          child: Image.asset(
-            "assets/icons/logo_gradient.png",
-            width: 150,
-          ),
-        ),
-      ),
-    ),
+  Widget routeWidget = const MaterialApp(
+    // ignore: prefer_const_constructors
+    home: SplashScreen(),
   );
   @override
   Widget build(BuildContext context) {
@@ -53,43 +51,54 @@ class _MyAppState extends State<MyApp> {
 
     if (splash == true) {
       userSettings.loadSettings().then((value) {
-        setState(() {
-          splash = !value;
-          userSettings = userSettings;
-          routeWidget = MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(
-                value: customColorScheme,
+        if (value) {
+          setState(() {
+            splash = !value;
+            userSettings = userSettings;
+            routeWidget = MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: customColorScheme,
+                ),
+                ChangeNotifierProvider.value(
+                  value: Events(),
+                ),
+                ChangeNotifierProvider.value(
+                  value: userSettings,
+                ),
+                ChangeNotifierProvider.value(
+                  value: PageIndex(),
+                ),
+              ],
+              child: MaterialApp(
+                title: 'Run With Me',
+                // theme: CustomTheme.lightTheme,
+                initialRoute: '/', // default is '/'
+                routes: {
+                  '/': (ctx) => TabsScreen(),
+                  EventsScreen.routeName: (ctx) => EventsScreen(),
+                  AddEventScreen.routeName: (ctx) => AddEventScreen(),
+                  BookedEventsScreen.routeName: (ctx) =>
+                      const BookedEventsScreen(),
+                  UserScreen.routeName: (ctx) => UserScreen(),
+                  HomeScreen.routeName: (ctx) => HomeScreen(),
+                  EventDetailsScreen.routeName: (ctx) =>
+                      const EventDetailsScreen(),
+                  SearchScreen.routeName: (ctx) => const EventDetailsScreen(),
+                },
+                onGenerateRoute: (settings) {},
+                // onUnknownRoute: (settings) {
+                //   return MaterialPageRoute(
+                //     builder: (ctx) => CategoriesScreen(),
+                //   );
+                // },
               ),
-              ChangeNotifierProvider.value(
-                value: userSettings,
-              ),
-            ],
-            child: MaterialApp(
-              title: 'Run With Me',
-              // theme: CustomTheme.lightTheme,
-              initialRoute: '/', // default is '/'
-              routes: {
-                '/': (ctx) => TabsScreen(),
-                EventsScreen.routeName: (ctx) => EventsScreen(),
-                AddEventScreen.routeName: (ctx) => AddEventScreen(),
-                BookedEventsScreen.routeName: (ctx) =>
-                    const BookedEventsScreen(),
-                UserScreen.routeName: (ctx) => UserScreen(),
-                HomeScreen.routeName: (ctx) => HomeScreen(),
-                EventDetailsScreen.routeName: (ctx) =>
-                    const EventDetailsScreen(),
-                SearchScreen.routeName: (ctx) => const EventDetailsScreen(),
-              },
-              onGenerateRoute: (settings) {},
-              // onUnknownRoute: (settings) {
-              //   return MaterialPageRoute(
-              //     builder: (ctx) => CategoriesScreen(),
-              //   );
-              // },
-            ),
-          );
-        });
+            );
+          });
+        } else {
+          print("Imma out of here");
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        }
       });
     }
     return AnimatedSwitcher(
