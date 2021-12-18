@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileManager {
+  String fileName = "";
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -13,11 +15,12 @@ class FileManager {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/counter.txt');
+    return File('$path/$fileName');
   }
 
-  Future<String> readFile() async {
+  Future<String> readFile(String fName) async {
     try {
+      fileName = fName;
       final file = await _localFile;
 
       // Read the file
@@ -30,10 +33,24 @@ class FileManager {
     }
   }
 
-  Future<File> writeFile(String counter) async {
+  Future<File> writeFile(String counter, String fName) async {
+    fileName = fName;
     final file = await _localFile;
 
-    // Write the file
+    // Write the
+
     return file.writeAsString(counter);
+  }
+
+  Future<bool> deleteFile(fName) async {
+    fileName = fName;
+    try {
+      final file = await _localFile;
+
+      await file.delete();
+    } catch (e) {
+      return false;
+    }
+    return false;
   }
 }

@@ -17,6 +17,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../providers/color_scheme.dart';
+import '../providers/event.dart';
+import '../providers/events.dart';
+import 'package:provider/provider.dart';
+import '../providers/page_index.dart';
+import '../widgets/custom_loading_icon.dart';
 
 class AddEventScreen extends StatefulWidget {
   static const routeName = '/add_event';
@@ -38,7 +43,21 @@ class _AddEventScreenState extends State<AddEventScreen> {
   DateTime _userSelectedDate = DateTime.now();
 
   static const double padding = 50;
-
+  var _editedEvent = Event(
+    adminId: 0,
+    averageDuration: 0,
+    averageLength: 0,
+    averagePace: 0,
+    createdAt: DateTime.now().toString(),
+    currentParticipants: 0,
+    date: DateTime.now().toString(),
+    difficultyLevel: 0,
+    maxParticipants: 0,
+    name: '',
+    startingPintLat: 0,
+    startingPintLong: 0,
+    id: null,
+  );
   final _initValues = {
     'name': '',
     'date': '',
@@ -76,7 +95,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   }
 
   void _presentDatePicker() {
-    final colors = Provider.of<CustomColorScheme>(context);
+    final colors = Provider.of<CustomColorScheme>(context, listen: false);
     showDatePicker(
       context: context,
       builder: (BuildContext context, Widget? child) {
@@ -107,6 +126,21 @@ class _AddEventScreenState extends State<AddEventScreen> {
       }
       setState(() {
         _userSelectedDate = pickedDate;
+        _editedEvent = Event(
+          adminId: _editedEvent.adminId,
+          averageDuration: _editedEvent.averageDuration,
+          averageLength: _editedEvent.averageLength,
+          averagePace: _editedEvent.averagePace,
+          createdAt: _editedEvent.createdAt,
+          currentParticipants: _editedEvent.currentParticipants,
+          date: pickedDate.toString(),
+          difficultyLevel: _editedEvent.difficultyLevel,
+          id: _editedEvent.id,
+          maxParticipants: _editedEvent.maxParticipants,
+          name: _editedEvent.name,
+          startingPintLat: _editedEvent.startingPintLat,
+          startingPintLong: _editedEvent.startingPintLong,
+        );
       });
     });
   }
@@ -114,7 +148,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   TimeOfDay _time = const TimeOfDay(hour: 7, minute: 15);
 
   void _selectTime() async {
-    final colors = Provider.of<CustomColorScheme>(context);
+    final colors = Provider.of<CustomColorScheme>(context, listen: false);
 
     TimeOfDay? newTime = await showTimePicker(
       context: context,
@@ -142,8 +176,74 @@ class _AddEventScreenState extends State<AddEventScreen> {
     if (newTime != null) {
       setState(() {
         _time = newTime;
+        // _editedEvent = Event(
+        //   adminId: _editedEvent.adminId,
+        //   averageDuration: _editedEvent.averageDuration,
+        //   averageLength: _editedEvent.averageLength,
+        //   averagePace: _editedEvent.averagePace,
+        //   createdAt: _editedEvent.createdAt,
+        //   currentParticipants: _editedEvent.currentParticipants,
+        //   date: _editedEvent.date,
+        //   difficultyLevel: _editedEvent.difficultyLevel,
+        //   id: _editedEvent.id,
+        //   maxParticipants: _editedEvent.maxParticipants,
+        //   name: _editedEvent.name,
+        //   startingPintLat: _editedEvent.startingPintLat,
+        //   startingPintLong: _editedEvent.startingPintLong,
+        // );
       });
     }
+  }
+
+  Future<void> _saveForm() async {
+    final pageIndex = Provider.of<PageIndex>(context, listen: false);
+
+    final isValid = _form.currentState?.validate();
+    if (isValid == null || !isValid) {
+      return;
+    }
+    _form.currentState?.save();
+    setState(() {
+      _isLoading = true;
+    });
+    if (_editedEvent.id != null) {
+      // await Provider.of<Events>(context, listen: false)
+      //     .updateProduct(_editedEvent.id, _editedEvent);
+      print("Here I should edit the Event");
+    } else {
+      try {
+        await Provider.of<Events>(context, listen: false)
+            .addEvent(_editedEvent);
+      } catch (error) {
+        print(error);
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred!'),
+            content: Text('Something went wrong.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  // Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+        );
+      }
+      // finally {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   Navigator.of(context).pop();
+
+      // }
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    pageIndex.setPage(0);
   }
 
   @override
@@ -161,7 +261,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
     return _isLoading
         ? Center(
             child: Builder(builder: (context) {
-              return const CircularProgressIndicator();
+              return const CustomLoadingIcon();
             }),
           )
         : Padding(
@@ -204,19 +304,27 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       FocusScope.of(context).requestFocus(_nameFocusNode);
                     },
                     validator: (value) {
-                      if (value?.length == 0) {
+                      if (value == null || value.isEmpty) {
                         return 'Please provide a value.';
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      // _editedProduct = Product(
-                      //     title: value,
-                      //     price: _editedProduct.price,
-                      //     description: _editedProduct.description,
-                      //     imageUrl: _editedProduct.imageUrl,
-                      //     id: _editedProduct.id,
-                      //     isFavorite: _editedProduct.isFavorite);
+                      _editedEvent = Event(
+                        adminId: _editedEvent.adminId,
+                        averageDuration: _editedEvent.averageDuration,
+                        averageLength: _editedEvent.averageLength,
+                        averagePace: _editedEvent.averagePace,
+                        createdAt: _editedEvent.createdAt,
+                        currentParticipants: _editedEvent.currentParticipants,
+                        date: _editedEvent.date,
+                        difficultyLevel: _editedEvent.difficultyLevel,
+                        id: _editedEvent.id,
+                        maxParticipants: _editedEvent.maxParticipants,
+                        name: _editedEvent.name,
+                        startingPintLat: _editedEvent.startingPintLat,
+                        startingPintLong: _editedEvent.startingPintLong,
+                      );
                     },
                   ),
                   const SizedBox(
@@ -308,48 +416,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   const SizedBox(
                     height: padding,
                   ),
-                  // Position
-                  // GestureDetector(
-                  //   onTap: () async {
-                  //     setState(() {
-                  //       var markerPosition = Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //             builder: (context) => CustomMapsNew()),
-                  //       );
-                  //     });
-                  //   },
-                  //   child: Container(
-                  //     height: 60,
 
-                  //     width: MediaQuery.of(context).size.width / 1.5,
-                  //     padding: const EdgeInsets.only(left: 25),
-
-                  //     decoration: BoxDecoration(
-                  //       color: onPrimary,
-                  //       border: Border.all(color: secondaryTextColor),
-                  //       // set border width
-                  //       borderRadius: BorderRadius.all(
-                  //         Radius.circular(10.0),
-                  //       ), // set rounded corner radius
-                  //     ),
-                  //     // set rounded corner radius
-                  //     child: Row(
-                  //       children: [
-                  //         const Icon(
-                  //           Icons.search,
-                  //           color: secondaryTextColor,
-                  //         ),
-                  //         markerPosition
-                  //             ? Text(markerPosition.toString())
-                  //             : Text('abbabba'),
-
-                  //         // style: TextStyle(color: secondaryTextColor),
-                  //         // )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                   TextFormField(
                     key: Key(markerPosition.toString()), //
                     onTap: () {
@@ -374,28 +441,37 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         });
                       });
                     },
-                    initialValue: markerPosition.toString(),
+                    // initialValue: markerPosition.toString(),
+
                     readOnly: true,
                     cursorColor: colors.primaryTextColor,
                     style: TextStyle(color: colors.primaryTextColor),
-                    decoration: textFormDecoration('Name', context),
+                    decoration: textFormDecoration('Position', context),
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).requestFocus(_nameFocusNode);
                     },
                     validator: (value) {
-                      if (value?.length == 0) {
+                      if (markerPosition == LatLng(0, 0)) {
                         return 'Please provide a value.';
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      // _editedProduct = Product(
-                      //     title: value,
-                      //     price: _editedProduct.price,
-                      //     description: _editedProduct.description,
-                      //     imageUrl: _editedProduct.imageUrl,
-                      //     id: _editedProduct.id,
-                      //     isFavorite: _editedProduct.isFavorite);
+                      _editedEvent = Event(
+                        adminId: _editedEvent.adminId,
+                        averageDuration: _editedEvent.averageDuration,
+                        averageLength: _editedEvent.averageLength,
+                        averagePace: _editedEvent.averagePace,
+                        createdAt: _editedEvent.createdAt,
+                        currentParticipants: _editedEvent.currentParticipants,
+                        date: _editedEvent.date,
+                        difficultyLevel: _editedEvent.difficultyLevel,
+                        id: _editedEvent.id,
+                        maxParticipants: _editedEvent.maxParticipants,
+                        name: _editedEvent.name,
+                        startingPintLat: markerPosition.latitude,
+                        startingPintLong: markerPosition.longitude,
+                      );
                     },
                   ),
                   const SizedBox(
@@ -412,27 +488,40 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           initialValue: '',
                           cursorColor: colors.primaryTextColor,
                           style: TextStyle(color: colors.primaryTextColor),
-                          decoration: textFormDecoration(
-                              'Dista, contextnce (km)', context),
+                          decoration:
+                              textFormDecoration('Distance (km)', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context)
                                 .requestFocus(_durationFocusNode);
                           },
                           validator: (value) {
-                            if (value?.length == 0) {
+                            if (value == null || value.isEmpty) {
                               return 'Please provide a value.';
+                            } else if (int.parse(value) > 100) {
+                              return 'Distance should be less than 100km.';
                             }
                             return null;
                           },
                           onSaved: (value) {
-                            // _editedProduct = Product(
-                            //     title: value,
-                            //     price: _editedProduct.price,
-                            //     description: _editedProduct.description,
-                            //     imageUrl: _editedProduct.imageUrl,
-                            //     id: _editedProduct.id,
-                            //     isFavorite: _editedProduct.isFavorite);
+                            if (value != null) {
+                              _editedEvent = Event(
+                                adminId: _editedEvent.adminId,
+                                averageDuration: _editedEvent.averageDuration,
+                                averageLength: int.parse(value),
+                                averagePace: _editedEvent.averagePace,
+                                createdAt: _editedEvent.createdAt,
+                                currentParticipants:
+                                    _editedEvent.currentParticipants,
+                                date: _editedEvent.date,
+                                difficultyLevel: _editedEvent.difficultyLevel,
+                                id: _editedEvent.id,
+                                maxParticipants: _editedEvent.maxParticipants,
+                                name: _editedEvent.name,
+                                startingPintLat: _editedEvent.startingPintLat,
+                                startingPintLong: _editedEvent.startingPintLong,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -444,8 +533,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           initialValue: '',
                           cursorColor: colors.primaryTextColor,
                           style: TextStyle(color: colors.primaryTextColor),
-                          decoration: textFormDecoration(
-                              'Durat, contextion (minutes)', context),
+                          decoration:
+                              textFormDecoration('Duration (minutes)', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(_nameFocusNode);
@@ -457,13 +546,24 @@ class _AddEventScreenState extends State<AddEventScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            // _editedProduct = Product(
-                            //     title: value,
-                            //     price: _editedProduct.price,
-                            //     description: _editedProduct.description,
-                            //     imageUrl: _editedProduct.imageUrl,
-                            //     id: _editedProduct.id,
-                            //     isFavorite: _editedProduct.isFavorite);
+                            if (value != null) {
+                              _editedEvent = Event(
+                                adminId: _editedEvent.adminId,
+                                averageDuration: int.parse(value),
+                                averageLength: _editedEvent.averageLength,
+                                averagePace: _editedEvent.averagePace,
+                                createdAt: _editedEvent.createdAt,
+                                currentParticipants:
+                                    _editedEvent.currentParticipants,
+                                date: _editedEvent.date,
+                                difficultyLevel: _editedEvent.difficultyLevel,
+                                id: _editedEvent.id,
+                                maxParticipants: _editedEvent.maxParticipants,
+                                name: _editedEvent.name,
+                                startingPintLat: _editedEvent.startingPintLat,
+                                startingPintLong: _editedEvent.startingPintLong,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -482,8 +582,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           initialValue: '',
                           cursorColor: colors.primaryTextColor,
                           style: TextStyle(color: colors.primaryTextColor),
-                          decoration: textFormDecoration(
-                              'Pace , context(mins/km)', context),
+                          decoration:
+                              textFormDecoration('Pace (mins/km)', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context)
@@ -496,13 +596,24 @@ class _AddEventScreenState extends State<AddEventScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            // _editedProduct = Product(
-                            //     title: value,
-                            //     price: _editedProduct.price,
-                            //     description: _editedProduct.description,
-                            //     imageUrl: _editedProduct.imageUrl,
-                            //     id: _editedProduct.id,
-                            //     isFavorite: _editedProduct.isFavorite);
+                            if (value != null) {
+                              _editedEvent = Event(
+                                adminId: _editedEvent.adminId,
+                                averageDuration: _editedEvent.averageDuration,
+                                averageLength: _editedEvent.averageLength,
+                                averagePace: _editedEvent.averagePace,
+                                createdAt: _editedEvent.createdAt,
+                                currentParticipants:
+                                    _editedEvent.currentParticipants,
+                                date: _editedEvent.date,
+                                difficultyLevel: _editedEvent.difficultyLevel,
+                                id: _editedEvent.id,
+                                maxParticipants: _editedEvent.maxParticipants,
+                                name: _editedEvent.name,
+                                startingPintLat: _editedEvent.startingPintLat,
+                                startingPintLong: _editedEvent.startingPintLong,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -514,8 +625,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           initialValue: '',
                           cursorColor: colors.primaryTextColor,
                           style: TextStyle(color: colors.primaryTextColor),
-                          decoration: textFormDecoration(
-                              'Max p, contextarticipants', context),
+                          decoration:
+                              textFormDecoration('Max participants', context),
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) {
                             FocusScope.of(context).requestFocus(_nameFocusNode);
@@ -527,13 +638,24 @@ class _AddEventScreenState extends State<AddEventScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            // _editedProduct = Product(
-                            //     title: value,
-                            //     price: _editedProduct.price,
-                            //     description: _editedProduct.description,
-                            //     imageUrl: _editedProduct.imageUrl,
-                            //     id: _editedProduct.id,
-                            //     isFavorite: _editedProduct.isFavorite);
+                            if (value != null) {
+                              _editedEvent = Event(
+                                adminId: _editedEvent.adminId,
+                                averageDuration: _editedEvent.averageDuration,
+                                averageLength: _editedEvent.averageLength,
+                                averagePace: _editedEvent.averagePace,
+                                createdAt: _editedEvent.createdAt,
+                                currentParticipants:
+                                    _editedEvent.currentParticipants,
+                                date: _editedEvent.date,
+                                difficultyLevel: _editedEvent.difficultyLevel,
+                                id: _editedEvent.id,
+                                maxParticipants: _editedEvent.maxParticipants,
+                                name: _editedEvent.name,
+                                startingPintLat: _editedEvent.startingPintLat,
+                                startingPintLong: _editedEvent.startingPintLong,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -552,7 +674,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           textStyle: const TextStyle(fontSize: 16),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 10)),
-                      onPressed: () => {},
+                      onPressed: _saveForm,
                       child: const Text('Create'),
                     ),
                   ),

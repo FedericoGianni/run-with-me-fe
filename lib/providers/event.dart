@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class Event with ChangeNotifier {
-  final int id;
+  var id;
   final String createdAt;
   final String name;
   final String date;

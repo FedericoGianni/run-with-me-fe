@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';
+import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/themes/custom_colors.dart';
 import '../providers/event.dart';
 
@@ -17,6 +18,7 @@ import '../widgets/default_appbar.dart';
 // import '../models/meal.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
+import '../providers/page_index.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -25,8 +27,7 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   late List<Map> _pages;
-  int _selectedPageIndex = 0;
-  int _prevSelectedPageIndex = -1;
+
   // ignore: prefer_typing_uninitialized_variables
   var _transitionStart;
   var _transitionEnd;
@@ -64,28 +65,30 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   void _selectPage(int index) {
+    final pageIndex = Provider.of<PageIndex>(context, listen: false);
+
     setState(() {
-      _selectedPageIndex = index;
+      pageIndex.setPage(index);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-
+    final pageIndex = Provider.of<PageIndex>(context);
     return Scaffold(
       backgroundColor: colors.background,
       appBar: PreferredSize(
-        child: _pages[_selectedPageIndex]['appbar'],
+        child: _pages[pageIndex.index]['appbar'],
         preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
       ),
-      body: _pages[_selectedPageIndex]['page'],
+      body: _pages[pageIndex.index]['page'],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         backgroundColor: colors.onPrimary,
         unselectedItemColor: colors.secondaryTextColor,
         selectedItemColor: colors.primaryColor,
-        currentIndex: _selectedPageIndex,
+        currentIndex: pageIndex.index,
         type: BottomNavigationBarType.fixed,
         elevation: 2,
         items: [
