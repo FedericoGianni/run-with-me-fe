@@ -60,7 +60,7 @@ class UserSettings with ChangeNotifier {
 
     // ignore: todo
     //TODO: This delay should be removed in production
-    await Future.delayed(const Duration(milliseconds: 2000));
+    // await Future.delayed(const Duration(milliseconds: 2000));
     if (settings.theme == CustomThemeMode.dark) {
       colors.setDarkMode();
     } else {
@@ -69,6 +69,16 @@ class UserSettings with ChangeNotifier {
     notifyListeners();
     return true;
   }
+
+  void userLogin() {
+    settings.isLoggedIn = true;
+    notifyListeners();
+  }
+
+  void userLogout() {
+    settings.isLoggedIn = false;
+    notifyListeners();
+  }
 }
 
 class Settings {
@@ -76,6 +86,7 @@ class Settings {
   bool location = false;
   NotificationMode notification = NotificationMode.off;
   MapStyle mapStyle = MapStyle.light;
+  bool isLoggedIn = false;
 
   fromJson(Map<String, dynamic> json) {
     theme = CustomThemeMode.values
@@ -85,6 +96,7 @@ class Settings {
         .firstWhere((e) => describeEnum(e) == json['notification']);
     mapStyle =
         MapStyle.values.firstWhere((e) => describeEnum(e) == json['map_style']);
+    isLoggedIn = json['loggedIn'] == 'true';
   }
 
   Map<String, dynamic> toJson() => {
@@ -92,5 +104,6 @@ class Settings {
         'location': location.toString(),
         'notification': notification.name,
         'map_style': mapStyle.name,
+        'loggedIn': isLoggedIn.toString(),
       };
 }

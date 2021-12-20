@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
               ],
               child: MaterialApp(
                 title: 'Run With Me',
-                // theme: CustomTheme.lightTheme,
+                theme: CustomTheme.noTheme,
                 initialRoute: '/', // default is '/'
                 routes: {
                   '/': (ctx) => TabsScreen(),

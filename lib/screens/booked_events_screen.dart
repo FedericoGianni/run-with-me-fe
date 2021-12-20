@@ -50,10 +50,10 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
       slivers: [
         SliverAppBar(
           stretch: false,
-          toolbarHeight: 103,
+          toolbarHeight: 123,
           title: Container(
             color: colors.onPrimary,
-            height: 120,
+            height: 123,
             width: double.infinity,
             padding: const EdgeInsets.only(
               top: 50,
@@ -66,7 +66,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
           ),
 
           titleSpacing: 0,
-          expandedHeight: 160,
+          expandedHeight: 183,
           backgroundColor: colors.background,
 
           // back up the list of items.
