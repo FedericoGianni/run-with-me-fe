@@ -73,19 +73,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
-              SizedBox(
-                height: 30,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      backgroundColor: colors.onPrimary,
-                      primary: colors.primaryColor,
-                      textStyle: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w500),
-                      padding: const EdgeInsets.all(0)),
-                  onPressed: () => {},
-                  child: const Text('View all'),
-                ),
-              ),
+              // SizedBox(
+              //   height: 30,
+              //   child: TextButton(
+              //     style: TextButton.styleFrom(
+              //         backgroundColor: colors.onPrimary,
+              //         primary: colors.primaryColor,
+              //         textStyle: const TextStyle(
+              //             fontSize: 12, fontWeight: FontWeight.w500),
+              //         padding: const EdgeInsets.all(0)),
+              //     onPressed: () => {},
+              //     child: const Text('View all'),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -126,15 +126,15 @@ class _SearchScreenState extends State<SearchScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: colors.onPrimary,
-                    primary: colors.primaryColor,
-                    textStyle: const TextStyle(fontSize: 10),
-                    padding: const EdgeInsets.all(0)),
-                onPressed: () => {},
-                child: const Text('View all'),
-              ),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //       backgroundColor: colors.onPrimary,
+              //       primary: colors.primaryColor,
+              //       textStyle: const TextStyle(fontSize: 10),
+              //       padding: const EdgeInsets.all(0)),
+              //   onPressed: () => {},
+              //   child: const Text('View all'),
+              // ),
             ],
           ),
         ),
@@ -168,24 +168,27 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildAppbar(BuildContext context, int eventsQuantity) {
     final colors = Provider.of<CustomColorScheme>(context);
+    double height = 123;
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
     }
     return SliverAppBar(
       stretch: false,
-      toolbarHeight: 103,
+      toolbarHeight: height,
       title: GradientAppBar(
-        105,
+        height,
         [
-          SearchButton(
-              Icon(
-                Icons.search,
-                color: colors.secondaryTextColor,
-              ),
-              Text(
-                '    Search',
-                style: TextStyle(color: colors.secondaryTextColor),
-              ))
+          Center(
+            child: SearchButton(
+                Icon(
+                  Icons.search,
+                  color: colors.secondaryTextColor,
+                ),
+                Text(
+                  '    Search',
+                  style: TextStyle(color: colors.secondaryTextColor),
+                )),
+          )
 
           // Container(
           //   margin: EdgeInsets.only(
@@ -221,7 +224,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
 
       titleSpacing: 0,
-      expandedHeight: 150,
+      expandedHeight: height + 60,
       backgroundColor: colors.background,
 
       // back up the list of items.
@@ -244,7 +247,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     textStyle: const TextStyle(fontSize: 10),
                     padding: const EdgeInsets.all(0)),
                 onPressed: () => {},
-                child: const Text('Filter'),
+                child: Text(
+                  'Filter',
+                  style: TextStyle(color: colors.primaryTextColor),
+                ),
               ),
             ),
             Text(

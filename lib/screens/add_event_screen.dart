@@ -695,38 +695,40 @@ class AddEventAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
     final colors = Provider.of<CustomColorScheme>(context);
-
+    print(statusBarHeight);
     return GradientAppBar(
-        ((MediaQuery.of(context).size.height / 16) + statusBarHeight), [
-      Padding(
-        padding: EdgeInsets.only(top: statusBarHeight),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(
-                Icons.replay_outlined,
-                color: colors.onPrimary,
-              ),
-              onPressed: () => {},
+        // ((MediaQuery.of(context).size.height / 14) + statusBarHeight), [
+        (75 + statusBarHeight),
+        [
+          Padding(
+            padding: EdgeInsets.all(statusBarHeight),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.replay_outlined,
+                    color: colors.titleColor,
+                  ),
+                  onPressed: () => {},
+                ),
+                Center(
+                  heightFactor: 0.5,
+                  child: Text(
+                    'Add new Event',
+                    style: TextStyle(
+                        color: colors.titleColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Icon(
+                  Icons.save,
+                  color: colors.titleColor,
+                ),
+              ],
             ),
-            Center(
-              heightFactor: 0.5,
-              child: Text(
-                'Add new Event',
-                style: TextStyle(
-                    color: colors.onPrimary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Icon(
-              Icons.save,
-              color: colors.onPrimary,
-            ),
-          ],
-        ),
-      ),
-    ]);
+          ),
+        ]);
   }
 }
