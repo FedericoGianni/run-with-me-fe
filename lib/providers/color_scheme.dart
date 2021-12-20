@@ -2,6 +2,7 @@ import '../themes/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomColorScheme with ChangeNotifier {
+  Color titleColor = Colors.amber.shade900;
   Color primaryColor = Colors.amber.shade900;
   Color secondaryColor = Colors.amber.shade900;
   Color primaryTextColor = Colors.amber.shade900;
@@ -13,28 +14,30 @@ class CustomColorScheme with ChangeNotifier {
   String currentMode = '';
 
   void setDarkMode() {
-    primaryColor = Color(CG_BLUE_HEX);
-    secondaryColor = Color(YELLOW_GREEN);
-    primaryTextColor = Color(PLATINUM);
-    secondaryTextColor = Color(SILVER_CHALICE);
-    tertiaryTextColor = Color(PLATINUM_DARK);
-    onPrimary = Color(dark1);
-    background = Color(JET_BLACK_DARK);
-    errorColor = Color(ERROR);
+    titleColor = const Color(MAGNOLIA);
+    primaryColor = const Color(CG_BLUE_HEX);
+    secondaryColor = const Color(YELLOW_GREEN);
+    primaryTextColor = const Color(PLATINUM);
+    secondaryTextColor = const Color(SILVER_CHALICE);
+    tertiaryTextColor = const Color(PLATINUM_DARK);
+    onPrimary = const Color(dark1);
+    background = const Color(JET_BLACK_DARK);
+    errorColor = const Color(ERROR);
     currentMode = 'dark';
     print("DarkMode");
     notifyListeners();
   }
 
   void setLightMode() {
-    primaryColor = Color(CG_BLUE_HEX);
-    secondaryColor = Color(YELLOW_GREEN);
-    primaryTextColor = Color(JET_BLACK);
-    secondaryTextColor = Color(SILVER_CHALICE);
-    tertiaryTextColor = Color(PLATINUM_DARK);
-    onPrimary = Color(MAGNOLIA);
-    background = Color(PLATINUM_LIGHT);
-    errorColor = Color(ERROR);
+    titleColor = const Color(MAGNOLIA);
+    primaryColor = const Color(CG_BLUE_HEX);
+    secondaryColor = const Color(YELLOW_GREEN);
+    primaryTextColor = const Color(JET_BLACK);
+    secondaryTextColor = const Color(SILVER_CHALICE);
+    tertiaryTextColor = const Color(PLATINUM_DARK);
+    onPrimary = const Color(MAGNOLIA);
+    background = const Color(PLATINUM_LIGHT);
+    errorColor = const Color(ERROR);
     currentMode = 'light';
     print("LightMode");
 

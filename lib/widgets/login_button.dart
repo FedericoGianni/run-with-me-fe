@@ -6,10 +6,10 @@ import 'search_event_bottomsheet.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 
-class SearchButton extends StatelessWidget {
+class LoginButton extends StatelessWidget {
   final Icon icon;
   final Text text;
-  const SearchButton(this.icon, this.text, {Key? key}) : super(key: key);
+  const LoginButton(this.icon, this.text, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
