@@ -32,7 +32,7 @@ Map<String, Marker> markerGenerator(List<Event> eventList,
           Stack(
             children: [
               Container(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: colors.onPrimary,
