@@ -14,7 +14,7 @@ class SubscribeBottomSheet extends StatefulWidget {
 
 class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _form = GlobalKey<FormState>();
-  final _pwdFocusNode = FocusNode();
+  final _pwd3FocusNode = FocusNode();
   final _pwd2FocusNode = FocusNode();
   Icon eyeIcon = const Icon(
     Icons.remove_red_eye,
@@ -43,7 +43,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
 
   @override
   void dispose() {
-    _pwdFocusNode.dispose();
+    print("DISPOSE");
+    _pwd3FocusNode.dispose();
     _pwd2FocusNode.dispose();
     super.dispose();
   }
@@ -123,7 +124,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                 decoration: textFormDecoration('Email', context),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_pwdFocusNode);
+                  FocusScope.of(context).requestFocus(_pwd3FocusNode);
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -142,7 +143,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
               padding: EdgeInsets.only(
                   top: 10, left: screenWidth / 7, right: screenWidth / 7),
               child: TextFormField(
-                focusNode: _pwdFocusNode,
+                focusNode: _pwd3FocusNode,
                 initialValue: _initValues['password'],
                 obscureText: isTextObsured,
                 cursorColor: colors.primaryTextColor,
@@ -220,6 +221,11 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             const SizedBox(
               height: padding,
             ),
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+            )
           ],
         ),
       ),

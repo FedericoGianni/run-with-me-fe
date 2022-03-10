@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
+import '../widgets/custom_maps_event_detail.dart';
 
 class EventDetailsScreen extends StatelessWidget {
   static const routeName = '/details';
@@ -69,7 +71,7 @@ class EventDetailsScreen extends StatelessWidget {
           ),
           SliverPadding(
             padding:
-                const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+                const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
             sliver: SliverToBoxAdapter(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +83,7 @@ class EventDetailsScreen extends StatelessWidget {
                       overflow: TextOverflow.clip,
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 20,
+                          fontSize: 24,
                           fontWeight: FontWeight.w900),
                     ),
                   ),
@@ -90,8 +92,54 @@ class EventDetailsScreen extends StatelessWidget {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.only(
-                bottom: 20, top: 500, left: 20, right: 20),
+            padding:
+                const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+            sliver: SliverToBoxAdapter(
+              child: Container(
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width / 2,
+                child: CustomMapsEvent(
+                  event: event,
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding:
+                const EdgeInsets.only(bottom: 20, top: 0, left: 15, right: 15),
+            sliver: SliverToBoxAdapter(
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: 160,
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Date:',
+                            style: TextStyle(
+                                color: colors.secondaryTextColor, fontSize: 18),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Text(
+                              event.date,
+                              style:
+                                  TextStyle(color: colors.secondaryTextColor),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+            ),
+          ),
+          SliverPadding(
+            padding:
+                const EdgeInsets.only(bottom: 20, top: 50, left: 20, right: 20),
             sliver: SliverToBoxAdapter(
               child: Center(
                 child: SizedBox(
@@ -107,7 +155,7 @@ class EventDetailsScreen extends StatelessWidget {
                     child: Text(
                       'Subscribe',
                       style: TextStyle(
-                          color: colors.onPrimary,
+                          color: colors.primaryTextColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w600),
                     ),

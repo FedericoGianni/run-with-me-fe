@@ -96,7 +96,7 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
           ),
           Container(
             padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top + 10,
+                top: MediaQuery.of(context).padding.top + 20,
                 left: 20,
                 right: 20),
             child: Row(
@@ -106,11 +106,40 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
                   icon: Icon(
                     Icons.arrow_back,
                     size: 30,
-                    color: colors.primaryTextColor,
+                    color: colors.secondaryTextColor,
                   ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.8,
+                  decoration: BoxDecoration(
+                    color: colors.onPrimary,
+                    border: Border.all(color: colors.onPrimary),
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(10.0),
+                    ),
+                  ),
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.search,
+                          size: 20,
+                          color: colors.secondaryTextColor,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Search',
+                            style: TextStyle(color: colors.secondaryTextColor),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 IconButton(
                   icon: Icon(

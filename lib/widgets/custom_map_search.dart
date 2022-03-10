@@ -14,7 +14,7 @@ class CustomMapsSearch extends StatelessWidget {
   CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
 
-  final LatLng _center = const LatLng(0, 0);
+  final LatLng _center = const LatLng(45.45, 9.23);
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     customInfoWindowController.googleMapController = controller;
@@ -39,7 +39,7 @@ class CustomMapsSearch extends StatelessWidget {
                   .values),
           initialCameraPosition: CameraPosition(
             target: _center,
-            zoom: 5.0,
+            zoom: 12.0,
           ),
         ),
         CustomInfoWindow(

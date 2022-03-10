@@ -72,11 +72,15 @@ class UserSettings with ChangeNotifier {
 
   void userLogin() {
     settings.isLoggedIn = true;
+    FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
+
     notifyListeners();
   }
 
   void userLogout() {
     settings.isLoggedIn = false;
+    FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
+
     notifyListeners();
   }
 }

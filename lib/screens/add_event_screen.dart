@@ -195,6 +195,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
     }
   }
 
+  void cleanForm() {
+    setState(() {});
+  }
+
   Future<void> _saveForm() async {
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
@@ -264,17 +268,17 @@ class _AddEventScreenState extends State<AddEventScreen> {
               return const CustomLoadingIcon();
             }),
           )
-        : Padding(
-            padding: const EdgeInsets.only(
-              top: 10,
-              left: 20.0,
-              right: 20,
-            ),
-            child: Form(
-              key: _form,
-              child: ListView(
-                children: <Widget>[
-                  Container(
+        : Form(
+            key: _form,
+            child: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    left: 20.0,
+                    right: 20,
+                  ),
+                  child: Container(
                     padding: const EdgeInsets.only(bottom: 40),
                     child: Center(
                       child: Row(
@@ -293,8 +297,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     ),
                     height: 70,
                   ),
-                  // Name
-                  TextFormField(
+                ),
+                // Name
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 20.0,
+                    right: 20,
+                  ),
+                  child: TextFormField(
                     initialValue: _initValues['name'],
                     cursorColor: colors.primaryTextColor,
                     style: TextStyle(color: colors.primaryTextColor),
@@ -327,11 +338,18 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       );
                     },
                   ),
-                  const SizedBox(
-                    height: padding,
+                ),
+                const SizedBox(
+                  height: padding,
+                ),
+                // Date and Time
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 20.0,
+                    right: 20,
                   ),
-                  // Date and Time
-                  Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
@@ -340,8 +358,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           width: MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
                             color: colors.onPrimary,
-                            border:
-                                Border.all(color: colors.secondaryTextColor),
+                            border: Border.all(color: colors.onPrimary),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
                             ),
@@ -358,7 +375,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                         : DateFormat.yMMMd()
                                             .format(_userSelectedDate),
                                     style: TextStyle(
-                                        color: colors.primaryTextColor),
+                                        color: colors.secondaryTextColor),
                                   ),
                                 ),
                                 Container(
@@ -366,7 +383,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                         horizontal: 20),
                                     child: Icon(
                                       Icons.calendar_today_outlined,
-                                      color: colors.primaryColor,
+                                      color: colors.secondaryTextColor,
                                     ))
                               ],
                             ),
@@ -379,8 +396,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           width: MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
                             color: colors.onPrimary,
-                            border:
-                                Border.all(color: colors.secondaryTextColor),
+                            border: Border.all(color: colors.onPrimary),
                             borderRadius: const BorderRadius.all(
                               const Radius.circular(10.0),
                             ),
@@ -396,7 +412,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                         ? 'No Date Chosen!'
                                         : _time.format(context),
                                     style: TextStyle(
-                                        color: colors.primaryTextColor),
+                                        color: colors.secondaryTextColor),
                                   ),
                                 ),
                                 Container(
@@ -404,7 +420,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                         horizontal: 20),
                                     child: Icon(
                                       Icons.watch_later_outlined,
-                                      color: colors.primaryColor,
+                                      color: colors.secondaryTextColor,
                                     ))
                               ],
                             ),
@@ -413,26 +429,30 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: padding,
-                  ),
+                ),
+                const SizedBox(
+                  height: padding,
+                ),
 
-                  TextFormField(
-                    key: Key(markerPosition.toString()), //
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 20.0,
+                    right: 20,
+                  ),
+                  child: GestureDetector(
                     onTap: () {
-                      _isLoading = true;
                       _getLocation().then((value) async {
                         var a = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomMapsNew(
-                                    markerPosition: markerPosition,
-                                    centerPosition:
-                                        markerPosition == LatLng(0, 0)
-                                            ? LatLng(
-                                                value.latitude, value.longitude)
-                                            : markerPosition,
-                                  )),
+                            builder: (context) => CustomMapsNew(
+                              markerPosition: markerPosition,
+                              centerPosition: markerPosition == LatLng(0, 0)
+                                  ? LatLng(value.latitude, value.longitude)
+                                  : markerPosition,
+                            ),
+                          ),
                         );
                         setState(() {
                           if (a != null) {
@@ -441,44 +461,59 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         });
                       });
                     },
-                    // initialValue: markerPosition.toString(),
-
-                    readOnly: true,
-                    cursorColor: colors.primaryTextColor,
-                    style: TextStyle(color: colors.primaryTextColor),
-                    decoration: textFormDecoration('Position', context),
-                    onFieldSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(_nameFocusNode);
-                    },
-                    validator: (value) {
-                      if (markerPosition == LatLng(0, 0)) {
-                        return 'Please provide a value.';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _editedEvent = Event(
-                        adminId: _editedEvent.adminId,
-                        averageDuration: _editedEvent.averageDuration,
-                        averageLength: _editedEvent.averageLength,
-                        averagePace: _editedEvent.averagePace,
-                        createdAt: _editedEvent.createdAt,
-                        currentParticipants: _editedEvent.currentParticipants,
-                        date: _editedEvent.date,
-                        difficultyLevel: _editedEvent.difficultyLevel,
-                        id: _editedEvent.id,
-                        maxParticipants: _editedEvent.maxParticipants,
-                        name: _editedEvent.name,
-                        startingPintLat: markerPosition.latitude,
-                        startingPintLong: markerPosition.longitude,
-                      );
-                    },
+                    // initialValue: markerPosition.toString(),,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2.3,
+                      decoration: BoxDecoration(
+                        color: colors.onPrimary,
+                        border: Border.all(color: colors.onPrimary),
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(10.0),
+                        ),
+                      ),
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: markerPosition == LatLng(0, 0)
+                                    ? Text(
+                                        'Search Location',
+                                        style: TextStyle(
+                                            color: colors.secondaryTextColor),
+                                      )
+                                    : Text(
+                                        'Location Selected',
+                                        style: TextStyle(
+                                            color: colors.primaryColor),
+                                      )),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Icon(
+                                  Icons.location_on_outlined,
+                                  color: markerPosition == LatLng(0, 0)
+                                      ? colors.secondaryTextColor
+                                      : colors.primaryColor,
+                                ))
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  const SizedBox(
-                    height: padding,
+                ),
+                const SizedBox(
+                  height: padding,
+                ),
+                // Distance and Duration
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 20.0,
+                    right: 20,
                   ),
-                  // Distance and Duration
-                  Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
@@ -569,10 +604,17 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: padding,
+                ),
+                const SizedBox(
+                  height: padding,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 20.0,
+                    right: 20,
                   ),
-                  Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
@@ -661,10 +703,17 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: padding,
+                ),
+                const SizedBox(
+                  height: padding,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 20.0,
+                    right: 20,
                   ),
-                  Container(
+                  child: Container(
                     width: 70,
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -678,11 +727,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       child: const Text('Create'),
                     ),
                   ),
-                  const SizedBox(
-                    height: padding,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: padding,
+                ),
+              ],
             ),
           );
   }
@@ -695,6 +744,8 @@ class AddEventAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
     final colors = Provider.of<CustomColorScheme>(context);
+    PageIndex index = Provider.of<PageIndex>(context);
+
     print(statusBarHeight);
     return GradientAppBar(
         // ((MediaQuery.of(context).size.height / 14) + statusBarHeight), [
@@ -702,31 +753,14 @@ class AddEventAppbar extends StatelessWidget {
         [
           Padding(
             padding: EdgeInsets.all(statusBarHeight),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.replay_outlined,
+            child: Center(
+              child: Text(
+                'Add new Event',
+                style: TextStyle(
                     color: colors.titleColor,
-                  ),
-                  onPressed: () => {},
-                ),
-                Center(
-                  heightFactor: 0.5,
-                  child: Text(
-                    'Add new Event',
-                    style: TextStyle(
-                        color: colors.titleColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Icon(
-                  Icons.save,
-                  color: colors.titleColor,
-                ),
-              ],
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ]);
