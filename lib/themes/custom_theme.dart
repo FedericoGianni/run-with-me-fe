@@ -42,21 +42,21 @@ class CustomTheme {
     return ThemeData(
         textTheme: GoogleFonts.robotoTextTheme(),
         // primaryColor: const Color(CG_BLUE_HEX),
-        scaffoldBackgroundColor: Colors.purple,
+        scaffoldBackgroundColor: Colors.transparent,
         colorScheme: const ColorScheme(
-          secondary: Colors.purple,
+          secondary: Colors.indigo,
           primary: Color(CG_BLUE_HEX),
-          primaryVariant: Colors.purple,
-          secondaryVariant: Colors.purple,
-          onPrimary: Colors.purple,
-          onSecondary: Colors.purple,
-          onSurface: Colors.purple,
+          primaryVariant: Colors.red,
+          secondaryVariant: Colors.orange,
+          onPrimary: Colors.green,
+          onSecondary: Colors.teal,
+          onSurface: Colors.brown,
           onError: Colors.purple,
           onBackground: Color(CG_BLUE_HEX),
-          error: Colors.purple,
+          error: Colors.grey,
           brightness: Brightness.dark,
           background: Color(CG_BLUE_HEX),
-          surface: Colors.purple,
+          surface: Colors.yellow,
         ),
         //fontFamily: 'Montserrat',
         buttonTheme: ButtonThemeData(
@@ -86,11 +86,11 @@ InputDecoration textFormDecoration(String label, ctx) {
     fillColor: colors.onPrimary,
     filled: true,
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: colors.secondaryTextColor),
+      borderSide: BorderSide(color: colors.tertiaryTextColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: colors.secondaryTextColor),
+      borderSide: BorderSide(color: colors.onPrimary),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
   );
@@ -121,11 +121,11 @@ InputDecoration passwordFormDecoration(
     fillColor: colors.onPrimary,
     filled: true,
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: colors.secondaryTextColor),
+      borderSide: BorderSide(color: colors.tertiaryTextColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: colors.secondaryTextColor),
+      borderSide: BorderSide(color: colors.onPrimary),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
   );

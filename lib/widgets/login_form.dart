@@ -41,12 +41,13 @@ class _LoginFormState extends State<LoginForm> {
       }
     });
   }
-
-  @override
-  void dispose() {
-    _pwdFocusNode.dispose();
-    super.dispose();
-  }
+  // TODO: this should be uncommented to avoid memory leaks
+  // @override
+  // void dispose() {
+  //   print('hey DISPOSING');
+  //   _pwdFocusNode.dispose();
+  //   super.dispose();
+  // }
 
   Future<void> _saveForm() async {
     // final pageIndex = Provider.of<PageIndex>(context, listen: false);

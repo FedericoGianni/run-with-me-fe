@@ -308,7 +308,7 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           SizedBox(
             width: double.infinity,
-            height: 150,
+            height: 190,
             child: CustomScrollView(
               slivers: [
                 _buildAppbar(
@@ -321,7 +321,7 @@ class _SearchScreenState extends State<SearchScreen> {
           SizedBox(
             child: CustomMapsSearch(),
             width: double.infinity,
-            height: MediaQuery.of(context).size.height - 150 - 60,
+            height: MediaQuery.of(context).size.height - 190 - 60,
           ),
         ],
       );
