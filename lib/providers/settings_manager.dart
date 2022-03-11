@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import '../providers/color_scheme.dart';
 import '../classes/file_manager.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum CustomThemeMode {
   dark,
@@ -27,9 +29,11 @@ enum MapStyle {
 class UserSettings with ChangeNotifier {
   String settingsFileName = 'settings.json';
   bool location = false;
-  var settings = Settings();
+  String baseUrl = 'https://runwithme.msuki.tk';
   CustomThemeMode mode = CustomThemeMode.light;
   CustomColorScheme colors;
+  var settings = Settings();
+  final secureStorage = const FlutterSecureStorage();
 
   UserSettings({required this.colors});
 
@@ -51,6 +55,7 @@ class UserSettings with ChangeNotifier {
   }
 
   Future<bool> loadSettings() async {
+    // First it reads software settings from file
     var settingsString = await FileManager().readFile(settingsFileName);
     if (settingsString == 'Null') {
       settingsString = json.encode(settings.toJson());
@@ -66,18 +71,107 @@ class UserSettings with ChangeNotifier {
     } else {
       colors.setLightMode();
     }
+
+    // Then it checks for user credentials
+    _checkUserCredentials();
+
     notifyListeners();
     return true;
   }
 
-  void userLogin() {
-    settings.isLoggedIn = true;
-    FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
+  Future<bool> userLogin(userName, password) async {
+    try {
+      // Makes the http request for the login
+      var request =
+          http.MultipartRequest('POST', Uri.parse(baseUrl + '/login'));
+      request.fields.addAll({
+        'username': userName,
+        'password': password,
+      });
+      http.StreamedResponse response = await request.send();
 
-    notifyListeners();
+      if (response.statusCode == 200) {
+        // Decode the jwt from the response
+        var jwt = json.decode(await response.stream.bytesToString());
+        // Saves users info into safe storage for future use
+        await secureStorage.write(key: 'username', value: userName);
+        await secureStorage.write(key: 'password', value: password);
+        await secureStorage.write(key: 'jwt', value: jwt['access_token']);
+        // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
+        settings.isLoggedIn = true;
+        // Saves the new isLoggedIn value to file and notify all listeners
+        FileManager()
+            .writeFile(json.encode(settings.toJson()), settingsFileName);
+        notifyListeners();
+        return true;
+      } else {
+        settings.isLoggedIn = false;
+        FileManager()
+            .writeFile(json.encode(settings.toJson()), settingsFileName);
+        notifyListeners();
+        print(response.reasonPhrase);
+        return false;
+      }
+    } catch (error) {
+      settings.isLoggedIn = false;
+      FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
+      notifyListeners();
+      rethrow;
+    }
   }
 
-  void userLogout() {
+  Future<void> _checkUserCredentials() async {
+    print("checking user crendentials...");
+    String? username = await secureStorage.read(key: 'username');
+    String? password = await secureStorage.read(key: 'password');
+    if (username != null && password != null) {
+      try {
+        // Makes the http request for the login
+        var request =
+            http.MultipartRequest('POST', Uri.parse(baseUrl + '/login'));
+        request.fields.addAll({
+          'username': username,
+          'password': password,
+        });
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode == 200) {
+          // Decode the jwt from the response
+          var jwt = json.decode(await response.stream.bytesToString());
+          // Saves users info into safe storage for future use
+          await secureStorage.write(key: 'jwt', value: jwt['access_token']);
+          // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
+          settings.isLoggedIn = true;
+          // Saves the new isLoggedIn value to file and notify all listeners
+          FileManager()
+              .writeFile(json.encode(settings.toJson()), settingsFileName);
+          notifyListeners();
+        } else {
+          settings.isLoggedIn = false;
+          FileManager()
+              .writeFile(json.encode(settings.toJson()), settingsFileName);
+          notifyListeners();
+        }
+      } catch (error) {
+        settings.isLoggedIn = false;
+        FileManager()
+            .writeFile(json.encode(settings.toJson()), settingsFileName);
+        notifyListeners();
+        rethrow;
+      }
+    } else {
+      print("Login credentials are empty");
+      // IsLoggedIn is set to false so that the app knows not to render registered content
+      settings.isLoggedIn = false;
+      FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
+      notifyListeners();
+    }
+  }
+
+  Future<void> userLogout() async {
+    await secureStorage.delete(key: 'username');
+    await secureStorage.delete(key: 'password');
+    await secureStorage.delete(key: 'jwt');
     settings.isLoggedIn = false;
     FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
 
