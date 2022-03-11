@@ -44,6 +44,7 @@ dependencies:
   flutter_google_places: ^0.3.0
   http: ^0.13.4
   geolocator: ^8.0.0
+  flutter_secure_storage: ^5.0.2
 
 flutter_icons:
   image_path: "assets/icons/icon.png"
