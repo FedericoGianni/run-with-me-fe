@@ -4,7 +4,6 @@ import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../themes/custom_theme.dart';
-import '../providers/user.dart';
 
 class SubscribeBottomSheet extends StatefulWidget {
   const SubscribeBottomSheet({Key? key}) : super(key: key);
@@ -17,12 +16,13 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _form = GlobalKey<FormState>();
   final _pwd3FocusNode = FocusNode();
   final _pwd2FocusNode = FocusNode();
+  bool _pageIndex = true;
   Icon eyeIcon = const Icon(
     Icons.remove_red_eye,
   );
   static const double padding = 50;
   bool isTextObsured = false;
-  var _initValues = {
+  final _initValues = {
     'email': '',
     'password': '',
   };
@@ -31,14 +31,22 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     setState(() {
       isTextObsured = !isTextObsured;
       if (!isTextObsured) {
-        eyeIcon = const Icon(
+        eyeIcon = Icon(
           Icons.remove_red_eye_outlined,
         );
       } else {
-        eyeIcon = const Icon(
+        eyeIcon = Icon(
           Icons.remove_red_eye,
         );
       }
+    });
+  }
+
+  void setPageIndex() {
+    setState(() {
+      print("changing index page");
+      _pageIndex = !_pageIndex;
+      print(_pageIndex);
     });
   }
 
@@ -52,15 +60,15 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
 
   Future<void> _saveForm() async {
     // final pageIndex = Provider.of<PageIndex>(context, listen: false);
-    final user = Provider.of<User>(context, listen: false);
+
     final isValid = _form.currentState?.validate();
     if (isValid == null || !isValid) {
       return;
     }
     _form.currentState?.save();
-    print("Signing up User");
+    print("Logging in");
     setState(() {
-      user.register(_initValues['username'], _initValues['password1']);
+      // _isLoading = true;
     });
   }
 
@@ -79,15 +87,25 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.chevron_left,
-                    color: colors.secondaryTextColor,
-                    size: 30,
-                  ),
-                  splashRadius: null,
-                  onPressed: () {},
-                ),
+                _pageIndex
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.chevron_left,
+                          color: colors.background,
+                          size: 25,
+                        ),
+                        splashRadius: null,
+                        onPressed: () {},
+                      )
+                    : IconButton(
+                        icon: Icon(
+                          Icons.chevron_left,
+                          color: colors.secondaryTextColor,
+                          size: 30,
+                        ),
+                        splashRadius: null,
+                        onPressed: setPageIndex,
+                      ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Text(
@@ -115,32 +133,53 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             const SizedBox(
               height: padding,
             ),
-
-            // Email textbox
-            Padding(
-              padding: EdgeInsets.only(
-                  top: 10, left: screenWidth / 7, right: screenWidth / 7),
-              child: TextFormField(
-                autofocus: true,
-                initialValue: _initValues['username'],
-                cursorColor: colors.primaryTextColor,
-                style: TextStyle(color: colors.primaryTextColor),
-                decoration: textFormDecoration('Username', context),
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_pwd3FocusNode);
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please provide a value.';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _initValues['username'] = value!;
-                },
-              ),
-            ),
+            _pageIndex
+                ?
+                // Email textbox
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 10, left: screenWidth / 7, right: screenWidth / 7),
+                    child: TextFormField(
+                      autofocus: true,
+                      initialValue: _initValues['email'],
+                      cursorColor: colors.primaryTextColor,
+                      style: TextStyle(color: colors.primaryTextColor),
+                      decoration: textFormDecoration('Email', context),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_pwd3FocusNode);
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please provide a value.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {},
+                    ),
+                  )
+                : Padding(
+                    padding: EdgeInsets.only(
+                        top: 10, left: screenWidth / 7, right: screenWidth / 7),
+                    child: TextFormField(
+                      autofocus: true,
+                      initialValue: _initValues['email'],
+                      cursorColor: colors.primaryTextColor,
+                      style: TextStyle(color: colors.primaryTextColor),
+                      decoration: textFormDecoration('Suca', context),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_pwd3FocusNode);
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please provide a value.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {},
+                    ),
+                  ),
             const SizedBox(
               height: padding,
             ),
@@ -150,7 +189,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                   top: 10, left: screenWidth / 7, right: screenWidth / 7),
               child: TextFormField(
                 focusNode: _pwd3FocusNode,
-                initialValue: _initValues['password1'],
+                initialValue: _initValues['password'],
                 obscureText: isTextObsured,
                 cursorColor: colors.primaryTextColor,
                 style: TextStyle(color: colors.primaryTextColor),
@@ -166,9 +205,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  _initValues['password1'] = value!;
-                },
+                onSaved: (value) {},
               ),
             ),
 
@@ -180,7 +217,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                   top: 10, left: screenWidth / 7, right: screenWidth / 7),
               child: TextFormField(
                 focusNode: _pwd2FocusNode,
-                initialValue: _initValues['password2'],
+                initialValue: _initValues['password'],
                 obscureText: isTextObsured,
                 cursorColor: colors.primaryTextColor,
                 style: TextStyle(color: colors.primaryTextColor),
@@ -194,9 +231,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  _initValues['password2'] = value!;
-                },
+                onSaved: (value) {},
               ),
             ),
             const SizedBox(
@@ -221,7 +256,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                           textStyle: const TextStyle(fontSize: 16),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 10)),
-                      onPressed: _saveForm,
+                      onPressed: setPageIndex,
                       child: const Text('Next'),
                     ),
                   ],

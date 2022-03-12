@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
 import '../providers/color_scheme.dart';
 import '../classes/file_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../providers/user.dart';
+import '../classes/config.dart';
 
 enum CustomThemeMode {
   dark,
@@ -29,13 +27,16 @@ enum MapStyle {
 class UserSettings with ChangeNotifier {
   String settingsFileName = 'settings.json';
   bool location = false;
-  String baseUrl = 'https://runwithme.msuki.tk';
+
   CustomThemeMode mode = CustomThemeMode.light;
-  CustomColorScheme colors;
+  late CustomColorScheme colors;
   var settings = Settings();
   final secureStorage = const FlutterSecureStorage();
+  late User user;
 
-  UserSettings({required this.colors});
+  void setColorScheme(colors) {
+    this.colors = colors;
+  }
 
   void toggleLocalization() {
     location = !location;
@@ -54,13 +55,18 @@ class UserSettings with ChangeNotifier {
     notifyListeners();
   }
 
+  void setUser(user) {
+    this.user = user;
+  }
+
   Future<bool> loadSettings() async {
     // First it reads software settings from file
     var settingsString = await FileManager().readFile(settingsFileName);
-    if (settingsString == 'Null') {
+    if (settingsString == 'Null' || settingsString == "") {
       settingsString = json.encode(settings.toJson());
       FileManager().writeFile(settingsString, settingsFileName);
     }
+    print(settingsString);
     settings.fromJson(jsonDecode(settingsString));
 
     // ignore: todo
@@ -79,11 +85,11 @@ class UserSettings with ChangeNotifier {
     return true;
   }
 
-  Future<bool> userLogin(userName, password) async {
+  Future<List> userLogin(userName, password) async {
     try {
       // Makes the http request for the login
       var request =
-          http.MultipartRequest('POST', Uri.parse(baseUrl + '/login'));
+          http.MultipartRequest('POST', Uri.parse(Config.baseUrl + '/login'));
       request.fields.addAll({
         'username': userName,
         'password': password,
@@ -93,30 +99,37 @@ class UserSettings with ChangeNotifier {
       if (response.statusCode == 200) {
         // Decode the jwt from the response
         var jwt = json.decode(await response.stream.bytesToString());
+        print(jwt);
         // Saves users info into safe storage for future use
         await secureStorage.write(key: 'username', value: userName);
         await secureStorage.write(key: 'password', value: password);
         await secureStorage.write(key: 'jwt', value: jwt['access_token']);
+        await secureStorage.write(
+            key: 'userId', value: jwt['user_id'].toString());
+
         // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
         settings.isLoggedIn = true;
         // Saves the new isLoggedIn value to file and notify all listeners
         FileManager()
             .writeFile(json.encode(settings.toJson()), settingsFileName);
         notifyListeners();
-        return true;
+        user.userId = jwt['user_id'];
+        user.getUserInfo();
+        return [true, ''];
       } else {
         settings.isLoggedIn = false;
         FileManager()
             .writeFile(json.encode(settings.toJson()), settingsFileName);
         notifyListeners();
         print(response.reasonPhrase);
-        return false;
+        return [false, 'Incorrect Username or Password!'];
       }
     } catch (error) {
+      print(error);
       settings.isLoggedIn = false;
       FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
       notifyListeners();
-      rethrow;
+      return [false, 'Internal Server Error'];
     }
   }
 
@@ -128,7 +141,7 @@ class UserSettings with ChangeNotifier {
       try {
         // Makes the http request for the login
         var request =
-            http.MultipartRequest('POST', Uri.parse(baseUrl + '/login'));
+            http.MultipartRequest('POST', Uri.parse(Config.baseUrl + '/login'));
         request.fields.addAll({
           'username': username,
           'password': password,
@@ -139,13 +152,19 @@ class UserSettings with ChangeNotifier {
           // Decode the jwt from the response
           var jwt = json.decode(await response.stream.bytesToString());
           // Saves users info into safe storage for future use
+          print(jwt);
           await secureStorage.write(key: 'jwt', value: jwt['access_token']);
+          await secureStorage.write(
+              key: 'userId', value: jwt['user_id'].toString());
           // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
-          settings.isLoggedIn = true;
           // Saves the new isLoggedIn value to file and notify all listeners
           FileManager()
               .writeFile(json.encode(settings.toJson()), settingsFileName);
           notifyListeners();
+          user.userId = jwt['user_id'];
+          print("setting user info");
+          user.getUserInfo();
+          settings.isLoggedIn = true;
         } else {
           settings.isLoggedIn = false;
           FileManager()
