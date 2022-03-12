@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
+import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/widgets/splash.dart';
 
 import 'themes/custom_theme.dart';
@@ -45,8 +46,10 @@ class _MyAppState extends State<MyApp> {
   );
   @override
   Widget build(BuildContext context) {
-    var userSettings = UserSettings(colors: customColorScheme);
-
+    var userSettings = UserSettings();
+    var userInfo = User();
+    userSettings.setUser(userInfo);
+    userSettings.setColorScheme(customColorScheme);
     // customColorScheme.setDarkMode();
 
     if (splash == true) {
@@ -54,7 +57,7 @@ class _MyAppState extends State<MyApp> {
         if (value) {
           setState(() {
             splash = !value;
-            userSettings = userSettings;
+            // userSettings = userSettings; // No scusa in che senso ???
             routeWidget = MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(
@@ -68,6 +71,9 @@ class _MyAppState extends State<MyApp> {
                 ),
                 ChangeNotifierProvider.value(
                   value: PageIndex(),
+                ),
+                ChangeNotifierProvider.value(
+                  value: userInfo,
                 ),
               ],
               child: MaterialApp(
