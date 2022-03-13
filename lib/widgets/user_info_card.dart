@@ -9,6 +9,8 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../providers/user.dart';
 
+var sexDict = {0: 'Not known', 1: 'Male', 2: 'Female', 9: 'Not applicable'};
+
 // ignore: camel_case_types
 class UserInfo extends StatelessWidget {
   final User user;
@@ -20,42 +22,57 @@ class UserInfo extends StatelessWidget {
     final colors = Provider.of<CustomColorScheme>(context);
 
     // name = name.replaceRange(5, name.length, '...');
-    return Card(
-      color: colors.onPrimary,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 2,
-      margin: const EdgeInsets.all(0),
-      child: Container(
-        child: Column(
-          children: [
-            Row(
+    return Column(
+      children: [
+        Card(
+          color: colors.onPrimary,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Container(
+            child: Column(
               children: [
-                Text(
-                  'User info',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: colors.primaryTextColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
+                UserInfoFilling('Name', user.name ?? ''),
+                UserInfoFilling('Surname', user.surname ?? ''),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: [
-                  UserInfoFilling('Name', user.name ?? ''),
-                  UserInfoFilling('Surname', user.surname ?? ''),
-                  UserInfoFilling('Height', user.height.toString()),
-                  UserInfoFilling(
-                      'Fitness Level', user.fitnessLevel.toString()),
-                ],
-              ),
-            ),
-          ],
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          ),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      ),
+        Card(
+          color: colors.onPrimary,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Container(
+            child: Column(
+              children: [
+                UserInfoFilling('Height', user.height.toString()),
+                UserInfoFilling('Age', user.age.toString()),
+                UserInfoFilling('Sex', sexDict[user.sex] ?? 'N/A'),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          ),
+        ),
+        Card(
+          color: colors.onPrimary,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Container(
+            child: Column(
+              children: [
+                UserInfoFilling('Fitness Level', user.fitnessLevel.toString()),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          ),
+        ),
+      ],
     );
   }
 }
