@@ -47,7 +47,7 @@ class PermissionMessage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('You need permissions to view booked events'),
-                )
+                ),
               ],
             ),
           ),

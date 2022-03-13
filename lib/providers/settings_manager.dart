@@ -98,8 +98,9 @@ class UserSettings with ChangeNotifier {
         'username': userName,
         'password': password,
       });
-      http.StreamedResponse response = await request.send();
-
+      http.StreamedResponse response =
+          await request.send().timeout(const Duration(seconds: 2));
+      print(response.statusCode);
       if (response.statusCode == 200) {
         // Decode the jwt from the response
         var jwt = json.decode(await response.stream.bytesToString());
@@ -120,13 +121,20 @@ class UserSettings with ChangeNotifier {
         user.userId = jwt['user_id'];
         user.getUserInfo();
         return [true, ''];
-      } else {
+      } else if (response.statusCode == 401) {
         settings.isLoggedIn = false;
         FileManager()
             .writeFile(json.encode(settings.toJson()), settingsFileName);
         notifyListeners();
         print(response.reasonPhrase);
         return [false, 'Incorrect Username or Password!'];
+      } else {
+        settings.isLoggedIn = false;
+        FileManager()
+            .writeFile(json.encode(settings.toJson()), settingsFileName);
+        notifyListeners();
+        print(response.reasonPhrase);
+        return [false, 'Dafuq did just happen'];
       }
     } catch (error) {
       print(error);
@@ -150,7 +158,8 @@ class UserSettings with ChangeNotifier {
           'username': username,
           'password': password,
         });
-        http.StreamedResponse response = await request.send();
+        http.StreamedResponse response =
+            await request.send().timeout(const Duration(seconds: 2));
 
         if (response.statusCode == 200) {
           // Decode the jwt from the response
