@@ -218,6 +218,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
       print("Here I should edit the Event");
     } else {
       try {
+        print("test markerposition: " + markerPosition.toString());
+
         print("_editedEvent.adminId: " + _editedEvent.adminId.toString());
         print("_editedEvent.avgDuration: " +
             _editedEvent.averageDuration.toString());
@@ -476,6 +478,22 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         setState(() {
                           if (a != null) {
                             markerPosition = a;
+                            _editedEvent = Event(
+                              adminId: _editedEvent.adminId,
+                              averageDuration: _editedEvent.averageDuration,
+                              averageLength: _editedEvent.averageLength,
+                              averagePace: _editedEvent.averagePace,
+                              createdAt: _editedEvent.createdAt,
+                              currentParticipants:
+                                  _editedEvent.currentParticipants,
+                              date: _editedEvent.date,
+                              difficultyLevel: _editedEvent.difficultyLevel,
+                              id: _editedEvent.id,
+                              maxParticipants: _editedEvent.maxParticipants,
+                              name: _editedEvent.name,
+                              startingPintLat: markerPosition.latitude,
+                              startingPintLong: markerPosition.longitude,
+                            );
                           }
                         });
                       });
