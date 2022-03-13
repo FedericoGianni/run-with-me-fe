@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
+import 'package:runwithme/providers/settings_manager.dart';
 
 import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';
@@ -166,6 +167,7 @@ class _EventsScreenState extends State<EventsScreen> {
   Widget build(BuildContext context) {
     var _newEventList = dummy.where((i) => i.difficultyLevel <= 3).toList();
     final colors = Provider.of<CustomColorScheme>(context);
+
     if (_view == 3) {
       return Column(
         children: [

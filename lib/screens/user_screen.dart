@@ -1,7 +1,9 @@
 // ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:runwithme/themes/custom_colors.dart';
+import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 import 'package:runwithme/widgets/search_button.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
@@ -31,175 +33,297 @@ class _UserScreenState extends State<UserScreen> {
     final user = Provider.of<User>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-
+    print(screenHeight);
     if (colors.currentMode == 'dark') {
       isSelected = [false, true];
     } else if (colors.currentMode == 'light') {
       isSelected = [true, false];
     }
-    if (settings.settings.isLoggedIn) {
-      print(user.username);
+    if (settings.isLoggedIn()) {
       return Column(
         children: [
-          Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: screenWidth / 1.2,
-                    child: Text(
-                      (user.username ?? 'No Name'),
-                      style: TextStyle(
-                        overflow: TextOverflow.clip,
-                        color: colors.primaryTextColor,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    padding: EdgeInsets.only(top: 30, left: 20, bottom: 5),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: colors.background,
-                    ),
-                    padding: EdgeInsets.only(top: 0),
-                    margin: EdgeInsets.only(right: 10, top: 25),
-                    // color: colors.onPrimary,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.settings,
-                        size: 22,
-                      ),
-                      color: colors.primaryTextColor,
-                    ),
-                  )
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: screenWidth / 1.2,
-                    child: Text(
-                      'USER ID: ' + (user.userId.toString()),
-                      style: TextStyle(
-                        overflow: TextOverflow.clip,
-                        color: colors.primaryTextColor,
-                        fontSize: 14,
-                      ),
-                    ),
-                    padding: EdgeInsets.only(left: 20, bottom: 20),
-                  ),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              ),
-
-              // Center(child: Text('User Info Page')),
-            ],
-          ),
           Container(
-            height: 520,
-            child: CustomScrollView(
-              // This is needed to avoid overflow
-              // shrinkWrap: true,
-              slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                      bottom: 0, top: 0, left: 0, right: 0),
-                  sliver: SliverToBoxAdapter(
-                    child: Row(
-                      children: [
-                        Container(
-                          child: TextButton(
-                            child: Text(
-                              'Edit',
-                              style: TextStyle(
-                                overflow: TextOverflow.clip,
-                                color: colors.primaryTextColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onPressed: () {},
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 30),
+            color: colors.background,
+            height: screenHeight - 56,
+            child: ScrollConfiguration(
+              behavior: CustomScrollBehavior(),
+              child: CustomScrollView(
+                // This is needed to avoid overflow
+                // shrinkWrap: true,
+                slivers: [
+                  SliverAppBar(
+                    pinned: true,
+                    collapsedHeight: 120,
+                    expandedHeight: 220,
+                    toolbarHeight: 10,
+                    floating: false,
+                    centerTitle: true,
+                    //
+                    flexibleSpace: FlexibleSpaceBar.createSettings(
+                      currentExtent: 100,
+                      child: FlexibleSpaceBar(
+                        background: Container(
                           decoration: BoxDecoration(
-                              color: colors.background,
-                              border: Border.all(
-                                color: colors.primaryTextColor,
-                                width: 1,
-                              ),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          height: 40,
+                            gradient: LinearGradient(
+                                colors: [
+                                  colors.secondaryColor,
+                                  colors.primaryColor
+                                ],
+                                begin: FractionalOffset(-0.2, 0),
+                                end: FractionalOffset(0.9, 0),
+                                stops: const [0.0, 1.0],
+                                tileMode: TileMode.clamp),
+                          ),
+                          child: SizedBox(),
                         ),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.start,
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                      bottom: 0, top: 20, left: 20, right: 20),
-                  sliver: SliverToBoxAdapter(child: UserInfo(user)),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                      bottom: 0, top: 20, left: 20, right: 20),
-                  sliver: SliverToBoxAdapter(
-                    child: Container(
-                      child: ToggleButtons(
-                        children: <Widget>[
-                          Icon(Icons.light_mode),
-                          Icon(Icons.dark_mode),
-                        ],
-                        onPressed: (int index) {
-                          setState(() {
-                            for (int buttonIndex = 0;
-                                buttonIndex < isSelected.length;
-                                buttonIndex++) {
-                              if (buttonIndex == index) {
-                                isSelected[buttonIndex] =
-                                    !isSelected[buttonIndex];
-                              } else {
-                                isSelected[buttonIndex] = false;
-                              }
-                            }
-                            if (index == 0) {
-                              settings.setThemeMode(CustomThemeMode.light);
-                            } else {
-                              settings.setThemeMode(CustomThemeMode.dark);
-                            }
-                          });
-                        },
-                        isSelected: isSelected,
+                        title: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  colors.secondaryColor,
+                                  colors.primaryColor
+                                ],
+                                begin: FractionalOffset(-0.2, 0),
+                                end: FractionalOffset(0.9, 0),
+                                stops: const [0.0, 1.0],
+                                tileMode: TileMode.clamp),
+                          ),
+                          height: 100,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: screenWidth / 2,
+                                    padding: EdgeInsets.only(
+                                        top: 20, left: 20, bottom: 5),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              (user.username ?? 'No Name'),
+                                              style: TextStyle(
+                                                overflow: TextOverflow.clip,
+                                                color: colors.titleColor,
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10, bottom: 10),
+                                              child: Text(
+                                                'USER ID: ' +
+                                                    (user.userId.toString()),
+                                                style: TextStyle(
+                                                  overflow: TextOverflow.clip,
+                                                  color: colors.titleColor,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 0, left: 0),
+                                              child: Text(
+                                                'Since: ' +
+                                                    user.createdAt!
+                                                        .toLocal()
+                                                        .day
+                                                        .toString() +
+                                                    '/' +
+                                                    user.createdAt!
+                                                        .toLocal()
+                                                        .month
+                                                        .toString() +
+                                                    '/' +
+                                                    user.createdAt!
+                                                        .toLocal()
+                                                        .year
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  overflow: TextOverflow.clip,
+                                                  color: colors.titleColor,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Container(
+                                      height: 35,
+                                      // width: 60,
+                                      child: TextButton(
+                                        child: Text(
+                                          'Edit',
+                                          style: TextStyle(
+                                            overflow: TextOverflow.clip,
+                                            color: colors.titleColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        onPressed: () {},
+                                      ),
+                                      decoration: BoxDecoration(
+                                          color: Colors.transparent,
+                                          border: Border.all(
+                                            color: colors.titleColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15))),
+                                    ),
+                                  ),
+                                ],
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                              ),
+                              // Border line used for separation
+                            ],
+                          ),
+                        ),
+                        titlePadding: EdgeInsetsDirectional.zero,
+                        centerTitle: false,
                       ),
-                      padding: EdgeInsets.all(20),
                     ),
                   ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                      bottom: 0, top: 20, left: 20, right: 20),
-                  sliver: SliverToBoxAdapter(
-                      child: Container(
-                    child: TextButton(
-                        onPressed: () {
-                          settings.userLogout();
-                        },
+                  // User info title
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                        bottom: 0, top: 40, left: 20, right: 20),
+                    sliver: SliverToBoxAdapter(
                         child: Text(
-                          "logout",
-                          style: TextStyle(color: colors.primaryColor),
-                        )),
-                  )),
-                ),
-              ],
-              anchor: 0,
+                      'User info',
+                      style: TextStyle(
+                          color: colors.primaryTextColor, fontSize: 22),
+                    )),
+                  ),
+                  // Actual list of cards with user infos
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                        bottom: 0, top: 20, left: 20, right: 20),
+                    sliver: SliverToBoxAdapter(child: UserInfo(user)),
+                  ),
+                  // Grey line
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                        bottom: 0, top: 40, left: 50, right: 50),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: colors.onPrimary,
+                              width: 3.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                        bottom: 0, top: 20, left: 20, right: 20),
+                    sliver: SliverToBoxAdapter(
+                        child: Container(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: TextButton(
+                                  child: Text(
+                                    'Settings',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.primaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              ),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                child: TextButton(
+                                  child: Text(
+                                    'Logout',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.primaryColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  onPressed: () => settings.userLogout(),
+                                ),
+                              ),
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                        ],
+                      ),
+                    )),
+                  ),
+                  // Theme mode selector
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                        bottom: 0, top: 20, left: 20, right: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        child: ToggleButtons(
+                          children: <Widget>[
+                            Icon(Icons.light_mode),
+                            Icon(Icons.dark_mode),
+                          ],
+                          onPressed: (int index) {
+                            setState(() {
+                              for (int buttonIndex = 0;
+                                  buttonIndex < isSelected.length;
+                                  buttonIndex++) {
+                                if (buttonIndex == index) {
+                                  isSelected[buttonIndex] =
+                                      !isSelected[buttonIndex];
+                                } else {
+                                  isSelected[buttonIndex] = false;
+                                }
+                              }
+                              if (index == 0) {
+                                settings.setThemeMode(CustomThemeMode.light);
+                              } else {
+                                settings.setThemeMode(CustomThemeMode.dark);
+                              }
+                            });
+                          },
+                          isSelected: isSelected,
+                        ),
+                        padding: EdgeInsets.all(20),
+                      ),
+                    ),
+                  ),
+                ],
+                anchor: 0,
+              ),
             ),
           )
         ],
@@ -222,7 +346,7 @@ class UserAppbar extends StatelessWidget {
     final settings = Provider.of<UserSettings>(context);
 
     return GradientAppBar(100, [
-      settings.settings.isLoggedIn
+      settings.isLoggedIn()
           ? Container(
               child: Text(
                 'User Profile',
