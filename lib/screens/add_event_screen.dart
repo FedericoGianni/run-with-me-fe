@@ -15,13 +15,14 @@ import '../themes/custom_theme.dart';
 import '../widgets/gradientAppbar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import '../providers/page_index.dart';
+
 import 'package:provider/provider.dart';
+import '../widgets/custom_loading_icon.dart';
 import '../providers/color_scheme.dart';
 import '../providers/event.dart';
 import '../providers/events.dart';
-import 'package:provider/provider.dart';
-import '../providers/page_index.dart';
-import '../widgets/custom_loading_icon.dart';
+import '../providers/user.dart';
 
 class AddEventScreen extends StatefulWidget {
   static const routeName = '/add_event';
@@ -41,8 +42,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
   LatLng markerPosition = const LatLng(0, 0);
 
   DateTime _userSelectedDate = DateTime.now();
+  TimeOfDay _time = TimeOfDay.now();
 
   static const double padding = 50;
+
   var _editedEvent = Event(
     adminId: 0,
     averageDuration: 0,
@@ -60,16 +63,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
   );
   final _initValues = {
     'name': '',
-    'date': '',
-    'price': '',
-    'imageUrl': '',
   };
 
   Future<Position> _getLocation() async {
     var currentLocation;
     LocationPermission permission = await Geolocator.checkPermission();
-    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA     ' +
-        permission.toString());
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission();
@@ -83,7 +81,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       return Position(
           longitude: defaultUserPos.longitude,
           latitude: defaultUserPos.latitude,
-          timestamp: DateTime(2021),
+          timestamp: DateTime.now(),
           accuracy: 0,
           altitude: 0,
           heading: 0,
@@ -145,8 +143,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
     });
   }
 
-  TimeOfDay _time = const TimeOfDay(hour: 7, minute: 15);
-
   void _selectTime() async {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
 
@@ -176,21 +172,21 @@ class _AddEventScreenState extends State<AddEventScreen> {
     if (newTime != null) {
       setState(() {
         _time = newTime;
-        // _editedEvent = Event(
-        //   adminId: _editedEvent.adminId,
-        //   averageDuration: _editedEvent.averageDuration,
-        //   averageLength: _editedEvent.averageLength,
-        //   averagePace: _editedEvent.averagePace,
-        //   createdAt: _editedEvent.createdAt,
-        //   currentParticipants: _editedEvent.currentParticipants,
-        //   date: _editedEvent.date,
-        //   difficultyLevel: _editedEvent.difficultyLevel,
-        //   id: _editedEvent.id,
-        //   maxParticipants: _editedEvent.maxParticipants,
-        //   name: _editedEvent.name,
-        //   startingPintLat: _editedEvent.startingPintLat,
-        //   startingPintLong: _editedEvent.startingPintLong,
-        // );
+        _editedEvent = Event(
+          adminId: _editedEvent.adminId,
+          averageDuration: _editedEvent.averageDuration,
+          averageLength: _editedEvent.averageLength,
+          averagePace: _editedEvent.averagePace,
+          createdAt: _editedEvent.createdAt,
+          currentParticipants: _editedEvent.currentParticipants,
+          date: _editedEvent.date,
+          difficultyLevel: _editedEvent.difficultyLevel,
+          id: _editedEvent.id,
+          maxParticipants: _editedEvent.maxParticipants,
+          name: _editedEvent.name,
+          startingPintLat: _editedEvent.startingPintLat,
+          startingPintLong: _editedEvent.startingPintLong,
+        );
       });
     }
   }
@@ -202,6 +198,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
   Future<void> _saveForm() async {
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
+    //user provider to get user id
+    //final user = Provider.of<User>(context);
+    //final userInfo = user.getUserInfo();
+
     final isValid = _form.currentState?.validate();
     if (isValid == null || !isValid) {
       return;
@@ -210,12 +210,30 @@ class _AddEventScreenState extends State<AddEventScreen> {
     setState(() {
       _isLoading = true;
     });
+
+    //editedEvent.id è null finchè il backend non gli ritorna un id
     if (_editedEvent.id != null) {
       // await Provider.of<Events>(context, listen: false)
       //     .updateProduct(_editedEvent.id, _editedEvent);
       print("Here I should edit the Event");
     } else {
       try {
+        print("_editedEvent.adminId: " + _editedEvent.adminId.toString());
+        print("_editedEvent.avgDuration: " +
+            _editedEvent.averageDuration.toString());
+        print(
+            "_editedEvent.avgLength: " + _editedEvent.averageLength.toString());
+        print("_editedEvent.avgPace: " + _editedEvent.averagePace.toString());
+        print("_editedEvent.date: " + _editedEvent.date.toString());
+        print("_editedEvent.id: " + _editedEvent.id.toString());
+        print("_editedEvent.maxParticipants: " +
+            _editedEvent.maxParticipants.toString());
+        print("_editedEvent.name: " + _editedEvent.name.toString());
+        print("_editedEvent.strartingPointLat: " +
+            _editedEvent.startingPintLat.toString());
+        print("_editedEvent.startingPointLong: " +
+            _editedEvent.startingPintLong.toString());
+
         await Provider.of<Events>(context, listen: false)
             .addEvent(_editedEvent);
       } catch (error) {
@@ -332,7 +350,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         difficultyLevel: _editedEvent.difficultyLevel,
                         id: _editedEvent.id,
                         maxParticipants: _editedEvent.maxParticipants,
-                        name: _editedEvent.name,
+                        //change the event name with the name selected by the user
+                        name: value.toString(),
                         startingPintLat: _editedEvent.startingPintLat,
                         startingPintLong: _editedEvent.startingPintLong,
                       );
@@ -533,8 +552,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please provide a value.';
-                            } else if (int.parse(value) > 100) {
-                              return 'Distance should be less than 100km.';
+                            } else if (int.parse(value) > 200) {
+                              return 'Distance should be less than 200km.';
                             }
                             return null;
                           },
@@ -692,7 +711,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                 date: _editedEvent.date,
                                 difficultyLevel: _editedEvent.difficultyLevel,
                                 id: _editedEvent.id,
-                                maxParticipants: _editedEvent.maxParticipants,
+                                maxParticipants: int.parse(value),
                                 name: _editedEvent.name,
                                 startingPintLat: _editedEvent.startingPintLat,
                                 startingPintLong: _editedEvent.startingPintLong,
