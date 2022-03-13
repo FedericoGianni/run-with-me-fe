@@ -58,7 +58,7 @@ class _TabsScreenState extends State<TabsScreen> {
       {
         'title': 'My Events',
         'page': UserScreen(),
-        'appbar': const UserAppbar(),
+        'appbar': const SizedBox.shrink(),
       },
     ];
     super.initState();
@@ -76,6 +76,8 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final pageIndex = Provider.of<PageIndex>(context);
+    // final settings = Provider.of<UserSettings>(context);
+
     return Scaffold(
       backgroundColor: colors.background,
       appBar: PreferredSize(

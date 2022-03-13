@@ -62,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
     final double screenWidth = MediaQuery.of(context).size.width;
     var _snackBarText = '';
 
-    final settings = Provider.of<UserSettings>(context, listen: false);
+    final settings = Provider.of<UserSettings>(context);
 
     final isValid = _form.currentState?.validate();
     if (isValid == null || !isValid) {
@@ -145,7 +145,7 @@ class _LoginFormState extends State<LoginForm> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
+                    padding: const EdgeInsets.only(top: 100.0),
                     child: Text(
                       "Log in to Run With Me",
                       style: TextStyle(
@@ -157,7 +157,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.only(bottom: 40),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

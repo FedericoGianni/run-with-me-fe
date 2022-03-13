@@ -19,6 +19,7 @@ class User with ChangeNotifier {
   DateTime? createdAt;
   int? height;
   int? age;
+  int? sex;
   double? fitnessLevel;
   String? city;
 
@@ -87,6 +88,7 @@ class User with ChangeNotifier {
           var userInfo = json.decode(await response.stream.bytesToString());
           print(userInfo);
           age = userInfo['age'];
+          sex = userInfo['sex'];
           name = userInfo['name'];
           surname = userInfo['surname'];
           city = userInfo['city'];

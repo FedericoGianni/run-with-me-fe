@@ -59,6 +59,10 @@ class UserSettings with ChangeNotifier {
     this.user = user;
   }
 
+  bool isLoggedIn() {
+    return settings.isLoggedIn;
+  }
+
   Future<bool> loadSettings() async {
     // First it reads software settings from file
     var settingsString = await FileManager().readFile(settingsFileName);
