@@ -113,13 +113,14 @@ class UserSettings with ChangeNotifier {
             key: 'userId', value: jwt['user_id'].toString());
 
         // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
-        settings.isLoggedIn = true;
         // Saves the new isLoggedIn value to file and notify all listeners
         FileManager()
             .writeFile(json.encode(settings.toJson()), settingsFileName);
         notifyListeners();
         user.userId = jwt['user_id'];
-        user.getUserInfo();
+        user.getUserInfo().then((value) {
+          settings.isLoggedIn = true;
+        });
         return [true, ''];
       } else if (response.statusCode == 401) {
         settings.isLoggedIn = false;
@@ -176,8 +177,9 @@ class UserSettings with ChangeNotifier {
           notifyListeners();
           user.userId = jwt['user_id'];
           print("setting user info");
-          user.getUserInfo();
-          settings.isLoggedIn = true;
+          user.getUserInfo().then((value) {
+            settings.isLoggedIn = true;
+          });
         } else {
           settings.isLoggedIn = false;
           FileManager()
