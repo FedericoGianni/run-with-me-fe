@@ -8,7 +8,9 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../themes/custom_theme.dart';
 import '../providers/user.dart';
+import 'custom_alert_dialog.dart';
 import 'custom_loading_icon.dart';
+import 'custom_map_place_search.dart';
 
 class SubscribeBottomSheet extends StatefulWidget {
   const SubscribeBottomSheet({Key? key}) : super(key: key);
@@ -19,7 +21,7 @@ class SubscribeBottomSheet extends StatefulWidget {
 
 class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _form = GlobalKey<FormState>();
-  int _pageIndex = 0;
+  int _pageIndex = 1;
   final _emailFocusNode = FocusNode();
   final _pwd1FocusNode = FocusNode();
   final _pwd2FocusNode = FocusNode();
@@ -29,6 +31,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _sexFocusNode = FocusNode();
   bool _isLoading = false;
   var snackBar;
+  var _controller = TextEditingController();
 
   Icon eyeIcon = const Icon(
     Icons.remove_red_eye,
@@ -92,6 +95,23 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     _heightFocusNode.dispose();
     // _ageFocusNode.dispose();
     super.dispose();
+  }
+
+  Future<void> _showMyDialog() async {
+    print("hey");
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CustomMapPlaceSearch();
+      },
+    ).then((value) {
+      _initValues['city'] = value['description'];
+      setState(() {
+        print("bellazio");
+        print(_initValues.keys);
+      });
+    });
   }
 
   Future<void> _saveForm() async {
@@ -456,26 +476,40 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             left: screenWidth / 7,
             right: screenWidth / 7,
             bottom: padding),
-        child: TextFormField(
-          // focusNode: _sexFocusNode,
-          initialValue: _initValues['sex'],
-          cursorColor: colors.primaryTextColor,
-          style: TextStyle(color: colors.primaryTextColor),
-          decoration: textFormDecoration('Sex', context),
-          keyboardType: TextInputType.number,
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (_) {
-            FocusScope.of(context).requestFocus(_sexFocusNode);
-          },
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please provide a value.';
-            }
-            return null;
-          },
-          onSaved: (value) {
-            _initValues['sex'] = value!;
-          },
+        child: GestureDetector(
+          onTap: _showMyDialog,
+          // initialValue: markerPosition.toString(),,
+          child: Container(
+            width: MediaQuery.of(context).size.width / 2.3,
+            decoration: BoxDecoration(
+              color: colors.onPrimary,
+              border: Border.all(color: colors.onPrimary),
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(10.0),
+              ),
+            ),
+            height: 60,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _initValues['city'] == ''
+                          ? Text(
+                              'City',
+                              style: TextStyle(
+                                  color: colors.secondaryTextColor,
+                                  fontSize: 16),
+                            )
+                          : Text(
+                              _initValues['city'].toString().split(',')[0],
+                              style: TextStyle(
+                                  color: colors.primaryTextColor, fontSize: 16),
+                            )),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
       Padding(
