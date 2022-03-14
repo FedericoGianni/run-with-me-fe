@@ -73,8 +73,7 @@ class User with ChangeNotifier {
       // Makes the http request for the login
       String? jwt = await secureStorage.read(key: 'jwt');
       if (jwt != null) {
-        print("JWT: ");
-        print(jwt);
+        print("Getting user info");
         var request = http.MultipartRequest(
             'GET', Uri.parse(Config.baseUrl + '/user/id/' + userId.toString()));
         var headers = {'Authorization': 'Bearer ' + jwt};
