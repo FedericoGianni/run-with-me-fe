@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../themes/custom_theme.dart';
 import '../providers/user.dart';
+import 'custom_loading_icon.dart';
 
 class SubscribeBottomSheet extends StatefulWidget {
   const SubscribeBottomSheet({Key? key}) : super(key: key);
@@ -23,12 +27,14 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _heightFocusNode = FocusNode();
   final _ageFocusNode = FocusNode();
   final _sexFocusNode = FocusNode();
+  bool _isLoading = false;
+  var snackBar;
 
   Icon eyeIcon = const Icon(
     Icons.remove_red_eye,
   );
   static const double padding = 50;
-  bool isTextObsured = false;
+  bool isTextObsured = true;
   var _initValues = {
     'username': '',
     'password': '',
@@ -89,16 +95,79 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   }
 
   Future<void> _saveForm() async {
+    setState(() {
+      _isLoading = true;
+    });
     // final pageIndex = Provider.of<PageIndex>(context, listen: false);
+    final colors = Provider.of<CustomColorScheme>(context, listen: false);
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     final user = Provider.of<User>(context, listen: false);
     final isValid = _form.currentState?.validate();
+    var _snackBarText = '';
+
     if (isValid == null || !isValid) {
       return;
     }
     _form.currentState?.save();
     print("Signing up User");
-    setState(() {
-      user.register(_initValues['username'], _initValues['password']);
+
+    user
+        .register(_initValues['username'], _initValues['password'])
+        .then((value1) {
+      if (value1[0]) {
+        user.updateUser().then((value2) {
+          print("Correcxlty Subscribed!");
+        });
+      } else {
+        print("Register not completed");
+      }
+      _snackBarText = value1[1].toString();
+      print(_snackBarText);
+      snackBar = SnackBar(
+        content: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  _snackBarText,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 14,
+                      overflow: TextOverflow.fade),
+                ),
+              ),
+            ],
+          ),
+          margin: EdgeInsets.symmetric(horizontal: screenWidth / 7),
+          // width: 20,
+
+          padding: EdgeInsets.all(10),
+
+          decoration: BoxDecoration(
+              color: colors.background,
+              border: Border.all(
+                color: colors.errorColor,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(15))),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 2),
+        padding: EdgeInsets.only(bottom: 40),
+      );
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      sleep(const Duration(seconds: 1));
+      setState(() {
+        _isLoading = false;
+        Navigator.pop(context);
+      });
     });
   }
 
@@ -444,86 +513,93 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
-    return SizedBox(
-      height: MediaQuery.of(context).size.height / 1.1,
-      child: Form(
-        key: _form,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: <Widget>[
-            // Title row
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Here pageIndex is used to show or not the back arrow
-                  _pageIndex > 0
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.chevron_left,
-                            color: colors.secondaryTextColor,
-                            size: 30,
-                          ),
-                          splashRadius: null,
-                          onPressed: _downPageIndex,
-                        )
-                      : IconButton(
-                          icon: Icon(
-                            Icons.chevron_left,
-                            color: Colors.transparent,
-                            size: 30,
-                          ),
-                          splashRadius: 1,
-                          onPressed: () {},
+    if (!_isLoading) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 1.1,
+        child: Form(
+          key: _form,
+          child: ScrollConfiguration(
+            behavior: CustomScrollBehavior(),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                // Title row
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Here pageIndex is used to show or not the back arrow
+                      _pageIndex > 0
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.chevron_left,
+                                color: colors.secondaryTextColor,
+                                size: 30,
+                              ),
+                              splashRadius: null,
+                              onPressed: _downPageIndex,
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Icons.chevron_left,
+                                color: Colors.transparent,
+                                size: 30,
+                              ),
+                              splashRadius: 1,
+                              onPressed: () {},
+                            ),
+                      Text(
+                        "Subscribe to Run With Me",
+                        style: TextStyle(
+                            color: colors.primaryTextColor,
+                            fontSize: 18,
+                            height: 1.5,
+                            fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.close_outlined,
+                          color: colors.secondaryTextColor,
+                          size: 25,
                         ),
-                  Text(
-                    "Subscribe to Run With Me",
-                    style: TextStyle(
-                        color: colors.primaryTextColor,
-                        fontSize: 18,
-                        height: 1.5,
-                        fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.close_outlined,
-                      color: colors.secondaryTextColor,
-                      size: 25,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                ),
+                const SizedBox(
+                  height: padding,
+                ),
+
+                // Username textbox
+                if (_pageIndex == 0) ...subscribeFormPage1(context),
+                if (_pageIndex == 1) ...subscribeFormPage2(context),
+
+                // Date and Time
+
+                const SizedBox(
+                  height: padding,
+                ),
+
+                const SizedBox(
+                  height: padding,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                ],
-              ),
+                )
+              ],
             ),
-            const SizedBox(
-              height: padding,
-            ),
-
-            // Username textbox
-            if (_pageIndex == 0) ...subscribeFormPage1(context),
-            if (_pageIndex == 1) ...subscribeFormPage2(context),
-
-            // Date and Time
-
-            const SizedBox(
-              height: padding,
-            ),
-
-            const SizedBox(
-              height: padding,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-            )
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return const CustomLoadingIcon();
+    }
   }
 }

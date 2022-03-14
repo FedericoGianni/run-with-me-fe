@@ -36,7 +36,7 @@ class CustomColorScheme with ChangeNotifier {
     secondaryTextColor = const Color(SILVER_CHALICE);
     tertiaryTextColor = const Color(PLATINUM_DARK);
     onPrimary = const Color(MAGNOLIA);
-    background = const Color(PLATINUM_LIGHT);
+    background = const Color(PLATINUM);
     errorColor = const Color(ERROR);
     currentMode = 'light';
     print("LightMode");
