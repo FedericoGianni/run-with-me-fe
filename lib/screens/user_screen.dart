@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:runwithme/themes/custom_colors.dart';
 import 'package:runwithme/widgets/custom_alert_dialog.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
@@ -16,6 +17,13 @@ import '../widgets/search_button.dart';
 import '../providers/user.dart';
 import '../widgets/loading_progress_indicator_UNUSED.dart';
 import '../widgets/user_info_card.dart';
+import 'dart:async';
+import 'dart:math';
+
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class UserScreen extends StatefulWidget {
   static const routeName = '/user';
@@ -193,7 +201,9 @@ class _UserScreenState extends State<UserScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          print("HEEEEEEEEEEEEEEEE");
+                                        },
                                       ),
                                       decoration: BoxDecoration(
                                           color: Colors.transparent,
