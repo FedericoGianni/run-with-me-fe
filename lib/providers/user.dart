@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import '../classes/file_manager.dart';
@@ -39,7 +40,7 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> register(username, password) async {
+  Future<List> register(username, password) async {
     try {
       // Makes the http request for the login
       var request = http.MultipartRequest(
@@ -59,9 +60,14 @@ class User with ChangeNotifier {
         this.username = username;
         // notifyListeners();
 
-        return true;
+        return [true, ''];
       } else {
-        return false;
+        print(response.statusCode);
+        print(response.reasonPhrase);
+        if (response.statusCode == 500) {
+          return [false, 'Internal Server Error'];
+        }
+        return [false, 'Generic Server Error'];
       }
     } catch (error) {
       rethrow;
@@ -97,6 +103,43 @@ class User with ChangeNotifier {
           height = userInfo['height'];
           username = userInfo['username'];
           notifyListeners();
+        }
+      } else {
+        print("Jwt was not found");
+      }
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+  }
+
+  Future<void> updateUser() async {
+    try {
+      // Makes the http request for the login
+      String? jwt = await secureStorage.read(key: 'jwt');
+      if (jwt != null) {
+        print("Updating user info");
+        var request = http.MultipartRequest(
+            'POST', Uri.parse('https://runwithme.msuki.tk//user/1'));
+        var headers = {'Authorization': 'Bearer ' + jwt};
+        request.headers.addAll(headers);
+        request.fields.addAll({
+          'email': 'updated@mail.com',
+          'name': 'updatedPippo',
+          'surname': 'topolina',
+          'height': '170',
+          'age': '33',
+          'sex': '1',
+          'fitness_level': '50',
+          'city': 'Milano'
+        });
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode == 200) {
+          print(await response.stream.bytesToString());
+        } else {
+          print(response.reasonPhrase);
         }
       } else {
         print("Jwt was not found");

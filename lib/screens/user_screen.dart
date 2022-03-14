@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:runwithme/themes/custom_colors.dart';
+import 'package:runwithme/widgets/custom_alert_dialog.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 import 'package:runwithme/widgets/search_button.dart';
 import '../providers/color_scheme.dart';
@@ -26,6 +27,21 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   List<bool> isSelected = [false, false];
 
+  Future<void> _showMyDialog() async {
+    print("hey");
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: 'Log Out',
+          message:
+              "Are you sure you would like to log out? \nYou will be missing a lot of cool features",
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
@@ -33,6 +49,7 @@ class _UserScreenState extends State<UserScreen> {
     final user = Provider.of<User>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+
     print(screenHeight);
     if (colors.currentMode == 'dark') {
       isSelected = [false, true];
@@ -53,7 +70,7 @@ class _UserScreenState extends State<UserScreen> {
                 slivers: [
                   SliverAppBar(
                     pinned: true,
-                    collapsedHeight: 120,
+                    collapsedHeight: 140,
                     expandedHeight: 220,
                     toolbarHeight: 10,
                     floating: false,
@@ -275,7 +292,7 @@ class _UserScreenState extends State<UserScreen> {
                                       fontSize: 18,
                                     ),
                                   ),
-                                  onPressed: () => settings.userLogout(),
+                                  onPressed: _showMyDialog,
                                 ),
                               ),
                             ],
