@@ -50,7 +50,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
     adminId: 0,
     averageDuration: 0,
     averageLength: 0,
-    averagePace: 0,
+    averagePaceMin: 0,
+    averagePaceSec: 0,
     createdAt: DateTime.now().toString(),
     currentParticipants: 0,
     date: DateTime.now().toString(),
@@ -128,7 +129,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
           adminId: _editedEvent.adminId,
           averageDuration: _editedEvent.averageDuration,
           averageLength: _editedEvent.averageLength,
-          averagePace: _editedEvent.averagePace,
+          averagePaceMin: _editedEvent.averagePaceMin,
+          averagePaceSec: _editedEvent.averagePaceSec,
           createdAt: _editedEvent.createdAt,
           currentParticipants: _editedEvent.currentParticipants,
           date: pickedDate.toString(),
@@ -176,7 +178,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
           adminId: _editedEvent.adminId,
           averageDuration: _editedEvent.averageDuration,
           averageLength: _editedEvent.averageLength,
-          averagePace: _editedEvent.averagePace,
+          averagePaceMin: _editedEvent.averagePaceMin,
+          averagePaceSec: _editedEvent.averagePaceSec,
           createdAt: _editedEvent.createdAt,
           currentParticipants: _editedEvent.currentParticipants,
           date: _editedEvent.date,
@@ -240,7 +243,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
             _editedEvent.averageDuration.toString());
         print(
             "_editedEvent.avgLength: " + _editedEvent.averageLength.toString());
-        print("_editedEvent.avgPace: " + _editedEvent.averagePace.toString());
+        print(
+            "_editedEvent.avgPace: " + _editedEvent.averagePaceMin.toString());
         print("_editedEvent.date: " + _editedEvent.date.toString());
         print("_editedEvent.id: " + _editedEvent.id.toString());
         print("_editedEvent.maxParticipants: " +
@@ -360,7 +364,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         adminId: _editedEvent.adminId,
                         averageDuration: _editedEvent.averageDuration,
                         averageLength: _editedEvent.averageLength,
-                        averagePace: _editedEvent.averagePace,
+                        averagePaceMin: _editedEvent.averagePaceMin,
+                        averagePaceSec: _editedEvent.averagePaceSec,
                         createdAt: _editedEvent.createdAt,
                         currentParticipants: _editedEvent.currentParticipants,
                         date: _editedEvent.date,
@@ -497,7 +502,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                               adminId: _editedEvent.adminId,
                               averageDuration: _editedEvent.averageDuration,
                               averageLength: _editedEvent.averageLength,
-                              averagePace: _editedEvent.averagePace,
+                              averagePaceMin: _editedEvent.averagePaceMin,
+                              averagePaceSec: _editedEvent.averagePaceSec,
                               createdAt: _editedEvent.createdAt,
                               currentParticipants:
                                   _editedEvent.currentParticipants,
@@ -596,7 +602,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                 adminId: _editedEvent.adminId,
                                 averageDuration: _editedEvent.averageDuration,
                                 averageLength: int.parse(value),
-                                averagePace: _editedEvent.averagePace,
+                                averagePaceMin: _editedEvent.averagePaceMin,
+                                averagePaceSec: _editedEvent.averagePaceSec,
                                 createdAt: _editedEvent.createdAt,
                                 currentParticipants:
                                     _editedEvent.currentParticipants,
@@ -638,7 +645,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                 adminId: _editedEvent.adminId,
                                 averageDuration: int.parse(value),
                                 averageLength: _editedEvent.averageLength,
-                                averagePace: _editedEvent.averagePace,
+                                averagePaceMin: _editedEvent.averagePaceMin,
+                                averagePaceSec: _editedEvent.averagePaceSec,
                                 createdAt: _editedEvent.createdAt,
                                 currentParticipants:
                                     _editedEvent.currentParticipants,
