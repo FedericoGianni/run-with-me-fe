@@ -35,6 +35,7 @@ class UserInfo extends StatelessWidget {
               children: [
                 UserInfoFilling('Name', user.name ?? ''),
                 UserInfoFilling('Surname', user.surname ?? ''),
+                UserInfoFilling('Email', user.email ?? ''),
               ],
             ),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -67,6 +68,21 @@ class UserInfo extends StatelessWidget {
             child: Column(
               children: [
                 UserInfoFilling('Fitness Level', user.fitnessLevel.toString()),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          ),
+        ),
+        Card(
+          color: colors.onPrimary,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Container(
+            child: Column(
+              children: [
+                UserInfoFilling('Default location', user.city.toString()),
               ],
             ),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
