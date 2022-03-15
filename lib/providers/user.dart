@@ -40,13 +40,14 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List> register(username, password) async {
+  Future<List> register(username, email, password) async {
     try {
       // Makes the http request for the login
       var request = http.MultipartRequest(
           'POST', Uri.parse(Config.baseUrl + '/register'));
       request.fields.addAll({
         'username': username,
+        'email': email,
         'password': password,
       });
       http.StreamedResponse response = await request.send();
@@ -55,12 +56,20 @@ class User with ChangeNotifier {
         print("Signup went correctly");
         var userId = json.decode(await response.stream.bytesToString());
         print(userId);
-        UserSettings().userLogin(username, password);
-        this.userId = userId;
-        this.username = username;
-        // notifyListeners();
+        //  var loginResult = await UserSettings().userLogin(username, password);
+          
+          if (userId['id']!=-1){
+          this.userId = userId['id'];
+          this.username = username;
+            return [true, 'Registration was successfull'];  
 
-        return [true, ''];
+          } else{
+        return [false, 'Internal Server Error'];
+
+          }
+          // notifyListeners();
+
+        
       } else {
         print(response.statusCode);
         print(response.reasonPhrase);
@@ -74,7 +83,7 @@ class User with ChangeNotifier {
     }
   }
 
-  Future<void> getUserInfo() async {
+  Future<bool> getUserInfo() async {
     try {
       // Makes the http request for the login
       String? jwt = await secureStorage.read(key: 'jwt');
@@ -103,10 +112,15 @@ class User with ChangeNotifier {
           height = userInfo['height'];
           username = userInfo['username'];
           notifyListeners();
+          return true;
         }
       } else {
         print("Jwt was not found");
+          return false;
+
       }
+          return false;
+
     } catch (error) {
       print(error);
       rethrow;

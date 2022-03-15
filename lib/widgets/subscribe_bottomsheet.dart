@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
+import '../providers/settings_manager.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class SubscribeBottomSheet extends StatefulWidget {
 
 class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _form = GlobalKey<FormState>();
-  int _pageIndex = 1;
+  int _pageIndex = 0;
   final _emailFocusNode = FocusNode();
   final _pwd1FocusNode = FocusNode();
   final _pwd2FocusNode = FocusNode();
@@ -39,16 +40,16 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   static const double padding = 50;
   bool isTextObsured = true;
   var _initValues = {
-    'username': '',
-    'password': '',
-    'email': '',
-    'password2': '',
-    'name': '',
-    'surname': '',
-    'height': '',
-    'age': '',
-    'sex': '',
-    'city': '',
+    'username': 'a',
+    'password': 'a',
+    'email': 'a',
+    'password2': 'a',
+    'name': 'a',
+    'surname': 'a',
+    'height': 'a',
+    'age': 'a',
+    'sex': 'a',
+    'city': 'a',
   };
 
   void _togglePwdText() {
@@ -121,10 +122,10 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     // final pageIndex = Provider.of<PageIndex>(context, listen: false);
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
+    var settings = Provider.of<UserSettings>(context, listen: false);
 
     final user = Provider.of<User>(context, listen: false);
     final isValid = _form.currentState?.validate();
-    var _snackBarText = '';
 
     if (isValid == null || !isValid) {
       return;
@@ -132,19 +133,11 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     _form.currentState?.save();
     print("Signing up User");
 
-    user
-        .register(_initValues['username'], _initValues['password'])
-        .then((value1) {
-      if (value1[0]) {
-        user.updateUser().then((value2) {
-          print("Correcxlty Subscribed!");
-        });
-      } else {
-        print("Register not completed");
-      }
-      _snackBarText = value1[1].toString();
-      print(_snackBarText);
-      snackBar = SnackBar(
+    List registerResult = await user.register(_initValues['username'], _initValues['email'], _initValues['password']);
+    if (registerResult[0]) {
+      List loginResult = await settings.userLogin(_initValues['username'], _initValues['password']);
+      if (loginResult[0]) {
+        snackBar = SnackBar(
         content: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +145,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
               Container(
                 padding: EdgeInsets.all(5),
                 child: Text(
-                  _snackBarText,
+                  registerResult[1],
                   style: TextStyle(
                       color: colors.primaryTextColor,
                       fontSize: 14,
@@ -169,7 +162,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           decoration: BoxDecoration(
               color: colors.background,
               border: Border.all(
-                color: colors.errorColor,
+                color: registerResult[0] ? colors.primaryColor:colors.errorColor,
                 width: 1,
               ),
               borderRadius: BorderRadius.all(Radius.circular(15))),
@@ -187,8 +180,10 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       setState(() {
         _isLoading = false;
         Navigator.pop(context);
-      });
-    });
+      });}
+    } else {
+      print("Register not completed");
+    }
   }
 
   List<Widget> subscribeFormPage1(BuildContext context) {
