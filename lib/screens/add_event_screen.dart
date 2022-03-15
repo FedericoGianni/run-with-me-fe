@@ -198,10 +198,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
   Future<void> _saveForm() async {
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
-    //user provider to get user id
-    //final user = Provider.of<User>(context);
-    //final userInfo = user.getUserInfo();
-
     final isValid = _form.currentState?.validate();
     if (isValid == null || !isValid) {
       return;
@@ -210,6 +206,25 @@ class _AddEventScreenState extends State<AddEventScreen> {
     setState(() {
       _isLoading = true;
     });
+
+    //user provider to get user id
+    // final user = Provider.of<User>(context);
+
+    // _editedEvent = Event(
+    //   adminId: user.userId,
+    //   averageDuration: _editedEvent.averageDuration,
+    //   averageLength: _editedEvent.averageLength,
+    //   averagePace: _editedEvent.averagePace,
+    //   createdAt: _editedEvent.createdAt,
+    //   currentParticipants: _editedEvent.currentParticipants,
+    //   date: _editedEvent.date,
+    //   difficultyLevel: _editedEvent.difficultyLevel,
+    //   id: _editedEvent.id,
+    //   maxParticipants: _editedEvent.maxParticipants,
+    //   name: _editedEvent.name,
+    //   startingPintLat: _editedEvent.startingPintLat,
+    //   startingPintLong: _editedEvent.startingPintLong,
+    // );
 
     //editedEvent.id è null finchè il backend non gli ritorna un id
     if (_editedEvent.id != null) {
@@ -645,102 +660,104 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 const SizedBox(
                   height: padding,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: 20.0,
-                    right: 20,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2.3,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          initialValue: '',
-                          cursorColor: colors.primaryTextColor,
-                          style: TextStyle(color: colors.primaryTextColor),
-                          decoration:
-                              textFormDecoration('Pace (mins/km)', context),
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context)
-                                .requestFocus(_durationFocusNode);
-                          },
-                          validator: (value) {
-                            if (value?.length == 0) {
-                              return 'Please provide a value.';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            if (value != null) {
-                              _editedEvent = Event(
-                                adminId: _editedEvent.adminId,
-                                averageDuration: _editedEvent.averageDuration,
-                                averageLength: _editedEvent.averageLength,
-                                averagePace: _editedEvent.averagePace,
-                                createdAt: _editedEvent.createdAt,
-                                currentParticipants:
-                                    _editedEvent.currentParticipants,
-                                date: _editedEvent.date,
-                                difficultyLevel: _editedEvent.difficultyLevel,
-                                id: _editedEvent.id,
-                                maxParticipants: _editedEvent.maxParticipants,
-                                name: _editedEvent.name,
-                                startingPintLat: _editedEvent.startingPintLat,
-                                startingPintLong: _editedEvent.startingPintLong,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2.3,
-                        child: TextFormField(
-                          // focusNode: _durationFocusNode,
-                          keyboardType: TextInputType.number,
-                          initialValue: '',
-                          cursorColor: colors.primaryTextColor,
-                          style: TextStyle(color: colors.primaryTextColor),
-                          decoration:
-                              textFormDecoration('Max participants', context),
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_nameFocusNode);
-                          },
-                          validator: (value) {
-                            if (value?.length == 0) {
-                              return 'Please provide a value.';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            if (value != null) {
-                              _editedEvent = Event(
-                                adminId: _editedEvent.adminId,
-                                averageDuration: _editedEvent.averageDuration,
-                                averageLength: _editedEvent.averageLength,
-                                averagePace: _editedEvent.averagePace,
-                                createdAt: _editedEvent.createdAt,
-                                currentParticipants:
-                                    _editedEvent.currentParticipants,
-                                date: _editedEvent.date,
-                                difficultyLevel: _editedEvent.difficultyLevel,
-                                id: _editedEvent.id,
-                                maxParticipants: int.parse(value),
-                                name: _editedEvent.name,
-                                startingPintLat: _editedEvent.startingPintLat,
-                                startingPintLong: _editedEvent.startingPintLong,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // PACE per ora non lo mettiamo, se non viene specificato il backend lo calcola automaticamente da distanza e km
+                // oppure posso fare il calcolo in addEvent dentro la classe event in provider se non gli arriva pace
+                // Padding(
+                //   padding: const EdgeInsets.only(
+                //     top: 10,
+                //     left: 20.0,
+                //     right: 20,
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       SizedBox(
+                //         width: MediaQuery.of(context).size.width / 2.3,
+                //         child: TextFormField(
+                //           keyboardType: TextInputType.number,
+                //           initialValue: '',
+                //           cursorColor: colors.primaryTextColor,
+                //           style: TextStyle(color: colors.primaryTextColor),
+                //           decoration:
+                //               textFormDecoration('Pace (mins/km)', context),
+                //           textInputAction: TextInputAction.next,
+                //           onFieldSubmitted: (_) {
+                //             FocusScope.of(context)
+                //                 .requestFocus(_durationFocusNode);
+                //           },
+                //           validator: (value) {
+                //             if (value?.length == 0) {
+                //               return 'Please provide a value.';
+                //             }
+                //             return null;
+                //           },
+                //           onSaved: (value) {
+                //             if (value != null) {
+                //               _editedEvent = Event(
+                //                 adminId: _editedEvent.adminId,
+                //                 averageDuration: _editedEvent.averageDuration,
+                //                 averageLength: _editedEvent.averageLength,
+                //                 averagePace: _editedEvent.averagePace,
+                //                 createdAt: _editedEvent.createdAt,
+                //                 currentParticipants:
+                //                     _editedEvent.currentParticipants,
+                //                 date: _editedEvent.date,
+                //                 difficultyLevel: _editedEvent.difficultyLevel,
+                //                 id: _editedEvent.id,
+                //                 maxParticipants: _editedEvent.maxParticipants,
+                //                 name: _editedEvent.name,
+                //                 startingPintLat: _editedEvent.startingPintLat,
+                //                 startingPintLong: _editedEvent.startingPintLong,
+                //               );
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //       SizedBox(
+                //         width: MediaQuery.of(context).size.width / 2.3,
+                //         child: TextFormField(
+                //           // focusNode: _durationFocusNode,
+                //           keyboardType: TextInputType.number,
+                //           initialValue: '',
+                //           cursorColor: colors.primaryTextColor,
+                //           style: TextStyle(color: colors.primaryTextColor),
+                //           decoration:
+                //               textFormDecoration('Max participants', context),
+                //           textInputAction: TextInputAction.next,
+                //           onFieldSubmitted: (_) {
+                //             FocusScope.of(context).requestFocus(_nameFocusNode);
+                //           },
+                //           validator: (value) {
+                //             if (value?.length == 0) {
+                //               return 'Please provide a value.';
+                //             }
+                //             return null;
+                //           },
+                //           onSaved: (value) {
+                //             if (value != null) {
+                //               _editedEvent = Event(
+                //                 adminId: _editedEvent.adminId,
+                //                 averageDuration: _editedEvent.averageDuration,
+                //                 averageLength: _editedEvent.averageLength,
+                //                 averagePace: _editedEvent.averagePace,
+                //                 createdAt: _editedEvent.createdAt,
+                //                 currentParticipants:
+                //                     _editedEvent.currentParticipants,
+                //                 date: _editedEvent.date,
+                //                 difficultyLevel: _editedEvent.difficultyLevel,
+                //                 id: _editedEvent.id,
+                //                 maxParticipants: int.parse(value),
+                //                 name: _editedEvent.name,
+                //                 startingPintLat: _editedEvent.startingPintLat,
+                //                 startingPintLong: _editedEvent.startingPintLong,
+                //               );
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 const SizedBox(
                   height: padding,
                 ),

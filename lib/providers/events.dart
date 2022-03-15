@@ -3,11 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import './event.dart';
+import '../classes/config.dart';
 import '../dummy_data/dummy_events.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class Events with ChangeNotifier {
   List<Event> _items = [];
+  final secureStorage = const FlutterSecureStorage();
 
   List<Event> get items {
     return [..._items];
@@ -53,48 +57,82 @@ class Events with ChangeNotifier {
   }
 
   Future<void> addEvent(Event event) async {
-    final url = Uri.https(
-        'runwithme-c6e23-default-rtdb.europe-west1.firebasedatabase.app',
-        '/events.json');
-    try {
-      final response = await http.post(
-        url,
-        body: json.encode({
-          'adminId': event.adminId,
-          'averageDuration': event.averageDuration,
-          'averageLength': event.averageLength,
-          'averagePace': event.averagePace,
-          'createdAt': event.createdAt,
-          'currentParticipants': event.currentParticipants,
-          'date': event.date,
-          'difficultyLevel': event.difficultyLevel,
-          'maxParticipants': event.maxParticipants,
-          'name': event.name,
-          'startingPintLat': event.startingPintLat,
-          'startingPintLong': event.startingPintLong,
-        }),
-      );
-      final newEvent = Event(
-        adminId: event.adminId,
-        averageDuration: event.averageDuration,
-        averageLength: event.averageLength,
-        averagePace: event.averagePace,
-        createdAt: event.createdAt,
-        currentParticipants: event.currentParticipants,
-        date: event.date,
-        difficultyLevel: event.difficultyLevel,
-        maxParticipants: event.maxParticipants,
-        name: event.name,
-        startingPintLat: event.startingPintLat,
-        startingPintLong: event.startingPintLong,
-        id: json.decode(response.body)['id'],
-      );
-      _items.add(newEvent);
-      // _items.insert(0, newEvent); // at the start of the list
-      notifyListeners();
-    } catch (error) {
-      rethrow;
+    var request =
+        http.MultipartRequest('POST', Uri.parse(Config.baseUrl + '/event/add'));
+
+    String? jwt = await secureStorage.read(key: 'jwt');
+    if (jwt != null) {
+      var headers = {'Authorization': 'Bearer ' + jwt};
+      request.headers.addAll(headers);
     }
+
+    print("date (string): " + event.date);
+    print("date (DateTime): " + DateTime.parse(event.date).toString());
+    print("date (timestamp): " +
+        (DateTime.parse(event.date).millisecondsSinceEpoch.toString()));
+    print("date (timestamp secondi):" +
+        (DateTime.parse(event.date).millisecondsSinceEpoch / 1000)
+            .round()
+            .toString());
+
+    request.fields.addAll({
+      'date': (DateTime.parse(event.date).millisecondsSinceEpoch / 1000)
+          .round()
+          .toString(),
+      //'starting_point_long': event.startingPintLong.toString(),
+      //'starting_point_lat': event.startingPintLong.toString(),
+      //'date': "1638024500",
+      'starting_point_lat': "0.0",
+      'starting_point_long': "0.0",
+      'avg_duration': event.averageDuration.toString(),
+      'avg_length': event.averageLength.toString(),
+      'max_participants': event.maxParticipants.toString(),
+      'name': event.name,
+    });
+
+    print("addEvent in events provider:");
+    print("adminId: " + event.adminId.toString());
+    print("avgDuration: " + event.averageDuration.toString());
+    print("avgLength: " + event.averageLength.toString());
+    print("avgPace: " + event.averagePace.toString());
+    print("createdAt: " + event.createdAt.toString());
+    print("currentParticipants: " + event.currentParticipants.toString());
+    print("date: " + event.date.toString());
+    print("difficultyLevel: " + event.difficultyLevel.toString());
+    print("maxParticipants: " + event.maxParticipants.toString());
+    print("name: " + event.name.toString());
+    print("startingPintLat: " + event.startingPintLat.toString());
+    print("startingPintLong: " + event.startingPintLong.toString());
+    print("id: " + event.id.toString());
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+    // final url = Uri.https(Config.baseUrl, '/event/add');
+
+    final newEvent = Event(
+      adminId: -1, //json.decode(response.stream.bytesToString())['admin_id'],
+      averageDuration: event.averageDuration,
+      averageLength: event.averageLength,
+      averagePace: event.averagePace,
+      createdAt: event.createdAt,
+      currentParticipants: event.currentParticipants,
+      date: event.date,
+      difficultyLevel: event.difficultyLevel,
+      maxParticipants: event.maxParticipants,
+      name: event.name,
+      startingPintLat: event.startingPintLat,
+      startingPintLong: event.startingPintLong,
+      id: -1, //json.decode(response.body)['id'],
+    );
+    _items.add(newEvent);
+
+    // _items.insert(0, newEvent); // at the start of the list
+    notifyListeners();
   }
 
   // Future<void> updateEvent(String id, Event newEvent) async {
