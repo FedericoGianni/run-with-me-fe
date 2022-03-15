@@ -30,9 +30,10 @@ class UserSettings with ChangeNotifier {
 
   CustomThemeMode mode = CustomThemeMode.light;
   late CustomColorScheme colors;
-  var settings = Settings();
+  Settings settings = Settings();
   final secureStorage = const FlutterSecureStorage();
   late User user;
+  Config config = Config();
 
   void setColorScheme(colors) {
     this.colors = colors;
@@ -59,8 +60,20 @@ class UserSettings with ChangeNotifier {
     this.user = user;
   }
 
+  void _saveLoginCredentials(username, password, jwt, userId){
+    secureStorage.write(key: 'username', value: username);
+    secureStorage.write(key: 'password', value: password);
+    secureStorage.write(key: 'jwt', value: jwt);
+    secureStorage.write(key: 'userId', value: userId);
+  }
+
   bool isLoggedIn() {
     return settings.isLoggedIn;
+  }
+  
+  void _saveSettingsAndNotify(){
+    FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
+    notifyListeners();
   }
 
   Future<bool> loadSettings() async {
@@ -90,58 +103,51 @@ class UserSettings with ChangeNotifier {
   }
 
   Future<List> userLogin(userName, password) async {
+    print('SettingsManager.userLogin');
     try {
       // Makes the http request for the login
       var request =
-          http.MultipartRequest('POST', Uri.parse(Config.baseUrl + '/login'));
+          http.MultipartRequest('POST', Uri.parse(config.getBaseUrl() + '/login'));
       request.fields.addAll({
         'username': userName,
         'password': password,
       });
       http.StreamedResponse response =
-          await request.send().timeout(const Duration(seconds: 2));
-      print(response.statusCode);
+          await request.send().timeout(Duration(seconds: config.apiTimeout));
       if (response.statusCode == 200) {
         // Decode the jwt from the response
-        var jwt = json.decode(await response.stream.bytesToString());
-        print(jwt);
+        var result = json.decode(await response.stream.bytesToString());
         // Saves users info into safe storage for future use
-        await secureStorage.write(key: 'username', value: userName);
-        await secureStorage.write(key: 'password', value: password);
-        await secureStorage.write(key: 'jwt', value: jwt['access_token']);
-        await secureStorage.write(
-            key: 'userId', value: jwt['user_id'].toString());
+        _saveLoginCredentials(userName, password, result['access_token'].toString(), result['user_id'].toString());
+        
+        user = User();
+        user.userId = result['user_id'];
+        await user.getUserInfo();
 
+        settings.isLoggedIn = true;
         // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
         // Saves the new isLoggedIn value to file and notify all listeners
-        FileManager()
-            .writeFile(json.encode(settings.toJson()), settingsFileName);
-        notifyListeners();
-        user.userId = jwt['user_id'];
-        user.getUserInfo().then((value) {
-          settings.isLoggedIn = true;
-        });
-        return [true, ''];
+        // If the getUserInfo request is successfull, then flag the user as logged in
+        _saveSettingsAndNotify();
+        return [true, 'Logging in'];
+
       } else if (response.statusCode == 401) {
         settings.isLoggedIn = false;
-        FileManager()
-            .writeFile(json.encode(settings.toJson()), settingsFileName);
-        notifyListeners();
-        print(response.reasonPhrase);
+        _saveSettingsAndNotify();
+
+        print("userLogin errored with message: "+ response.reasonPhrase.toString());
         return [false, 'Incorrect Username or Password!'];
       } else {
         settings.isLoggedIn = false;
-        FileManager()
-            .writeFile(json.encode(settings.toJson()), settingsFileName);
-        notifyListeners();
-        print(response.reasonPhrase);
+        _saveSettingsAndNotify();
+
+        print("userLogin errored with message: "+ response.reasonPhrase.toString());
         return [false, 'Dafuq did just happen'];
       }
     } catch (error) {
       print(error);
       settings.isLoggedIn = false;
-      FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
-      notifyListeners();
+      _saveSettingsAndNotify();
       return [false, 'Internal Server Error'];
     }
   }
@@ -154,13 +160,13 @@ class UserSettings with ChangeNotifier {
       try {
         // Makes the http request for the login
         var request =
-            http.MultipartRequest('POST', Uri.parse(Config.baseUrl + '/login'));
+            http.MultipartRequest('POST', Uri.parse(config.getBaseUrl() + '/login'));
         request.fields.addAll({
           'username': username,
           'password': password,
         });
         http.StreamedResponse response =
-            await request.send().timeout(const Duration(seconds: 2));
+            await request.send().timeout( Duration(seconds: config.getApiTimeout()));
 
         if (response.statusCode == 200) {
           // Decode the jwt from the response

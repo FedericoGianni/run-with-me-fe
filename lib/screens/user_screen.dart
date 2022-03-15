@@ -50,10 +50,16 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
+  void refresh(){
+    setState(() {
+      var settings = Provider.of<UserSettings>(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-    final settings = Provider.of<UserSettings>(context);
+    var settings = Provider.of<UserSettings>(context);
     final user = Provider.of<User>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -119,7 +125,7 @@ class _UserScreenState extends State<UserScreen> {
                               Row(
                                 children: [
                                   Container(
-                                    width: screenWidth / 2,
+                                    width: screenWidth / 1.7,
                                     padding: EdgeInsets.only(
                                         top: 20, left: 20, bottom: 5),
                                     child: Column(

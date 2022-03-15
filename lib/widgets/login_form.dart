@@ -140,8 +140,10 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
-    // This snackbar is used for the popup message in case of wrong credentials
+      var settings = Provider.of<UserSettings>(context);
 
+    // This snackbar is used for the popup message in case of wrong credentials
+    print(settings.isLoggedIn().toString());
     if (!_isLoading) {
       return Form(
         key: _form,
