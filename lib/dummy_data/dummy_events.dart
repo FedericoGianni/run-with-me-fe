@@ -14,7 +14,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -29,7 +30,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -44,7 +46,8 @@ List<Event> dummy = [
     difficultyLevel: 3,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -59,7 +62,8 @@ List<Event> dummy = [
     difficultyLevel: 2.5,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -74,7 +78,8 @@ List<Event> dummy = [
     difficultyLevel: 5,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -89,7 +94,8 @@ List<Event> dummy = [
     difficultyLevel: 1,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -104,7 +110,8 @@ List<Event> dummy = [
     difficultyLevel: 1.5,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -119,7 +126,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -134,7 +142,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -149,7 +158,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -164,7 +174,8 @@ List<Event> dummy = [
     difficultyLevel: 1.5,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -179,7 +190,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -194,7 +206,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -209,7 +222,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -224,7 +238,8 @@ List<Event> dummy = [
     difficultyLevel: 1.5,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -239,7 +254,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -254,7 +270,8 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
   Event(
     adminId: 1,
@@ -269,6 +286,7 @@ List<Event> dummy = [
     difficultyLevel: 4,
     date: "1974-03-20",
     createdAt: '1974-03-20',
-    averagePace: 55.76,
+    averagePaceMin: 55,
+    averagePaceSec: 76,
   ),
 ];
