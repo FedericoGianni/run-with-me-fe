@@ -66,24 +66,20 @@ class Events with ChangeNotifier {
       request.headers.addAll(headers);
     }
 
-    print("date (string): " + event.date);
-    print("date (DateTime): " + DateTime.parse(event.date).toString());
-    print("date (timestamp): " +
-        (DateTime.parse(event.date).millisecondsSinceEpoch.toString()));
     print("date (timestamp secondi):" +
         (DateTime.parse(event.date).millisecondsSinceEpoch / 1000)
             .round()
             .toString());
 
+    print('starting_point_long' + event.startingPintLong.toString());
+    print('starting_point_lat' + event.startingPintLat.toString());
+
     request.fields.addAll({
       'date': (DateTime.parse(event.date).millisecondsSinceEpoch / 1000)
           .round()
           .toString(),
-      //'starting_point_long': event.startingPintLong.toString(),
-      //'starting_point_lat': event.startingPintLong.toString(),
-      //'date': "1638024500",
-      'starting_point_lat': "0.0",
-      'starting_point_long': "0.0",
+      'starting_point_long': event.startingPintLong.toStringAsFixed(14),
+      'starting_point_lat': event.startingPintLat.toStringAsFixed(14),
       'avg_duration': event.averageDuration.toString(),
       'avg_length': event.averageLength.toString(),
       'max_participants': event.maxParticipants.toString(),
