@@ -45,9 +45,9 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-    final settings = Provider.of<UserSettings>(context);
+    final settings = Provider.of<UserSettings>(context, listen: false);
     final double screenHeight = MediaQuery.of(context).size.height;
-
+    print(settings.isLoggedIn());
     if (settings.isLoggedIn()) {
       if (_rowColor == Colors.deepOrange.shade900) {
         __selectGridView(colors);
