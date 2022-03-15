@@ -337,16 +337,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     height: 70,
                   ),
                 ),
-Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: 20.0,
-                    right: 20,
-                  ),
-                  child: InputDatePickerFormField(firstDate: DateTime.parse('2022-02-27'), lastDate: DateTime.parse('20122-03-27'))),
-                const SizedBox(
-                  height: padding,
-                ),
+
                 // Name
                 Padding(
                   padding: const EdgeInsets.only(
