@@ -15,13 +15,14 @@ import '../themes/custom_theme.dart';
 import '../widgets/gradientAppbar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import '../providers/page_index.dart';
+
 import 'package:provider/provider.dart';
+import '../widgets/custom_loading_icon.dart';
 import '../providers/color_scheme.dart';
 import '../providers/event.dart';
 import '../providers/events.dart';
-import 'package:provider/provider.dart';
-import '../providers/page_index.dart';
-import '../widgets/custom_loading_icon.dart';
+import '../providers/user.dart';
 
 class AddEventScreen extends StatefulWidget {
   static const routeName = '/add_event';
@@ -41,13 +42,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
   LatLng markerPosition = const LatLng(0, 0);
 
   DateTime _userSelectedDate = DateTime.now();
+  TimeOfDay _time = TimeOfDay.now();
 
   static const double padding = 50;
+
   var _editedEvent = Event(
     adminId: 0,
     averageDuration: 0,
     averageLength: 0,
-    averagePace: 0,
+    averagePaceMin: 0,
+    averagePaceSec: 0,
     createdAt: DateTime.now().toString(),
     currentParticipants: 0,
     date: DateTime.now().toString(),
@@ -60,16 +64,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
   );
   final _initValues = {
     'name': '',
-    'date': '',
-    'price': '',
-    'imageUrl': '',
   };
 
   Future<Position> _getLocation() async {
     var currentLocation;
     LocationPermission permission = await Geolocator.checkPermission();
-    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA     ' +
-        permission.toString());
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission();
@@ -83,7 +82,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       return Position(
           longitude: defaultUserPos.longitude,
           latitude: defaultUserPos.latitude,
-          timestamp: DateTime(2021),
+          timestamp: DateTime.now(),
           accuracy: 0,
           altitude: 0,
           heading: 0,
@@ -130,7 +129,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
           adminId: _editedEvent.adminId,
           averageDuration: _editedEvent.averageDuration,
           averageLength: _editedEvent.averageLength,
-          averagePace: _editedEvent.averagePace,
+          averagePaceMin: _editedEvent.averagePaceMin,
+          averagePaceSec: _editedEvent.averagePaceSec,
           createdAt: _editedEvent.createdAt,
           currentParticipants: _editedEvent.currentParticipants,
           date: pickedDate.toString(),
@@ -144,8 +144,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
       });
     });
   }
-
-  TimeOfDay _time = const TimeOfDay(hour: 7, minute: 15);
 
   void _selectTime() async {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
@@ -176,21 +174,22 @@ class _AddEventScreenState extends State<AddEventScreen> {
     if (newTime != null) {
       setState(() {
         _time = newTime;
-        // _editedEvent = Event(
-        //   adminId: _editedEvent.adminId,
-        //   averageDuration: _editedEvent.averageDuration,
-        //   averageLength: _editedEvent.averageLength,
-        //   averagePace: _editedEvent.averagePace,
-        //   createdAt: _editedEvent.createdAt,
-        //   currentParticipants: _editedEvent.currentParticipants,
-        //   date: _editedEvent.date,
-        //   difficultyLevel: _editedEvent.difficultyLevel,
-        //   id: _editedEvent.id,
-        //   maxParticipants: _editedEvent.maxParticipants,
-        //   name: _editedEvent.name,
-        //   startingPintLat: _editedEvent.startingPintLat,
-        //   startingPintLong: _editedEvent.startingPintLong,
-        // );
+        _editedEvent = Event(
+          adminId: _editedEvent.adminId,
+          averageDuration: _editedEvent.averageDuration,
+          averageLength: _editedEvent.averageLength,
+          averagePaceMin: _editedEvent.averagePaceMin,
+          averagePaceSec: _editedEvent.averagePaceSec,
+          createdAt: _editedEvent.createdAt,
+          currentParticipants: _editedEvent.currentParticipants,
+          date: _editedEvent.date,
+          difficultyLevel: _editedEvent.difficultyLevel,
+          id: _editedEvent.id,
+          maxParticipants: _editedEvent.maxParticipants,
+          name: _editedEvent.name,
+          startingPintLat: _editedEvent.startingPintLat,
+          startingPintLong: _editedEvent.startingPintLong,
+        );
       });
     }
   }
@@ -210,12 +209,52 @@ class _AddEventScreenState extends State<AddEventScreen> {
     setState(() {
       _isLoading = true;
     });
+
+    //user provider to get user id
+    // final user = Provider.of<User>(context);
+
+    // _editedEvent = Event(
+    //   adminId: user.userId,
+    //   averageDuration: _editedEvent.averageDuration,
+    //   averageLength: _editedEvent.averageLength,
+    //   averagePace: _editedEvent.averagePace,
+    //   createdAt: _editedEvent.createdAt,
+    //   currentParticipants: _editedEvent.currentParticipants,
+    //   date: _editedEvent.date,
+    //   difficultyLevel: _editedEvent.difficultyLevel,
+    //   id: _editedEvent.id,
+    //   maxParticipants: _editedEvent.maxParticipants,
+    //   name: _editedEvent.name,
+    //   startingPintLat: _editedEvent.startingPintLat,
+    //   startingPintLong: _editedEvent.startingPintLong,
+    // );
+
+    //editedEvent.id è null finchè il backend non gli ritorna un id
     if (_editedEvent.id != null) {
       // await Provider.of<Events>(context, listen: false)
       //     .updateProduct(_editedEvent.id, _editedEvent);
       print("Here I should edit the Event");
     } else {
       try {
+        print("test markerposition: " + markerPosition.toString());
+
+        print("_editedEvent.adminId: " + _editedEvent.adminId.toString());
+        print("_editedEvent.avgDuration: " +
+            _editedEvent.averageDuration.toString());
+        print(
+            "_editedEvent.avgLength: " + _editedEvent.averageLength.toString());
+        print(
+            "_editedEvent.avgPace: " + _editedEvent.averagePaceMin.toString());
+        print("_editedEvent.date: " + _editedEvent.date.toString());
+        print("_editedEvent.id: " + _editedEvent.id.toString());
+        print("_editedEvent.maxParticipants: " +
+            _editedEvent.maxParticipants.toString());
+        print("_editedEvent.name: " + _editedEvent.name.toString());
+        print("_editedEvent.strartingPointLat: " +
+            _editedEvent.startingPintLat.toString());
+        print("_editedEvent.startingPointLong: " +
+            _editedEvent.startingPintLong.toString());
+
         await Provider.of<Events>(context, listen: false)
             .addEvent(_editedEvent);
       } catch (error) {
@@ -335,14 +374,16 @@ Padding(
                         adminId: _editedEvent.adminId,
                         averageDuration: _editedEvent.averageDuration,
                         averageLength: _editedEvent.averageLength,
-                        averagePace: _editedEvent.averagePace,
+                        averagePaceMin: _editedEvent.averagePaceMin,
+                        averagePaceSec: _editedEvent.averagePaceSec,
                         createdAt: _editedEvent.createdAt,
                         currentParticipants: _editedEvent.currentParticipants,
                         date: _editedEvent.date,
                         difficultyLevel: _editedEvent.difficultyLevel,
                         id: _editedEvent.id,
                         maxParticipants: _editedEvent.maxParticipants,
-                        name: _editedEvent.name,
+                        //change the event name with the name selected by the user
+                        name: value.toString(),
                         startingPintLat: _editedEvent.startingPintLat,
                         startingPintLong: _editedEvent.startingPintLong,
                       );
@@ -467,6 +508,23 @@ Padding(
                         setState(() {
                           if (a != null) {
                             markerPosition = a;
+                            _editedEvent = Event(
+                              adminId: _editedEvent.adminId,
+                              averageDuration: _editedEvent.averageDuration,
+                              averageLength: _editedEvent.averageLength,
+                              averagePaceMin: _editedEvent.averagePaceMin,
+                              averagePaceSec: _editedEvent.averagePaceSec,
+                              createdAt: _editedEvent.createdAt,
+                              currentParticipants:
+                                  _editedEvent.currentParticipants,
+                              date: _editedEvent.date,
+                              difficultyLevel: _editedEvent.difficultyLevel,
+                              id: _editedEvent.id,
+                              maxParticipants: _editedEvent.maxParticipants,
+                              name: _editedEvent.name,
+                              startingPintLat: markerPosition.latitude,
+                              startingPintLong: markerPosition.longitude,
+                            );
                           }
                         });
                       });
@@ -543,8 +601,8 @@ Padding(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please provide a value.';
-                            } else if (int.parse(value) > 100) {
-                              return 'Distance should be less than 100km.';
+                            } else if (int.parse(value) > 200) {
+                              return 'Distance should be less than 200km.';
                             }
                             return null;
                           },
@@ -554,7 +612,8 @@ Padding(
                                 adminId: _editedEvent.adminId,
                                 averageDuration: _editedEvent.averageDuration,
                                 averageLength: int.parse(value),
-                                averagePace: _editedEvent.averagePace,
+                                averagePaceMin: _editedEvent.averagePaceMin,
+                                averagePaceSec: _editedEvent.averagePaceSec,
                                 createdAt: _editedEvent.createdAt,
                                 currentParticipants:
                                     _editedEvent.currentParticipants,
@@ -596,7 +655,8 @@ Padding(
                                 adminId: _editedEvent.adminId,
                                 averageDuration: int.parse(value),
                                 averageLength: _editedEvent.averageLength,
-                                averagePace: _editedEvent.averagePace,
+                                averagePaceMin: _editedEvent.averagePaceMin,
+                                averagePaceSec: _editedEvent.averagePaceSec,
                                 createdAt: _editedEvent.createdAt,
                                 currentParticipants:
                                     _editedEvent.currentParticipants,
@@ -618,102 +678,104 @@ Padding(
                 const SizedBox(
                   height: padding,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: 20.0,
-                    right: 20,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2.3,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          initialValue: '',
-                          cursorColor: colors.primaryTextColor,
-                          style: TextStyle(color: colors.primaryTextColor),
-                          decoration:
-                              textFormDecoration('Pace (mins/km)', context),
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context)
-                                .requestFocus(_durationFocusNode);
-                          },
-                          validator: (value) {
-                            if (value?.length == 0) {
-                              return 'Please provide a value.';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            if (value != null) {
-                              _editedEvent = Event(
-                                adminId: _editedEvent.adminId,
-                                averageDuration: _editedEvent.averageDuration,
-                                averageLength: _editedEvent.averageLength,
-                                averagePace: _editedEvent.averagePace,
-                                createdAt: _editedEvent.createdAt,
-                                currentParticipants:
-                                    _editedEvent.currentParticipants,
-                                date: _editedEvent.date,
-                                difficultyLevel: _editedEvent.difficultyLevel,
-                                id: _editedEvent.id,
-                                maxParticipants: _editedEvent.maxParticipants,
-                                name: _editedEvent.name,
-                                startingPintLat: _editedEvent.startingPintLat,
-                                startingPintLong: _editedEvent.startingPintLong,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2.3,
-                        child: TextFormField(
-                          // focusNode: _durationFocusNode,
-                          keyboardType: TextInputType.number,
-                          initialValue: '',
-                          cursorColor: colors.primaryTextColor,
-                          style: TextStyle(color: colors.primaryTextColor),
-                          decoration:
-                              textFormDecoration('Max participants', context),
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_nameFocusNode);
-                          },
-                          validator: (value) {
-                            if (value?.length == 0) {
-                              return 'Please provide a value.';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            if (value != null) {
-                              _editedEvent = Event(
-                                adminId: _editedEvent.adminId,
-                                averageDuration: _editedEvent.averageDuration,
-                                averageLength: _editedEvent.averageLength,
-                                averagePace: _editedEvent.averagePace,
-                                createdAt: _editedEvent.createdAt,
-                                currentParticipants:
-                                    _editedEvent.currentParticipants,
-                                date: _editedEvent.date,
-                                difficultyLevel: _editedEvent.difficultyLevel,
-                                id: _editedEvent.id,
-                                maxParticipants: _editedEvent.maxParticipants,
-                                name: _editedEvent.name,
-                                startingPintLat: _editedEvent.startingPintLat,
-                                startingPintLong: _editedEvent.startingPintLong,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // PACE per ora non lo mettiamo, se non viene specificato il backend lo calcola automaticamente da distanza e km
+                // oppure posso fare il calcolo in addEvent dentro la classe event in provider se non gli arriva pace
+                // Padding(
+                //   padding: const EdgeInsets.only(
+                //     top: 10,
+                //     left: 20.0,
+                //     right: 20,
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       SizedBox(
+                //         width: MediaQuery.of(context).size.width / 2.3,
+                //         child: TextFormField(
+                //           keyboardType: TextInputType.number,
+                //           initialValue: '',
+                //           cursorColor: colors.primaryTextColor,
+                //           style: TextStyle(color: colors.primaryTextColor),
+                //           decoration:
+                //               textFormDecoration('Pace (mins/km)', context),
+                //           textInputAction: TextInputAction.next,
+                //           onFieldSubmitted: (_) {
+                //             FocusScope.of(context)
+                //                 .requestFocus(_durationFocusNode);
+                //           },
+                //           validator: (value) {
+                //             if (value?.length == 0) {
+                //               return 'Please provide a value.';
+                //             }
+                //             return null;
+                //           },
+                //           onSaved: (value) {
+                //             if (value != null) {
+                //               _editedEvent = Event(
+                //                 adminId: _editedEvent.adminId,
+                //                 averageDuration: _editedEvent.averageDuration,
+                //                 averageLength: _editedEvent.averageLength,
+                //                 averagePace: _editedEvent.averagePace,
+                //                 createdAt: _editedEvent.createdAt,
+                //                 currentParticipants:
+                //                     _editedEvent.currentParticipants,
+                //                 date: _editedEvent.date,
+                //                 difficultyLevel: _editedEvent.difficultyLevel,
+                //                 id: _editedEvent.id,
+                //                 maxParticipants: _editedEvent.maxParticipants,
+                //                 name: _editedEvent.name,
+                //                 startingPintLat: _editedEvent.startingPintLat,
+                //                 startingPintLong: _editedEvent.startingPintLong,
+                //               );
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //       SizedBox(
+                //         width: MediaQuery.of(context).size.width / 2.3,
+                //         child: TextFormField(
+                //           // focusNode: _durationFocusNode,
+                //           keyboardType: TextInputType.number,
+                //           initialValue: '',
+                //           cursorColor: colors.primaryTextColor,
+                //           style: TextStyle(color: colors.primaryTextColor),
+                //           decoration:
+                //               textFormDecoration('Max participants', context),
+                //           textInputAction: TextInputAction.next,
+                //           onFieldSubmitted: (_) {
+                //             FocusScope.of(context).requestFocus(_nameFocusNode);
+                //           },
+                //           validator: (value) {
+                //             if (value?.length == 0) {
+                //               return 'Please provide a value.';
+                //             }
+                //             return null;
+                //           },
+                //           onSaved: (value) {
+                //             if (value != null) {
+                //               _editedEvent = Event(
+                //                 adminId: _editedEvent.adminId,
+                //                 averageDuration: _editedEvent.averageDuration,
+                //                 averageLength: _editedEvent.averageLength,
+                //                 averagePace: _editedEvent.averagePace,
+                //                 createdAt: _editedEvent.createdAt,
+                //                 currentParticipants:
+                //                     _editedEvent.currentParticipants,
+                //                 date: _editedEvent.date,
+                //                 difficultyLevel: _editedEvent.difficultyLevel,
+                //                 id: _editedEvent.id,
+                //                 maxParticipants: int.parse(value),
+                //                 name: _editedEvent.name,
+                //                 startingPintLat: _editedEvent.startingPintLat,
+                //                 startingPintLong: _editedEvent.startingPintLong,
+                //               );
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 const SizedBox(
                   height: padding,
                 ),
