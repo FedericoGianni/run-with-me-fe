@@ -120,7 +120,6 @@ class UserSettings with ChangeNotifier {
         // Saves users info into safe storage for future use
         _saveLoginCredentials(userName, password, result['access_token'].toString(), result['user_id'].toString());
         
-        user = User();
         user.userId = result['user_id'];
         await user.getUserInfo();
 
@@ -213,9 +212,8 @@ class UserSettings with ChangeNotifier {
     await secureStorage.delete(key: 'password');
     await secureStorage.delete(key: 'jwt');
     settings.isLoggedIn = false;
-    FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
-
-    notifyListeners();
+    user.username = '';
+    _saveSettingsAndNotify();
   }
 }
 

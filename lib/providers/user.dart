@@ -17,6 +17,7 @@ class User with ChangeNotifier {
   String? username;
   String? name;
   String? surname;
+  String? email;
   DateTime? createdAt;
   int? height;
   int? age;
@@ -24,16 +25,7 @@ class User with ChangeNotifier {
   double? fitnessLevel;
   String? city;
 
-  // User(
-  //     {required this.userId,
-  //     required this.username,
-  //     required this.name,
-  //     required this.surname,
-  //     required this.createdAt,
-  //     required this.height,
-  //     required this.age,
-  //     required this.fitnessLevel,
-  //     required this.city});
+  Config config = Config();
 
   void setId(userId) {
     this.userId = userId;
@@ -56,8 +48,7 @@ class User with ChangeNotifier {
         print("Signup went correctly");
         var userId = json.decode(await response.stream.bytesToString());
         print(userId);
-        //  var loginResult = await UserSettings().userLogin(username, password);
-          
+        
           if (userId['id']!=-1){
           this.userId = userId['id'];
           this.username = username;
@@ -105,6 +96,7 @@ class User with ChangeNotifier {
           sex = userInfo['sex'];
           name = userInfo['name'];
           surname = userInfo['surname'];
+          email = userInfo['email'];
           city = userInfo['city'];
           createdAt = DateTime.fromMillisecondsSinceEpoch(
               12321232 * 1000); // userInfo['created_at']
@@ -127,36 +119,41 @@ class User with ChangeNotifier {
     }
   }
 
-  Future<void> updateUser() async {
+  Future<bool> updateUser() async {
     try {
       // Makes the http request for the login
       String? jwt = await secureStorage.read(key: 'jwt');
       if (jwt != null) {
         print("Updating user info");
         var request = http.MultipartRequest(
-            'POST', Uri.parse('https://runwithme.msuki.tk//user/1'));
+            'POST', Uri.parse(config.getBaseUrl()+'/user/'+userId.toString()));
         var headers = {'Authorization': 'Bearer ' + jwt};
         request.headers.addAll(headers);
         request.fields.addAll({
-          'email': 'updated@mail.com',
-          'name': 'updatedPippo',
-          'surname': 'topolina',
-          'height': '170',
-          'age': '33',
-          'sex': '1',
-          'fitness_level': '50',
-          'city': 'Milano'
+          'email': email!,
+          'name': name!,
+          'surname': surname!,
+          'height': height.toString(),
+          'age': age.toString(),
+          'sex': sex.toString(),
+          'fitness_level': fitnessLevel.toString(),
+          'city': city!,
         });
 
         http.StreamedResponse response = await request.send();
 
         if (response.statusCode == 200) {
           print(await response.stream.bytesToString());
+          return true;
         } else {
           print(response.reasonPhrase);
+          return false;
+
         }
       } else {
-        print("Jwt was not found");
+        print("UpdateUser error: Jwt was not found");
+        return false;
+
       }
     } catch (error) {
       print(error);

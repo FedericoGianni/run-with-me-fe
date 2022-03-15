@@ -12,6 +12,7 @@ import '../providers/user.dart';
 import 'custom_alert_dialog.dart';
 import 'custom_loading_icon.dart';
 import 'custom_map_place_search.dart';
+import 'custom_sex_dialog.dart';
 
 class SubscribeBottomSheet extends StatefulWidget {
   const SubscribeBottomSheet({Key? key}) : super(key: key);
@@ -39,6 +40,9 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   );
   static const double padding = 50;
   bool isTextObsured = true;
+
+  var _sexCodes = {'Male': 1, 'Female': 2, "Don't know": 0};
+
   var _initValues = {
     'username': 'a',
     'password': 'a',
@@ -48,7 +52,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     'surname': 'a',
     'height': 'a',
     'age': 'a',
-    'sex': 'a',
+    'sex': '',
     'city': 'a',
   };
 
@@ -98,7 +102,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     super.dispose();
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _showMapDialog() async {
     print("hey");
     return showDialog(
       context: context,
@@ -115,21 +119,40 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     });
   }
 
-  Future<void> _saveForm() async {
-    setState(() {
-      _isLoading = true;
+  Future<void> _showSexDialog() async {
+    print("hey");
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CustomSexDialog();
+      },
+    ).then((value) {
+      _initValues['sex'] = value;
+      setState(() {
+        print("bellazio");
+        print(_initValues.keys);
+      });
     });
+  }
+
+  Future<void> _saveForm() async {
     // final pageIndex = Provider.of<PageIndex>(context, listen: false);
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
     var settings = Provider.of<UserSettings>(context, listen: false);
 
     final user = Provider.of<User>(context, listen: false);
+    settings.setUser(user);
     final isValid = _form.currentState?.validate();
 
     if (isValid == null || !isValid) {
+      print("Returning");
       return;
     }
+    setState(() {
+      _isLoading = true;
+    });
     _form.currentState?.save();
     print("Signing up User");
 
@@ -137,6 +160,17 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     if (registerResult[0]) {
       List loginResult = await settings.userLogin(_initValues['username'], _initValues['password']);
       if (loginResult[0]) {
+        user.age = int.parse(_initValues['age']!);
+        user.surname = _initValues['surname'];
+        user.name = _initValues['name'];
+        user.city = _initValues['city'];
+        user.fitnessLevel = 99;
+        // user.fitnessLevel = double.parse(_initValues['fitnessLevel']!);
+        user.height = int.parse(_initValues['height']!);
+        user.sex = _sexCodes[_initValues['sex']!];
+
+        bool updateResult = await user.updateUser();
+        if (updateResult){
         snackBar = SnackBar(
         content: Container(
           child: Row(
@@ -180,7 +214,9 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       setState(() {
         _isLoading = false;
         Navigator.pop(context);
-      });}
+      });
+        }
+}
     } else {
       print("Register not completed");
     }
@@ -267,7 +303,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please provide a value.';
-            }
+            } 
             return null;
           },
           onChanged: (value) {
@@ -351,6 +387,11 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     final double screenWidth = MediaQuery.of(context).size.width;
     print(_initValues);
     return [
+      Padding(padding: EdgeInsets.only(
+            left: screenWidth / 7,
+            right: screenWidth / 7,
+            bottom: 10),
+            child: Text("What is your name:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
             top: 10,
@@ -379,6 +420,11 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
+      Padding(padding: EdgeInsets.only(
+            left: screenWidth / 7,
+            right: screenWidth / 7,
+            bottom: 10),
+            child: Text("And your surname:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
             top: 10,
@@ -407,9 +453,13 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
+      Padding(padding: EdgeInsets.only(
+            left: screenWidth / 7,
+            right: screenWidth / 7,
+            bottom: 10),
+            child: Text("Your height:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
-            top: 10,
             left: screenWidth / 7,
             right: screenWidth / 7,
             bottom: padding),
@@ -428,6 +478,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please provide a value.';
+            } else if (int.tryParse(value) == null) {
+              return 'Please provide a valid height in cm';
             }
             return null;
           },
@@ -435,10 +487,13 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             _initValues['height'] = value!;
           },
         ),
-      ),
+      ),Padding(padding: EdgeInsets.only(
+            left: screenWidth / 7,
+            right: screenWidth / 7,
+            bottom: 10),
+            child: Text("How old are you:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
-            top: 10,
             left: screenWidth / 7,
             right: screenWidth / 7,
             bottom: padding),
@@ -457,6 +512,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please provide a value.';
+            } else if (int.tryParse(value) == null) {
+              return 'Please provide a valid age';
             }
             return null;
           },
@@ -465,6 +522,11 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
+      Padding(padding: EdgeInsets.only(
+            left: screenWidth / 7,
+            right: screenWidth / 7,
+            bottom: 10),
+            child: Text("You define yourself as:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
             top: 10,
@@ -472,7 +534,54 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             right: screenWidth / 7,
             bottom: padding),
         child: GestureDetector(
-          onTap: _showMyDialog,
+          onTap: _showSexDialog,
+          // initialValue: markerPosition.toString(),,
+          child: Container(
+            width: MediaQuery.of(context).size.width / 2.3,
+            decoration: BoxDecoration(
+              color: colors.onPrimary,
+              border: Border.all(color: colors.onPrimary),
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(10.0),
+              ),
+            ),
+            height: 60,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _initValues['sex'] == ''
+                          ? Text(
+                              'Sex',
+                              style: TextStyle(
+                                  color: colors.secondaryTextColor,
+                                  fontSize: 16),
+                            )
+                          : Text(
+                              _initValues['sex']!,
+                              style: TextStyle(
+                                  color: colors.primaryTextColor, fontSize: 16),
+                            )),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      Padding(padding: EdgeInsets.only(
+            left: screenWidth / 7,
+            right: screenWidth / 7,
+            bottom: 10),
+            child: Text("Your preferred location:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
+      Padding(
+        padding: EdgeInsets.only(
+            top: 10,
+            left: screenWidth / 7,
+            right: screenWidth / 7,
+            bottom: padding),
+        child: GestureDetector(
+          onTap: _showMapDialog,
           // initialValue: markerPosition.toString(),,
           child: Container(
             width: MediaQuery.of(context).size.width / 2.3,
