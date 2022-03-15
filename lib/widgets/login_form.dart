@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:runwithme/providers/settings_manager.dart';
+import '../providers/user.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,7 @@ class _LoginFormState extends State<LoginForm> {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
     var _snackBarText = '';
-
+    final user = Provider.of<User>(context, listen: false);
     final settings = Provider.of<UserSettings>(context, listen: false);
 
     final isValid = _form.currentState?.validate();
@@ -77,63 +78,61 @@ class _LoginFormState extends State<LoginForm> {
     });
 
     print("isLoading is true");
-
-    settings
-        .userLogin(_initValues['username'], _initValues['password'])
-        .then((value) {
-      if (!value[0]) {
-        print('rip');
-        _snackBarText = value[1].toString();
-        snackBar = SnackBar(
-          content: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(5),
-                  child: Text(
-                    _snackBarText,
-                    style: TextStyle(
-                        color: colors.primaryTextColor,
-                        fontSize: 14,
-                        overflow: TextOverflow.fade),
-                  ),
+    settings.setUser(user);
+    List loginResult = await settings.userLogin(_initValues['username'], _initValues['password']);
+        
+    if (!loginResult[0]) {
+      print('rip');
+      _snackBarText = loginResult[1].toString();
+      snackBar = SnackBar(
+        content: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  _snackBarText,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 14,
+                      overflow: TextOverflow.fade),
                 ),
-              ],
-            ),
-            margin: EdgeInsets.symmetric(horizontal: screenWidth / 7),
-            // width: 20,
-
-            padding: EdgeInsets.all(10),
-
-            decoration: BoxDecoration(
-                color: colors.background,
-                border: Border.all(
-                  color: colors.errorColor,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(15))),
+              ),
+            ],
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          behavior: SnackBarBehavior.fixed,
-          duration: Duration(seconds: 1),
-          padding: EdgeInsets.only(bottom: 40),
-        );
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar()
-          ..showSnackBar(snackBar);
+          margin: EdgeInsets.symmetric(horizontal: screenWidth / 7),
+          // width: 20,
+
+          padding: EdgeInsets.all(10),
+
+          decoration: BoxDecoration(
+              color: colors.background,
+              border: Border.all(
+                color: colors.errorColor,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(15))),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        behavior: SnackBarBehavior.fixed,
+        duration: Duration(seconds: 1),
+        padding: EdgeInsets.only(bottom: 40),
+      );
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      _isLoading = false;
+      print("isLoading is false1");
+      sleep(const Duration(seconds: 1));
+      setState(() {
         _isLoading = false;
-        print("isLoading is false1");
-        sleep(const Duration(seconds: 1));
-        setState(() {
-          _isLoading = false;
-        });
-      } else {
-        _isLoading = false;
-        print("isLoading is false2");
-      }
-    });
+      });
+    } else {
+      _isLoading = false;
+      print("isLoading is false2");
+    }
   }
 
   @override
