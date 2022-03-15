@@ -8,7 +8,8 @@ class Event with ChangeNotifier {
   final double startingPintLong;
   final double startingPintLat;
   final double difficultyLevel;
-  final double averagePace;
+  final int averagePaceMin;
+  final int averagePaceSec;
   final int averageDuration;
   final int averageLength;
   final int adminId;
@@ -23,7 +24,8 @@ class Event with ChangeNotifier {
       required this.startingPintLat,
       required this.startingPintLong,
       required this.difficultyLevel,
-      required this.averagePace,
+      required this.averagePaceMin,
+      required this.averagePaceSec,
       required this.averageDuration,
       required this.averageLength,
       required this.adminId,
