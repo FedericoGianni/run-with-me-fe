@@ -44,16 +44,16 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   var _sexCodes = {'Male': 1, 'Female': 2, "Don't know": 0};
 
   var _initValues = {
-    'username': 'a',
-    'password': 'a',
-    'email': 'a',
-    'password2': 'a',
-    'name': 'a',
-    'surname': 'a',
-    'height': 'a',
-    'age': 'a',
+    'username': '',
+    'password': '',
+    'email': '',
+    'password2': '',
+    'name': '',
+    'surname': '',
+    'height': '',
+    'age': '',
     'sex': '',
-    'city': 'a',
+    'city': '',
   };
 
   void _togglePwdText() {
