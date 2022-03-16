@@ -30,8 +30,29 @@ class Events with ChangeNotifier {
     }
   }
 
+  Event eventFromJson(String value) {
+    return new Event(
+      id: json.decode(value)["id"],
+      name: json.decode(value)["name"],
+      adminId: json.decode(value)["admin_id"],
+      averageDuration: json.decode(value)["avg_duration"],
+      averageLength: json.decode(value)["avg_length"],
+      averagePaceMin: json.decode(value)["avg_pace_min"],
+      averagePaceSec: json.decode(value)["avg_pace_sec"],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(
+          json.decode(value)["created_at"].toInt() * 1000),
+      currentParticipants: json.decode(value)["current_participants"],
+      date: DateTime.fromMicrosecondsSinceEpoch(
+          json.decode(value)["date"].toInt() * 1000),
+      difficultyLevel: json.decode(value)["difficulty_level"],
+      maxParticipants: json.decode(value)["max_participants"],
+      startingPintLat: double.parse(json.decode(value)["starting_point_lat"]),
+      startingPintLong: double.parse(json.decode(value)["starting_point_long"]),
+    );
+  }
+
   Future<Event> fetchEventById(int eventId) async {
-    final Event event = new Event(
+    Event event = new Event(
         id: -1,
         createdAt: DateTime.now(),
         name: "",
@@ -59,32 +80,12 @@ class Events with ChangeNotifier {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      //print(await response.stream.bytesToString());
-
       // generate an Event from the reply
       final stream = await response.stream.bytesToString().then((value) {
-        final event = new Event(
-          //id: int.parse(json.decode(value)["id"]),
-          id: json.decode(value)["id"],
-          name: json.decode(value)["name"],
-          adminId: int.parse(json.decode(value)["admin_id"]),
-          averageDuration: int.parse(json.decode(value)["avg_duration"]),
-          averageLength: int.parse(json.decode(value)["avg_length"]),
-          averagePaceMin: int.parse(json.decode(value)["avg_pace_min"]),
-          averagePaceSec: int.parse(json.decode(value)["avg_pace_sec"]),
-          createdAt: json.decode(value)["created_at"],
-          currentParticipants:
-              int.parse(json.decode(value)["current_participants"]),
-          date: DateTime.parse(json.decode(value)["date"]),
-          difficultyLevel: double.parse(json.decode(value)["difficulty_level"]),
-          maxParticipants: int.parse(json.decode(value)["max_participants"]),
-          startingPintLat:
-              double.parse(json.decode(value)["starting_point_lat"]),
-          startingPintLong:
-              double.parse(json.decode(value)["starting_point_long"]),
-        );
+        print("200 OK, populating event with the receivded json");
+        print("received json: " + value);
+        event = eventFromJson(value);
       });
-      print("event: " + event.toString());
     } else {
       print(response.reasonPhrase);
     }
