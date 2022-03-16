@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
+import '../providers/events.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import 'rating.dart';
@@ -17,6 +18,11 @@ class EventItem extends StatelessWidget {
   const EventItem(this.event, this.index, this.totAmount);
 
   void selectEvent(BuildContext context) {
+    // add this event to the recently viewed events
+    Provider.of<Events>(context, listen: false).addRecentEvent(
+      event,
+    );
+
     Navigator.of(context).pushNamed(
       EventDetailsScreen.routeName,
       arguments: event,

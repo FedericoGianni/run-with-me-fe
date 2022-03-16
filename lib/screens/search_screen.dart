@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
 
 import '../dummy_data/dummy_events.dart';
+import '../providers/events.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 // import '../themes/custom_colors.dart';
@@ -24,6 +25,31 @@ class _SearchScreenState extends State<SearchScreen> {
   Color _rowColor = Colors.deepOrange.shade900;
   Color _gridColor = Colors.deepOrange.shade900;
   Color _mapColor = Colors.deepOrange.shade900;
+
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Events>(context).fetchAndSetEvents(46, 10, 100).then((_) {
+        setState(() {
+          _isLoading = false;
+          print("fetching events for search_screen");
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   void __selectListView(colors) {
     setState(() {
@@ -56,6 +82,18 @@ class _SearchScreenState extends State<SearchScreen> {
 
   List<Widget> _buildContent(BuildContext context, List _eventList) {
     final colors = Provider.of<CustomColorScheme>(context);
+    final events = Provider.of<Events>(context);
+
+    // suggested events taken from Events provider, re-fetch the suggested events every time there is an update in the widget tree
+    List<Event> _suggestedEvents = events.suggestedEvents;
+    List<Event> _recentEvents = events.recentEvents;
+
+    //print("suggestedEvents: " + _suggestedEvents.toString());
+    //print("Search_Screen printing suggestedEvents ID...");
+    for (int i = 0; i < _suggestedEvents.length; i++) {
+      print(_suggestedEvents[i].id.toString());
+    }
+
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
     }
@@ -103,12 +141,9 @@ class _SearchScreenState extends State<SearchScreen> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return EventItem(
-                _eventList[index],
-                index,
-                dummy.length,
-              );
+                  _suggestedEvents[index], index, _suggestedEvents.length);
             },
-            childCount: _eventList.length,
+            childCount: _suggestedEvents.length,
           ),
         ),
       ),
@@ -147,16 +182,19 @@ class _SearchScreenState extends State<SearchScreen> {
           height: (380.0 / _view) / _aspectRatio,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 10,
+            //itemCount: 10,
+            itemCount: _recentEvents.length,
             itemBuilder: (context, index) {
               return Container(
                 padding: const EdgeInsets.only(left: 15, bottom: 5),
                 width: 380.0 / _view,
                 height: (370 / _view) / _aspectRatio,
                 child: EventItem(
-                  dummy[index],
+                  //dummy[index],
+                  _recentEvents[index],
                   index,
-                  dummy.length,
+                  _recentEvents.length,
+                  //dummy.length,
                 ),
               );
             },
