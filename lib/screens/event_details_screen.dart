@@ -52,8 +52,16 @@ class EventDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Created: " + event.createdAt.toString(),
-                      //"Posted on Wed, 03/20",
+                      "Created: " +
+                          event.createdAt.day.toString() +
+                          "/" +
+                          event.createdAt.month.toString() +
+                          "/" +
+                          event.createdAt.year.toString() +
+                          " " +
+                          event.createdAt.hour.toString() +
+                          ":" +
+                          event.createdAt.minute.toString(),
                       style: TextStyle(
                           color: colors.secondaryTextColor,
                           fontSize: 10,
