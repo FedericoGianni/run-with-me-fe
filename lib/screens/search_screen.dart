@@ -190,11 +190,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 width: 380.0 / _view,
                 height: (370 / _view) / _aspectRatio,
                 child: EventItem(
-                  //dummy[index],
                   _recentEvents[index],
                   index,
                   _recentEvents.length,
-                  //dummy.length,
                 ),
               );
             },
@@ -340,7 +338,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var _newEventList = dummy.where((i) => i.difficultyLevel <= 3).toList();
+    final events = Provider.of<Events>(context);
+
     if (_view == 3) {
       return Column(
         children: [
@@ -350,9 +349,9 @@ class _SearchScreenState extends State<SearchScreen> {
             child: CustomScrollView(
               slivers: [
                 _buildAppbar(
-                  context,
-                  _newEventList.length,
-                ),
+                    context,
+                    //_newEventList.length,
+                    events.suggestedEvents.length),
               ],
             ),
           ),
@@ -366,8 +365,8 @@ class _SearchScreenState extends State<SearchScreen> {
     } else {
       return CustomScrollView(
         slivers: [
-          _buildAppbar(context, _newEventList.length),
-          ..._buildContent(context, _newEventList)
+          _buildAppbar(context, events.suggestedEvents.length),
+          ..._buildContent(context, events.suggestedEvents)
         ],
       );
     }
