@@ -74,6 +74,7 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
           children: [
             Align(
               child: TextField(
+                autofocus: true,
                 controller: _controller,
                 style: TextStyle(color: colors.primaryTextColor),
                 decoration: InputDecoration(
@@ -121,7 +122,11 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
                                     Navigator.of(context)
                                         .pop(_placeList[index]);
                                   },
-                                  title: Text(_placeList[index]["description"]),
+                                  title: Text(
+                                    _placeList[index]["description"],
+                                    style: TextStyle(
+                                        color: colors.primaryTextColor),
+                                  ),
                                 );
                               },
                             )
