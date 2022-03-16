@@ -24,6 +24,10 @@ class Events with ChangeNotifier {
     return [..._recentEvents];
   }
 
+  List<Event> get bookedEvents {
+    return [..._bookedEvents];
+  }
+
   Event findById(int id) {
     return _suggestedEvents.firstWhere((event) => event.id == id);
   }
@@ -86,6 +90,49 @@ class Events with ChangeNotifier {
 
             _suggestedEvents.add(eventFromJson(json.encode(list[i])));
             //print("suggestedEvents.length: " +  _suggestedEvents.length.toString());
+          }
+        });
+      } else {
+        print(response.reasonPhrase);
+      }
+
+      //_items = loadedEvents;
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
+
+    return _events;
+  }
+
+  Future<List<Event>> fetchAndSetBookedEvents(int userId) async {
+    List<Event> _events = [];
+
+    try {
+      var request = http.MultipartRequest('GET',
+          Uri.parse(Config.baseUrl + '/events/user/' + userId.toString()));
+      String? jwt = await secureStorage.read(key: 'jwt');
+      if (jwt != null) {
+        var headers = {'Authorization': 'Bearer ' + jwt};
+        request.headers.addAll(headers);
+      }
+
+      print("fetchAndSetBookedEvents calling API...");
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        // generate an Event from the reply
+
+        final stream = await response.stream.bytesToString().then((value) {
+          // empty old list
+          _bookedEvents.clear();
+
+          // receive a json-array
+          List<dynamic> list = json.decode(value);
+
+          // for each element of the json array, re-encode as single json object and use eventFromJson function to generate single event to be added to the suggestedEvents list
+          for (int i = 0; i < list.length; i++) {
+            _bookedEvents.add(eventFromJson(json.encode(list[i])));
           }
         });
       } else {
