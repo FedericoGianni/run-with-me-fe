@@ -730,51 +730,61 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 //           },
                 //         ),
                 //       ),
-                //       SizedBox(
-                //         width: MediaQuery.of(context).size.width / 2.3,
-                //         child: TextFormField(
-                //           // focusNode: _durationFocusNode,
-                //           keyboardType: TextInputType.number,
-                //           initialValue: '',
-                //           cursorColor: colors.primaryTextColor,
-                //           style: TextStyle(color: colors.primaryTextColor),
-                //           decoration:
-                //               textFormDecoration('Max participants', context),
-                //           textInputAction: TextInputAction.next,
-                //           onFieldSubmitted: (_) {
-                //             FocusScope.of(context).requestFocus(_nameFocusNode);
-                //           },
-                //           validator: (value) {
-                //             if (value?.length == 0) {
-                //               return 'Please provide a value.';
-                //             }
-                //             return null;
-                //           },
-                //           onSaved: (value) {
-                //             if (value != null) {
-                //               _editedEvent = Event(
-                //                 adminId: _editedEvent.adminId,
-                //                 averageDuration: _editedEvent.averageDuration,
-                //                 averageLength: _editedEvent.averageLength,
-                //                 averagePace: _editedEvent.averagePace,
-                //                 createdAt: _editedEvent.createdAt,
-                //                 currentParticipants:
-                //                     _editedEvent.currentParticipants,
-                //                 date: _editedEvent.date,
-                //                 difficultyLevel: _editedEvent.difficultyLevel,
-                //                 id: _editedEvent.id,
-                //                 maxParticipants: int.parse(value),
-                //                 name: _editedEvent.name,
-                //                 startingPintLat: _editedEvent.startingPintLat,
-                //                 startingPintLong: _editedEvent.startingPintLong,
-                //               );
-                //             }
-                //           },
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 20.0,
+                    right: 20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.3,
+                        child: TextFormField(
+                          // focusNode: _durationFocusNode,
+                          keyboardType: TextInputType.number,
+                          initialValue: '',
+                          cursorColor: colors.primaryTextColor,
+                          style: TextStyle(color: colors.primaryTextColor),
+                          decoration:
+                              textFormDecoration('Max participants', context),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(_nameFocusNode);
+                          },
+                          validator: (value) {
+                            if (value?.length == 0) {
+                              return 'Please provide a value.';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            if (value != null) {
+                              _editedEvent = Event(
+                                adminId: _editedEvent.adminId,
+                                averageDuration: _editedEvent.averageDuration,
+                                averageLength: _editedEvent.averageLength,
+                                averagePaceMin: _editedEvent.averagePaceMin,
+                                averagePaceSec: _editedEvent.averagePaceSec,
+                                createdAt: _editedEvent.createdAt,
+                                currentParticipants:
+                                    _editedEvent.currentParticipants,
+                                date: _editedEvent.date,
+                                difficultyLevel: _editedEvent.difficultyLevel,
+                                id: _editedEvent.id,
+                                maxParticipants: int.parse(value),
+                                name: _editedEvent.name,
+                                startingPintLat: _editedEvent.startingPintLat,
+                                startingPintLong: _editedEvent.startingPintLong,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: padding,
                 ),
