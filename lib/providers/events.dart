@@ -33,9 +33,9 @@ class Events with ChangeNotifier {
   Future<Event> fetchEventById(int eventId) async {
     final Event event = new Event(
         id: -1,
-        createdAt: DateTime.now().toString(),
+        createdAt: DateTime.now(),
         name: "",
-        date: DateTime.now().toString(),
+        date: DateTime.now(),
         startingPintLat: 0.0,
         startingPintLong: 0.0,
         difficultyLevel: 0.0,
@@ -48,7 +48,7 @@ class Events with ChangeNotifier {
         maxParticipants: 0);
 
     var request = http.MultipartRequest(
-        'POST', Uri.parse(Config.baseUrl + '/event/' + eventId.toString()));
+        'GET', Uri.parse(Config.baseUrl + '/event/' + eventId.toString()));
 
     String? jwt = await secureStorage.read(key: 'jwt');
     if (jwt != null) {
@@ -59,34 +59,31 @@ class Events with ChangeNotifier {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-      final event = new Event(
-        id: int.parse(json.decode(await response.stream.bytesToString())["id"]),
-        name: json.decode(await response.stream.bytesToString())["name"],
-        adminId: int.parse(
-            json.decode(await response.stream.bytesToString())["admin_id"]),
-        averageDuration: int.parse(
-            json.decode(await response.stream.bytesToString())["avg_duration"]),
-        averageLength: int.parse(
-            json.decode(await response.stream.bytesToString())["avg_length"]),
-        averagePaceMin: int.parse(
-            json.decode(await response.stream.bytesToString())["avg_pace_min"]),
-        averagePaceSec: int.parse(
-            json.decode(await response.stream.bytesToString())["avg_pace_sec"]),
-        createdAt:
-            json.decode(await response.stream.bytesToString())["created_at"],
-        currentParticipants: int.parse(json.decode(
-            await response.stream.bytesToString())["current_participants"]),
-        date: json.decode(await response.stream.bytesToString())["date"],
-        difficultyLevel: json
-            .decode(await response.stream.bytesToString())["difficulty_level"],
-        maxParticipants: int.parse(json
-            .decode(await response.stream.bytesToString())["max_participants"]),
-        startingPintLat: json.decode(
-            await response.stream.bytesToString())["starting_point_lat"],
-        startingPintLong: json.decode(
-            await response.stream.bytesToString())["starting_point_long"],
-      );
+      //print(await response.stream.bytesToString());
+
+      // generate an Event from the reply
+      final stream = await response.stream.bytesToString().then((value) {
+        final event = new Event(
+          //id: int.parse(json.decode(value)["id"]),
+          id: json.decode(value)["id"],
+          name: json.decode(value)["name"],
+          adminId: int.parse(json.decode(value)["admin_id"]),
+          averageDuration: int.parse(json.decode(value)["avg_duration"]),
+          averageLength: int.parse(json.decode(value)["avg_length"]),
+          averagePaceMin: int.parse(json.decode(value)["avg_pace_min"]),
+          averagePaceSec: int.parse(json.decode(value)["avg_pace_sec"]),
+          createdAt: json.decode(value)["created_at"],
+          currentParticipants:
+              int.parse(json.decode(value)["current_participants"]),
+          date: DateTime.parse(json.decode(value)["date"]),
+          difficultyLevel: double.parse(json.decode(value)["difficulty_level"]),
+          maxParticipants: int.parse(json.decode(value)["max_participants"]),
+          startingPintLat:
+              double.parse(json.decode(value)["starting_point_lat"]),
+          startingPintLong:
+              double.parse(json.decode(value)["starting_point_long"]),
+        );
+      });
       print("event: " + event.toString());
     } else {
       print(response.reasonPhrase);
@@ -114,9 +111,7 @@ class Events with ChangeNotifier {
     // print('starting_point_lat' + event.startingPintLat.toString());
 
     request.fields.addAll({
-      'date': (DateTime.parse(event.date).millisecondsSinceEpoch / 1000)
-          .round()
-          .toString(),
+      'date': (event.date.millisecondsSinceEpoch / 1000).round().toString(),
       'starting_point_long': event.startingPintLong.toStringAsFixed(14),
       'starting_point_lat': event.startingPintLat.toStringAsFixed(14),
       'avg_duration': event.averageDuration.toString(),

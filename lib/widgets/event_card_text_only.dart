@@ -68,7 +68,7 @@ class EventItem extends StatelessWidget {
                 children: [
                   Text(
                     DateFormat.MEd().format(
-                      DateTime.parse(event.date),
+                      DateTime.parse(event.date.toString()),
                     ),
                     style: TextStyle(
                       color: colors.secondaryTextColor,

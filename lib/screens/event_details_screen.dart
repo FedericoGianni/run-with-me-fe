@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:runwithme/widgets/event_detail_card.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import '../providers/color_scheme.dart';
@@ -51,7 +52,8 @@ class EventDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Posted on Wed, 03/20",
+                      "Created: " + event.createdAt.toString(),
+                      //"Posted on Wed, 03/20",
                       style: TextStyle(
                           color: colors.secondaryTextColor,
                           fontSize: 10,
@@ -104,38 +106,11 @@ class EventDetailsScreen extends StatelessWidget {
               ),
             ),
           ),
+          //actual event details
           SliverPadding(
             padding:
-                const EdgeInsets.only(bottom: 20, top: 0, left: 15, right: 15),
-            sliver: SliverToBoxAdapter(
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: 160,
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Date:',
-                            style: TextStyle(
-                                color: colors.secondaryTextColor, fontSize: 18),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Text(
-                              event.date,
-                              style:
-                                  TextStyle(color: colors.secondaryTextColor),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
-            ),
+                const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+            sliver: SliverToBoxAdapter(child: EventDetail(event)),
           ),
           SliverPadding(
             padding:
