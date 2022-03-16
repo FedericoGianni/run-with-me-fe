@@ -23,6 +23,7 @@ import '../providers/color_scheme.dart';
 import '../providers/event.dart';
 import '../providers/events.dart';
 import '../providers/user.dart';
+import 'event_details_screen.dart';
 
 class AddEventScreen extends StatefulWidget {
   static const routeName = '/add_event';
@@ -52,9 +53,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
     averageLength: 0,
     averagePaceMin: 0,
     averagePaceSec: 0,
-    createdAt: DateTime.now().toString(),
+    createdAt: DateTime.now(),
     currentParticipants: 0,
-    date: DateTime.now().toString(),
+    date: DateTime.now(),
     difficultyLevel: 0,
     maxParticipants: 0,
     name: '',
@@ -133,7 +134,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
           averagePaceSec: _editedEvent.averagePaceSec,
           createdAt: _editedEvent.createdAt,
           currentParticipants: _editedEvent.currentParticipants,
-          date: pickedDate.toString(),
+          date: pickedDate,
           difficultyLevel: _editedEvent.difficultyLevel,
           id: _editedEvent.id,
           maxParticipants: _editedEvent.maxParticipants,
@@ -200,6 +201,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   Future<void> _saveForm() async {
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
+    final events = Provider.of<Events>(context, listen: false);
 
     final isValid = _form.currentState?.validate();
     if (isValid == null || !isValid) {
@@ -255,8 +257,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
         print("_editedEvent.startingPointLong: " +
             _editedEvent.startingPintLong.toString());
 
-        await Provider.of<Events>(context, listen: false)
+        // add event and return id of the newly generated event
+        int newEventId = await Provider.of<Events>(context, listen: false)
             .addEvent(_editedEvent);
+
+        // open new event detail screen
+        Navigator.of(context).pushNamed(
+          EventDetailsScreen.routeName,
+          arguments: await events.fetchEventById(newEventId),
+        );
       } catch (error) {
         print(error);
         await showDialog(
@@ -337,7 +346,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     height: 70,
                   ),
                 ),
-
                 // Name
                 Padding(
                   padding: const EdgeInsets.only(

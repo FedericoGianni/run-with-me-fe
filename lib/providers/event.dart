@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 class Event with ChangeNotifier {
   var id;
-  final String createdAt;
   final String name;
-  final String date;
+  final DateTime createdAt;
+  final DateTime date;
   final double startingPintLong;
   final double startingPintLat;
   final double difficultyLevel;
