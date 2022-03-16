@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../dummy_data/dummy_events.dart';
+import '../providers/events.dart';
 import 'custom_info_window.dart';
 import 'default_appbar.dart';
 import '../models/map_style.dart';
@@ -14,7 +16,9 @@ class CustomMapsSearch extends StatelessWidget {
   CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
 
+  //TODO change _center with the user city
   final LatLng _center = const LatLng(45.45, 9.23);
+
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     customInfoWindowController.googleMapController = controller;
@@ -23,6 +27,8 @@ class CustomMapsSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final events = Provider.of<Events>(context);
+
     return Stack(
       children: [
         GoogleMap(
@@ -34,9 +40,9 @@ class CustomMapsSearch extends StatelessWidget {
           mapType: MapType.normal,
           zoomControlsEnabled: false,
           myLocationButtonEnabled: true,
-          markers: Set<Marker>.of(
-              markerGenerator(dummy, customInfoWindowController, context)
-                  .values),
+          markers: Set<Marker>.of(markerGenerator(
+                  events.suggestedEvents, customInfoWindowController, context)
+              .values),
           initialCameraPosition: CameraPosition(
             target: _center,
             zoom: 12.0,

@@ -4,6 +4,8 @@ import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 
 import '../dummy_data/dummy_events.dart';
+import '../providers/events.dart';
+import '../providers/user.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../providers/color_scheme.dart';
@@ -23,6 +25,32 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
   double _aspectRatio = 1.4;
   Color _rowColor = Colors.deepOrange.shade900;
   Color _gridColor = Colors.deepOrange.shade900;
+
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      int userId = Provider.of<User>(context).userId ?? -1;
+      Provider.of<Events>(context).fetchAndSetBookedEvents(userId).then((_) {
+        setState(() {
+          _isLoading = false;
+          print("fetching events for booked_events_screen");
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   void __selectListView(colors) {
     setState(() {
@@ -47,6 +75,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
     final colors = Provider.of<CustomColorScheme>(context);
     final settings = Provider.of<UserSettings>(context, listen: false);
     final double screenHeight = MediaQuery.of(context).size.height;
+    final events = Provider.of<Events>(context);
     print(settings.isLoggedIn());
     if (settings.isLoggedIn()) {
       if (_rowColor == Colors.deepOrange.shade900) {
@@ -86,7 +115,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    dummy.length.toString() + " results",
+                    events.bookedEvents.length.toString() + " results",
                     style: TextStyle(
                         color: colors.secondaryTextColor, fontSize: 10),
                   ),
@@ -152,16 +181,13 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  List suggested =
-                      dummy.where((i) => i.difficultyLevel <= 5).toList();
                   return EventItem(
-                    suggested[index],
+                    events.bookedEvents[index],
                     index,
-                    dummy.length,
+                    events.bookedEvents.length,
                   );
                 },
-                childCount:
-                    dummy.where((i) => i.difficultyLevel <= 5).toList().length,
+                childCount: events.bookedEvents.length,
               ),
             ),
           ),
