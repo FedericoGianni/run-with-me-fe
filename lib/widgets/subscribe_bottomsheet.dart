@@ -12,7 +12,8 @@ import '../providers/user.dart';
 import 'custom_alert_dialog.dart';
 import 'custom_loading_icon.dart';
 import 'custom_map_place_search.dart';
-import 'custom_sex_dialog.dart';
+import 'custom_options_dialog.dart';
+import 'custom_slider.dart';
 
 class SubscribeBottomSheet extends StatefulWidget {
   const SubscribeBottomSheet({Key? key}) : super(key: key);
@@ -30,7 +31,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _surnameFocusNode = FocusNode();
   final _heightFocusNode = FocusNode();
   final _ageFocusNode = FocusNode();
-  final _sexFocusNode = FocusNode();
+  final _durationFocusNode = FocusNode();
+  final _distanceFocusNode = FocusNode();
   bool _isLoading = false;
   var snackBar;
   var _controller = TextEditingController();
@@ -41,9 +43,10 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   static const double padding = 50;
   bool isTextObsured = true;
 
-  var _sexCodes = {'Male': 1, 'Female': 2, "Don't know": 0};
+  List _sexCodes = ["Don't know", 'Male', 'Female'];
+  List _fitCodes = ['Very unfit', 'Unfit', 'Average', 'Just fit', 'Very fit'];
 
-  var _initValues = {
+  final _initValues = {
     'username': '',
     'password': '',
     'email': '',
@@ -52,8 +55,13 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     'surname': '',
     'height': '',
     'age': '',
-    'sex': '',
+    'sex': '-1',
     'city': '',
+    'frequency': '',
+    'duration': '',
+    'distance': '',
+    'fitness': '-1',
+    'fitnessTotalValue': '-1',
   };
 
   void _togglePwdText() {
@@ -99,6 +107,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     _ageFocusNode.dispose();
     _heightFocusNode.dispose();
     // _ageFocusNode.dispose();
+    // TODO: DISPOSE OF OTHER FOCUS NODES!!!!
     super.dispose();
   }
 
@@ -120,19 +129,38 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   }
 
   Future<void> _showSexDialog() async {
-    print("hey");
     return showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return CustomSexDialog();
+        return CustomOptionsDialog(
+          options: _sexCodes.reversed.toList(),
+        );
       },
     ).then((value) {
-      _initValues['sex'] = value;
-      setState(() {
-        print("bellazio");
-        print(_initValues.keys);
-      });
+      if (value != null) {
+        setState(() {
+          _initValues['sex'] = (_sexCodes.length - 1 - value).toString();
+        });
+      }
+    });
+  }
+
+  Future<void> _showFitnessDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CustomOptionsDialog(
+          options: _fitCodes.reversed.toList(),
+        );
+      },
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          _initValues['fitness'] = (_fitCodes.length - 1 - value).toString();
+        });
+      }
     });
   }
 
@@ -156,67 +184,70 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     _form.currentState?.save();
     print("Signing up User");
 
-    List registerResult = await user.register(_initValues['username'], _initValues['email'], _initValues['password']);
+    List registerResult = await user.register(
+        _initValues['username'], _initValues['email'], _initValues['password']);
     if (registerResult[0]) {
-      List loginResult = await settings.userLogin(_initValues['username'], _initValues['password']);
+      List loginResult = await settings.userLogin(
+          _initValues['username'], _initValues['password']);
       if (loginResult[0]) {
         user.age = int.parse(_initValues['age']!);
         user.surname = _initValues['surname'];
         user.name = _initValues['name'];
         user.city = _initValues['city'];
-        user.fitnessLevel = 99;
-        // user.fitnessLevel = double.parse(_initValues['fitnessLevel']!);
+        user.fitnessLevel = double.parse(_initValues['fitness'] ?? '-1');
         user.height = int.parse(_initValues['height']!);
-        user.sex = _sexCodes[_initValues['sex']!];
+        user.sex = int.parse(_initValues['sex'] ?? '-1');
 
         bool updateResult = await user.updateUser();
-        if (updateResult){
-        snackBar = SnackBar(
-        content: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.all(5),
-                child: Text(
-                  registerResult[1],
-                  style: TextStyle(
-                      color: colors.primaryTextColor,
-                      fontSize: 14,
-                      overflow: TextOverflow.fade),
-                ),
+        if (updateResult) {
+          snackBar = SnackBar(
+            content: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    child: Text(
+                      registerResult[1],
+                      style: TextStyle(
+                          color: colors.primaryTextColor,
+                          fontSize: 14,
+                          overflow: TextOverflow.fade),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          margin: EdgeInsets.symmetric(horizontal: screenWidth / 7),
-          // width: 20,
+              margin: EdgeInsets.symmetric(horizontal: screenWidth / 7),
+              // width: 20,
 
-          padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
 
-          decoration: BoxDecoration(
-              color: colors.background,
-              border: Border.all(
-                color: registerResult[0] ? colors.primaryColor:colors.errorColor,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(15))),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        duration: Duration(seconds: 2),
-        padding: EdgeInsets.only(bottom: 40),
-      );
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar()
-        ..showSnackBar(snackBar);
-      sleep(const Duration(seconds: 1));
-      setState(() {
-        _isLoading = false;
-        Navigator.pop(context);
-      });
+              decoration: BoxDecoration(
+                  color: colors.background,
+                  border: Border.all(
+                    color: registerResult[0]
+                        ? colors.primaryColor
+                        : colors.errorColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 2),
+            padding: EdgeInsets.only(bottom: 40),
+          );
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(snackBar);
+          sleep(const Duration(seconds: 1));
+          setState(() {
+            _isLoading = false;
+            Navigator.pop(context);
+          });
         }
-}
+      }
     } else {
       print("Register not completed");
     }
@@ -229,10 +260,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     return [
       Padding(
         padding: EdgeInsets.only(
-            top: 10,
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
         child: TextFormField(
           key: Key('username'),
 
@@ -258,10 +286,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            top: 10,
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
         child: TextFormField(
           key: Key('email'),
           focusNode: _emailFocusNode,
@@ -285,8 +310,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         ),
       ),
       Padding(
-        padding: EdgeInsets.only(
-            top: 10, left: screenWidth / 7, right: screenWidth / 7),
+        padding: EdgeInsets.only(left: screenWidth / 7, right: screenWidth / 7),
         child: TextFormField(
           key: Key('password'),
           focusNode: _pwd1FocusNode,
@@ -303,7 +327,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please provide a value.';
-            } 
+            }
             return null;
           },
           onChanged: (value) {
@@ -318,7 +342,6 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-          top: 10,
           left: screenWidth / 7,
           right: screenWidth / 7,
           bottom: padding,
@@ -353,7 +376,6 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-          top: 10,
           left: screenWidth / 7,
           right: screenWidth / 7,
         ),
@@ -385,19 +407,22 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   List<Widget> subscribeFormPage2(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
-    print(_initValues);
     return [
-      Padding(padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: 10),
-            child: Text("What is your name:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
-            top: 10,
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "What is your name:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
         child: TextFormField(
           key: Key('name'),
           autofocus: false,
@@ -420,17 +445,21 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
-      Padding(padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: 10),
-            child: Text("And your surname:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
-            top: 10,
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "And your surname:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
         child: TextFormField(
           key: Key('surname'),
           focusNode: _surnameFocusNode,
@@ -453,28 +482,426 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
-      Padding(padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: 10),
-            child: Text("Your height:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
       Padding(
         padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(
+            "Your height:",
+            style: TextStyle(
+              color: colors.primaryTextColor,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "And your age:",
+            style: TextStyle(
+              color: colors.primaryTextColor,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ]),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 100,
+              child: TextFormField(
+                key: Key('height'),
+                focusNode: _heightFocusNode,
+                initialValue: _initValues['height'],
+                cursorColor: colors.primaryTextColor,
+                style: TextStyle(color: colors.primaryTextColor),
+                decoration: textFormDecoration('Height', context),
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_ageFocusNode);
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please provide a value.';
+                  } else if (int.tryParse(value) == null) {
+                    return 'Please provide a valid height in cm';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _initValues['height'] = value!;
+                },
+              ),
+            ),
+            SizedBox(
+              width: 100,
+              child: TextFormField(
+                key: Key('age'),
+                focusNode: _ageFocusNode,
+                initialValue: _initValues['age'],
+                cursorColor: colors.primaryTextColor,
+                style: TextStyle(color: colors.primaryTextColor),
+                decoration: textFormDecoration('Age', context),
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) {
+                  // FocusScope.of(context).requestFocus(_sexFocusNode);
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please provide a value.';
+                  } else if (int.tryParse(value) == null) {
+                    return 'Please provide a valid age';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _initValues['age'] = value!;
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "You define yourself as:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
+        child: FormField(
+          builder: (FormFieldState<int> state) {
+            return GestureDetector(
+              onTap: _showSexDialog,
+              // initialValue: markerPosition.toString(),,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: state.hasError
+                          ? BoxDecoration(
+                              color: colors.onPrimary,
+                              border: Border.all(color: colors.errorColor),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            )
+                          : BoxDecoration(
+                              color: colors.onPrimary,
+                              border: Border.all(color: colors.onPrimary),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            ),
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: _initValues['sex'] == '-1'
+                                    ? Text(
+                                        'Sex',
+                                        style: TextStyle(
+                                            color: colors.secondaryTextColor,
+                                            fontSize: 16),
+                                      )
+                                    : Text(
+                                        _sexCodes[int.parse(
+                                            _initValues['sex'] ?? '-1')],
+                                        style: TextStyle(
+                                            color: colors.primaryTextColor,
+                                            fontSize: 16),
+                                      )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    state.hasError
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              state.errorText ?? 'Nope',
+                              style: TextStyle(
+                                color: colors.errorColor,
+                                fontSize: 12.2,
+                              ),
+                            ),
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+            );
+          },
+          validator: (value) {
+            if (_initValues['sex'] == null ||
+                _initValues['sex']!.isEmpty ||
+                _initValues['sex'] == '-1') {
+              return 'Please provide a value.';
+            }
+            return null;
+          },
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "Your preferred location:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
+        child: FormField(
+          builder: (FormFieldState<int> state) {
+            return GestureDetector(
+              onTap: _showMapDialog,
+              // initialValue: markerPosition.toString(),,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: state.hasError
+                          ? BoxDecoration(
+                              color: colors.onPrimary,
+                              border: Border.all(color: colors.errorColor),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            )
+                          : BoxDecoration(
+                              color: colors.onPrimary,
+                              border: Border.all(color: colors.onPrimary),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            ),
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: _initValues['city'] == ''
+                                    ? Text(
+                                        'City',
+                                        style: TextStyle(
+                                            color: colors.secondaryTextColor,
+                                            fontSize: 16),
+                                      )
+                                    : Text(
+                                        _initValues['city']
+                                            .toString()
+                                            .split(',')[0],
+                                        style: TextStyle(
+                                            color: colors.primaryTextColor,
+                                            fontSize: 16),
+                                      )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    state.hasError
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              state.errorText ?? 'Nope',
+                              style: TextStyle(
+                                color: colors.errorColor,
+                                fontSize: 12.2,
+                              ),
+                            ),
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+            );
+          },
+          validator: (value) {
+            if (_initValues['city'] == null ||
+                _initValues['city']!.isEmpty ||
+                _initValues['city'] == '') {
+              return 'Please provide a value.';
+            }
+            return null;
+          },
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+          left: screenWidth / 7,
+          right: screenWidth / 7,
+        ),
+        child: Container(
+          width: 70,
+          alignment: Alignment.centerRight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                style: TextButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    backgroundColor: colors.primaryColor,
+                    primary: colors.onPrimary,
+                    textStyle: const TextStyle(fontSize: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10)),
+                onPressed: _upPageIndex,
+                child: const Text('Next'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> subscribeFormPage3(BuildContext context) {
+    final colors = Provider.of<CustomColorScheme>(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    return [
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 50),
+        child: Text(
+          "Now lets get your  fitness level!",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "How many times a week did you go running in the last six months:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
         child: TextFormField(
-          key: Key('height'),
-          focusNode: _heightFocusNode,
-          initialValue: _initValues['height'],
+          key: Key('frequency'),
+          autofocus: false,
+          initialValue: _initValues['frequency'],
           cursorColor: colors.primaryTextColor,
           style: TextStyle(color: colors.primaryTextColor),
-          decoration: textFormDecoration('Height', context),
-          keyboardType: TextInputType.number,
+          decoration: textFormDecoration('Frequency', context),
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
-            FocusScope.of(context).requestFocus(_ageFocusNode);
+            FocusScope.of(context).requestFocus(_durationFocusNode);
           },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please provide a value.';
+            } else if (int.tryParse(value) == null) {
+              return 'Please provide a valid number';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _initValues['frequency'] = value!;
+          },
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "And for how long each time:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
+        child: TextFormField(
+          key: Key('duration'),
+          focusNode: _durationFocusNode,
+          initialValue: _initValues['duration'],
+          cursorColor: colors.primaryTextColor,
+          style: TextStyle(color: colors.primaryTextColor),
+          decoration: textFormDecoration('Duration', context),
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {
+            FocusScope.of(context).requestFocus(_distanceFocusNode);
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please provide a value.';
+            } else if (int.tryParse(value) == null) {
+              return 'Please provide a valid duration in minutes';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _initValues['duration'] = value!;
+          },
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "How many kilometers do you go for:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
+        child: TextFormField(
+          key: Key('distance'),
+          focusNode: _distanceFocusNode,
+          initialValue: _initValues['distance'],
+          cursorColor: colors.primaryTextColor,
+          style: TextStyle(color: colors.primaryTextColor),
+          decoration: textFormDecoration('Distance', context),
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {},
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please provide a value.';
@@ -484,141 +911,106 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             return null;
           },
           onSaved: (value) {
-            _initValues['height'] = value!;
+            _initValues['distance'] = value!;
           },
         ),
-      ),Padding(padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: 10),
-            child: Text("How old are you:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
+      ),
       Padding(
         padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
-        child: TextFormField(
-          key: Key('age'),
-          focusNode: _ageFocusNode,
-          initialValue: _initValues['age'],
-          cursorColor: colors.primaryTextColor,
-          style: TextStyle(color: colors.primaryTextColor),
-          decoration: textFormDecoration('Age', context),
-          keyboardType: TextInputType.number,
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (_) {
-            // FocusScope.of(context).requestFocus(_sexFocusNode);
+            left: screenWidth / 7, right: screenWidth / 7, bottom: 10),
+        child: Text(
+          "How fit do you feel you are:",
+          style: TextStyle(
+            color: colors.primaryTextColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            left: screenWidth / 7, right: screenWidth / 7, bottom: padding),
+        child: FormField(
+          builder: (FormFieldState<int> state) {
+            return GestureDetector(
+              onTap: _showFitnessDialog,
+              // initialValue: markerPosition.toString(),,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: state.hasError
+                          ? BoxDecoration(
+                              color: colors.onPrimary,
+                              border: Border.all(color: colors.errorColor),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            )
+                          : BoxDecoration(
+                              color: colors.onPrimary,
+                              border: Border.all(color: colors.onPrimary),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            ),
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: _initValues['fitness'] == '-1'
+                                    ? Text(
+                                        'Fitness',
+                                        style: TextStyle(
+                                            color: colors.secondaryTextColor,
+                                            fontSize: 16),
+                                      )
+                                    : Text(
+                                        _fitCodes[int.parse(
+                                            _initValues['fitness'] ?? '-1')],
+                                        style: TextStyle(
+                                            color: colors.primaryTextColor,
+                                            fontSize: 16),
+                                      )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    state.hasError
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              state.errorText ?? 'Nope',
+                              style: TextStyle(
+                                color: colors.errorColor,
+                                fontSize: 12.2,
+                              ),
+                            ),
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+            );
           },
           validator: (value) {
-            if (value == null || value.isEmpty) {
+            print(_initValues['fitness']);
+            if (_initValues['fitness'] == null ||
+                _initValues['fitness']!.isEmpty ||
+                _initValues['fitness'] == '-1') {
+              print("hey");
               return 'Please provide a value.';
-            } else if (int.tryParse(value) == null) {
-              return 'Please provide a valid age';
             }
             return null;
           },
-          onSaved: (value) {
-            _initValues['age'] = value!;
-          },
-        ),
-      ),
-      Padding(padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: 10),
-            child: Text("You define yourself as:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
-      Padding(
-        padding: EdgeInsets.only(
-            top: 10,
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
-        child: GestureDetector(
-          onTap: _showSexDialog,
-          // initialValue: markerPosition.toString(),,
-          child: Container(
-            width: MediaQuery.of(context).size.width / 2.3,
-            decoration: BoxDecoration(
-              color: colors.onPrimary,
-              border: Border.all(color: colors.onPrimary),
-              borderRadius: const BorderRadius.all(
-                const Radius.circular(10.0),
-              ),
-            ),
-            height: 60,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: _initValues['sex'] == ''
-                          ? Text(
-                              'Sex',
-                              style: TextStyle(
-                                  color: colors.secondaryTextColor,
-                                  fontSize: 16),
-                            )
-                          : Text(
-                              _initValues['sex']!,
-                              style: TextStyle(
-                                  color: colors.primaryTextColor, fontSize: 16),
-                            )),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      Padding(padding: EdgeInsets.only(
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: 10),
-            child: Text("Your preferred location:", style: TextStyle(color: colors.primaryTextColor, fontSize: 16, fontWeight: FontWeight.bold,),),),
-      Padding(
-        padding: EdgeInsets.only(
-            top: 10,
-            left: screenWidth / 7,
-            right: screenWidth / 7,
-            bottom: padding),
-        child: GestureDetector(
-          onTap: _showMapDialog,
-          // initialValue: markerPosition.toString(),,
-          child: Container(
-            width: MediaQuery.of(context).size.width / 2.3,
-            decoration: BoxDecoration(
-              color: colors.onPrimary,
-              border: Border.all(color: colors.onPrimary),
-              borderRadius: const BorderRadius.all(
-                const Radius.circular(10.0),
-              ),
-            ),
-            height: 60,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: _initValues['city'] == ''
-                          ? Text(
-                              'City',
-                              style: TextStyle(
-                                  color: colors.secondaryTextColor,
-                                  fontSize: 16),
-                            )
-                          : Text(
-                              _initValues['city'].toString().split(',')[0],
-                              style: TextStyle(
-                                  color: colors.primaryTextColor, fontSize: 16),
-                            )),
-                ],
-              ),
-            ),
-          ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-          top: 10,
           left: screenWidth / 7,
           right: screenWidth / 7,
         ),
@@ -638,7 +1030,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 10)),
                 onPressed: _saveForm,
-                child: const Text('Next'),
+                child: const Text('Submit'),
               ),
             ],
           ),
@@ -716,6 +1108,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                 // Username textbox
                 if (_pageIndex == 0) ...subscribeFormPage1(context),
                 if (_pageIndex == 1) ...subscribeFormPage2(context),
+                if (_pageIndex == 2) ...subscribeFormPage3(context),
 
                 // Date and Time
 
