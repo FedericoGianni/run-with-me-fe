@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:runwithme/dummy_data/dummy_events.dart';
 
 import './event.dart';
 import '../classes/config.dart';
@@ -9,25 +10,95 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Events with ChangeNotifier {
-  List<Event> _items = [];
+  List<Event> _suggestedEvents = [];
+  List<Event> _recentEvents = [];
+  List<Event> _bookedEvents = [];
+
   final secureStorage = const FlutterSecureStorage();
 
-  List<Event> get items {
-    return [..._items];
+  List<Event> get suggestedEvents {
+    return [..._suggestedEvents];
+  }
+
+  List<Event> get recentEvents {
+    return [..._recentEvents];
   }
 
   Event findById(int id) {
-    return _items.firstWhere((event) => event.id == id);
+    return _suggestedEvents.firstWhere((event) => event.id == id);
   }
 
-  Future<void> fetchAndSetEvents() async {
-    //TODO
+  // add an event to the recently viewed event list
+  // only keep 10 events, if limit is exceeded replace the oldest
+  void addRecentEvent(Event event) {
+    if (_recentEvents.length < 10) {
+      _recentEvents.add(event);
+    } else {
+      //TODO not sure about this logic
+      _recentEvents.removeAt(0);
+      // shift all remaining events to the left of 1
+      _recentEvents = _recentEvents.sublist(1, 9);
+      // add new event
+      _recentEvents.add(event);
+    }
+    notifyListeners();
+  }
+
+  Future<List<Event>> fetchAndSetEvents(
+      double lat, double long, int max_dist_km) async {
+    List<Event> _events = [];
+
     try {
+      var request = http.MultipartRequest(
+          'GET',
+          Uri.parse(Config.baseUrl +
+              '/events' +
+              '?lat=' +
+              lat.toString() +
+              '&long=' +
+              long.toString() +
+              '&max_dist_km=' +
+              max_dist_km.toString()));
+
+      String? jwt = await secureStorage.read(key: 'jwt');
+      if (jwt != null) {
+        var headers = {'Authorization': 'Bearer ' + jwt};
+        request.headers.addAll(headers);
+      }
+
+      print("fetchAndSetEvents calling API...");
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        // generate an Event from the reply
+
+        final stream = await response.stream.bytesToString().then((value) {
+          // empty old list
+          _suggestedEvents.clear();
+
+          // receive a json-array
+          List<dynamic> list = json.decode(value);
+
+          // for each element of the json array, re-encode as single json object and use eventFromJson function to generate single event to be added to the suggestedEvents list
+          for (int i = 0; i < list.length; i++) {
+            //print("received json [{$i}]: " + list[i].toString());
+            //print("re-encoding single json: " + json.encode(list[i]));
+
+            _suggestedEvents.add(eventFromJson(json.encode(list[i])));
+            //print("suggestedEvents.length: " +  _suggestedEvents.length.toString());
+          }
+        });
+      } else {
+        print(response.reasonPhrase);
+      }
+
       //_items = loadedEvents;
       notifyListeners();
     } catch (error) {
       rethrow;
     }
+
+    return _events;
   }
 
   Event eventFromJson(String value) {
