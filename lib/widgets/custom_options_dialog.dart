@@ -4,17 +4,16 @@ import 'package:provider/provider.dart';
 import '../providers/color_scheme.dart';
 import 'custom_scroll_behavior.dart';
 
-class CustomSexDialog extends StatelessWidget {
-  const CustomSexDialog({ Key? key }) : super(key: key);
-
+class CustomOptionsDialog extends StatelessWidget {
+  const CustomOptionsDialog({required this.options, Key? key})
+      : super(key: key);
+  final options;
 
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    List _sexList = ['Male', 'Female', "Don't know"];
-    
     return AlertDialog(
       backgroundColor: colors.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -41,15 +40,19 @@ class CustomSexDialog extends StatelessWidget {
                             ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: _sexList.length,
+                              itemCount: options.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
                                   onTap: () {
                                     // print(_placeList[index]);
-                                    Navigator.of(context)
-                                        .pop(_sexList[index]);
+                                    Navigator.of(context).pop(index);
                                   },
-                                  title: Text(_sexList[index], style: TextStyle(color: colors.primaryTextColor, ),),
+                                  title: Text(
+                                    options[index],
+                                    style: TextStyle(
+                                      color: colors.primaryTextColor,
+                                    ),
+                                  ),
                                 );
                               },
                             )
@@ -67,6 +70,3 @@ class CustomSexDialog extends StatelessWidget {
     );
   }
 }
-
-
-

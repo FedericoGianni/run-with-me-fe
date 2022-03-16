@@ -101,6 +101,8 @@ class UserInfoFilling extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     final colors = Provider.of<CustomColorScheme>(context);
     return Column(
       children: [
@@ -119,10 +121,15 @@ class UserInfoFilling extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(top: 5, bottom: 10),
-              child: Text(
-                description,
-                style:
-                    TextStyle(color: colors.secondaryTextColor, fontSize: 18),
+              child: SizedBox(
+                width: screenWidth / 1.5,
+                child: Text(
+                  description,
+                  style: TextStyle(
+                      color: colors.secondaryTextColor,
+                      fontSize: 18,
+                      overflow: TextOverflow.ellipsis),
+                ),
               ),
             ),
           ],
