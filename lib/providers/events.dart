@@ -55,7 +55,7 @@ class Events with ChangeNotifier {
       var request = http.MultipartRequest(
           'GET',
           Uri.parse(Config.baseUrl +
-              '/events' +
+              '/events/auth' +
               '?lat=' +
               lat.toString() +
               '&long=' +
@@ -158,7 +158,7 @@ class Events with ChangeNotifier {
 
           // for each element of the json array, re-encode as single json object and use eventFromJson function to generate single event to be added to the suggestedEvents list
           for (int i = 0; i < list.length; i++) {
-            _bookedEvents.add(eventFromJson(json.encode(list[i])));
+            _bookedEvents.add(eventFromJsonWithoutAuth(json.encode(list[i])));
           }
         });
       } else {
@@ -196,6 +196,28 @@ class Events with ChangeNotifier {
         userBooked: json.decode(value)["user_booked"]);
   }
 
+  Event eventFromJsonWithoutAuth(String value) {
+    return new Event(
+      id: json.decode(value)["id"],
+      name: json.decode(value)["name"],
+      adminId: json.decode(value)["admin_id"],
+      averageDuration: json.decode(value)["avg_duration"],
+      averageLength: json.decode(value)["avg_length"],
+      averagePaceMin: json.decode(value)["avg_pace_min"],
+      averagePaceSec: json.decode(value)["avg_pace_sec"],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(
+          json.decode(value)["created_at"].toInt() * 1000),
+      currentParticipants: json.decode(value)["current_participants"],
+      date: DateTime.fromMillisecondsSinceEpoch(
+          json.decode(value)["date"].toInt() * 1000),
+      difficultyLevel: json.decode(value)["difficulty_level"],
+      maxParticipants: json.decode(value)["max_participants"],
+      startingPintLat: double.parse(json.decode(value)["starting_point_lat"]),
+      startingPintLong: double.parse(json.decode(value)["starting_point_long"]),
+      //userBooked: json.decode(value)["user_booked"]);
+    );
+  }
+
   Future<Event> fetchEventById(int eventId) async {
     Event event = new Event(
         id: -1,
@@ -214,7 +236,7 @@ class Events with ChangeNotifier {
         maxParticipants: 0);
 
     var request = http.MultipartRequest(
-        'GET', Uri.parse(Config.baseUrl + '/event/' + eventId.toString()));
+        'GET', Uri.parse(Config.baseUrl + '/event/auth/' + eventId.toString()));
 
     String? jwt = await secureStorage.read(key: 'jwt');
     if (jwt != null) {
