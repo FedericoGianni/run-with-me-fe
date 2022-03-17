@@ -160,7 +160,7 @@ class Events with ChangeNotifier {
       createdAt: DateTime.fromMillisecondsSinceEpoch(
           json.decode(value)["created_at"].toInt() * 1000),
       currentParticipants: json.decode(value)["current_participants"],
-      date: DateTime.fromMicrosecondsSinceEpoch(
+      date: DateTime.fromMillisecondsSinceEpoch(
           json.decode(value)["date"].toInt() * 1000),
       difficultyLevel: json.decode(value)["difficulty_level"],
       maxParticipants: json.decode(value)["max_participants"],
