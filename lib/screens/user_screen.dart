@@ -36,7 +36,6 @@ class _UserScreenState extends State<UserScreen> {
   List<bool> isSelected = [false, false];
 
   Future<void> _showMyDialog() async {
-    print("hey");
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -50,7 +49,7 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  void refresh(){
+  void refresh() {
     setState(() {
       var settings = Provider.of<UserSettings>(context);
     });
