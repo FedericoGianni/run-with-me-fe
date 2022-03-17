@@ -9,7 +9,6 @@ import 'package:runwithme/widgets/splash.dart';
 
 import 'themes/custom_theme.dart';
 import 'widgets/event_card_text_only.dart';
-import 'dummy_data/dummy_events.dart';
 import 'screens/events_result_screen.dart';
 import 'screens/tabs_screen.dart';
 import 'screens/add_event_screen.dart';
