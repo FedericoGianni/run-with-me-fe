@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:runwithme/dummy_data/dummy_events.dart';
 
 import './event.dart';
 import '../classes/config.dart';
@@ -105,6 +104,33 @@ class Events with ChangeNotifier {
     return _events;
   }
 
+  Future<bool> addBookingToEvent(int eventId, int userId) async {
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(Config.baseUrl +
+            '/booking/add' +
+            '?event_id=' +
+            eventId.toString() +
+            '&user_id=' +
+            userId.toString()));
+
+    String? jwt = await secureStorage.read(key: 'jwt');
+    if (jwt != null) {
+      var headers = {'Authorization': 'Bearer ' + jwt};
+      request.headers.addAll(headers);
+    }
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+    } else {
+      print(response.reasonPhrase);
+      return false;
+    }
+  }
+
   Future<List<Event>> fetchAndSetBookedEvents(int userId) async {
     List<Event> _events = [];
 
@@ -150,23 +176,24 @@ class Events with ChangeNotifier {
 
   Event eventFromJson(String value) {
     return new Event(
-      id: json.decode(value)["id"],
-      name: json.decode(value)["name"],
-      adminId: json.decode(value)["admin_id"],
-      averageDuration: json.decode(value)["avg_duration"],
-      averageLength: json.decode(value)["avg_length"],
-      averagePaceMin: json.decode(value)["avg_pace_min"],
-      averagePaceSec: json.decode(value)["avg_pace_sec"],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-          json.decode(value)["created_at"].toInt() * 1000),
-      currentParticipants: json.decode(value)["current_participants"],
-      date: DateTime.fromMillisecondsSinceEpoch(
-          json.decode(value)["date"].toInt() * 1000),
-      difficultyLevel: json.decode(value)["difficulty_level"],
-      maxParticipants: json.decode(value)["max_participants"],
-      startingPintLat: double.parse(json.decode(value)["starting_point_lat"]),
-      startingPintLong: double.parse(json.decode(value)["starting_point_long"]),
-    );
+        id: json.decode(value)["id"],
+        name: json.decode(value)["name"],
+        adminId: json.decode(value)["admin_id"],
+        averageDuration: json.decode(value)["avg_duration"],
+        averageLength: json.decode(value)["avg_length"],
+        averagePaceMin: json.decode(value)["avg_pace_min"],
+        averagePaceSec: json.decode(value)["avg_pace_sec"],
+        createdAt: DateTime.fromMillisecondsSinceEpoch(
+            json.decode(value)["created_at"].toInt() * 1000),
+        currentParticipants: json.decode(value)["current_participants"],
+        date: DateTime.fromMillisecondsSinceEpoch(
+            json.decode(value)["date"].toInt() * 1000),
+        difficultyLevel: json.decode(value)["difficulty_level"],
+        maxParticipants: json.decode(value)["max_participants"],
+        startingPintLat: double.parse(json.decode(value)["starting_point_lat"]),
+        startingPintLong:
+            double.parse(json.decode(value)["starting_point_long"]),
+        userBooked: json.decode(value)["user_booked"]);
   }
 
   Future<Event> fetchEventById(int eventId) async {
