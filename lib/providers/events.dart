@@ -35,7 +35,7 @@ class Events with ChangeNotifier {
   // only keep 10 events, if limit is exceeded replace the oldest
   void addRecentEvent(Event event) {
     //only add event if not already present in recently viewed list
-    if (!recentEvents.contains(event)) {
+    if (!_recentEvents.contains(event)) {
       if (_recentEvents.length < 10) {
         _recentEvents.add(event);
       } else {
