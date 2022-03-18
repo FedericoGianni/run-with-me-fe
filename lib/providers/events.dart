@@ -34,17 +34,20 @@ class Events with ChangeNotifier {
   // add an event to the recently viewed event list
   // only keep 10 events, if limit is exceeded replace the oldest
   void addRecentEvent(Event event) {
-    if (_recentEvents.length < 10) {
-      _recentEvents.add(event);
-    } else {
-      //TODO not sure about this logic
-      _recentEvents.removeAt(0);
-      // shift all remaining events to the left of 1
-      _recentEvents = _recentEvents.sublist(1, 9);
-      // add new event
-      _recentEvents.add(event);
+    //only add event if not already present in recently viewed list
+    if (!recentEvents.contains(event)) {
+      if (_recentEvents.length < 10) {
+        _recentEvents.add(event);
+      } else {
+        //TODO not sure about this logic
+        _recentEvents.removeAt(0);
+        // shift all remaining events to the left of 1
+        _recentEvents = _recentEvents.sublist(1, 9);
+        // add new event
+        _recentEvents.add(event);
+      }
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<List<Event>> fetchAndSetEvents(
@@ -158,7 +161,8 @@ class Events with ChangeNotifier {
 
           // for each element of the json array, re-encode as single json object and use eventFromJson function to generate single event to be added to the suggestedEvents list
           for (int i = 0; i < list.length; i++) {
-            _bookedEvents.add(eventFromJsonWithoutAuth(json.encode(list[i])));
+            _bookedEvents
+                .add(eventFromJsonWithoutUserBooked(json.encode(list[i])));
           }
         });
       } else {
@@ -196,7 +200,7 @@ class Events with ChangeNotifier {
         userBooked: json.decode(value)["user_booked"]);
   }
 
-  Event eventFromJsonWithoutAuth(String value) {
+  Event eventFromJsonWithoutUserBooked(String value) {
     return new Event(
       id: json.decode(value)["id"],
       name: json.decode(value)["name"],
@@ -214,7 +218,8 @@ class Events with ChangeNotifier {
       maxParticipants: json.decode(value)["max_participants"],
       startingPintLat: double.parse(json.decode(value)["starting_point_lat"]),
       startingPintLong: double.parse(json.decode(value)["starting_point_long"]),
-      //userBooked: json.decode(value)["user_booked"]);
+      // always true beacause it is used by get events by user_id so it has made booking for it
+      userBooked: true,
     );
   }
 
