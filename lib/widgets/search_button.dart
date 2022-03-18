@@ -7,24 +7,35 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 
 class SearchButton extends StatelessWidget {
+  const SearchButton(this.icon, this.text,
+      {required this.formValues, required this.onSubmitting, Key? key})
+      : super(key: key);
   final Icon icon;
   final Text text;
-  const SearchButton(this.icon, this.text, {Key? key}) : super(key: key);
+  final Function(Map<String, dynamic>) onSubmitting;
+  final Map<String, dynamic> formValues;
 
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    print("BUTTON: " + formValues.toString());
 
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
             isScrollControlled: true,
+            backgroundColor: colors.errorColor,
             shape: const RoundedRectangleBorder(
                 borderRadius: const BorderRadius.vertical(
                     top: const Radius.circular(15))),
             context: context,
             builder: (_) {
-              return const SearchEventBottomSheet();
+              return SearchEventBottomSheet(
+                formValues: formValues,
+                onFormAccept: (value) {
+                  onSubmitting(value);
+                },
+              );
             });
       },
       child: Container(
