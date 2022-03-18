@@ -30,7 +30,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
       // _currentSliderValue = 0;
       widget.formValues = {
         'show_full': false,
-        'slider_value': 5.0,
+        'slider_value': 0.0,
         'city_name': '',
         'city_lat': '',
         'city_long': ''
