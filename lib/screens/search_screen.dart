@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
+import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 
 import '../dummy_data/dummy_events.dart';
 import '../providers/events.dart';
@@ -14,7 +15,13 @@ import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
-
+  Map<String, dynamic> formValues = {
+    'show_full': false,
+    'slider_value': 0.0,
+    'city_name': '',
+    'city_lat': 0.0,
+    'city_long': 0.0
+  };
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -216,14 +223,22 @@ class _SearchScreenState extends State<SearchScreen> {
         [
           Center(
             child: SearchButton(
-                Icon(
-                  Icons.search,
-                  color: colors.secondaryTextColor,
-                ),
-                Text(
-                  '    Search',
-                  style: TextStyle(color: colors.secondaryTextColor),
-                )),
+              Icon(
+                Icons.search,
+                color: colors.secondaryTextColor,
+              ),
+              Text(
+                '    Search',
+                style: TextStyle(color: colors.secondaryTextColor),
+              ),
+              formValues: widget.formValues,
+              onSubmitting: (value) {
+                print('SEARCH SCREEN: ' + value.toString());
+                setState(() {
+                  widget.formValues = value;
+                });
+              },
+            ),
           )
 
           // Container(
@@ -363,11 +378,14 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       );
     } else {
-      return CustomScrollView(
-        slivers: [
-          _buildAppbar(context, events.suggestedEvents.length),
-          ..._buildContent(context, events.suggestedEvents)
-        ],
+      return ScrollConfiguration(
+        behavior: CustomScrollBehavior(),
+        child: CustomScrollView(
+          slivers: [
+            _buildAppbar(context, events.suggestedEvents.length),
+            ..._buildContent(context, events.suggestedEvents)
+          ],
+        ),
       );
     }
   }

@@ -17,6 +17,9 @@ class CustomMapPlaceSearch extends StatefulWidget {
 class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
   var _controller = TextEditingController();
   var uuid = Uuid();
+  late Map<String, Object> _place;
+  String kPLACES_API_KEY = "AIzaSyAIjayoyV5uUd4pCZgGyMttVoZfUo4lKUM";
+
   String _sessionToken = Uuid().v4();
   List<dynamic> _placeList = [];
 
@@ -38,15 +41,12 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
   }
 
   void getSuggestion(String input) async {
-    String kPLACES_API_KEY = "AIzaSyAIjayoyV5uUd4pCZgGyMttVoZfUo4lKUM";
     String type = '(regions)';
-    String baseURL =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 
-    String url =
-        '$baseURL?input=$input&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
-    print(url);
-    final request = Uri.parse(url);
+    String placesUrl =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
+
+    final request = Uri.parse(placesUrl);
     var response = await http.get(request);
     if (response.statusCode == 200) {
       print("heiii");
@@ -54,6 +54,28 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
         setState(() {
           _placeList = json.decode(response.body)['predictions'];
         });
+      }
+    } else {
+      throw Exception('Failed to load predictions');
+    }
+  }
+
+  Future<bool> getPlaceDetails(String placeId) async {
+    String detailsUrl =
+        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
+
+    final request = Uri.parse(detailsUrl);
+    var response = await http.get(request);
+    if (response.statusCode == 200) {
+      if (true) {
+        var result = json.decode(response.body);
+        _place = {
+          'name': result['result']['formatted_address'],
+          'location': result['result']['geometry']['location']
+        };
+        print(_place);
+        print('');
+        return true;
       }
     } else {
       throw Exception('Failed to load predictions');
@@ -117,10 +139,11 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
                               itemCount: _placeList.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  onTap: () {
-                                    // print(_placeList[index]);
-                                    Navigator.of(context)
-                                        .pop(_placeList[index]);
+                                  onTap: () async {
+                                    await getPlaceDetails(
+                                        _placeList[index]['place_id']);
+
+                                    Navigator.of(context).pop(_place);
                                   },
                                   title: Text(
                                     _placeList[index]["description"],
