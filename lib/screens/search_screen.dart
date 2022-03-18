@@ -12,9 +12,12 @@ import '../widgets/search_event_bottomsheet.dart';
 import '../widgets/search_button.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
+import '../widgets/custom_sort_by_button.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
+  bool _sortMenu = false;
+  int _currentSortButton = 0;
   Map<String, dynamic> formValues = {
     'show_full': false,
     'slider_value': 0.0,
@@ -240,37 +243,6 @@ class _SearchScreenState extends State<SearchScreen> {
               },
             ),
           )
-
-          // Container(
-          //   margin: EdgeInsets.only(
-          //     left: MediaQuery.of(context).size.width / 10,
-          //     right: MediaQuery.of(context).size.width / 10,
-          //     top: 45,
-          //   ),
-          //   height: 45,
-          //   padding: const EdgeInsets.only(left: 5),
-          //   decoration: const BoxDecoration(
-          //     color: onPrimary,
-          //     // set border width
-          //     borderRadius: BorderRadius.all(
-          //       Radius.circular(10.0),
-          //     ), // set rounded corner radius
-          //   ),
-          //   child: TextField(
-          //     onTap: () {
-          //       _openSearchMenu(context);
-          //     },
-          //     decoration: InputDecoration(
-          //       hintText: 'Search',
-          //       hintStyle: TextStyle(color: colors.secondaryTextColor),
-          //       border: InputBorder.none,
-          //       prefixIcon: Icon(
-          //         Icons.search,
-          //         color: colors.secondaryTextColor,
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
 
@@ -293,14 +265,20 @@ class _SearchScreenState extends State<SearchScreen> {
               width: 50,
               child: TextButton(
                 style: TextButton.styleFrom(
-                    backgroundColor: colors.primaryColor,
+                    backgroundColor: colors.background,
                     primary: colors.onPrimary,
                     textStyle: const TextStyle(fontSize: 10),
                     padding: const EdgeInsets.all(0)),
-                onPressed: () => {},
+                onPressed: () {
+                  setState(() {
+                    widget._sortMenu = !widget._sortMenu;
+                  });
+                },
                 child: Text(
-                  'Filter',
-                  style: TextStyle(color: colors.primaryTextColor),
+                  'Sort by',
+                  style: widget._sortMenu
+                      ? TextStyle(color: colors.secondaryColor)
+                      : TextStyle(color: colors.secondaryTextColor),
                 ),
               ),
             ),
@@ -354,6 +332,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final events = Provider.of<Events>(context);
+    final colors = Provider.of<CustomColorScheme>(context);
 
     if (_view == 3) {
       return Column(
@@ -383,6 +362,64 @@ class _SearchScreenState extends State<SearchScreen> {
         child: CustomScrollView(
           slivers: [
             _buildAppbar(context, events.suggestedEvents.length),
+            widget._sortMenu
+                ? SliverToBoxAdapter(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SortByButton(
+                            title: 'Distance',
+                            color: colors.secondaryColor,
+                            id: 0,
+                            activeId: widget._currentSortButton,
+                            onPressed: () {
+                              setState(() {
+                                widget._currentSortButton = 0;
+                              });
+                            },
+                          ),
+                          SortByButton(
+                            title: 'Difficulty',
+                            color: Color.fromARGB(255, 94, 168, 105),
+                            id: 1,
+                            activeId: widget._currentSortButton,
+                            onPressed: () {
+                              setState(() {
+                                widget._currentSortButton = 1;
+                              });
+                            },
+                          ),
+                          SortByButton(
+                            title: 'Lenght',
+                            color: Color.fromARGB(255, 66, 150, 136),
+                            id: 2,
+                            activeId: widget._currentSortButton,
+                            onPressed: () {
+                              setState(() {
+                                widget._currentSortButton = 2;
+                              });
+                            },
+                          ),
+                          SortByButton(
+                            title: 'Lenght',
+                            color: colors.primaryColor,
+                            id: 3,
+                            activeId: widget._currentSortButton,
+                            onPressed: () {
+                              setState(() {
+                                widget._currentSortButton = 3;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : SliverToBoxAdapter(
+                    child: SizedBox(),
+                  ),
             ..._buildContent(context, events.suggestedEvents)
           ],
         ),
