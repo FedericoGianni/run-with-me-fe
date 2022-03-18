@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class CustomColorScheme with ChangeNotifier {
   Color titleColor = Colors.amber.shade900;
   Color primaryColor = Colors.amber.shade900;
+  Color primaryColorLight = Colors.amber.shade900;
   Color secondaryColor = Colors.amber.shade900;
   Color primaryTextColor = Colors.amber.shade900;
   Color secondaryTextColor = Colors.amber.shade900;
@@ -16,6 +17,7 @@ class CustomColorScheme with ChangeNotifier {
   void setDarkMode() {
     titleColor = const Color(MAGNOLIA);
     primaryColor = const Color(CG_BLUE_HEX);
+    primaryColorLight = Color.fromARGB(255, 94, 183, 215);
     secondaryColor = const Color(YELLOW_GREEN);
     primaryTextColor = const Color(PLATINUM);
     secondaryTextColor = const Color(SILVER_CHALICE);
@@ -31,6 +33,7 @@ class CustomColorScheme with ChangeNotifier {
   void setLightMode() {
     titleColor = const Color(MAGNOLIA);
     primaryColor = const Color(CG_BLUE_HEX);
+    primaryColorLight = const Color(CG_BLUE_HEX_LIGHT);
     secondaryColor = const Color(YELLOW_GREEN);
     primaryTextColor = const Color(JET_BLACK);
     secondaryTextColor = const Color(SILVER_CHALICE);
