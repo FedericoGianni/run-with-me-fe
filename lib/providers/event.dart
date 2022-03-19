@@ -15,6 +15,7 @@ class Event with ChangeNotifier {
   final int adminId;
   final int currentParticipants;
   final int maxParticipants;
+  final bool userBooked;
 
   Event(
       {required this.id,
@@ -30,5 +31,6 @@ class Event with ChangeNotifier {
       required this.averageLength,
       required this.adminId,
       required this.currentParticipants,
-      required this.maxParticipants});
+      required this.maxParticipants,
+      this.userBooked = false});
 }

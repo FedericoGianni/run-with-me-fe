@@ -8,7 +8,7 @@ import 'package:runwithme/widgets/custom_maps_new.dart';
 import 'package:runwithme/widgets/search_event_bottomsheet.dart';
 
 import '../widgets/search_button.dart';
-import '../dummy_data/dummy_events.dart';
+
 import '../widgets/event_card_text_only.dart';
 import '../themes/custom_colors.dart';
 import '../themes/custom_theme.dart';

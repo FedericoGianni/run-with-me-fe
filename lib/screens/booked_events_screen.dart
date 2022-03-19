@@ -3,7 +3,6 @@ import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 
-import '../dummy_data/dummy_events.dart';
 import '../providers/events.dart';
 import '../providers/user.dart';
 import '../widgets/event_card_text_only.dart';
