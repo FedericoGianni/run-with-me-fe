@@ -37,13 +37,19 @@ class EventDetailsScreen extends StatelessWidget {
 
     void _addBookingToEvent(int eventId, int userId) async {
       if (await events.addBookingToEvent(event.id, user.userId ?? -1)) {
-        //_showMyDialog("AddBooking", "Successfully booked");
+        _showMyDialog("AddBooking", "Successfully booked");
         // switch to booked events page
+        // open new event detail screen
+        Navigator.of(context).pushNamed(BookedEventsScreen.routeName);
       }
     }
 
     void _removeBookingFromEvent(int eventId, int userId) async {
-      //TODO
+      if (await events.delBookingFromEvent(event.id, user.userId ?? -1)) {
+        _showMyDialog("delBooking", "Successfully deleted booking");
+        // switch to booked events screen
+        Navigator.of(context).pushNamed(BookedEventsScreen.routeName);
+      }
     }
 
     return Scaffold(
