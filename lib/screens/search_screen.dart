@@ -107,7 +107,45 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
     }
+
+    _suggestedEvents.sort((a, b) => a.averageLength.compareTo(b.averageLength));
     return [
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Results",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding:
+            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+        sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            childAspectRatio: _aspectRatio,
+            mainAxisSpacing: 15.0,
+            crossAxisSpacing: 15.0,
+            maxCrossAxisExtent: 400 / _view,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return EventItem(
+                  _suggestedEvents[index], index, _suggestedEvents.length);
+            },
+            childCount: _suggestedEvents.length,
+          ),
+        ),
+      ),
       SliverPadding(
         padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
@@ -121,19 +159,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
-              // SizedBox(
-              //   height: 30,
-              //   child: TextButton(
-              //     style: TextButton.styleFrom(
-              //         backgroundColor: colors.onPrimary,
-              //         primary: colors.primaryColor,
-              //         textStyle: const TextStyle(
-              //             fontSize: 12, fontWeight: FontWeight.w500),
-              //         padding: const EdgeInsets.all(0)),
-              //     onPressed: () => {},
-              //     child: const Text('View all'),
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -403,7 +428,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             },
                           ),
                           SortByButton(
-                            title: 'Lenght',
+                            title: 'Duration',
                             color: colors.primaryColor,
                             id: 3,
                             activeId: widget._currentSortButton,

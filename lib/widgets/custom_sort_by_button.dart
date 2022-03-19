@@ -40,6 +40,9 @@ class SortByButton extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        ),
         onPressed: () {
           onPressed();
         },
