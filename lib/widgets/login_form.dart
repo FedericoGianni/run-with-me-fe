@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:runwithme/providers/settings_manager.dart';
+import 'package:runwithme/widgets/custom_snackbar.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
@@ -36,7 +37,7 @@ class _LoginFormState extends State<LoginForm> {
     'username': '',
     'password': '',
   };
-  var snackBar;
+
   void _togglePwdText() {
     setState(() {
       isTextObsured = !isTextObsured;
@@ -79,53 +80,19 @@ class _LoginFormState extends State<LoginForm> {
 
     print("isLoading is true");
     settings.setUser(user);
-    List loginResult = await settings.userLogin(_initValues['username'], _initValues['password']);
-        
+    List loginResult = await settings.userLogin(
+        _initValues['username'], _initValues['password']);
+
     if (!loginResult[0]) {
       print('rip');
-      _snackBarText = loginResult[1].toString();
-      snackBar = SnackBar(
-        content: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.all(5),
-                child: Text(
-                  _snackBarText,
-                  style: TextStyle(
-                      color: colors.primaryTextColor,
-                      fontSize: 14,
-                      overflow: TextOverflow.fade),
-                ),
-              ),
-            ],
-          ),
-          margin: EdgeInsets.symmetric(horizontal: screenWidth / 7),
-          // width: 20,
-
-          padding: EdgeInsets.all(10),
-
-          decoration: BoxDecoration(
-              color: colors.background,
-              border: Border.all(
-                color: colors.errorColor,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(15))),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        behavior: SnackBarBehavior.fixed,
-        duration: Duration(seconds: 1),
-        padding: EdgeInsets.only(bottom: 40),
-      );
+      CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
+          ctx: context, message: loginResult[1].toString());
       ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
-        ..showSnackBar(snackBar);
+        ..showSnackBar(snackbarProvider.provide());
       _isLoading = false;
       print("isLoading is false1");
-      sleep(const Duration(seconds: 1));
+      sleep(const Duration(milliseconds: 500));
       setState(() {
         _isLoading = false;
       });
@@ -139,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
-      var settings = Provider.of<UserSettings>(context);
+    var settings = Provider.of<UserSettings>(context);
 
     // This snackbar is used for the popup message in case of wrong credentials
     print(settings.isLoggedIn().toString());

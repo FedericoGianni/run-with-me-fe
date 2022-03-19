@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:runwithme/classes/locationHelper.dart';
 import 'package:runwithme/widgets/custom_slider.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 
+import 'custom_loading_icon.dart';
 import 'custom_map_place_search.dart';
 import 'custom_scroll_behavior.dart';
 
@@ -17,7 +20,7 @@ class SearchEventBottomSheet extends StatefulWidget {
 
   Map<String, dynamic> formValues;
   late final Function(Map<String, dynamic>) onFormAccept;
-
+  bool searching = false;
   @override
   State<SearchEventBottomSheet> createState() => _SearchEventBottomSheetState();
 }
@@ -46,6 +49,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
     widget.onFormAccept(widget.formValues);
     Navigator.pop(context);
   }
+
+  void validate() {}
 
   Future<void> _showMapDialog() async {
     print("hey");
@@ -210,16 +215,31 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                                 fontSize: 16),
                                           ),
                                     IconButton(
-                                        onPressed: () {
+                                        onPressed: () async {
+                                          setState(() {
+                                            widget.searching = true;
+                                          });
+                                          Position position =
+                                              await LocationHelper()
+                                                  .determinePosition();
+                                          print(position);
                                           setState(() {
                                             widget.formValues['city_name'] =
                                                 'Current location';
+                                            widget.formValues['city_lat'] =
+                                                position.latitude;
+                                            widget.formValues['city_long'] =
+                                                position.longitude;
+                                            widget.searching = false;
                                           });
                                         },
-                                        icon: Icon(
-                                          Icons.location_on_outlined,
-                                          color: colors.secondaryTextColor,
-                                        ))
+                                        icon: !widget.searching
+                                            ? Icon(
+                                                Icons.location_on_outlined,
+                                                color:
+                                                    colors.secondaryTextColor,
+                                              )
+                                            : CustomLoadingIcon())
                                   ],
                                 ),
                               ),

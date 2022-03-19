@@ -5,11 +5,17 @@ import 'package:runwithme/providers/settings_manager.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog(
-      {required this.title, required this.message, Key? key})
+      {required this.title,
+      required this.message,
+      required this.onDismiss,
+      required this.onAccept,
+      Key? key})
       : super(key: key);
 
   final String title;
   final String message;
+  final Function() onDismiss;
+  final Function() onAccept;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +56,7 @@ class CustomAlertDialog extends StatelessWidget {
             ),
           ),
           onPressed: () {
+            onDismiss();
             Navigator.of(context).pop();
           },
         ),
@@ -62,7 +69,7 @@ class CustomAlertDialog extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            settings.userLogout();
+            onAccept();
             Navigator.of(context).pop();
           },
         ),

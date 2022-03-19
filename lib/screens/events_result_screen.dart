@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
+import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 
-import '../dummy_data/dummy_events.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../themes/custom_colors.dart';
@@ -18,6 +18,33 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Events>(context)
+          .fetchAndSetSuggestedEvents(46, 10, 100)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+          print("fetching events for search_screen");
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   int _view = 2;
   double _aspectRatio = 1.4;
   late Color _rowColor;
@@ -55,6 +82,7 @@ class _EventsScreenState extends State<EventsScreen> {
 
   List<Widget> buildContent(BuildContext context, List _eventList) {
     final colors = Provider.of<CustomColorScheme>(context);
+    final events = Provider.of<Events>(context);
 
     return [
       SliverPadding(
@@ -100,9 +128,9 @@ class _EventsScreenState extends State<EventsScreen> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return EventItem(
-                _eventList[index],
+                events.suggestedEvents[index],
                 index,
-                dummy.length,
+                events.suggestedEvents.length,
               );
             },
             childCount: _eventList.length,
@@ -151,9 +179,9 @@ class _EventsScreenState extends State<EventsScreen> {
                 width: 380.0 / _view,
                 height: (370 / _view) / _aspectRatio,
                 child: EventItem(
-                  dummy[index],
+                  events.recentEvents[index],
                   index,
-                  dummy.length,
+                  events.recentEvents.length,
                 ),
               );
             },
@@ -165,8 +193,8 @@ class _EventsScreenState extends State<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var _newEventList = dummy.where((i) => i.difficultyLevel <= 3).toList();
     final colors = Provider.of<CustomColorScheme>(context);
+    final events = Provider.of<Events>(context);
 
     if (_view == 3) {
       return Column(
@@ -241,7 +269,7 @@ class _EventsScreenState extends State<EventsScreen> {
                           ),
                         ),
                         Text(
-                          _newEventList.length.toString() + " results",
+                          events.suggestedEvents.length.toString() + " results",
                           style: TextStyle(
                               color: colors.secondaryTextColor, fontSize: 10),
                         ),
@@ -364,7 +392,7 @@ class _EventsScreenState extends State<EventsScreen> {
                     ),
                   ),
                   Text(
-                    _newEventList.length.toString() + " results",
+                    events.suggestedEvents.length.toString() + " results",
                     style: TextStyle(
                         color: colors.secondaryTextColor, fontSize: 10),
                   ),
@@ -410,7 +438,7 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
             // Make the initial height of the SliverAppBar larger than normal.
           ),
-          ...buildContent(context, _newEventList)
+          ...buildContent(context, events.suggestedEvents)
         ],
       );
     }
