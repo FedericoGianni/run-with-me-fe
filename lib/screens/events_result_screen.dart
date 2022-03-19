@@ -32,7 +32,9 @@ class _EventsScreenState extends State<EventsScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Events>(context).fetchAndSetEvents(46, 10, 100).then((_) {
+      Provider.of<Events>(context)
+          .fetchAndSetSuggestedEvents(46, 10, 100)
+          .then((_) {
         setState(() {
           _isLoading = false;
           print("fetching events for search_screen");

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
 
 import '../providers/events.dart';
+import '../providers/user.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 // import '../themes/custom_colors.dart';
@@ -39,7 +40,10 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Events>(context).fetchAndSetEvents(46, 10, 100).then((_) {
+
+      Provider.of<Events>(context)
+          .fetchAndSetSuggestedEvents(46, 10, 100)
+          .then((_) {
         setState(() {
           _isLoading = false;
           print("fetching events for search_screen");

@@ -12,6 +12,7 @@ class Events with ChangeNotifier {
   List<Event> _suggestedEvents = [];
   List<Event> _recentEvents = [];
   List<Event> _bookedEvents = [];
+  List<Event> _resultEvents = [];
 
   final secureStorage = const FlutterSecureStorage();
 
@@ -24,6 +25,10 @@ class Events with ChangeNotifier {
   }
 
   List<Event> get bookedEvents {
+    return [..._bookedEvents];
+  }
+
+  List<Event> get resultEvents {
     return [..._bookedEvents];
   }
 
@@ -50,10 +55,18 @@ class Events with ChangeNotifier {
     }
   }
 
-  Future<List<Event>> fetchAndSetEvents(
+  Future<void> fetchAndSetSuggestedEvents(
       double lat, double long, int max_dist_km) async {
-    List<Event> _events = [];
+    fetchAndSetEvents(lat, long, max_dist_km, _suggestedEvents, true);
+  }
 
+  Future<void> fetchAndSetResultEvents(
+      double lat, double long, int max_dist_km) async {
+    fetchAndSetEvents(lat, long, max_dist_km, _resultEvents, true);
+  }
+
+  Future<void> fetchAndSetEvents(double lat, double long, int max_dist_km,
+      List<Event> events, bool auth) async {
     try {
       var request = http.MultipartRequest(
           'GET',
@@ -80,7 +93,7 @@ class Events with ChangeNotifier {
 
         final stream = await response.stream.bytesToString().then((value) {
           // empty old list
-          _suggestedEvents.clear();
+          events.clear();
 
           // receive a json-array
           List<dynamic> list = json.decode(value);
@@ -90,7 +103,7 @@ class Events with ChangeNotifier {
             //print("received json [{$i}]: " + list[i].toString());
             //print("re-encoding single json: " + json.encode(list[i]));
 
-            _suggestedEvents.add(eventFromJson(json.encode(list[i])));
+            events.add(eventFromJson(json.encode(list[i]), true));
             //print("suggestedEvents.length: " +  _suggestedEvents.length.toString());
           }
         });
@@ -103,8 +116,6 @@ class Events with ChangeNotifier {
     } catch (error) {
       rethrow;
     }
-
-    return _events;
   }
 
   Future<bool> addBookingToEvent(int eventId, int userId) async {
@@ -122,6 +133,30 @@ class Events with ChangeNotifier {
       var headers = {'Authorization': 'Bearer ' + jwt};
       request.headers.addAll(headers);
     }
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+    } else {
+      print(response.reasonPhrase);
+      return false;
+    }
+  }
+
+  Future<bool> delBookingFromEvent(int eventId, int userId) async {
+    var request =
+        http.MultipartRequest('DELETE', Uri.parse(Config.baseUrl + '/booking'));
+
+    String? jwt = await secureStorage.read(key: 'jwt');
+    if (jwt != null) {
+      var headers = {'Authorization': 'Bearer ' + jwt};
+      request.headers.addAll(headers);
+    }
+
+    request.fields
+        .addAll({'user_id': userId.toString(), 'event_id': eventId.toString()});
 
     http.StreamedResponse response = await request.send();
 
@@ -161,8 +196,8 @@ class Events with ChangeNotifier {
 
           // for each element of the json array, re-encode as single json object and use eventFromJson function to generate single event to be added to the suggestedEvents list
           for (int i = 0; i < list.length; i++) {
-            _bookedEvents
-                .add(eventFromJsonWithoutUserBooked(json.encode(list[i])));
+            //auth == false because don't need user_booked parameter since it is true because we are fetching events to which the user subscribed
+            _bookedEvents.add(eventFromJson(json.encode(list[i]), false));
           }
         });
       } else {
@@ -178,8 +213,30 @@ class Events with ChangeNotifier {
     return _events;
   }
 
-  Event eventFromJson(String value) {
-    return new Event(
+  Event eventFromJson(String value, bool auth) {
+    if (auth) {
+      return new Event(
+          id: json.decode(value)["id"],
+          name: json.decode(value)["name"],
+          adminId: json.decode(value)["admin_id"],
+          averageDuration: json.decode(value)["avg_duration"],
+          averageLength: json.decode(value)["avg_length"],
+          averagePaceMin: json.decode(value)["avg_pace_min"],
+          averagePaceSec: json.decode(value)["avg_pace_sec"],
+          createdAt: DateTime.fromMillisecondsSinceEpoch(
+              json.decode(value)["created_at"].toInt() * 1000),
+          currentParticipants: json.decode(value)["current_participants"],
+          date: DateTime.fromMillisecondsSinceEpoch(
+              json.decode(value)["date"].toInt() * 1000),
+          difficultyLevel: json.decode(value)["difficulty_level"],
+          maxParticipants: json.decode(value)["max_participants"],
+          startingPintLat:
+              double.parse(json.decode(value)["starting_point_lat"]),
+          startingPintLong:
+              double.parse(json.decode(value)["starting_point_long"]),
+          userBooked: json.decode(value)["user_booked"]);
+    } else {
+      return new Event(
         id: json.decode(value)["id"],
         name: json.decode(value)["name"],
         adminId: json.decode(value)["admin_id"],
@@ -197,30 +254,10 @@ class Events with ChangeNotifier {
         startingPintLat: double.parse(json.decode(value)["starting_point_lat"]),
         startingPintLong:
             double.parse(json.decode(value)["starting_point_long"]),
-        userBooked: json.decode(value)["user_booked"]);
-  }
-
-  Event eventFromJsonWithoutUserBooked(String value) {
-    return new Event(
-      id: json.decode(value)["id"],
-      name: json.decode(value)["name"],
-      adminId: json.decode(value)["admin_id"],
-      averageDuration: json.decode(value)["avg_duration"],
-      averageLength: json.decode(value)["avg_length"],
-      averagePaceMin: json.decode(value)["avg_pace_min"],
-      averagePaceSec: json.decode(value)["avg_pace_sec"],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-          json.decode(value)["created_at"].toInt() * 1000),
-      currentParticipants: json.decode(value)["current_participants"],
-      date: DateTime.fromMillisecondsSinceEpoch(
-          json.decode(value)["date"].toInt() * 1000),
-      difficultyLevel: json.decode(value)["difficulty_level"],
-      maxParticipants: json.decode(value)["max_participants"],
-      startingPintLat: double.parse(json.decode(value)["starting_point_lat"]),
-      startingPintLong: double.parse(json.decode(value)["starting_point_long"]),
-      // always true beacause it is used by get events by user_id so it has made booking for it
-      userBooked: true,
-    );
+        // always true beacause it is used by get events by user_id so it has made booking for it
+        userBooked: true,
+      );
+    }
   }
 
   Future<Event> fetchEventById(int eventId) async {
@@ -256,7 +293,7 @@ class Events with ChangeNotifier {
       final stream = await response.stream.bytesToString().then((value) {
         print("200 OK, populating event with the receivded json");
         print("received json: " + value);
-        event = eventFromJson(value);
+        event = eventFromJson(value, true);
       });
     } else {
       print(response.reasonPhrase);
