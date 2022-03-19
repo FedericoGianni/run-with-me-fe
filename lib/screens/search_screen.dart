@@ -90,6 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
     // suggested events taken from Events provider, re-fetch the suggested events every time there is an update in the widget tree
     List<Event> _suggestedEvents = events.suggestedEvents;
     List<Event> _recentEvents = events.recentEvents;
+    List<Event> _resultEvents = events.resultEvents;
 
     //print("suggestedEvents: " + _suggestedEvents.toString());
     //print("Search_Screen printing suggestedEvents ID...");
