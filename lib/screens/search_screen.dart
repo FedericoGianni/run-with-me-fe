@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 
-import '../dummy_data/dummy_events.dart';
 import '../providers/events.dart';
+import '../providers/user.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 // import '../themes/custom_colors.dart';
@@ -50,7 +50,10 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Events>(context).fetchAndSetEvents(46, 10, 100).then((_) {
+
+      Provider.of<Events>(context)
+          .fetchAndSetSuggestedEvents(46, 10, 100)
+          .then((_) {
         setState(() {
           _isLoading = false;
           print("fetching events for search_screen");
@@ -97,6 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
     // suggested events taken from Events provider, re-fetch the suggested events every time there is an update in the widget tree
     List<Event> _suggestedEvents = events.suggestedEvents;
     List<Event> _recentEvents = events.recentEvents;
+    List<Event> _resultEvents = events.resultEvents;
 
     //print("suggestedEvents: " + _suggestedEvents.toString());
     //print("Search_Screen printing suggestedEvents ID...");

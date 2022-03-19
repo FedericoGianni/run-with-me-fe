@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../dummy_data/dummy_events.dart';
 import '../providers/events.dart';
 import 'custom_info_window.dart';
 import 'default_appbar.dart';

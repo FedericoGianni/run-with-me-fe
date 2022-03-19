@@ -36,7 +36,8 @@ class _UserScreenState extends State<UserScreen> {
   List<bool> isSelected = [false, false];
 
   Future<void> _showMyDialog() async {
-    print("hey");
+    var settings = Provider.of<UserSettings>(context, listen: false);
+
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -45,12 +46,14 @@ class _UserScreenState extends State<UserScreen> {
           title: 'Log Out',
           message:
               "Are you sure you would like to log out? \nYou will be missing a lot of cool features",
+          onAccept: settings.userLogout,
+          onDismiss: () {},
         );
       },
     );
   }
 
-  void refresh(){
+  void refresh() {
     setState(() {
       var settings = Provider.of<UserSettings>(context);
     });
