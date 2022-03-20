@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:runwithme/classes/locationHelper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 
@@ -17,8 +19,7 @@ import '../widgets/custom_sort_by_button.dart';
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
   bool _sortMenu = false;
-  int _currentSortButton = 0;
-  late List _resultEvents;
+  int _currentSortButton = -1;
   Map<String, dynamic> formValues = {
     'show_full': false,
     'slider_value': 0.0,
@@ -26,6 +27,10 @@ class SearchScreen extends StatefulWidget {
     'city_lat': 0.0,
     'city_long': 0.0
   };
+
+  List<Event> _suggestedEvents = [];
+  List<Event> _recentEvents = [];
+  List<Event> _resultEvents = [];
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -94,28 +99,81 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  List<Widget> _buildContent(BuildContext context, List _eventList) {
+  Future<void> _sortEvents(String sortBy) async {
+    if (sortBy == 'distance') {
+      Position userPosition =
+          await LocationHelper().determinePosition(LocationAccuracy.low);
+
+      widget._resultEvents.sort(
+        (a, b) => LocationHelper()
+            .getDistanceBetween(
+              startLatitude: userPosition.latitude,
+              startLongitude: userPosition.longitude,
+              endLatitude: a.startingPintLat,
+              endLongitude: a.startingPintLong,
+            )
+            .compareTo(
+              LocationHelper().getDistanceBetween(
+                startLatitude: userPosition.latitude,
+                startLongitude: userPosition.longitude,
+                endLatitude: b.startingPintLat,
+                endLongitude: b.startingPintLong,
+              ),
+            ),
+      );
+      widget._suggestedEvents.sort(
+        (a, b) => LocationHelper()
+            .getDistanceBetween(
+              startLatitude: userPosition.latitude,
+              startLongitude: userPosition.longitude,
+              endLatitude: a.startingPintLat,
+              endLongitude: a.startingPintLong,
+            )
+            .compareTo(
+              LocationHelper().getDistanceBetween(
+                startLatitude: userPosition.latitude,
+                startLongitude: userPosition.longitude,
+                endLatitude: b.startingPintLat,
+                endLongitude: b.startingPintLong,
+              ),
+            ),
+      );
+    } else if (sortBy == 'difficulty') {
+      widget._resultEvents
+          .sort((a, b) => a.difficultyLevel.compareTo(b.difficultyLevel));
+      widget._suggestedEvents
+          .sort((a, b) => a.difficultyLevel.compareTo(b.difficultyLevel));
+    } else if (sortBy == 'lenght') {
+      widget._resultEvents
+          .sort((a, b) => a.averageLength.compareTo(b.averageLength));
+      widget._suggestedEvents
+          .sort((a, b) => a.averageLength.compareTo(b.averageLength));
+    } else if (sortBy == 'duration') {
+      widget._resultEvents
+          .sort((a, b) => a.averageDuration.compareTo(b.averageDuration));
+      widget._suggestedEvents
+          .sort((a, b) => a.averageDuration.compareTo(b.averageDuration));
+    } else if (sortBy == 'date') {
+      widget._resultEvents.sort((a, b) => a.date.compareTo(b.date));
+      widget._suggestedEvents.sort((a, b) => a.date.compareTo(b.date));
+    }
+  }
+
+  List<Widget> _buildContent(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-    final events = Provider.of<Events>(context);
+    print("Rebuilding content");
 
     // suggested events taken from Events provider, re-fetch the suggested events every time there is an update in the widget tree
-    List<Event> _suggestedEvents = events.suggestedEvents;
-    List<Event> _recentEvents = events.recentEvents;
-    List<Event> _resultEvents = events.resultEvents;
 
     //print("suggestedEvents: " + _suggestedEvents.toString());
     //print("Search_Screen printing suggestedEvents ID...");
-    for (int i = 0; i < _suggestedEvents.length; i++) {
-      print(_suggestedEvents[i].id.toString());
-    }
 
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
     }
 
-    _suggestedEvents.sort((a, b) => a.averageLength.compareTo(b.averageLength));
     return [
-      if (_resultEvents.length > 0)
+      if (widget._resultEvents.length > 0)
         SliverPadding(
           padding:
               const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
@@ -134,7 +192,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
         ),
-      if (_resultEvents.length > 0)
+      if (widget._resultEvents.length > 0)
         SliverPadding(
           padding:
               const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
@@ -147,12 +205,12 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                if (_resultEvents.length > index) {
-                  return EventItem(
-                      _resultEvents[index], index, _resultEvents.length);
+                if (widget._resultEvents.length > index) {
+                  return EventItem(widget._resultEvents[index], index,
+                      widget._resultEvents.length);
                 }
               },
-              childCount: _suggestedEvents.length,
+              childCount: widget._suggestedEvents.length,
             ),
           ),
         ),
@@ -185,10 +243,10 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return EventItem(
-                  _suggestedEvents[index], index, _suggestedEvents.length);
+              return EventItem(widget._suggestedEvents[index], index,
+                  widget._suggestedEvents.length);
             },
-            childCount: _suggestedEvents.length,
+            childCount: widget._suggestedEvents.length,
           ),
         ),
       ),
@@ -228,16 +286,16 @@ class _SearchScreenState extends State<SearchScreen> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             //itemCount: 10,
-            itemCount: _recentEvents.length,
+            itemCount: widget._recentEvents.length,
             itemBuilder: (context, index) {
               return Container(
                 padding: const EdgeInsets.only(left: 15, bottom: 5),
                 width: 380.0 / _view,
                 height: (370 / _view) / _aspectRatio,
                 child: EventItem(
-                  _recentEvents[index],
+                  widget._recentEvents[index],
                   index,
-                  _recentEvents.length,
+                  widget._recentEvents.length,
                 ),
               );
             },
@@ -247,7 +305,7 @@ class _SearchScreenState extends State<SearchScreen> {
     ];
   }
 
-  Widget _buildAppbar(BuildContext context, int eventsQuantity) {
+  Widget _buildAppbar(BuildContext context) {
     final events = Provider.of<Events>(context);
     final colors = Provider.of<CustomColorScheme>(context);
 
@@ -281,9 +339,16 @@ class _SearchScreenState extends State<SearchScreen> {
                   widget.formValues['city_long'],
                   widget.formValues['slider_value'].toInt() + 1 * 5,
                 );
-                setState(() {
-                  widget._resultEvents = events.resultEvents;
-                });
+                widget._resultEvents = events.resultEvents;
+
+                if (!widget.formValues['show_full']) {
+                  widget._resultEvents = widget._resultEvents
+                      .where((element) =>
+                          element.maxParticipants !=
+                          element.currentParticipants)
+                      .toList();
+                }
+                setState(() {});
               },
             ),
           )
@@ -327,7 +392,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             Text(
-              eventsQuantity.toString() + " results",
+              widget._resultEvents.length.toString() + " results",
               style: TextStyle(color: colors.secondaryTextColor, fontSize: 10),
             ),
             Row(
@@ -375,8 +440,16 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final events = Provider.of<Events>(context);
+    print("Rebuilding Page");
     final colors = Provider.of<CustomColorScheme>(context);
+    final events = Provider.of<Events>(context);
+    // This if statement is used to avoid reloading resultEvents on setState when sorting events
+    if (widget._suggestedEvents.length == 0) {
+      widget._resultEvents = events.resultEvents;
+      widget._recentEvents = events.recentEvents;
+      widget._suggestedEvents = events.suggestedEvents;
+      print("Got events from provider");
+    }
 
     if (_view == 3) {
       return Column(
@@ -387,9 +460,9 @@ class _SearchScreenState extends State<SearchScreen> {
             child: CustomScrollView(
               slivers: [
                 _buildAppbar(
-                    context,
-                    //_newEventList.length,
-                    events.suggestedEvents.length),
+                  context,
+                  //_newEventList.length,
+                ),
               ],
             ),
           ),
@@ -405,7 +478,7 @@ class _SearchScreenState extends State<SearchScreen> {
         behavior: CustomScrollBehavior(),
         child: CustomScrollView(
           slivers: [
-            _buildAppbar(context, events.suggestedEvents.length),
+            _buildAppbar(context),
             widget._sortMenu
                 ? SliverToBoxAdapter(
                     child: Container(
@@ -418,42 +491,58 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: colors.secondaryColor,
                             id: 0,
                             activeId: widget._currentSortButton,
-                            onPressed: () {
+                            onPressed: () async {
+                              await _sortEvents('distance');
                               setState(() {
                                 widget._currentSortButton = 0;
                               });
                             },
                           ),
                           SortByButton(
-                            title: 'Difficulty',
-                            color: Color.fromARGB(255, 94, 168, 105),
+                            title: 'Date',
+                            color: Color.fromARGB(255, 102, 173, 97),
                             id: 1,
                             activeId: widget._currentSortButton,
-                            onPressed: () {
+                            onPressed: () async {
+                              await _sortEvents('date');
                               setState(() {
                                 widget._currentSortButton = 1;
                               });
                             },
                           ),
                           SortByButton(
-                            title: 'Lenght',
-                            color: Color.fromARGB(255, 66, 150, 136),
+                            title: 'Difficulty',
+                            color: Color.fromARGB(255, 80, 159, 120),
                             id: 2,
                             activeId: widget._currentSortButton,
-                            onPressed: () {
+                            onPressed: () async {
+                              await _sortEvents('difficulty');
                               setState(() {
                                 widget._currentSortButton = 2;
                               });
                             },
                           ),
                           SortByButton(
-                            title: 'Duration',
-                            color: colors.primaryColor,
+                            title: 'Lenght',
+                            color: Color.fromARGB(255, 59, 146, 143),
                             id: 3,
                             activeId: widget._currentSortButton,
-                            onPressed: () {
+                            onPressed: () async {
+                              await _sortEvents('lenght');
                               setState(() {
                                 widget._currentSortButton = 3;
+                              });
+                            },
+                          ),
+                          SortByButton(
+                            title: 'Duration',
+                            color: colors.primaryColor,
+                            id: 4,
+                            activeId: widget._currentSortButton,
+                            onPressed: () async {
+                              await _sortEvents('duration');
+                              setState(() {
+                                widget._currentSortButton = 4;
                               });
                             },
                           ),
@@ -464,7 +553,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 : SliverToBoxAdapter(
                     child: SizedBox(),
                   ),
-            ..._buildContent(context, events.suggestedEvents)
+            ..._buildContent(context)
           ],
         ),
       );

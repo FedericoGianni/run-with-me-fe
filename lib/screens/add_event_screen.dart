@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:runwithme/classes/locationHelper.dart';
 import 'package:runwithme/widgets/custom_map_search.dart';
 import 'package:runwithme/widgets/custom_maps_new.dart';
 import 'package:runwithme/widgets/search_event_bottomsheet.dart';
@@ -68,30 +69,19 @@ class _AddEventScreenState extends State<AddEventScreen> {
   };
 
   Future<Position> _getLocation() async {
-    var currentLocation;
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      permission = await Geolocator.requestPermission();
-    }
-    // sleep(const Duration(seconds: 2));
-    try {
-      currentLocation = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
-    } catch (e) {
-      _isLoading = false;
-      return Position(
-          longitude: defaultUserPos.longitude,
-          latitude: defaultUserPos.latitude,
-          timestamp: DateTime.now(),
-          accuracy: 0,
-          altitude: 0,
-          heading: 0,
-          speed: 0,
-          speedAccuracy: 0);
-    }
+    Position currentLocation =
+        await LocationHelper().determinePosition(LocationAccuracy.lowest);
+
     _isLoading = false;
-    return currentLocation;
+    return Position(
+        longitude: currentLocation.longitude,
+        latitude: currentLocation.latitude,
+        timestamp: DateTime.now(),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0);
   }
 
   void _presentDatePicker() {
