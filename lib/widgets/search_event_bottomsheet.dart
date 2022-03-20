@@ -21,12 +21,14 @@ class SearchEventBottomSheet extends StatefulWidget {
   Map<String, dynamic> formValues;
   late final Function(Map<String, dynamic>) onFormAccept;
   bool searching = false;
+
   @override
   State<SearchEventBottomSheet> createState() => _SearchEventBottomSheetState();
 }
 
 class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
   // double _currentSliderValue = 0;
+  final _form = GlobalKey<FormState>();
 
   void _clearForm() {
     setState(() {
@@ -42,6 +44,10 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
   }
 
   void acceptAndClose() {
+    final isValid = _form.currentState?.validate();
+    if (isValid == null || !isValid) {
+      return;
+    }
     // widget.formValues['show_full'] = _isSwitched.toString();
     // widget.formValues['distance'] = ((_currentSliderValue + 1) * 5).toString();
     print(widget.formValues);
@@ -162,112 +168,122 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
             Padding(
               padding: EdgeInsets.only(
                   left: screenWidth / 7, right: screenWidth / 7, bottom: 40),
-              child: FormField(
-                builder: (FormFieldState<int> state) {
-                  return GestureDetector(
-                    onTap: _showMapDialog,
-                    // initialValue: markerPosition.toString(),,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: state.hasError
-                                ? BoxDecoration(
-                                    color: colors.onPrimary,
-                                    border:
-                                        Border.all(color: colors.errorColor),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10.0),
+              child: Form(
+                key: _form,
+                child: FormField(
+                  builder: (FormFieldState<int> state) {
+                    return GestureDetector(
+                      onTap: _showMapDialog,
+                      // initialValue: markerPosition.toString(),,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: state.hasError
+                                  ? BoxDecoration(
+                                      color: colors.onPrimary,
+                                      border:
+                                          Border.all(color: colors.errorColor),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(10.0),
+                                      ),
+                                    )
+                                  : BoxDecoration(
+                                      color: colors.onPrimary,
+                                      border:
+                                          Border.all(color: colors.onPrimary),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(10.0),
+                                      ),
                                     ),
-                                  )
-                                : BoxDecoration(
-                                    color: colors.onPrimary,
-                                    border: Border.all(color: colors.onPrimary),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    ),
-                                  ),
-                            height: 60,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10),
+                              height: 60,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    widget.formValues['city_name'] == ''
-                                        ? Text(
-                                            'Location',
-                                            style: TextStyle(
-                                                color:
-                                                    colors.secondaryTextColor,
-                                                fontSize: 16),
-                                          )
-                                        : Text(
-                                            widget.formValues['city_name']
-                                                .toString()
-                                                .split(',')[0],
-                                            style: TextStyle(
-                                                color: colors.primaryTextColor,
-                                                fontSize: 16),
-                                          ),
-                                    IconButton(
-                                        onPressed: () async {
-                                          setState(() {
-                                            widget.searching = true;
-                                          });
-                                          Position position =
-                                              await LocationHelper()
-                                                  .determinePosition();
-                                          print(position);
-                                          setState(() {
-                                            widget.formValues['city_name'] =
-                                                'Current location';
-                                            widget.formValues['city_lat'] =
-                                                position.latitude;
-                                            widget.formValues['city_long'] =
-                                                position.longitude;
-                                            widget.searching = false;
-                                          });
-                                        },
-                                        icon: !widget.searching
-                                            ? Icon(
-                                                Icons.location_on_outlined,
-                                                color:
-                                                    colors.secondaryTextColor,
-                                              )
-                                            : CustomLoadingIcon())
-                                  ],
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      widget.formValues['city_name'] == ''
+                                          ? Text(
+                                              'Location',
+                                              style: TextStyle(
+                                                  color:
+                                                      colors.secondaryTextColor,
+                                                  fontSize: 16),
+                                            )
+                                          : Text(
+                                              widget.formValues['city_name']
+                                                  .toString()
+                                                  .split(',')[0],
+                                              style: TextStyle(
+                                                  color:
+                                                      colors.primaryTextColor,
+                                                  fontSize: 16),
+                                            ),
+                                      IconButton(
+                                          onPressed: () async {
+                                            setState(() {
+                                              widget.searching = true;
+                                            });
+                                            Position position =
+                                                await LocationHelper()
+                                                    .determinePosition();
+                                            print(position);
+                                            if (mounted) {
+                                              setState(() {
+                                                widget.formValues['city_name'] =
+                                                    'Current location';
+                                                widget.formValues['city_lat'] =
+                                                    position.latitude;
+                                                widget.formValues['city_long'] =
+                                                    position.longitude;
+                                                widget.searching = false;
+                                              });
+                                            } else {
+                                              print(
+                                                  "Search bottomSheet unmounted");
+                                            }
+                                          },
+                                          icon: !widget.searching
+                                              ? Icon(
+                                                  Icons.location_on_outlined,
+                                                  color:
+                                                      colors.secondaryTextColor,
+                                                )
+                                              : CustomLoadingIcon())
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          state.hasError
-                              ? Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    state.errorText ?? 'Nope',
-                                    style: TextStyle(
-                                      color: colors.errorColor,
-                                      fontSize: 12.2,
+                            state.hasError
+                                ? Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      state.errorText ?? 'Nope',
+                                      style: TextStyle(
+                                        color: colors.errorColor,
+                                        fontSize: 12.2,
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : Container()
-                        ],
+                                  )
+                                : Container()
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-                validator: (value) {
-                  if (widget.formValues['city_name'] == '') {
-                    return 'Please provide a value.';
-                  }
-                  return null;
-                },
+                    );
+                  },
+                  validator: (value) {
+                    if (widget.formValues['city_name'] == '') {
+                      return 'Please provide a value.';
+                    }
+                    return null;
+                  },
+                ),
               ),
             ),
             Padding(

@@ -18,6 +18,7 @@ class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
   bool _sortMenu = false;
   int _currentSortButton = 0;
+  late List _resultEvents;
   Map<String, dynamic> formValues = {
     'show_full': false,
     'slider_value': 0.0,
@@ -114,42 +115,47 @@ class _SearchScreenState extends State<SearchScreen> {
 
     _suggestedEvents.sort((a, b) => a.averageLength.compareTo(b.averageLength));
     return [
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Results",
-                style: TextStyle(
-                    color: colors.primaryTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900),
-              ),
-            ],
+      if (_resultEvents.length > 0)
+        SliverPadding(
+          padding:
+              const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Results",
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
-        sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            childAspectRatio: _aspectRatio,
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 15.0,
-            maxCrossAxisExtent: 400 / _view,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return EventItem(
-                  _suggestedEvents[index], index, _suggestedEvents.length);
-            },
-            childCount: _suggestedEvents.length,
+      if (_resultEvents.length > 0)
+        SliverPadding(
+          padding:
+              const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              childAspectRatio: _aspectRatio,
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 15.0,
+              maxCrossAxisExtent: 400 / _view,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (_resultEvents.length > index) {
+                  return EventItem(
+                      _resultEvents[index], index, _resultEvents.length);
+                }
+              },
+              childCount: _suggestedEvents.length,
+            ),
           ),
         ),
-      ),
       SliverPadding(
         padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
@@ -242,7 +248,9 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildAppbar(BuildContext context, int eventsQuantity) {
+    final events = Provider.of<Events>(context);
     final colors = Provider.of<CustomColorScheme>(context);
+
     double height = 123;
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
@@ -264,10 +272,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: TextStyle(color: colors.secondaryTextColor),
               ),
               formValues: widget.formValues,
-              onSubmitting: (value) {
-                print('SEARCH SCREEN: ' + value.toString());
+              onSubmitting: (value) async {
+                // print('SEARCH SCREEN: ' + value.toString());
+                widget.formValues = value;
+
+                await events.fetchAndSetResultEvents(
+                  widget.formValues['city_lat'],
+                  widget.formValues['city_long'],
+                  widget.formValues['slider_value'].toInt() + 1 * 5,
+                );
                 setState(() {
-                  widget.formValues = value;
+                  widget._resultEvents = events.resultEvents;
                 });
               },
             ),
