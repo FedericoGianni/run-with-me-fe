@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:runwithme/classes/locationHelper.dart';
+import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 
@@ -99,10 +99,11 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  Future<void> _sortEvents(String sortBy) async {
+  void _sortEvents(String sortBy) {
+    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+
     if (sortBy == 'distance') {
-      Position userPosition =
-          await LocationHelper().determinePosition(LocationAccuracy.low);
+      Position userPosition = locationHelper.getLastKnownPosition();
 
       widget._resultEvents.sort(
         (a, b) => LocationHelper()
@@ -206,11 +207,14 @@ class _SearchScreenState extends State<SearchScreen> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 if (widget._resultEvents.length > index) {
-                  return EventItem(widget._resultEvents[index], index,
-                      widget._resultEvents.length);
+                  return EventItem(
+                    widget._resultEvents[index],
+                    index,
+                    widget._resultEvents.length,
+                  );
                 }
               },
-              childCount: widget._suggestedEvents.length,
+              childCount: widget._resultEvents.length,
             ),
           ),
         ),
@@ -364,14 +368,16 @@ class _SearchScreenState extends State<SearchScreen> {
       // Display a placeholder widget to visualize the shrinking size.
       pinned: true,
       snap: false,
-      elevation: 0,
+      elevation: 4,
       flexibleSpace: FlexibleSpaceBar(
         title: Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              height: 20,
-              width: 50,
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 0),
+              height: 40,
+              width: 75,
               child: TextButton(
                 style: TextButton.styleFrom(
                     backgroundColor: colors.background,
@@ -395,44 +401,55 @@ class _SearchScreenState extends State<SearchScreen> {
               widget._resultEvents.length.toString() + " results",
               style: TextStyle(color: colors.secondaryTextColor, fontSize: 10),
             ),
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.map_outlined),
-                  color: _mapColor,
-                  onPressed: () {
-                    __selectMapView(colors);
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 10,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.table_rows_outlined),
-                  color: _rowColor,
-                  onPressed: () {
-                    __selectListView(colors);
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 10,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.grid_view_outlined),
-                  color: _gridColor,
-                  onPressed: () {
-                    __selectGridView(colors);
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 10,
-                ),
-              ],
+            Container(
+              width: 75,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.map_outlined,
+                      size: 20,
+                    ),
+                    color: _mapColor,
+                    onPressed: () {
+                      __selectMapView(colors);
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    splashRadius: 10,
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.table_rows_outlined,
+                      size: 20,
+                    ),
+                    color: _rowColor,
+                    onPressed: () {
+                      __selectListView(colors);
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    splashRadius: 10,
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.grid_view_outlined,
+                      size: 20,
+                    ),
+                    color: _gridColor,
+                    onPressed: () {
+                      __selectGridView(colors);
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    splashRadius: 10,
+                  ),
+                ],
+              ),
             ),
           ],
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
-        titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        titlePadding: const EdgeInsets.only(left: 5, right: 5),
       ),
       // Make the initial height of the SliverAppBar larger than normal.
     );
@@ -482,7 +499,8 @@ class _SearchScreenState extends State<SearchScreen> {
             widget._sortMenu
                 ? SliverToBoxAdapter(
                     child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 20),
+                      color: colors.onPrimary,
+                      padding: EdgeInsets.only(top: 15, bottom: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -491,8 +509,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: colors.secondaryColor,
                             id: 0,
                             activeId: widget._currentSortButton,
-                            onPressed: () async {
-                              await _sortEvents('distance');
+                            onPressed: () {
+                              _sortEvents('distance');
                               setState(() {
                                 widget._currentSortButton = 0;
                               });
@@ -503,8 +521,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: Color.fromARGB(255, 102, 173, 97),
                             id: 1,
                             activeId: widget._currentSortButton,
-                            onPressed: () async {
-                              await _sortEvents('date');
+                            onPressed: () {
+                              _sortEvents('date');
                               setState(() {
                                 widget._currentSortButton = 1;
                               });
@@ -515,8 +533,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: Color.fromARGB(255, 80, 159, 120),
                             id: 2,
                             activeId: widget._currentSortButton,
-                            onPressed: () async {
-                              await _sortEvents('difficulty');
+                            onPressed: () {
+                              _sortEvents('difficulty');
                               setState(() {
                                 widget._currentSortButton = 2;
                               });
@@ -527,8 +545,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: Color.fromARGB(255, 59, 146, 143),
                             id: 3,
                             activeId: widget._currentSortButton,
-                            onPressed: () async {
-                              await _sortEvents('lenght');
+                            onPressed: () {
+                              _sortEvents('lenght');
                               setState(() {
                                 widget._currentSortButton = 3;
                               });
@@ -539,8 +557,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: colors.primaryColor,
                             id: 4,
                             activeId: widget._currentSortButton,
-                            onPressed: () async {
-                              await _sortEvents('duration');
+                            onPressed: () {
+                              _sortEvents('duration');
                               setState(() {
                                 widget._currentSortButton = 4;
                               });

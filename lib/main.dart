@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
@@ -38,6 +40,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
 
   bool splash = true;
+  bool settingsLoaded = false;
   var customColorScheme = CustomColorScheme();
   Widget routeWidget = const MaterialApp(
     // ignore: prefer_const_constructors
@@ -47,15 +50,19 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     var userSettings = UserSettings();
     var userInfo = User();
+    var locationHelper = LocationHelper();
     userSettings.setUser(userInfo);
     userSettings.setColorScheme(customColorScheme);
     // customColorScheme.setDarkMode();
 
     if (splash == true) {
-      userSettings.loadSettings().then((value) {
-        if (value) {
+      // THIS IS VERY BAD!!! Both check values are needed to be true in order for the app to start but they are async..
+      // This only works because loading settings is usually much faster than loading location so by the time location has been loaded settings are already available
+      userSettings.loadSettings().then((value) => settingsLoaded = value);
+      locationHelper.determinePosition(LocationAccuracy.best).then((value) {
+        if (settingsLoaded) {
           setState(() {
-            splash = !value;
+            splash = !settingsLoaded;
             // userSettings = userSettings; // No scusa in che senso ???
             routeWidget = MultiProvider(
               providers: [
@@ -73,6 +80,9 @@ class _MyAppState extends State<MyApp> {
                 ),
                 ChangeNotifierProvider.value(
                   value: userInfo,
+                ),
+                ChangeNotifierProvider.value(
+                  value: locationHelper,
                 ),
               ],
               child: MaterialApp(
