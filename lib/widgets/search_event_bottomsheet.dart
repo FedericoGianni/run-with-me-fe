@@ -231,7 +231,9 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                             });
                                             Position position =
                                                 await LocationHelper()
-                                                    .determinePosition();
+                                                    .determinePosition(
+                                                        LocationAccuracy
+                                                            .lowest);
                                             print(position);
                                             if (mounted) {
                                               setState(() {
