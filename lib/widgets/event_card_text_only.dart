@@ -37,13 +37,13 @@ class EventItem extends StatelessWidget {
 
   void selectEvent(BuildContext context) {
     // add this event to the recently viewed events
-    Provider.of<Events>(context, listen: false).addRecentEvent(
-      event,
-    );
 
     Navigator.of(context).pushNamed(
       EventDetailsScreen.routeName,
       arguments: event,
+    );
+    Provider.of<Events>(context, listen: false).addRecentEvent(
+      event,
     );
   }
 
