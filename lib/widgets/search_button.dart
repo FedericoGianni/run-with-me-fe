@@ -18,7 +18,6 @@ class SearchButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-    print("BUTTON: " + formValues.toString());
 
     return GestureDetector(
       onTap: () {

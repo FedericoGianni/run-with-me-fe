@@ -1,7 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 
 class LocationHelper {
-  Future<Position> determinePosition() async {
+  Future<Position> determinePosition(LocationAccuracy accuracy) async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -22,7 +22,14 @@ class LocationHelper {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+    print("Getting Location");
     return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.lowest);
+        desiredAccuracy: LocationAccuracy.best);
+  }
+
+  double getDistanceBetween(
+      {startLatitude, startLongitude, endLatitude, endLongitude}) {
+    return Geolocator.distanceBetween(
+        startLatitude, startLongitude, endLatitude, endLongitude);
   }
 }
