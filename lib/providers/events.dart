@@ -29,7 +29,7 @@ class Events with ChangeNotifier {
   }
 
   List<Event> get resultEvents {
-    return [..._bookedEvents];
+    return [..._resultEvents];
   }
 
   Event findById(int id) {
@@ -62,7 +62,7 @@ class Events with ChangeNotifier {
 
   Future<void> fetchAndSetResultEvents(
       double lat, double long, int max_dist_km) async {
-    fetchAndSetEvents(lat, long, max_dist_km, _resultEvents, true);
+    await fetchAndSetEvents(lat, long, max_dist_km, _resultEvents, true);
   }
 
   Future<void> fetchAndSetEvents(double lat, double long, int max_dist_km,
@@ -91,22 +91,20 @@ class Events with ChangeNotifier {
       if (response.statusCode == 200) {
         // generate an Event from the reply
 
-        final stream = await response.stream.bytesToString().then((value) {
-          // empty old list
-          events.clear();
+        final stream = await response.stream.bytesToString();
+        // empty old list
+        events.clear();
 
-          // receive a json-array
-          List<dynamic> list = json.decode(value);
+        // receive a json-array
+        List<dynamic> list = json.decode(stream);
+        // for each element of the json array, re-encode as single json object and use eventFromJson function to generate single event to be added to the suggestedEvents list
+        for (int i = 0; i < list.length; i++) {
+          //print("received json [{$i}]: " + list[i].toString());
+          //print("re-encoding single json: " + json.encode(list[i]));
 
-          // for each element of the json array, re-encode as single json object and use eventFromJson function to generate single event to be added to the suggestedEvents list
-          for (int i = 0; i < list.length; i++) {
-            //print("received json [{$i}]: " + list[i].toString());
-            //print("re-encoding single json: " + json.encode(list[i]));
-
-            events.add(eventFromJson(json.encode(list[i]), true));
-            //print("suggestedEvents.length: " +  _suggestedEvents.length.toString());
-          }
-        });
+          events.add(eventFromJson(json.encode(list[i]), true));
+          //print("suggestedEvents.length: " +  _suggestedEvents.length.toString());
+        }
       } else {
         print(response.reasonPhrase);
       }
