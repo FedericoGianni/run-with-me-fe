@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:runwithme/classes/locationHelper.dart';
+import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/widgets/custom_slider.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
@@ -80,6 +80,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+
     final double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       // color: colors.onPrimary,
@@ -225,16 +227,12 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                                   fontSize: 16),
                                             ),
                                       IconButton(
-                                          onPressed: () async {
+                                          onPressed: () {
                                             setState(() {
                                               widget.searching = true;
                                             });
-                                            Position position =
-                                                await LocationHelper()
-                                                    .determinePosition(
-                                                        LocationAccuracy
-                                                            .lowest);
-                                            print(position);
+                                            Position position = locationHelper
+                                                .getLastKnownPosition();
                                             if (mounted) {
                                               setState(() {
                                                 widget.formValues['city_name'] =
