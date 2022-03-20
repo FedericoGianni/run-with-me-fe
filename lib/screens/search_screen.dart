@@ -268,15 +268,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
-              // TextButton(
-              //   style: TextButton.styleFrom(
-              //       backgroundColor: colors.onPrimary,
-              //       primary: colors.primaryColor,
-              //       textStyle: const TextStyle(fontSize: 10),
-              //       padding: const EdgeInsets.all(0)),
-              //   onPressed: () => {},
-              //   child: const Text('View all'),
-              // ),
             ],
           ),
         ),
@@ -463,10 +454,10 @@ class _SearchScreenState extends State<SearchScreen> {
     // This if statement is used to avoid reloading resultEvents on setState when sorting events
     if (widget._suggestedEvents.length == 0) {
       widget._resultEvents = events.resultEvents;
-      widget._recentEvents = events.recentEvents;
-      widget._suggestedEvents = events.suggestedEvents;
       print("Got events from provider");
     }
+    widget._suggestedEvents = events.suggestedEvents;
+    widget._recentEvents = events.recentEvents;
 
     if (_view == 3) {
       return Column(
