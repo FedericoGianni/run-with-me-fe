@@ -40,7 +40,6 @@ class Rating extends StatelessWidget {
     final colors = Provider.of<CustomColorScheme>(context);
 
     return Container(
-      padding: const EdgeInsets.only(left: 5, top: 2),
       child: Row(
         children: [
           ..._addScore(),

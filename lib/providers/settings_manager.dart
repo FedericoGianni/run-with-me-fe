@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import '../providers/color_scheme.dart';
 import '../classes/file_manager.dart';
 import 'package:flutter/foundation.dart';
@@ -60,7 +61,7 @@ class UserSettings with ChangeNotifier {
     this.user = user;
   }
 
-  void _saveLoginCredentials(username, password, jwt, userId){
+  void _saveLoginCredentials(username, password, jwt, userId) {
     secureStorage.write(key: 'username', value: username);
     secureStorage.write(key: 'password', value: password);
     secureStorage.write(key: 'jwt', value: jwt);
@@ -70,8 +71,8 @@ class UserSettings with ChangeNotifier {
   bool isLoggedIn() {
     return settings.isLoggedIn;
   }
-  
-  void _saveSettingsAndNotify(){
+
+  void _saveSettingsAndNotify() {
     FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
     notifyListeners();
   }
@@ -106,8 +107,8 @@ class UserSettings with ChangeNotifier {
     print('SettingsManager.userLogin');
     try {
       // Makes the http request for the login
-      var request =
-          http.MultipartRequest('POST', Uri.parse(config.getBaseUrl() + '/login'));
+      var request = http.MultipartRequest(
+          'POST', Uri.parse(config.getBaseUrl() + '/login'));
       request.fields.addAll({
         'username': userName,
         'password': password,
@@ -118,8 +119,9 @@ class UserSettings with ChangeNotifier {
         // Decode the jwt from the response
         var result = json.decode(await response.stream.bytesToString());
         // Saves users info into safe storage for future use
-        _saveLoginCredentials(userName, password, result['access_token'].toString(), result['user_id'].toString());
-        
+        _saveLoginCredentials(userName, password,
+            result['access_token'].toString(), result['user_id'].toString());
+
         user.userId = result['user_id'];
         await user.getUserInfo();
 
@@ -129,18 +131,19 @@ class UserSettings with ChangeNotifier {
         // If the getUserInfo request is successfull, then flag the user as logged in
         _saveSettingsAndNotify();
         return [true, 'Logging in'];
-
       } else if (response.statusCode == 401) {
         settings.isLoggedIn = false;
         _saveSettingsAndNotify();
 
-        print("userLogin errored with message: "+ response.reasonPhrase.toString());
+        print("userLogin errored with message: " +
+            response.reasonPhrase.toString());
         return [false, 'Incorrect Username or Password!'];
       } else {
         settings.isLoggedIn = false;
         _saveSettingsAndNotify();
 
-        print("userLogin errored with message: "+ response.reasonPhrase.toString());
+        print("userLogin errored with message: " +
+            response.reasonPhrase.toString());
         return [false, 'Dafuq did just happen'];
       }
     } catch (error) {
@@ -158,14 +161,15 @@ class UserSettings with ChangeNotifier {
     if (username != null && password != null) {
       try {
         // Makes the http request for the login
-        var request =
-            http.MultipartRequest('POST', Uri.parse(config.getBaseUrl() + '/login'));
+        var request = http.MultipartRequest(
+            'POST', Uri.parse(config.getBaseUrl() + '/login'));
         request.fields.addAll({
           'username': username,
           'password': password,
         });
-        http.StreamedResponse response =
-            await request.send().timeout( Duration(seconds: config.getApiTimeout()));
+        http.StreamedResponse response = await request
+            .send()
+            .timeout(Duration(seconds: config.getApiTimeout()));
 
         if (response.statusCode == 200) {
           // Decode the jwt from the response

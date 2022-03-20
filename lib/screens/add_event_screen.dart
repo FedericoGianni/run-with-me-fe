@@ -3,7 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:runwithme/classes/locationHelper.dart';
+import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/widgets/custom_map_search.dart';
 import 'package:runwithme/widgets/custom_maps_new.dart';
 import 'package:runwithme/widgets/search_event_bottomsheet.dart';
@@ -69,8 +69,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
   };
 
   Future<Position> _getLocation() async {
+    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+
     Position currentLocation =
-        await LocationHelper().determinePosition(LocationAccuracy.lowest);
+        await locationHelper.determinePosition(LocationAccuracy.lowest);
 
     _isLoading = false;
     return Position(
