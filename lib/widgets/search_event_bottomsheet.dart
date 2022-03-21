@@ -7,7 +7,7 @@ import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 
-import 'custom_loading_icon.dart';
+import 'custom_loading_circle_icon.dart';
 import 'custom_map_place_search.dart';
 import 'custom_scroll_behavior.dart';
 
@@ -254,7 +254,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                                   color:
                                                       colors.secondaryTextColor,
                                                 )
-                                              : CustomLoadingIcon())
+                                              : CustomLoadingCircleIcon())
                                     ],
                                   ),
                                 ),
