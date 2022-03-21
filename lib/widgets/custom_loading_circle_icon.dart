@@ -4,15 +4,16 @@ import 'package:provider/provider.dart';
 import '../providers/color_scheme.dart';
 import '../themes/custom_colors.dart';
 
-class CustomLoadingIcon extends StatefulWidget {
-  const CustomLoadingIcon({Key? key}) : super(key: key);
+class CustomLoadingCircleIcon extends StatefulWidget {
+  const CustomLoadingCircleIcon({Key? key}) : super(key: key);
 
   @override
-  State<CustomLoadingIcon> createState() => _CustomLoadingIconState();
+  State<CustomLoadingCircleIcon> createState() =>
+      _CustomLoadingCircleIconState();
 }
 
 /// AnimationControllers can be created with `vsync: this` because of TickerProviderStateMixin.
-class _CustomLoadingIconState extends State<CustomLoadingIcon>
+class _CustomLoadingCircleIconState extends State<CustomLoadingCircleIcon>
     with TickerProviderStateMixin {
   late AnimationController controller;
 
