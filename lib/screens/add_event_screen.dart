@@ -71,9 +71,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   Future<Position> _getLocation() async {
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
 
-    Position currentLocation =
-        await locationHelper.determinePosition(LocationAccuracy.lowest);
-
+    Position currentLocation = locationHelper.getLastKnownPositionAndUpdate();
     _isLoading = false;
     return Position(
         longitude: currentLocation.longitude,

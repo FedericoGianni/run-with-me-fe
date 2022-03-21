@@ -1,12 +1,15 @@
 // ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/themes/custom_colors.dart';
 import '../providers/event.dart';
 
 // import '../widgets/main_drawer.dart';
 // import './favorites_screen.dart';
+import '../providers/locationHelper.dart';
+import '../providers/user.dart';
 import 'events_result_screen.dart';
 import 'add_event_screen.dart';
 import 'user_screen.dart';
@@ -27,6 +30,7 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   late List<Map> _pages;
+  bool gotLocation = false;
 
   // ignore: prefer_typing_uninitialized_variables
   var _transitionStart;
@@ -75,8 +79,26 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context);
-    // final settings = Provider.of<UserSettings>(context);
+    final user = Provider.of<User>(context, listen: false);
+    locationHelper.setDefaultUserPosition(
+      Position(
+        longitude: user.cityLong ?? 0.0,
+        latitude: user.cityLat ?? 0.0,
+        timestamp: user.createdAt,
+        accuracy: 0.0,
+        altitude: 0.0,
+        heading: 0.0,
+        speed: 0.0,
+        speedAccuracy: 0.0,
+      ),
+    );
+
+    if (!gotLocation) {
+      locationHelper.determinePosition(LocationAccuracy.best, context);
+      gotLocation = true;
+    }
 
     return Scaffold(
       backgroundColor: colors.background,
