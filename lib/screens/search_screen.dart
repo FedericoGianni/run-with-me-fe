@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/event.dart';
+import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 import 'package:runwithme/widgets/splash.dart';
 
@@ -455,7 +456,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final events = Provider.of<Events>(context);
 
     if (_isLoading) {
-      return const SplashScreen();
+      return const CustomLoadingAnimation();
     } else {
       // This if statement is used to avoid reloading resultEvents on setState when sorting events
       if (widget._suggestedEvents.length == 0) {
