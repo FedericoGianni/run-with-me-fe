@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
+import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 import 'package:runwithme/widgets/splash.dart';
 
@@ -83,7 +84,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
       }
 
       if (_isLoading) {
-        return SplashScreen();
+        return const CustomLoadingAnimation();
       } else {
         return CustomScrollView(
           slivers: [
