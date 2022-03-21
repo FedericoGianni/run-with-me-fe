@@ -19,7 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import '../providers/page_index.dart';
 
 import 'package:provider/provider.dart';
-import '../widgets/custom_loading_icon.dart';
+import '../widgets/custom_loading_circle_icon.dart';
 import '../providers/color_scheme.dart';
 import '../providers/event.dart';
 import '../providers/events.dart';
@@ -305,7 +305,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
     return _isLoading
         ? Center(
             child: Builder(builder: (context) {
-              return const CustomLoadingIcon();
+              return const CustomLoadingCircleIcon();
             }),
           )
         : Form(
