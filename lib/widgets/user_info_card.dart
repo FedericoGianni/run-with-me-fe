@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:runwithme/providers/locationHelper.dart';
+import 'package:uuid/uuid.dart';
 // import 'package:intl/intl.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
@@ -82,7 +84,10 @@ class UserInfo extends StatelessWidget {
           child: Container(
             child: Column(
               children: [
-                UserInfoFilling('Default location', user.city.toString()),
+                UserInfoFilling(
+                  'Default location',
+                  user.cityName ?? '',
+                ),
               ],
             ),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

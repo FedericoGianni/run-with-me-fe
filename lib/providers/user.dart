@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:runwithme/providers/locationHelper.dart';
+import 'package:uuid/uuid.dart';
 import '../classes/file_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +25,11 @@ class User with ChangeNotifier {
   int? age;
   int? sex;
   double? fitnessLevel;
-  String? city;
+
+  String? cityName;
+  String? cityId;
+  double? cityLat;
+  double? cityLong;
 
   Config config = Config();
 
@@ -48,19 +54,16 @@ class User with ChangeNotifier {
         print("Signup went correctly");
         var userId = json.decode(await response.stream.bytesToString());
         print(userId);
-        
-          if (userId['id']!=-1){
+
+        if (userId['id'] != -1) {
           this.userId = userId['id'];
           this.username = username;
-            return [true, 'Registration was successfull'];  
+          return [true, 'Registration was successfull'];
+        } else {
+          return [false, 'Internal Server Error'];
+        }
+        // notifyListeners();
 
-          } else{
-        return [false, 'Internal Server Error'];
-
-          }
-          // notifyListeners();
-
-        
       } else {
         print(response.statusCode);
         print(response.reasonPhrase);
@@ -97,7 +100,14 @@ class User with ChangeNotifier {
           name = userInfo['name'];
           surname = userInfo['surname'];
           email = userInfo['email'];
-          city = userInfo['city'];
+
+          Map<String, Object> city = await LocationHelper().getPlaceDetails(
+              placeId: userInfo['city'], sessionToken: Uuid().v4());
+
+          cityName = city['name'].toString();
+          cityId = city['place_id'].toString();
+          cityLat = double.parse(city['latitude'].toString());
+          cityLong = double.parse(city['longitude'].toString());
           createdAt = DateTime.fromMillisecondsSinceEpoch(
               12321232 * 1000); // userInfo['created_at']
           fitnessLevel = userInfo['fitness_level'];
@@ -108,11 +118,9 @@ class User with ChangeNotifier {
         }
       } else {
         print("Jwt was not found");
-          return false;
-
+        return false;
       }
-          return false;
-
+      return false;
     } catch (error) {
       print(error);
       rethrow;
@@ -125,8 +133,8 @@ class User with ChangeNotifier {
       String? jwt = await secureStorage.read(key: 'jwt');
       if (jwt != null) {
         print("Updating user info");
-        var request = http.MultipartRequest(
-            'POST', Uri.parse(config.getBaseUrl()+'/user/'+userId.toString()));
+        var request = http.MultipartRequest('POST',
+            Uri.parse(config.getBaseUrl() + '/user/' + userId.toString()));
         var headers = {'Authorization': 'Bearer ' + jwt};
         request.headers.addAll(headers);
         request.fields.addAll({
@@ -137,7 +145,7 @@ class User with ChangeNotifier {
           'age': age.toString(),
           'sex': sex.toString(),
           'fitness_level': fitnessLevel.toString(),
-          'city': city!,
+          'city': cityId!,
         });
 
         http.StreamedResponse response = await request.send();
@@ -148,12 +156,10 @@ class User with ChangeNotifier {
         } else {
           print(response.reasonPhrase);
           return false;
-
         }
       } else {
         print("UpdateUser error: Jwt was not found");
         return false;
-
       }
     } catch (error) {
       print(error);

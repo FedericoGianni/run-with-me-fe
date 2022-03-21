@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../providers/locationHelper.dart';
 import 'custom_scroll_behavior.dart';
 
 class CustomMapPlaceSearch extends StatefulWidget {
@@ -31,54 +32,18 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
     });
   }
 
-  _onChanged() {
+  _onChanged() async {
     if (_sessionToken == null) {
       setState(() {
         _sessionToken = uuid.v4();
       });
     }
-    getSuggestion(_controller.text);
-  }
-
-  void getSuggestion(String input) async {
-    String type = '(regions)';
-
-    String placesUrl =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
-
-    final request = Uri.parse(placesUrl);
-    var response = await http.get(request);
-    if (response.statusCode == 200) {
-      print("heiii");
-      if (mounted) {
-        setState(() {
-          _placeList = json.decode(response.body)['predictions'];
-        });
-      }
-    } else {
-      throw Exception('Failed to load predictions');
-    }
-  }
-
-  Future<bool> getPlaceDetails(String placeId) async {
-    String detailsUrl =
-        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
-
-    final request = Uri.parse(detailsUrl);
-    var response = await http.get(request);
-    if (response.statusCode == 200) {
-      if (true) {
-        var result = json.decode(response.body);
-        _place = {
-          'name': result['result']['formatted_address'],
-          'location': result['result']['geometry']['location']
-        };
-        print(_place);
-        print('');
-        return true;
-      }
-    } else {
-      throw Exception('Failed to load predictions');
+    if (mounted) {
+      LocationHelper()
+          .getSuggestion(input: _controller.text, sessionToken: _sessionToken)
+          .then((value) => setState(() {
+                _placeList = value;
+              }));
     }
   }
 
@@ -86,6 +51,7 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
+    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
 
     return AlertDialog(
       backgroundColor: colors.background,
@@ -140,9 +106,11 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
                               itemBuilder: (context, index) {
                                 return ListTile(
                                   onTap: () async {
-                                    await getPlaceDetails(
-                                        _placeList[index]['place_id']);
-
+                                    _place =
+                                        await locationHelper.getPlaceDetails(
+                                            placeId: _placeList[index]
+                                                ['place_id'],
+                                            sessionToken: _sessionToken);
                                     Navigator.of(context).pop(_place);
                                   },
                                   title: Text(
