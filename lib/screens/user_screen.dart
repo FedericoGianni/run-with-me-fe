@@ -367,7 +367,10 @@ class _UserScreenState extends State<UserScreen> {
     } else {
       return Container(
         width: double.infinity,
-        child: const Center(widthFactor: 0.5, child: LoginForm()),
+        child: const Center(
+          widthFactor: 0.5,
+          child: LoginForm(),
+        ),
       );
     }
   }
