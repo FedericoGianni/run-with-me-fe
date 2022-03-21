@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import '../themes/custom_theme.dart';
 import '../providers/user.dart';
 import 'custom_alert_dialog.dart';
-import 'custom_loading_icon.dart';
+import 'custom_loading_circle_icon.dart';
 import 'custom_map_place_search.dart';
 import 'custom_options_dialog.dart';
 import 'custom_slider.dart';
@@ -1130,7 +1130,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         ),
       );
     } else {
-      return const CustomLoadingIcon();
+      return const CustomLoadingCircleIcon();
     }
   }
 }
