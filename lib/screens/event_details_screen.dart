@@ -11,45 +11,77 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_maps_event_detail.dart';
+import '../widgets/custom_snackbar.dart';
 
-class EventDetailsScreen extends StatelessWidget {
+class EventDetailsScreen extends StatefulWidget {
   static const routeName = '/details';
   const EventDetailsScreen({Key? key}) : super(key: key);
 
   @override
+  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
+}
+
+class _EventDetailsScreenState extends State<EventDetailsScreen> {
+  @override
   Widget build(BuildContext context) {
-    final event = ModalRoute.of(context)?.settings.arguments as Event;
+    var event = ModalRoute.of(context)?.settings.arguments as Event;
     final user = Provider.of<User>(context, listen: false);
     final events = Provider.of<Events>(context, listen: false);
     final colors = Provider.of<CustomColorScheme>(context);
 
-    Future<void> _showMyDialog(String title, String msg) async {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text(msg),
-          );
-        },
-      );
-    }
-
     void _addBookingToEvent(int eventId, int userId) async {
       if (await events.addBookingToEvent(event.id, user.userId ?? -1)) {
-        _showMyDialog("AddBooking", "Successfully booked");
-        // switch to booked events page
-        // open new event detail screen
-        Navigator.of(context).pushNamed(BookedEventsScreen.routeName);
+        // show snackbar with addBookingToEvent result
+        CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
+            ctx: context, message: "Successfully booked to event.");
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar()
+          ..showSnackBar(snackbarProvider.provide());
+      } else {
+        CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
+            ctx: context,
+            message: "Error while trying to create booking to the event.");
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar()
+          ..showSnackBar(snackbarProvider.provide());
       }
+
+      // reload booked events
+      events.fetchAndSetBookedEvents(userId);
+
+      // TODO reload page with updated event details
+      event = await events.fetchEventById(eventId).then((value) {
+        setState(() {
+          build(context);
+        });
+        return event;
+      });
     }
 
     void _removeBookingFromEvent(int eventId, int userId) async {
       if (await events.delBookingFromEvent(event.id, user.userId ?? -1)) {
-        _showMyDialog("delBooking", "Successfully deleted booking");
-        // switch to booked events screen
-        Navigator.of(context).pushNamed(BookedEventsScreen.routeName);
+        // show snackbar with addBookingToEvent result
+        CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
+            ctx: context, message: "Successfully unbooked from event.");
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar()
+          ..showSnackBar(snackbarProvider.provide());
+      } else {
+        CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
+            ctx: context, message: "Error while trying to unbook from event.");
+        ScaffoldMessenger.of(context)
+          ..removeCurrentSnackBar()
+          ..showSnackBar(snackbarProvider.provide());
       }
+
+      // reload booked events
+      events.fetchAndSetBookedEvents(userId);
+
+      // TODO reload page with updated event details
+      Event updatedEvent = await events.fetchEventById(event.id);
+      setState(() {
+        event = updatedEvent;
+      });
     }
 
     return Scaffold(
