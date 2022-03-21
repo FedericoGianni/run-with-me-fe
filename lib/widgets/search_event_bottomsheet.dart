@@ -232,7 +232,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                               widget.searching = true;
                                             });
                                             Position position = locationHelper
-                                                .getLastKnownPosition();
+                                                .getLastKnownPositionAndUpdate();
                                             if (mounted) {
                                               setState(() {
                                                 widget.formValues['city_name'] =

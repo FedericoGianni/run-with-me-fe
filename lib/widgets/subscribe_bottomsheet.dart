@@ -56,7 +56,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     'height': '',
     'age': '',
     'sex': '-1',
-    'city': '',
+    'city_id': '',
+    'city_name': '',
     'frequency': '',
     'duration': '',
     'distance': '',
@@ -120,7 +121,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         return CustomMapPlaceSearch();
       },
     ).then((value) {
-      _initValues['city'] = value['description'];
+      _initValues['city_name'] = value['name'].toString();
+      _initValues['city_id'] = value['place_id'].toString();
       setState(() {
         print("bellazio");
         print(_initValues.keys);
@@ -193,7 +195,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         user.age = int.parse(_initValues['age']!);
         user.surname = _initValues['surname'];
         user.name = _initValues['name'];
-        user.city = _initValues['city'];
+        user.cityId = _initValues['city_id'];
         user.fitnessLevel = double.parse(_initValues['fitness'] ?? '-1');
         user.height = int.parse(_initValues['height']!);
         user.sex = int.parse(_initValues['sex'] ?? '-1');
@@ -707,7 +709,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                         child: Row(
                           children: [
                             Expanded(
-                                child: _initValues['city'] == ''
+                                child: _initValues['city_name'] == ''
                                     ? Text(
                                         'City',
                                         style: TextStyle(
@@ -715,7 +717,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                                             fontSize: 16),
                                       )
                                     : Text(
-                                        _initValues['city']
+                                        _initValues['city_name']
                                             .toString()
                                             .split(',')[0],
                                         style: TextStyle(

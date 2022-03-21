@@ -97,7 +97,7 @@ class UserSettings with ChangeNotifier {
     }
 
     // Then it checks for user credentials
-    _checkUserCredentials();
+    await _checkUserCredentials();
 
     notifyListeners();
     return true;
@@ -186,9 +186,8 @@ class UserSettings with ChangeNotifier {
           notifyListeners();
           user.userId = jwt['user_id'];
           print("setting user info");
-          user.getUserInfo().then((value) {
-            settings.isLoggedIn = true;
-          });
+
+          settings.isLoggedIn = await user.getUserInfo();
         } else {
           settings.isLoggedIn = false;
           FileManager()
@@ -200,7 +199,8 @@ class UserSettings with ChangeNotifier {
         FileManager()
             .writeFile(json.encode(settings.toJson()), settingsFileName);
         notifyListeners();
-        rethrow;
+        print(
+            "Could not get user Info, probably because user is not logged in");
       }
     } else {
       print("Login credentials are empty");
