@@ -24,6 +24,7 @@ import 'widgets/slide_DEPRECATED.dart';
 import 'providers/color_scheme.dart';
 import 'providers/events.dart';
 import 'providers/page_index.dart';
+import 'providers/locationHelper.dart';
 import 'widgets/splash.dart';
 
 void main() {
