@@ -9,13 +9,15 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_snackbar.dart';
+import 'package:runwithme/widgets/splash.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../themes/custom_theme.dart';
+import 'custom_loading_animation.dart';
 import 'subscribe_bottomsheet.dart';
-import '../widgets/custom_loading_icon.dart';
+import 'custom_loading_circle_icon.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -83,6 +85,7 @@ class _LoginFormState extends State<LoginForm> {
     List loginResult = await settings.userLogin(
         _initValues['username'], _initValues['password']);
 
+    await Future.delayed(Duration(seconds: 1));
     if (!loginResult[0]) {
       print('rip');
       CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
@@ -90,9 +93,7 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(snackbarProvider.provide());
-      _isLoading = false;
       print("isLoading is false1");
-      sleep(const Duration(milliseconds: 500));
       setState(() {
         _isLoading = false;
       });
@@ -273,7 +274,7 @@ class _LoginFormState extends State<LoginForm> {
         ),
       );
     } else {
-      return const CustomLoadingIcon();
+      return const CustomLoadingAnimation();
     }
   }
 }
