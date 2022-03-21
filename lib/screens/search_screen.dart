@@ -284,8 +284,8 @@ class _SearchScreenState extends State<SearchScreen> {
             itemCount: widget._recentEvents.length,
             itemBuilder: (context, index) {
               return Container(
-                padding: const EdgeInsets.only(left: 15, bottom: 5),
-                width: 380.0 / _view,
+                padding: const EdgeInsets.only(left: 7, bottom: 5, right: 7),
+                width: 370.0 / _view,
                 height: (370 / _view) / _aspectRatio,
                 child: EventItem(
                   widget._recentEvents[index],
@@ -383,8 +383,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Text(
                   'Sort by',
                   style: widget._sortMenu
-                      ? TextStyle(color: colors.secondaryColor)
-                      : TextStyle(color: colors.secondaryTextColor),
+                      ? TextStyle(color: colors.secondaryColor, fontSize: 12)
+                      : TextStyle(
+                          color: colors.secondaryTextColor, fontSize: 12),
                 ),
               ),
             ),
