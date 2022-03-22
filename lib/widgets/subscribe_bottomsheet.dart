@@ -112,7 +112,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     super.dispose();
   }
 
-  Future<void> _showMapDialog() async {
+  Future<void> _showPlacesDialog() async {
     print("hey");
     return showDialog(
       context: context,
@@ -680,7 +680,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: FormField(
           builder: (FormFieldState<int> state) {
             return GestureDetector(
-              onTap: _showMapDialog,
+              onTap: _showPlacesDialog,
               // initialValue: markerPosition.toString(),,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width / 2.3,

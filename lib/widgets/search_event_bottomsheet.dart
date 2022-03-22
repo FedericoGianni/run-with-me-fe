@@ -58,7 +58,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
 
   void validate() {}
 
-  Future<void> _showMapDialog() async {
+  Future<void> _showPlacesDialog() async {
     print("hey");
     return showDialog(
       context: context,
@@ -175,7 +175,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                 child: FormField(
                   builder: (FormFieldState<int> state) {
                     return GestureDetector(
-                      onTap: _showMapDialog,
+                      onTap: _showPlacesDialog,
                       // initialValue: markerPosition.toString(),,
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 2.3,

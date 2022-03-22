@@ -38,13 +38,16 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
         _sessionToken = uuid.v4();
       });
     }
-    if (mounted) {
-      LocationHelper()
-          .getSuggestion(input: _controller.text, sessionToken: _sessionToken)
-          .then((value) => setState(() {
-                _placeList = value;
-              }));
-    }
+
+    LocationHelper()
+        .getSuggestion(input: _controller.text, sessionToken: _sessionToken)
+        .then((value) {
+      if (mounted) {
+        setState(() {
+          _placeList = value;
+        });
+      }
+    });
   }
 
   @override

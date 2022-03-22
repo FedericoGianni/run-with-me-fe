@@ -28,6 +28,7 @@ import 'event_details_screen.dart';
 
 class AddEventScreen extends StatefulWidget {
   static const routeName = '/add_event';
+  bool _isSearching = false;
 
   @override
   State<AddEventScreen> createState() => _AddEventScreenState();
@@ -38,9 +39,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final _nameFocusNode = FocusNode();
   final _distanceFocusNode = FocusNode();
   final _durationFocusNode = FocusNode();
-  var _isLoading = false;
+  bool _isLoading = false;
 
-  LatLng defaultUserPos = const LatLng(44.48867812986885, 6.197411131341138);
+  // LatLng defaultUserPos = const LatLng(44.48867812986885, 6.197411131341138);
   LatLng markerPosition = const LatLng(0, 0);
 
   DateTime _userSelectedDate = DateTime.now();
@@ -202,25 +203,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
       _isLoading = true;
     });
 
-    //user provider to get user id
-    // final user = Provider.of<User>(context);
-
-    // _editedEvent = Event(
-    //   adminId: user.userId,
-    //   averageDuration: _editedEvent.averageDuration,
-    //   averageLength: _editedEvent.averageLength,
-    //   averagePace: _editedEvent.averagePace,
-    //   createdAt: _editedEvent.createdAt,
-    //   currentParticipants: _editedEvent.currentParticipants,
-    //   date: _editedEvent.date,
-    //   difficultyLevel: _editedEvent.difficultyLevel,
-    //   id: _editedEvent.id,
-    //   maxParticipants: _editedEvent.maxParticipants,
-    //   name: _editedEvent.name,
-    //   startingPintLat: _editedEvent.startingPintLat,
-    //   startingPintLong: _editedEvent.startingPintLong,
-    // );
-
     //editedEvent.id è null finchè il backend non gli ritorna un id
     if (_editedEvent.id != null) {
       // await Provider.of<Events>(context, listen: false)
@@ -299,6 +281,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    final locationHelper = Provider.of<LocationHelper>(context);
 
     return _isLoading
         ? Center(
@@ -548,12 +531,27 @@ class _AddEventScreenState extends State<AddEventScreen> {
                             Container(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                child: Icon(
-                                  Icons.location_on_outlined,
-                                  color: markerPosition == LatLng(0, 0)
-                                      ? colors.secondaryTextColor
-                                      : colors.primaryColor,
-                                ))
+                                child: IconButton(
+                                    onPressed: () {
+                                      setState(() {});
+                                      Position position =
+                                          locationHelper.getLastKnownPosition();
+                                      if (mounted) {
+                                        setState(() {
+                                          markerPosition = LatLng(
+                                              position.latitude,
+                                              position.longitude);
+                                        });
+                                      } else {
+                                        print("Search bottomSheet unmounted");
+                                      }
+                                    },
+                                    icon: !widget._isSearching
+                                        ? Icon(
+                                            Icons.location_on_outlined,
+                                            color: colors.secondaryTextColor,
+                                          )
+                                        : CustomLoadingCircleIcon())),
                           ],
                         ),
                       ),
