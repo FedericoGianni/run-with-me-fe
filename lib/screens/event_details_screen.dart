@@ -155,7 +155,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.5,
+                    width: MediaQuery.of(context).size.width / 2,
                     child: Text(
                       event.name,
                       overflow: TextOverflow.clip,
@@ -164,6 +164,42 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           fontSize: 24,
                           fontWeight: FontWeight.w900),
                     ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: event.userBooked
+                        ? TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: colors.errorColor,
+                                primary: colors.primaryTextColor,
+                                textStyle: const TextStyle(fontSize: 10),
+                                padding: const EdgeInsets.all(0)),
+                            onPressed: () => _removeBookingFromEvent(
+                                event.id, user.userId ?? -1),
+                            child: Text(
+                              'Unsubscribe',
+                              style: TextStyle(
+                                  color: colors.primaryTextColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          )
+                        : TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: colors.primaryColor,
+                                primary: colors.onPrimary,
+                                textStyle: const TextStyle(fontSize: 10),
+                                padding: const EdgeInsets.all(0)),
+                            onPressed: () =>
+                                _addBookingToEvent(event.id, user.userId ?? -1),
+                            child: Text(
+                              'Subscribe',
+                              style: TextStyle(
+                                  color: colors.primaryTextColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -205,39 +241,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
                   height: 40,
-                  child: event.userBooked
-                      ? TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: colors.errorColor,
-                              primary: colors.onPrimary,
-                              textStyle: const TextStyle(fontSize: 10),
-                              padding: const EdgeInsets.all(0)),
-                          onPressed: () => _removeBookingFromEvent(
-                              event.id, user.userId ?? -1),
-                          child: Text(
-                            'Unsubscribe',
-                            style: TextStyle(
-                                color: colors.primaryTextColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        )
-                      : TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: colors.primaryColor,
-                              primary: colors.onPrimary,
-                              textStyle: const TextStyle(fontSize: 10),
-                              padding: const EdgeInsets.all(0)),
-                          onPressed: () =>
-                              _addBookingToEvent(event.id, user.userId ?? -1),
-                          child: Text(
-                            'Subscribe',
-                            style: TextStyle(
-                                color: colors.primaryTextColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
+                  child: Text("AAA"),
                 ),
               ),
             ),
