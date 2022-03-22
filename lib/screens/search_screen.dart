@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/event.dart';
+import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
+import 'package:runwithme/widgets/splash.dart';
 
 import '../providers/events.dart';
 import '../providers/user.dart';
@@ -158,6 +160,18 @@ class _SearchScreenState extends State<SearchScreen> {
       widget._resultEvents.sort((a, b) => a.date.compareTo(b.date));
       widget._suggestedEvents.sort((a, b) => a.date.compareTo(b.date));
     }
+  }
+
+  Future<Null> _handleRefresh() async {
+    final events = Provider.of<Events>(context, listen: false);
+    events.fetchAndSetResultEvents(events.lastResultLat, events.lastResultLong,
+        events.lastResultMaxDistKm);
+    widget._resultEvents = events.resultEvents;
+
+    events.fetchAndSetSuggestedEvents(events.lastSuggestedLat,
+        events.lastSuggestedLong, events.lastSuggestedMaxDistKm);
+
+    return null;
   }
 
   List<Widget> _buildContent(BuildContext context) {
@@ -452,121 +466,132 @@ class _SearchScreenState extends State<SearchScreen> {
     print("Rebuilding Page");
     final colors = Provider.of<CustomColorScheme>(context);
     final events = Provider.of<Events>(context);
-    // This if statement is used to avoid reloading resultEvents on setState when sorting events
-    if (widget._suggestedEvents.length == 0) {
-      widget._resultEvents = events.resultEvents;
-      print("Got events from provider");
-    }
-    widget._suggestedEvents = events.suggestedEvents;
-    widget._recentEvents = events.recentEvents;
 
-    if (_view == 3) {
-      return Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: 190,
+    if (_isLoading) {
+      return const CustomLoadingAnimation();
+    } else {
+      // This if statement is used to avoid reloading resultEvents on setState when sorting events
+      if (widget._suggestedEvents.length == 0) {
+        widget._resultEvents = events.resultEvents;
+        print("Got events from provider");
+      }
+      widget._suggestedEvents = events.suggestedEvents;
+      widget._recentEvents = events.recentEvents;
+
+      if (_view == 3) {
+        return RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 190,
+                child: CustomScrollView(
+                  slivers: [
+                    _buildAppbar(
+                      context,
+                      //_newEventList.length,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                child: CustomMapsSearch(),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height - 190 - 60,
+              ),
+            ],
+          ),
+        );
+      } else {
+        return RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: ScrollConfiguration(
+            behavior: CustomScrollBehavior(),
             child: CustomScrollView(
               slivers: [
-                _buildAppbar(
-                  context,
-                  //_newEventList.length,
-                ),
+                _buildAppbar(context),
+                widget._sortMenu
+                    ? SliverToBoxAdapter(
+                        child: Container(
+                          color: colors.onPrimary,
+                          padding: EdgeInsets.only(top: 15, bottom: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SortByButton(
+                                title: 'Distance',
+                                color: colors.secondaryColor,
+                                id: 0,
+                                activeId: widget._currentSortButton,
+                                onPressed: () {
+                                  _sortEvents('distance');
+                                  setState(() {
+                                    widget._currentSortButton = 0;
+                                  });
+                                },
+                              ),
+                              SortByButton(
+                                title: 'Date',
+                                color: Color.fromARGB(255, 102, 173, 97),
+                                id: 1,
+                                activeId: widget._currentSortButton,
+                                onPressed: () {
+                                  _sortEvents('date');
+                                  setState(() {
+                                    widget._currentSortButton = 1;
+                                  });
+                                },
+                              ),
+                              SortByButton(
+                                title: 'Difficulty',
+                                color: Color.fromARGB(255, 80, 159, 120),
+                                id: 2,
+                                activeId: widget._currentSortButton,
+                                onPressed: () {
+                                  _sortEvents('difficulty');
+                                  setState(() {
+                                    widget._currentSortButton = 2;
+                                  });
+                                },
+                              ),
+                              SortByButton(
+                                title: 'Lenght',
+                                color: Color.fromARGB(255, 59, 146, 143),
+                                id: 3,
+                                activeId: widget._currentSortButton,
+                                onPressed: () {
+                                  _sortEvents('lenght');
+                                  setState(() {
+                                    widget._currentSortButton = 3;
+                                  });
+                                },
+                              ),
+                              SortByButton(
+                                title: 'Duration',
+                                color: colors.primaryColor,
+                                id: 4,
+                                activeId: widget._currentSortButton,
+                                onPressed: () {
+                                  _sortEvents('duration');
+                                  setState(() {
+                                    widget._currentSortButton = 4;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : SliverToBoxAdapter(
+                        child: SizedBox(),
+                      ),
+                ..._buildContent(context)
               ],
             ),
           ),
-          SizedBox(
-            child: CustomMapsSearch(),
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height - 190 - 60,
-          ),
-        ],
-      );
-    } else {
-      return ScrollConfiguration(
-        behavior: CustomScrollBehavior(),
-        child: CustomScrollView(
-          slivers: [
-            _buildAppbar(context),
-            widget._sortMenu
-                ? SliverToBoxAdapter(
-                    child: Container(
-                      color: colors.onPrimary,
-                      padding: EdgeInsets.only(top: 15, bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SortByButton(
-                            title: 'Distance',
-                            color: colors.secondaryColor,
-                            id: 0,
-                            activeId: widget._currentSortButton,
-                            onPressed: () {
-                              _sortEvents('distance');
-                              setState(() {
-                                widget._currentSortButton = 0;
-                              });
-                            },
-                          ),
-                          SortByButton(
-                            title: 'Date',
-                            color: Color.fromARGB(255, 102, 173, 97),
-                            id: 1,
-                            activeId: widget._currentSortButton,
-                            onPressed: () {
-                              _sortEvents('date');
-                              setState(() {
-                                widget._currentSortButton = 1;
-                              });
-                            },
-                          ),
-                          SortByButton(
-                            title: 'Difficulty',
-                            color: Color.fromARGB(255, 80, 159, 120),
-                            id: 2,
-                            activeId: widget._currentSortButton,
-                            onPressed: () {
-                              _sortEvents('difficulty');
-                              setState(() {
-                                widget._currentSortButton = 2;
-                              });
-                            },
-                          ),
-                          SortByButton(
-                            title: 'Lenght',
-                            color: Color.fromARGB(255, 59, 146, 143),
-                            id: 3,
-                            activeId: widget._currentSortButton,
-                            onPressed: () {
-                              _sortEvents('lenght');
-                              setState(() {
-                                widget._currentSortButton = 3;
-                              });
-                            },
-                          ),
-                          SortByButton(
-                            title: 'Duration',
-                            color: colors.primaryColor,
-                            id: 4,
-                            activeId: widget._currentSortButton,
-                            onPressed: () {
-                              _sortEvents('duration');
-                              setState(() {
-                                widget._currentSortButton = 4;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : SliverToBoxAdapter(
-                    child: SizedBox(),
-                  ),
-            ..._buildContent(context)
-          ],
-        ),
-      );
+        );
+      }
     }
   }
 }
