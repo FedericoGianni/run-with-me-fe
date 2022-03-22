@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:core';
 import 'package:flutter/material.dart';
 
 import './event.dart';
@@ -14,7 +14,41 @@ class Events with ChangeNotifier {
   List<Event> _bookedEvents = [];
   List<Event> _resultEvents = [];
 
+  // save the last used parameters for fetchAndSetSuggestedEvents in case of refresh
+  double _lastSuggestedLat = 0.0;
+  double _lastSuggestedLong = 0.0;
+  int _lastSuggestedMaxDistKm = 0;
+
+  // save the last used parameters for fetchAndSetSuggestedEvents in case of refresh
+  double _lastResultLat = 0.0;
+  double _lastResultLong = 0.0;
+  int _lastResultMaxDistKm = 0;
+
   final secureStorage = const FlutterSecureStorage();
+
+  double get lastSuggestedLat {
+    return _lastSuggestedLat;
+  }
+
+  double get lastSuggestedLong {
+    return _lastSuggestedLong;
+  }
+
+  int get lastSuggestedMaxDistKm {
+    return _lastSuggestedMaxDistKm;
+  }
+
+  double get lastResultLat {
+    return _lastResultLat;
+  }
+
+  double get lastResultLong {
+    return _lastResultLong;
+  }
+
+  int get lastResultMaxDistKm {
+    return _lastResultMaxDistKm;
+  }
 
   List<Event> get suggestedEvents {
     return [..._suggestedEvents];
@@ -57,11 +91,23 @@ class Events with ChangeNotifier {
 
   Future<void> fetchAndSetSuggestedEvents(
       double lat, double long, int max_dist_km) async {
+    // 1. save parameters used in case of refresh
+    _lastSuggestedLat = lat;
+    _lastSuggestedLong = long;
+    _lastSuggestedMaxDistKm = max_dist_km;
+
+    // 2. actual call
     fetchAndSetEvents(lat, long, max_dist_km, _suggestedEvents, true);
   }
 
   Future<void> fetchAndSetResultEvents(
       double lat, double long, int max_dist_km) async {
+    // 1. save parameters used in case of refresh
+    _lastResultLat = lat;
+    _lastResultLong = long;
+    _lastResultMaxDistKm = max_dist_km;
+
+    // 2. actual call
     await fetchAndSetEvents(lat, long, max_dist_km, _resultEvents, true);
   }
 
