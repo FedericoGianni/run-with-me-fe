@@ -99,7 +99,7 @@ class _TabsScreenState extends State<TabsScreen> {
       locationHelper.determinePosition(LocationAccuracy.best, context);
       gotLocation = true;
     }
-
+    print("Rebuilding Tabs Screen");
     return Scaffold(
       backgroundColor: colors.background,
       appBar: PreferredSize(

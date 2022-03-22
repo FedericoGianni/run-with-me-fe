@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/themes/custom_colors.dart';
 
 import 'custom_info_window.dart';
+import 'custom_map_place_search.dart';
 import 'default_appbar.dart';
 import '../models/map_style.dart';
 import '../classes/markers.dart';
@@ -32,6 +33,23 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     customInfoWindowController.googleMapController = controller;
+  }
+
+  Future<void> _showPlacesDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CustomMapPlaceSearch();
+      },
+    ).then((value) {
+      print(value);
+      setState(() {
+        widget.markerPosition = LatLng(value['latitude'], value['longitude']);
+        widget.centerPosition = widget.markerPosition;
+        mapController.moveCamera(CameraUpdate.newLatLng(widget.centerPosition));
+      });
+    });
   }
 
   void _handleTap(LatLng point) {
@@ -67,7 +85,7 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
       _handleTap(widget.markerPosition);
     }
     final colors = Provider.of<CustomColorScheme>(context);
-
+    print('Rebuilding maps new');
     return Scaffold(
       body: Stack(
         children: [
@@ -111,32 +129,36 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
                     Navigator.pop(context);
                   },
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.8,
-                  decoration: BoxDecoration(
-                    color: colors.onPrimary,
-                    border: Border.all(color: colors.onPrimary),
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(10.0),
+                GestureDetector(
+                  onTap: _showPlacesDialog,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 1.8,
+                    decoration: BoxDecoration(
+                      color: colors.onPrimary,
+                      border: Border.all(color: colors.onPrimary),
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(10.0),
+                      ),
                     ),
-                  ),
-                  height: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.search,
-                          size: 20,
-                          color: colors.secondaryTextColor,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Search',
-                            style: TextStyle(color: colors.secondaryTextColor),
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.search,
+                            size: 20,
+                            color: colors.secondaryTextColor,
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Text(
+                              'Search',
+                              style:
+                                  TextStyle(color: colors.secondaryTextColor),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

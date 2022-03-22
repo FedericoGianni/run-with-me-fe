@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/events.dart';
+import '../providers/locationHelper.dart';
 import 'custom_info_window.dart';
 import 'default_appbar.dart';
 import '../models/map_style.dart';
@@ -16,7 +18,6 @@ class CustomMapsSearch extends StatelessWidget {
       CustomInfoWindowController();
 
   //TODO change _center with the user city
-  final LatLng _center = const LatLng(45.45, 9.23);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -27,6 +28,10 @@ class CustomMapsSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final events = Provider.of<Events>(context);
+    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+    final Position userPosition = locationHelper.getLastKnownPosition();
+    final LatLng _center =
+        LatLng(userPosition.latitude, userPosition.longitude);
 
     return Stack(
       children: [
