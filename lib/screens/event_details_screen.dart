@@ -233,19 +233,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 const EdgeInsets.only(bottom: 0, top: 10, left: 20, right: 20),
             sliver: SliverToBoxAdapter(child: EventDetail(event)),
           ),
-          SliverPadding(
-            padding:
-                const EdgeInsets.only(bottom: 20, top: 50, left: 20, right: 20),
-            sliver: SliverToBoxAdapter(
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: 40,
-                  child: Text("AAA"),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
