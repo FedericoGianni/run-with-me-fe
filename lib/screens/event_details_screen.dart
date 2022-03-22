@@ -171,13 +171,22 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
           SliverPadding(
             padding:
-                const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+                const EdgeInsets.only(bottom: 0, top: 0, left: 20, right: 20),
             sliver: SliverToBoxAdapter(
-              child: Container(
-                height: MediaQuery.of(context).size.height / 3,
-                width: MediaQuery.of(context).size.width / 2,
-                child: CustomMapsEvent(
-                  event: event,
+              child: Card(
+                color: colors.onPrimary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                elevation: 4,
+                margin: const EdgeInsets.all(0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 3,
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: CustomMapsEvent(
+                    event: event,
+                  ),
                 ),
               ),
             ),
@@ -185,7 +194,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           //actual event details
           SliverPadding(
             padding:
-                const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+                const EdgeInsets.only(bottom: 0, top: 10, left: 20, right: 20),
             sliver: SliverToBoxAdapter(child: EventDetail(event)),
           ),
           SliverPadding(
