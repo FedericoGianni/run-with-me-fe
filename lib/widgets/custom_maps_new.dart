@@ -188,7 +188,8 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
                               style:
                                   TextStyle(color: colors.secondaryTextColor),
                             ),
-                          ]);
+                          ],
+                          colors);
                     }
                   },
                 ),
