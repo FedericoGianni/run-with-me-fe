@@ -28,7 +28,7 @@ class CustomMapsSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final events = Provider.of<Events>(context);
-    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+    final locationHelper = Provider.of<LocationHelper>(context);
     final Position userPosition = locationHelper.getLastKnownPosition();
     final LatLng _center =
         LatLng(userPosition.latitude, userPosition.longitude);

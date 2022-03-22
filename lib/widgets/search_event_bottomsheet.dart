@@ -68,8 +68,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
       },
     ).then((value) {
       widget.formValues['city_name'] = value['name'].toString();
-      widget.formValues['city_lat'] = value['location']['lat'];
-      widget.formValues['city_long'] = value['location']['lng'];
+      widget.formValues['city_lat'] = value['latitude'];
+      widget.formValues['city_long'] = value['longitude'];
       setState(() {
         print("bellazio");
         print(widget.formValues.keys);
@@ -79,8 +79,9 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    print("REBUILDING SEARCH BOTTOMSHEET");
     final colors = Provider.of<CustomColorScheme>(context);
-    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+    final locationHelper = Provider.of<LocationHelper>(context, listen: true);
 
     final double screenWidth = MediaQuery.of(context).size.width;
     return Container(

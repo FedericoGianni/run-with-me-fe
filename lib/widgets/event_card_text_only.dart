@@ -50,7 +50,7 @@ class EventItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+    final locationHelper = Provider.of<LocationHelper>(context);
 
     final double screenWidth = MediaQuery.of(context).size.width;
 

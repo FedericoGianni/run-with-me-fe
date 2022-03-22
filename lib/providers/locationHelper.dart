@@ -14,8 +14,17 @@ class LocationHelper with ChangeNotifier {
   late Map<String, Object> _place;
   String kPLACES_API_KEY = "***REMOVED***";
 
+  Position _lastKnownPosition = Position(
+    longitude: 0.0,
+    latitude: 0.0,
+    timestamp: DateTime.now(),
+    accuracy: 0.0,
+    altitude: 0.0,
+    heading: 0.0,
+    speed: 0.0,
+    speedAccuracy: 0.0,
+  );
   late Position _defaultUserPosition;
-  late Position _lastKnownPosition;
   late Position _currentUserPosition;
   LocationHelper();
 
@@ -23,7 +32,11 @@ class LocationHelper with ChangeNotifier {
     print("Setting default user location");
 
     _defaultUserPosition = userPosition;
-    _lastKnownPosition = userPosition;
+    if (_lastKnownPosition.latitude == 0.0 &&
+        _lastKnownPosition.longitude == 0.0) {
+      print("Setting last known user location to default user location");
+      _lastKnownPosition = userPosition;
+    }
   }
 
   Position _getDefaultUserLocation() {
@@ -80,17 +93,19 @@ class LocationHelper with ChangeNotifier {
                 // all again this function that will attewmpt 10 check before closing itself too
                 determinePosition(LocationAccuracy.best, context);
                 // For the time being lets use the default user position, hoping for the best in the future
+                searchingForLocation = false;
                 return _getDefaultUserLocation();
               },
               onDismiss: () {
                 // If user selected no, default user position is going to be used instead
+                searchingForLocation = false;
                 return _getDefaultUserLocation();
               });
           print('Location services are disabled.');
           return _getDefaultUserLocation();
         } else {
-          for (var i = 0; i < 10; i++) {
-            await Future.delayed(Duration(seconds: 2));
+          for (var i = 0; i < 5; i++) {
+            await Future.delayed(Duration(seconds: 1));
             print("Re checking if location services are enabled");
             serviceEnabled = await Geolocator.isLocationServiceEnabled();
             if (serviceEnabled) {
@@ -101,6 +116,7 @@ class LocationHelper with ChangeNotifier {
           // If after 10 tries the user still hasnt turned on the location, the default location is used instead
           if (!serviceEnabled) {
             print('Location services are disabled.');
+            searchingForLocation = false;
             return _getDefaultUserLocation();
           }
         }
@@ -121,10 +137,12 @@ class LocationHelper with ChangeNotifier {
             },
             onDismiss: () {
               // If user selected no, default user position is going to be used instead
+              searchingForLocation = false;
               return _getDefaultUserLocation();
             });
         if (permission == LocationPermission.denied) {
           print('Location permissions are denied');
+          searchingForLocation = false;
           return _getDefaultUserLocation();
         }
       }
@@ -132,6 +150,7 @@ class LocationHelper with ChangeNotifier {
       if (permission == LocationPermission.deniedForever) {
         print(
             'Location permissions are permanently denied, we cannot request permissions.');
+        searchingForLocation = false;
         return _getDefaultUserLocation();
       }
       print("Getting Location");
