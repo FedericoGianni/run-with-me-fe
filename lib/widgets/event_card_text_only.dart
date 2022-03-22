@@ -52,6 +52,8 @@ class EventItem extends StatelessWidget {
     final colors = Provider.of<CustomColorScheme>(context);
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
 
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     Color colorGradient = (Color.lerp(colors.primaryColor,
         colors.secondaryColor, (index / 2).toDouble() / totAmount))!;
     String name = event.name;
@@ -73,8 +75,9 @@ class EventItem extends StatelessWidget {
         child: Column(children: [
           // Title row
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Padding(
+            Container(
               padding: const EdgeInsets.all(10.0),
+              width: screenWidth / 3.5,
               child: Text(
                 name,
                 overflow: TextOverflow.ellipsis,
