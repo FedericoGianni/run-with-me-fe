@@ -533,18 +533,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: IconButton(
                                     onPressed: () {
-                                      setState(() {});
-                                      Position position =
-                                          locationHelper.getLastKnownPosition();
+                                      Position position = locationHelper
+                                          .getLastKnownPositionAndUpdate();
                                       if (mounted) {
                                         setState(() {
                                           markerPosition = LatLng(
                                               position.latitude,
                                               position.longitude);
                                         });
-                                      } else {
-                                        print("Search bottomSheet unmounted");
-                                      }
+                                      } else {}
                                     },
                                     icon: !widget._isSearching
                                         ? Icon(
