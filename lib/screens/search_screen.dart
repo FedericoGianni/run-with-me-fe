@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
@@ -58,9 +59,11 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         _isLoading = true;
       });
-
+      Position userPosition =
+          Provider.of<LocationHelper>(context).getLastKnownPosition();
       Provider.of<Events>(context)
-          .fetchAndSetSuggestedEvents(46, 10, 100)
+          .fetchAndSetSuggestedEvents(
+              userPosition.latitude, userPosition.longitude, 5)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -375,85 +378,174 @@ class _SearchScreenState extends State<SearchScreen> {
       snap: false,
       elevation: 4,
       flexibleSpace: FlexibleSpaceBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 0),
-              height: 40,
-              width: 75,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: colors.background,
-                    primary: colors.onPrimary,
-                    textStyle: const TextStyle(fontSize: 10),
-                    padding: const EdgeInsets.all(0)),
-                onPressed: () {
-                  setState(() {
-                    widget._sortMenu = !widget._sortMenu;
-                  });
-                },
-                child: Text(
-                  'Sort by',
-                  style: widget._sortMenu
-                      ? TextStyle(color: colors.secondaryColor, fontSize: 12)
-                      : TextStyle(
-                          color: colors.secondaryTextColor, fontSize: 12),
-                ),
-              ),
-            ),
-            Text(
-              widget._resultEvents.length.toString() + " results",
-              style: TextStyle(color: colors.secondaryTextColor, fontSize: 10),
-            ),
-            Container(
-              width: 75,
-              child: Row(
+        title: Container(
+          height: 40,
+          // width: 200,
+          child: Column(
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.map_outlined,
-                      size: 20,
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 0),
+                    height: 40,
+                    width: 75,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: colors.background,
+                          primary: colors.onPrimary,
+                          textStyle: const TextStyle(fontSize: 10),
+                          padding: const EdgeInsets.all(0)),
+                      onPressed: () {
+                        setState(() {
+                          widget._sortMenu = !widget._sortMenu;
+                        });
+                      },
+                      child: Text(
+                        'Sort by',
+                        style: widget._sortMenu
+                            ? TextStyle(
+                                color: colors.secondaryColor, fontSize: 12)
+                            : TextStyle(
+                                color: colors.secondaryTextColor, fontSize: 12),
+                      ),
                     ),
-                    color: _mapColor,
-                    onPressed: () {
-                      __selectMapView(colors);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 10,
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.table_rows_outlined,
-                      size: 20,
-                    ),
-                    color: _rowColor,
-                    onPressed: () {
-                      __selectListView(colors);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 10,
+                  Text(
+                    widget._resultEvents.length.toString() + " results",
+                    style: TextStyle(
+                        color: colors.secondaryTextColor, fontSize: 10),
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.grid_view_outlined,
-                      size: 20,
+                  Container(
+                    width: 75,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.map_outlined,
+                            size: 20,
+                          ),
+                          color: _mapColor,
+                          onPressed: () {
+                            __selectMapView(colors);
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          splashRadius: 10,
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.table_rows_outlined,
+                            size: 20,
+                          ),
+                          color: _rowColor,
+                          onPressed: () {
+                            __selectListView(colors);
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          splashRadius: 10,
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.grid_view_outlined,
+                            size: 20,
+                          ),
+                          color: _gridColor,
+                          onPressed: () {
+                            __selectGridView(colors);
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          splashRadius: 10,
+                        ),
+                      ],
                     ),
-                    color: _gridColor,
-                    onPressed: () {
-                      __selectGridView(colors);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 10,
                   ),
                 ],
               ),
-            ),
-          ],
+              // Row(
+              //   children: [
+              //     widget._sortMenu
+              //         ? SliverToBoxAdapter(
+              //             child: Container(
+              //               color: colors.onPrimary,
+              //               padding: EdgeInsets.only(top: 15, bottom: 15),
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //                 children: [
+              //                   SortByButton(
+              //                     title: 'Distance',
+              //                     color: colors.secondaryColor,
+              //                     id: 0,
+              //                     activeId: widget._currentSortButton,
+              //                     onPressed: () {
+              //                       _sortEvents('distance');
+              //                       setState(() {
+              //                         widget._currentSortButton = 0;
+              //                       });
+              //                     },
+              //                   ),
+              //                   SortByButton(
+              //                     title: 'Date',
+              //                     color: Color.fromARGB(255, 102, 173, 97),
+              //                     id: 1,
+              //                     activeId: widget._currentSortButton,
+              //                     onPressed: () {
+              //                       _sortEvents('date');
+              //                       setState(() {
+              //                         widget._currentSortButton = 1;
+              //                       });
+              //                     },
+              //                   ),
+              //                   SortByButton(
+              //                     title: 'Difficulty',
+              //                     color: Color.fromARGB(255, 80, 159, 120),
+              //                     id: 2,
+              //                     activeId: widget._currentSortButton,
+              //                     onPressed: () {
+              //                       _sortEvents('difficulty');
+              //                       setState(() {
+              //                         widget._currentSortButton = 2;
+              //                       });
+              //                     },
+              //                   ),
+              //                   SortByButton(
+              //                     title: 'Lenght',
+              //                     color: Color.fromARGB(255, 59, 146, 143),
+              //                     id: 3,
+              //                     activeId: widget._currentSortButton,
+              //                     onPressed: () {
+              //                       _sortEvents('lenght');
+              //                       setState(() {
+              //                         widget._currentSortButton = 3;
+              //                       });
+              //                     },
+              //                   ),
+              //                   SortByButton(
+              //                     title: 'Duration',
+              //                     color: colors.primaryColor,
+              //                     id: 4,
+              //                     activeId: widget._currentSortButton,
+              //                     onPressed: () {
+              //                       _sortEvents('duration');
+              //                       setState(() {
+              //                         widget._currentSortButton = 4;
+              //                       });
+              //                     },
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           )
+              //         : SliverToBoxAdapter(
+              //             child: SizedBox(),
+              //           ),
+              //   ],
+              // )
+            ],
+          ),
         ),
         titlePadding: const EdgeInsets.only(left: 5, right: 5),
       ),
@@ -511,82 +603,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: CustomScrollView(
               slivers: [
                 _buildAppbar(context),
-                widget._sortMenu
-                    ? SliverToBoxAdapter(
-                        child: Container(
-                          color: colors.onPrimary,
-                          padding: EdgeInsets.only(top: 15, bottom: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SortByButton(
-                                title: 'Distance',
-                                color: colors.secondaryColor,
-                                id: 0,
-                                activeId: widget._currentSortButton,
-                                onPressed: () {
-                                  _sortEvents('distance');
-                                  setState(() {
-                                    widget._currentSortButton = 0;
-                                  });
-                                },
-                              ),
-                              SortByButton(
-                                title: 'Date',
-                                color: Color.fromARGB(255, 102, 173, 97),
-                                id: 1,
-                                activeId: widget._currentSortButton,
-                                onPressed: () {
-                                  _sortEvents('date');
-                                  setState(() {
-                                    widget._currentSortButton = 1;
-                                  });
-                                },
-                              ),
-                              SortByButton(
-                                title: 'Difficulty',
-                                color: Color.fromARGB(255, 80, 159, 120),
-                                id: 2,
-                                activeId: widget._currentSortButton,
-                                onPressed: () {
-                                  _sortEvents('difficulty');
-                                  setState(() {
-                                    widget._currentSortButton = 2;
-                                  });
-                                },
-                              ),
-                              SortByButton(
-                                title: 'Lenght',
-                                color: Color.fromARGB(255, 59, 146, 143),
-                                id: 3,
-                                activeId: widget._currentSortButton,
-                                onPressed: () {
-                                  _sortEvents('lenght');
-                                  setState(() {
-                                    widget._currentSortButton = 3;
-                                  });
-                                },
-                              ),
-                              SortByButton(
-                                title: 'Duration',
-                                color: colors.primaryColor,
-                                id: 4,
-                                activeId: widget._currentSortButton,
-                                onPressed: () {
-                                  _sortEvents('duration');
-                                  setState(() {
-                                    widget._currentSortButton = 4;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : SliverToBoxAdapter(
-                        child: SizedBox(),
-                      ),
-                ..._buildContent(context)
+                ..._buildContent(context),
               ],
             ),
           ),
