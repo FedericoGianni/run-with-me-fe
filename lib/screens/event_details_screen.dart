@@ -4,6 +4,7 @@ import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/screens/booked_events_screen.dart';
 import 'package:runwithme/screens/search_screen.dart';
 import 'package:runwithme/widgets/event_detail_card.dart';
+import '../methods/DateHelper.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
@@ -127,9 +128,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           "/" +
                           event.createdAt.year.toString() +
                           " " +
-                          event.createdAt.hour.toString() +
+                          DateHelper.formatHourOrMinutes(
+                              event.createdAt.hour.toString()) +
                           ":" +
-                          event.createdAt.minute.toString(),
+                          DateHelper.formatHourOrMinutes(
+                              event.createdAt.minute.toString()),
                       style: TextStyle(
                           color: colors.secondaryTextColor,
                           fontSize: 10,
