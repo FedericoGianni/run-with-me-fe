@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:runwithme/providers/color_scheme.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 
+import '../providers/page_index.dart';
+
 class PermissionMessage extends StatelessWidget {
   const PermissionMessage({Key? key}) : super(key: key);
 
@@ -11,6 +13,7 @@ class PermissionMessage extends StatelessWidget {
     final colors = Provider.of<CustomColorScheme>(context);
     final settings = Provider.of<UserSettings>(context);
     final double screenHeight = MediaQuery.of(context).size.height;
+    final pageIndex = Provider.of<PageIndex>(context, listen: false);
     return SizedBox(
       height: double.infinity,
       child: Column(
@@ -28,9 +31,8 @@ class PermissionMessage extends StatelessWidget {
               width: 130,
             ),
           ),
-          Container(
-            height: screenHeight - 200,
-            padding: EdgeInsets.symmetric(vertical: (screenHeight - 300) / 2),
+          Center(
+            heightFactor: 4.5,
             child: Column(
               children: [
                 Padding(
@@ -47,9 +49,28 @@ class PermissionMessage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'You need permissions to view booked events',
+                    'You need permissions to view this page',
                     style:
                         TextStyle(color: colors.primaryTextColor, fontSize: 14),
+                  ),
+                ),
+                SizedBox(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                        backgroundColor: colors.secondaryColor,
+                        primary: colors.onPrimary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        textStyle: const TextStyle(fontSize: 20),
+                        padding: const EdgeInsets.all(0)),
+                    onPressed: () => {pageIndex.setPage(Screens.USER.index)},
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                          color: colors.primaryTextColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ],
