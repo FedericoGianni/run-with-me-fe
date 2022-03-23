@@ -31,7 +31,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     final colors = Provider.of<CustomColorScheme>(context);
 
     void _addBookingToEvent(int eventId, int userId) async {
-      if (await events.addBookingToEvent(event.id, user.userId ?? -1)) {
+      if (await events.addBookingToEvent(event.id)) {
         // show snackbar with addBookingToEvent result
         CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
             ctx: context, message: "Successfully booked to event.");
@@ -60,7 +60,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     }
 
     void _removeBookingFromEvent(int eventId, int userId) async {
-      if (await events.delBookingFromEvent(event.id, user.userId ?? -1)) {
+      if (await events.delBookingFromEvent(event.id)) {
         // show snackbar with addBookingToEvent result
         CustomSnackbarProvider snackbarProvider = CustomSnackbarProvider(
             ctx: context, message: "Successfully unbooked from event.");

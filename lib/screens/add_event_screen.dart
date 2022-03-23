@@ -296,28 +296,13 @@ class _AddEventScreenState extends State<AddEventScreen> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(
-                    top: 20,
+                    top: 10,
                     left: 20.0,
                     right: 20,
                   ),
                   child: Container(
-                    padding: const EdgeInsets.only(bottom: 40),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Write event informations here",
-                            style: TextStyle(color: colors.primaryTextColor),
-                          ),
-                          Icon(
-                            Icons.info_outlined,
-                            color: colors.secondaryTextColor,
-                          )
-                        ],
-                      ),
-                    ),
-                    height: 70,
+                    padding: const EdgeInsets.only(bottom: 20),
+                    height: 30,
                   ),
                 ),
                 // Name
