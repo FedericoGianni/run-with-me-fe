@@ -540,6 +540,31 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                           markerPosition = LatLng(
                                               position.latitude,
                                               position.longitude);
+                                          _editedEvent = Event(
+                                            adminId: _editedEvent.adminId,
+                                            averageDuration:
+                                                _editedEvent.averageDuration,
+                                            averageLength:
+                                                _editedEvent.averageLength,
+                                            averagePaceMin:
+                                                _editedEvent.averagePaceMin,
+                                            averagePaceSec:
+                                                _editedEvent.averagePaceSec,
+                                            createdAt: _editedEvent.createdAt,
+                                            currentParticipants: _editedEvent
+                                                .currentParticipants,
+                                            date: _editedEvent.date,
+                                            difficultyLevel:
+                                                _editedEvent.difficultyLevel,
+                                            id: _editedEvent.id,
+                                            maxParticipants:
+                                                _editedEvent.maxParticipants,
+                                            name: _editedEvent.name,
+                                            startingPintLat:
+                                                markerPosition.latitude,
+                                            startingPintLong:
+                                                markerPosition.longitude,
+                                          );
                                         });
                                       } else {}
                                     },
