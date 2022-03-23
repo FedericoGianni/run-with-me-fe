@@ -154,13 +154,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
               subtitle1: TextStyle(color: colors.primaryTextColor),
               button: TextStyle(color: colors.primaryTextColor),
             ),
-            accentColor: colors.primaryTextColor,
-            colorScheme: ColorScheme.light(
-              primary: colors.primaryColor,
-              onPrimary: colors.onPrimary,
-              onSurface: colors.primaryTextColor,
-            ),
-            dialogBackgroundColor: colors.onPrimary,
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: colors.primaryColor,
+                background: colors.background,
+                surface: colors.background,
+                onBackground: colors.tertiaryTextColor,
+                onPrimary: colors.onPrimary,
+                primary: colors.primaryColor,
+                onSurface: colors.primaryTextColor),
+            // dialogBackgroundColor: colors.background,
           ),
           child: child ?? const Text(""),
         );
