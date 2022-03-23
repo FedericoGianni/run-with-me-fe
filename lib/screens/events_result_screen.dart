@@ -3,6 +3,7 @@ import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 
+import '../providers/user.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../themes/custom_colors.dart';
@@ -33,7 +34,8 @@ class _EventsScreenState extends State<EventsScreen> {
         _isLoading = true;
       });
       Provider.of<Events>(context)
-          .fetchAndSetSuggestedEvents(46, 10, 100)
+          .fetchAndSetSuggestedEvents(46, 10, 100,
+              Provider.of<UserSettings>(context, listen: false).isLoggedIn())
           .then((_) {
         setState(() {
           _isLoading = false;
