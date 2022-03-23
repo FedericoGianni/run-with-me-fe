@@ -13,6 +13,7 @@ class Events with ChangeNotifier {
   List<Event> _recentEvents = [];
   List<Event> _bookedEvents = [];
   List<Event> _resultEvents = [];
+  late Event eventDetail;
 
   // save the last used parameters for fetchAndSetSuggestedEvents in case of refresh
   double _lastSuggestedLat = -1;
@@ -345,6 +346,8 @@ class Events with ChangeNotifier {
       print(response.reasonPhrase);
     }
 
+    eventDetail = event;
+    notifyListeners();
     return event;
   }
 
