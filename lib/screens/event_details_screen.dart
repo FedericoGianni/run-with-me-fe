@@ -12,6 +12,7 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_maps_event_detail.dart';
+import '../widgets/custom_scroll_behavior.dart';
 import '../widgets/custom_snackbar.dart';
 
 class EventDetailsScreen extends StatefulWidget {
@@ -109,134 +110,137 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding:
-                const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
-            sliver: SliverToBoxAdapter(
-              child: Container(
-                margin: const EdgeInsets.only(top: 10),
+      body: ScrollConfiguration(
+        behavior: CustomScrollBehavior(),
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 20, top: 0, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Created: " +
+                            event.createdAt.day.toString() +
+                            "/" +
+                            event.createdAt.month.toString() +
+                            "/" +
+                            event.createdAt.year.toString() +
+                            " " +
+                            DateHelper.formatHourOrMinutes(
+                                event.createdAt.hour.toString()) +
+                            ":" +
+                            DateHelper.formatHourOrMinutes(
+                                event.createdAt.minute.toString()),
+                        style: TextStyle(
+                            color: colors.secondaryTextColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        'ID: ' + event.id.toString(),
+                        style: TextStyle(
+                            color: colors.secondaryTextColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 30, top: 0, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Created: " +
-                          event.createdAt.day.toString() +
-                          "/" +
-                          event.createdAt.month.toString() +
-                          "/" +
-                          event.createdAt.year.toString() +
-                          " " +
-                          DateHelper.formatHourOrMinutes(
-                              event.createdAt.hour.toString()) +
-                          ":" +
-                          DateHelper.formatHourOrMinutes(
-                              event.createdAt.minute.toString()),
-                      style: TextStyle(
-                          color: colors.secondaryTextColor,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Text(
+                        event.name,
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                            color: colors.primaryTextColor,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900),
+                      ),
                     ),
-                    Text(
-                      'ID: ' + event.id.toString(),
-                      style: TextStyle(
-                          color: colors.secondaryTextColor,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: event.userBooked
+                          ? TextButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: colors.errorColor,
+                                  primary: colors.background,
+                                  textStyle: const TextStyle(fontSize: 10),
+                                  padding: const EdgeInsets.all(0)),
+                              onPressed: () => _removeBookingFromEvent(
+                                  event.id, user.userId ?? -1),
+                              child: Text(
+                                'Unsubscribe',
+                                style: TextStyle(
+                                    color: colors.background,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            )
+                          : TextButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: colors.primaryColor,
+                                  primary: colors.onPrimary,
+                                  textStyle: const TextStyle(fontSize: 10),
+                                  padding: const EdgeInsets.all(0)),
+                              onPressed: () => _addBookingToEvent(
+                                  event.id, user.userId ?? -1),
+                              child: Text(
+                                'Subscribe',
+                                style: TextStyle(
+                                    color: colors.primaryTextColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-          SliverPadding(
-            padding:
-                const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
-            sliver: SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
+            SliverPadding(
+              padding:
+                  const EdgeInsets.only(bottom: 0, top: 0, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
+                child: Card(
+                  color: colors.onPrimary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  semanticContainer: true,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 4,
+                  margin: const EdgeInsets.all(0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 2,
-                    child: Text(
-                      event.name,
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(
-                          color: colors.primaryTextColor,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900),
+                    child: CustomMapsEvent(
+                      event: event,
                     ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: event.userBooked
-                        ? TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: colors.errorColor,
-                                primary: colors.background,
-                                textStyle: const TextStyle(fontSize: 10),
-                                padding: const EdgeInsets.all(0)),
-                            onPressed: () => _removeBookingFromEvent(
-                                event.id, user.userId ?? -1),
-                            child: Text(
-                              'Unsubscribe',
-                              style: TextStyle(
-                                  color: colors.background,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          )
-                        : TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: colors.primaryColor,
-                                primary: colors.onPrimary,
-                                textStyle: const TextStyle(fontSize: 10),
-                                padding: const EdgeInsets.all(0)),
-                            onPressed: () =>
-                                _addBookingToEvent(event.id, user.userId ?? -1),
-                            child: Text(
-                              'Subscribe',
-                              style: TextStyle(
-                                  color: colors.primaryTextColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding:
-                const EdgeInsets.only(bottom: 0, top: 0, left: 20, right: 20),
-            sliver: SliverToBoxAdapter(
-              child: Card(
-                color: colors.onPrimary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                semanticContainer: true,
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                elevation: 4,
-                margin: const EdgeInsets.all(0),
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 3,
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: CustomMapsEvent(
-                    event: event,
                   ),
                 ),
               ),
             ),
-          ),
-          //actual event details
-          SliverPadding(
-            padding:
-                const EdgeInsets.only(bottom: 0, top: 10, left: 20, right: 20),
-            sliver: SliverToBoxAdapter(child: EventDetail(event)),
-          ),
-        ],
+            //actual event details
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 0, top: 10, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(child: EventDetail(event)),
+            ),
+          ],
+        ),
       ),
     );
   }
