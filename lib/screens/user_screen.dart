@@ -271,89 +271,128 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                   ),
+                  // User info title
                   SliverPadding(
                     padding: const EdgeInsets.only(
-                        bottom: 0, top: 20, left: 20, right: 20),
+                        bottom: 0, top: 40, left: 20, right: 20),
                     sliver: SliverToBoxAdapter(
-                        child: Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: TextButton(
-                                  child: Text(
-                                    'Settings',
-                                    style: TextStyle(
-                                      overflow: TextOverflow.clip,
-                                      color: colors.primaryTextColor,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10, bottom: 10),
-                                child: TextButton(
-                                  child: Text(
-                                    'Logout',
-                                    style: TextStyle(
-                                      overflow: TextOverflow.clip,
-                                      color: colors.primaryColor,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  onPressed: _showMyDialog,
-                                ),
-                              ),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          ),
-                        ],
-                      ),
+                        child: Text(
+                      'Settings',
+                      style: TextStyle(
+                          color: colors.primaryTextColor, fontSize: 22),
                     )),
                   ),
-                  // Theme mode selector
+                  // Actual list of cards with user infos
                   SliverPadding(
                     padding: const EdgeInsets.only(
                         bottom: 0, top: 20, left: 20, right: 20),
                     sliver: SliverToBoxAdapter(
-                      child: Container(
-                        child: ToggleButtons(
-                          children: <Widget>[
-                            Icon(Icons.light_mode),
-                            Icon(Icons.dark_mode),
-                          ],
-                          onPressed: (int index) {
-                            setState(() {
-                              for (int buttonIndex = 0;
-                                  buttonIndex < isSelected.length;
-                                  buttonIndex++) {
-                                if (buttonIndex == index) {
-                                  isSelected[buttonIndex] =
-                                      !isSelected[buttonIndex];
-                                } else {
-                                  isSelected[buttonIndex] = false;
-                                }
-                              }
-                              if (index == 0) {
-                                settings.setThemeMode(CustomThemeMode.light);
-                              } else {
-                                settings.setThemeMode(CustomThemeMode.dark);
-                              }
-                            });
-                          },
-                          isSelected: isSelected,
+                      child: Card(
+                        color: colors.onPrimary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        elevation: 4,
+                        margin: const EdgeInsets.symmetric(vertical: 0),
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 0, bottom: 0),
+                                    child: SizedBox(
+                                      width: 150,
+                                      child: Text(
+                                        'Theme mode',
+                                        style: TextStyle(
+                                            color: colors.secondaryTextColor,
+                                            fontSize: 18,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 40,
+                                    child: ToggleButtons(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderColor: colors.background,
+                                      selectedColor: colors.primaryColor,
+                                      disabledColor: colors.errorColor,
+                                      color: colors.secondaryTextColor,
+                                      selectedBorderColor: colors.background,
+                                      // fillColor: colors.background,
+                                      highlightColor: colors.onPrimary,
+                                      splashColor: colors.background,
+                                      children: <Widget>[
+                                        Icon(Icons.light_mode),
+                                        Icon(Icons.dark_mode),
+                                      ],
+                                      onPressed: (int index) {
+                                        setState(() {
+                                          for (int buttonIndex = 0;
+                                              buttonIndex < isSelected.length;
+                                              buttonIndex++) {
+                                            if (buttonIndex == index) {
+                                              isSelected[buttonIndex] =
+                                                  !isSelected[buttonIndex];
+                                            } else {
+                                              isSelected[buttonIndex] = false;
+                                            }
+                                          }
+                                          if (index == 0) {
+                                            settings.setThemeMode(
+                                                CustomThemeMode.light);
+                                          } else {
+                                            settings.setThemeMode(
+                                                CustomThemeMode.dark);
+                                          }
+                                        });
+                                      },
+                                      isSelected: isSelected,
+                                    ),
+                                    padding: EdgeInsets.all(0),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                         ),
-                        padding: EdgeInsets.all(20),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                        bottom: 0, top: 10, left: 20, right: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: Card(
+                        color: colors.onPrimary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        elevation: 4,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 5, bottom: 5, left: 10),
+                              child: TextButton(
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    overflow: TextOverflow.clip,
+                                    color: colors.primaryColor,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                onPressed: _showMyDialog,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
