@@ -3,6 +3,15 @@ import 'package:provider/provider.dart';
 
 import '../providers/color_scheme.dart';
 
+enum SortButton {
+  distance,
+  date,
+  difficulty,
+  lenght,
+  duration,
+  none,
+}
+
 class SortByButton extends StatelessWidget {
   SortByButton(
       {required this.title,
@@ -15,8 +24,8 @@ class SortByButton extends StatelessWidget {
 
   final String title;
   Color color;
-  final int id;
-  final int activeId;
+  final SortButton id;
+  final SortButton activeId;
   final Function() onPressed;
 
   @override
