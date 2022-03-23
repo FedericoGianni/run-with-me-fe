@@ -69,8 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
               userPosition.latitude,
               userPosition.longitude,
               5,
-              //Provider.of<UserSettings>(context, listen: false).isLoggedIn())
-              false)
+              Provider.of<UserSettings>(context, listen: false).isLoggedIn())
           .then((_) {
         setState(() {
           _isLoading = false;
