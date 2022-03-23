@@ -11,11 +11,14 @@ import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
+import '../widgets/custom_sort_by_button.dart';
+import '../widgets/sort_by.dart';
 
 class BookedEventsScreen extends StatefulWidget {
   static const routeName = '/event';
-
-  const BookedEventsScreen({Key? key}) : super(key: key);
+  bool _sortMenu = false;
+  SortButton _currentSortButton = SortButton.none;
+  List<Event> _bookedEvents = [];
 
   @override
   State<BookedEventsScreen> createState() => _BookedEventsScreenState();
@@ -26,7 +29,6 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
   double _aspectRatio = 1.4;
   Color _rowColor = Colors.deepOrange.shade900;
   Color _gridColor = Colors.deepOrange.shade900;
-
   var _isInit = true;
   var _isLoading = false;
 
@@ -72,8 +74,13 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
   }
 
   Future<Null> _handleRefresh() async {
+    widget._sortMenu = false;
+    widget._currentSortButton = SortButton.none;
+
     int userId = Provider.of<User>(context, listen: false).userId ?? -1;
-    Provider.of<Events>(context, listen: false).fetchAndSetBookedEvents(userId);
+    final events = Provider.of<Events>(context);
+    events.fetchAndSetBookedEvents(userId);
+    widget._bookedEvents = events.bookedEvents;
     return null;
   }
 
@@ -83,7 +90,17 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
     final settings = Provider.of<UserSettings>(context, listen: false);
     final double screenHeight = MediaQuery.of(context).size.height;
     final events = Provider.of<Events>(context);
+    if (widget._bookedEvents.length == 0) {
+      widget._bookedEvents = events.bookedEvents;
+    }
 
+    double _flexibleSpaceBarHeight;
+    if (widget._sortMenu) {
+      _flexibleSpaceBarHeight = screenHeight / 7.5;
+    } else {
+      _flexibleSpaceBarHeight = screenHeight / 20;
+    }
+    print(_flexibleSpaceBarHeight);
     print(settings.isLoggedIn());
     if (settings.isLoggedIn()) {
       if (_rowColor == Colors.deepOrange.shade900) {
@@ -99,10 +116,10 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
             slivers: [
               SliverAppBar(
                 stretch: false,
-                toolbarHeight: 123,
+                toolbarHeight: screenHeight / 6,
                 title: Container(
                   color: colors.onPrimary,
-                  height: 123,
+                  height: screenHeight / 6,
                   width: double.infinity,
                   padding: const EdgeInsets.only(
                     top: 50,
@@ -115,7 +132,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 ),
 
                 titleSpacing: 0,
-                expandedHeight: 183,
+                expandedHeight: screenHeight / 6 + _flexibleSpaceBarHeight,
                 backgroundColor: colors.background,
 
                 // back up the list of items.
@@ -124,46 +141,125 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 pinned: true,
                 snap: false,
                 elevation: 2,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        events.bookedEvents.length.toString() + " results",
-                        style: TextStyle(
-                            color: colors.secondaryTextColor, fontSize: 10),
-                      ),
-                      Row(
+                flexibleSpace: FlexibleSpaceBar.createSettings(
+                  currentExtent: 100,
+                  child: FlexibleSpaceBar(
+                    title: Container(
+                      height: _flexibleSpaceBarHeight,
+                      child: Column(
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.table_rows_outlined),
-                            color: _rowColor,
-                            onPressed: () {
-                              __selectListView(colors);
-                            },
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            splashRadius: 10,
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 10),
+                                height: screenHeight / 20,
+                                width: 80,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: colors.background,
+                                      primary: colors.onPrimary,
+                                      textStyle: const TextStyle(fontSize: 10),
+                                      padding: const EdgeInsets.all(0)),
+                                  onPressed: () {
+                                    setState(() {
+                                      widget._sortMenu = !widget._sortMenu;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Sort by',
+                                        style: widget._sortMenu
+                                            ? TextStyle(
+                                                color: colors.secondaryColor,
+                                                fontSize: 16)
+                                            : TextStyle(
+                                                color:
+                                                    colors.secondaryTextColor,
+                                                fontSize: 16),
+                                      ),
+                                      Icon(
+                                        widget._sortMenu
+                                            ? Icons.keyboard_arrow_right_rounded
+                                            : Icons.keyboard_arrow_down_rounded,
+                                        size: 18,
+                                        color: widget._sortMenu
+                                            ? colors.secondaryColor
+                                            : colors.secondaryTextColor,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                widget._bookedEvents.length.toString() +
+                                    " results",
+                                style: TextStyle(
+                                    color: colors.secondaryTextColor,
+                                    fontSize: 14),
+                              ),
+                              Container(
+                                width: 75,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.table_rows_outlined,
+                                        size: 30,
+                                      ),
+                                      color: _rowColor,
+                                      onPressed: () {
+                                        __selectListView(colors);
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      splashRadius: 10,
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.grid_view_outlined,
+                                        size: 30,
+                                      ),
+                                      color: _gridColor,
+                                      onPressed: () {
+                                        __selectGridView(colors);
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      splashRadius: 10,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.grid_view_outlined),
-                            color: _gridColor,
-                            onPressed: () {
-                              __selectGridView(colors);
-                            },
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            splashRadius: 10,
-                          ),
+                          widget._sortMenu
+                              ? SortByRow(
+                                  currentSortButton: widget._currentSortButton,
+                                  eventLists: [widget._bookedEvents],
+                                  onTap: (activeSortButton, eventLists) {
+                                    setState(() {
+                                      // print(widget._suggestedEvents[0].name);
+                                      widget._currentSortButton =
+                                          activeSortButton;
+                                      widget._bookedEvents = eventLists[0];
+                                    });
+                                    // print(widget._currentSortButton.toString());
+                                  },
+                                )
+                              : SizedBox(),
                         ],
                       ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    titlePadding: const EdgeInsets.only(left: 5, right: 5),
+
+                    // Make the initial height of the SliverAppBar larger than normal.
                   ),
-                  titlePadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 ),
-                // Make the initial height of the SliverAppBar larger than normal.
               ),
               SliverPadding(
                 padding: const EdgeInsets.only(
@@ -196,12 +292,12 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       return EventItem(
-                        events.bookedEvents[index],
+                        widget._bookedEvents[index],
                         index,
-                        events.bookedEvents.length,
+                        widget._bookedEvents.length,
                       );
                     },
-                    childCount: events.bookedEvents.length,
+                    childCount: widget._bookedEvents.length,
                   ),
                 ),
               ),
