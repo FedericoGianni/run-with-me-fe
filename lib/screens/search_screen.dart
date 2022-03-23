@@ -271,55 +271,68 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildAppbar(BuildContext context) {
     final events = Provider.of<Events>(context);
     final colors = Provider.of<CustomColorScheme>(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    double _flexibleSpaceBarHeight;
 
-    double height = 123;
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
     }
+
+    if (widget._sortMenu) {
+      _flexibleSpaceBarHeight = screenHeight / 7.5;
+    } else {
+      _flexibleSpaceBarHeight = screenHeight / 20;
+    }
+
     return SliverAppBar(
       stretch: false,
-      toolbarHeight: height,
+      toolbarHeight: screenHeight / 6,
+
       title: GradientAppBar(
-        height,
+        screenHeight / 6,
         [
-          Center(
-            child: SearchButton(
-              Icon(
-                Icons.search,
-                color: colors.secondaryTextColor,
-              ),
-              Text(
-                '    Search',
-                style: TextStyle(color: colors.secondaryTextColor),
-              ),
-              formValues: widget.formValues,
-              onSubmitting: (value) async {
-                // print('SEARCH SCREEN: ' + value.toString());
-                widget.formValues = value;
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SearchButton(
+                Icon(
+                  Icons.search,
+                  color: colors.secondaryTextColor,
+                ),
+                Text(
+                  '    Search',
+                  style: TextStyle(color: colors.secondaryTextColor),
+                ),
+                formValues: widget.formValues,
+                onSubmitting: (value) async {
+                  // print('SEARCH SCREEN: ' + value.toString());
+                  widget.formValues = value;
 
-                await events.fetchAndSetResultEvents(
-                  widget.formValues['city_lat'],
-                  widget.formValues['city_long'],
-                  widget.formValues['slider_value'].toInt() + 1 * 5,
-                );
-                widget._resultEvents = events.resultEvents;
+                  await events.fetchAndSetResultEvents(
+                    widget.formValues['city_lat'],
+                    widget.formValues['city_long'],
+                    widget.formValues['slider_value'].toInt() + 1 * 5,
+                  );
+                  widget._resultEvents = events.resultEvents;
 
-                if (!widget.formValues['show_full']) {
-                  widget._resultEvents = widget._resultEvents
-                      .where((element) =>
-                          element.maxParticipants !=
-                          element.currentParticipants)
-                      .toList();
-                }
-                setState(() {});
-              },
-            ),
+                  if (!widget.formValues['show_full']) {
+                    widget._resultEvents = widget._resultEvents
+                        .where((element) =>
+                            element.maxParticipants !=
+                            element.currentParticipants)
+                        .toList();
+                  }
+                  setState(() {});
+                },
+              ),
+            ],
           )
         ],
       ),
 
       titleSpacing: 0,
-      expandedHeight: height + 60,
+      expandedHeight: screenHeight / 6 + _flexibleSpaceBarHeight,
       backgroundColor: colors.background,
 
       // back up the list of items.
@@ -328,102 +341,133 @@ class _SearchScreenState extends State<SearchScreen> {
       pinned: true,
       snap: false,
       elevation: 4,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              height: 40,
-              width: 80,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: colors.background,
-                    primary: colors.onPrimary,
-                    textStyle: const TextStyle(fontSize: 10),
-                    padding: const EdgeInsets.all(0)),
-                onPressed: () {
-                  setState(() {
-                    widget._sortMenu = !widget._sortMenu;
-                  });
-                },
-                child: Row(
+      flexibleSpace: FlexibleSpaceBar.createSettings(
+        currentExtent: 100,
+        child: FlexibleSpaceBar(
+          title: Container(
+            height: _flexibleSpaceBarHeight,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Sort by',
-                      style: widget._sortMenu
-                          ? TextStyle(
-                              color: colors.secondaryColor, fontSize: 12)
-                          : TextStyle(
-                              color: colors.secondaryTextColor, fontSize: 12),
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
+                      height: screenHeight / 20,
+                      width: 80,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: colors.background,
+                            primary: colors.onPrimary,
+                            textStyle: const TextStyle(fontSize: 10),
+                            padding: const EdgeInsets.all(0)),
+                        onPressed: () {
+                          setState(() {
+                            widget._sortMenu = !widget._sortMenu;
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              'Sort by',
+                              style: widget._sortMenu
+                                  ? TextStyle(
+                                      color: colors.secondaryColor,
+                                      fontSize: 16)
+                                  : TextStyle(
+                                      color: colors.secondaryTextColor,
+                                      fontSize: 16),
+                            ),
+                            Icon(
+                              widget._sortMenu
+                                  ? Icons.keyboard_arrow_right_rounded
+                                  : Icons.keyboard_arrow_down_rounded,
+                              size: 18,
+                              color: widget._sortMenu
+                                  ? colors.secondaryColor
+                                  : colors.secondaryTextColor,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Icon(
-                      widget._sortMenu
-                          ? Icons.keyboard_arrow_right_rounded
-                          : Icons.keyboard_arrow_down_rounded,
-                      size: 16,
-                      color: widget._sortMenu
-                          ? colors.secondaryColor
-                          : colors.secondaryTextColor,
+                    Text(
+                      widget._resultEvents.length.toString() + " results",
+                      style: TextStyle(
+                          color: colors.secondaryTextColor, fontSize: 14),
+                    ),
+                    Container(
+                      width: 75,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.map_outlined,
+                              size: 25,
+                            ),
+                            color: _mapColor,
+                            onPressed: () {
+                              __selectMapView(colors);
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            splashRadius: 10,
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.table_rows_outlined,
+                              size: 25,
+                            ),
+                            color: _rowColor,
+                            onPressed: () {
+                              __selectListView(colors);
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            splashRadius: 10,
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.grid_view_outlined,
+                              size: 25,
+                            ),
+                            color: _gridColor,
+                            onPressed: () {
+                              __selectGridView(colors);
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            splashRadius: 10,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+                widget._sortMenu
+                    ? SortByRow(
+                        currentSortButton: widget._currentSortButton,
+                        eventLists: [
+                          widget._resultEvents,
+                          widget._suggestedEvents
+                        ],
+                        onTap: (activeSortButton, eventLists) {
+                          setState(() {
+                            print(widget._suggestedEvents[0].name);
+                            widget._currentSortButton = activeSortButton;
+                            widget._resultEvents = eventLists[0];
+                            widget._suggestedEvents = eventLists[1];
+                          });
+                          print(widget._currentSortButton.toString());
+                        },
+                      )
+                    : SizedBox(),
+              ],
             ),
-            Text(
-              widget._resultEvents.length.toString() + " results",
-              style: TextStyle(color: colors.secondaryTextColor, fontSize: 10),
-            ),
-            Container(
-              width: 75,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.map_outlined,
-                      size: 20,
-                    ),
-                    color: _mapColor,
-                    onPressed: () {
-                      __selectMapView(colors);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 10,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.table_rows_outlined,
-                      size: 20,
-                    ),
-                    color: _rowColor,
-                    onPressed: () {
-                      __selectListView(colors);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 10,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.grid_view_outlined,
-                      size: 20,
-                    ),
-                    color: _gridColor,
-                    onPressed: () {
-                      __selectGridView(colors);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 10,
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
+          titlePadding: const EdgeInsets.only(left: 5, right: 5),
         ),
-        titlePadding: const EdgeInsets.only(left: 5, right: 5),
       ),
       // Make the initial height of the SliverAppBar larger than normal.
     );
@@ -469,11 +513,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
               ),
-              SizedBox(
-                child: CustomMapsSearch(),
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height - 190 - 60,
-              ),
+              // SizedBox(
+              //   child: CustomMapsSearch(),
+              //   width: double.infinity,
+              //   height: MediaQuery.of(context).size.height - 190 - 60,
+              // ),
             ],
           ),
         );
@@ -483,32 +527,7 @@ class _SearchScreenState extends State<SearchScreen> {
           child: ScrollConfiguration(
             behavior: CustomScrollBehavior(),
             child: CustomScrollView(
-              slivers: [
-                _buildAppbar(context),
-                widget._sortMenu
-                    ? SliverToBoxAdapter(
-                        child: SortByRow(
-                          currentSortButton: widget._currentSortButton,
-                          eventLists: [
-                            widget._resultEvents,
-                            widget._suggestedEvents
-                          ],
-                          onTap: (activeSortButton, eventLists) {
-                            setState(() {
-                              print(widget._suggestedEvents[0].name);
-                              widget._currentSortButton = activeSortButton;
-                              widget._resultEvents = eventLists[0];
-                              widget._suggestedEvents = eventLists[1];
-                            });
-                            print(widget._currentSortButton.toString());
-                          },
-                        ),
-                      )
-                    : SliverToBoxAdapter(
-                        child: SizedBox(),
-                      ),
-                ..._buildContent(context)
-              ],
+              slivers: [_buildAppbar(context), ..._buildContent(context)],
             ),
           ),
         );
