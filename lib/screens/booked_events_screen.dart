@@ -20,6 +20,8 @@ class BookedEventsScreen extends StatefulWidget {
   bool _sortMenu = false;
   SortButton _currentSortButton = SortButton.none;
   List<Event> _bookedEvents = [];
+  List<Event> _futureBookedEvents = [];
+  List<Event> _pastBookedEvents = [];
 
   @override
   State<BookedEventsScreen> createState() => _BookedEventsScreenState();
@@ -79,9 +81,18 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
     widget._currentSortButton = SortButton.none;
 
     int userId = Provider.of<User>(context, listen: false).userId ?? -1;
-    final events = Provider.of<Events>(context);
+    final events = Provider.of<Events>(context, listen: false);
     events.fetchAndSetBookedEvents(userId);
     widget._bookedEvents = events.bookedEvents;
+    widget._futureBookedEvents = widget._bookedEvents
+        .where((element) => element.date.isAfter(DateTime.now()))
+        .toList();
+
+    widget._pastBookedEvents = widget._bookedEvents
+        .where((element) => element.date.isBefore(DateTime.now()))
+        .toList();
+
+    setState(() {});
     return null;
   }
 
@@ -93,6 +104,14 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
     final events = Provider.of<Events>(context);
     if (widget._bookedEvents.length == 0) {
       widget._bookedEvents = events.bookedEvents;
+
+      widget._futureBookedEvents = widget._bookedEvents
+          .where((element) => element.date.isAfter(DateTime.now()))
+          .toList();
+
+      widget._pastBookedEvents = widget._bookedEvents
+          .where((element) => element.date.isBefore(DateTime.now()))
+          .toList();
     }
 
     double _flexibleSpaceBarHeight;
@@ -247,13 +266,19 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                                 ? SortByRow(
                                     currentSortButton:
                                         widget._currentSortButton,
-                                    eventLists: [widget._bookedEvents],
+                                    eventLists: [
+                                      widget._futureBookedEvents,
+                                      widget._pastBookedEvents
+                                    ],
                                     onTap: (activeSortButton, eventLists) {
                                       setState(() {
                                         // print(widget._suggestedEvents[0].name);
                                         widget._currentSortButton =
                                             activeSortButton;
-                                        widget._bookedEvents = eventLists[0];
+                                        widget._futureBookedEvents =
+                                            eventLists[0];
+                                        widget._pastBookedEvents =
+                                            eventLists[1];
                                       });
                                       // print(widget._currentSortButton.toString());
                                     },
@@ -299,12 +324,52 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         return EventItem(
-                          widget._bookedEvents[index],
+                          widget._futureBookedEvents[index],
                           index,
-                          widget._bookedEvents.length,
+                          widget._futureBookedEvents.length,
                         );
                       },
-                      childCount: widget._bookedEvents.length,
+                      childCount: widget._futureBookedEvents.length,
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(
+                      bottom: 0, top: 20, left: 20, right: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Your past events",
+                          style: TextStyle(
+                              color: colors.primaryTextColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(
+                      bottom: 40, top: 20, left: 20, right: 20),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      childAspectRatio: _aspectRatio,
+                      mainAxisSpacing: 15.0,
+                      crossAxisSpacing: 15.0,
+                      maxCrossAxisExtent: 400 / _view,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return EventItem(
+                          widget._pastBookedEvents[index],
+                          index,
+                          widget._pastBookedEvents.length,
+                        );
+                      },
+                      childCount: widget._pastBookedEvents.length,
                     ),
                   ),
                 ),
