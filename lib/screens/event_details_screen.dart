@@ -182,6 +182,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 style: TextButton.styleFrom(
                                     backgroundColor: colors.errorColor,
                                     primary: colors.primaryTextColor,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
                                     textStyle: const TextStyle(fontSize: 10),
                                     padding: const EdgeInsets.all(0)),
                                 onPressed: () => _removeBookingFromEvent(
@@ -198,6 +201,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 style: TextButton.styleFrom(
                                     backgroundColor: colors.primaryColor,
                                     primary: colors.onPrimary,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
                                     textStyle: const TextStyle(fontSize: 10),
                                     padding: const EdgeInsets.all(0)),
                                 onPressed: () => _addBookingToEvent(
@@ -214,9 +220,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             style: TextButton.styleFrom(
                                 backgroundColor: colors.secondaryColor,
                                 primary: colors.onPrimary,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
                                 textStyle: const TextStyle(fontSize: 10),
                                 padding: const EdgeInsets.all(0)),
-                            // TODO switch to user page
                             onPressed: () => {
                               Navigator.pop(context),
                               pageIndex.setPage(Screens.USER.index)
