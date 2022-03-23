@@ -219,7 +219,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                                   ),
                                 ),
                                 Text(
-                                  widget._bookedEvents.length.toString() +
+                                  widget._futureBookedEvents.length.toString() +
                                       " results",
                                   style: TextStyle(
                                       color: colors.secondaryTextColor,
