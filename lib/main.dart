@@ -89,8 +89,7 @@ class _MyAppState extends State<MyApp> {
                   '/': (ctx) => TabsScreen(),
                   EventsScreen.routeName: (ctx) => EventsScreen(),
                   AddEventScreen.routeName: (ctx) => AddEventScreen(),
-                  BookedEventsScreen.routeName: (ctx) =>
-                      const BookedEventsScreen(),
+                  BookedEventsScreen.routeName: (ctx) => BookedEventsScreen(),
                   UserScreen.routeName: (ctx) => UserScreen(),
                   HomeScreen.routeName: (ctx) => HomeScreen(),
                   EventDetailsScreen.routeName: (ctx) =>

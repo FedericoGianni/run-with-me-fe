@@ -174,7 +174,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         ? TextButton(
                             style: TextButton.styleFrom(
                                 backgroundColor: colors.errorColor,
-                                primary: colors.primaryTextColor,
+                                primary: colors.background,
                                 textStyle: const TextStyle(fontSize: 10),
                                 padding: const EdgeInsets.all(0)),
                             onPressed: () => _removeBookingFromEvent(
@@ -182,7 +182,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             child: Text(
                               'Unsubscribe',
                               style: TextStyle(
-                                  color: colors.primaryTextColor,
+                                  color: colors.background,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600),
                             ),
