@@ -285,7 +285,7 @@ class _UserScreenState extends State<UserScreen> {
                   // Actual list of cards with user infos
                   SliverPadding(
                     padding: const EdgeInsets.only(
-                        bottom: 0, top: 20, left: 20, right: 20),
+                        bottom: 0, top: 10, left: 20, right: 20),
                     sliver: SliverToBoxAdapter(
                       child: Card(
                         color: colors.onPrimary,
@@ -307,7 +307,7 @@ class _UserScreenState extends State<UserScreen> {
                                       child: Text(
                                         'Theme mode',
                                         style: TextStyle(
-                                            color: colors.secondaryTextColor,
+                                            color: colors.primaryColor,
                                             fontSize: 18,
                                             overflow: TextOverflow.ellipsis),
                                       ),
@@ -390,6 +390,126 @@ class _UserScreenState extends State<UserScreen> {
                                 ),
                                 onPressed: _showMyDialog,
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                        bottom: 40, top: 0, left: 20, right: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: Card(
+                        color: colors.onPrimary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        elevation: 4,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 15, bottom: 15, left: 20),
+                                  child: Text(
+                                    'About',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.primaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5, bottom: 15, left: 20),
+                                  child: Text(
+                                    'Version:',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.secondaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5, bottom: 15, right: 20),
+                                  child: Text(
+                                    '1.001.012',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.secondaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5, bottom: 5, left: 20),
+                                  child: Text(
+                                    'Developed by:',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.secondaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5, bottom: 5, right: 20),
+                                  child: Text(
+                                    'Federico Deicas',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.secondaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 0, bottom: 15, left: 20),
+                                  child: Text(
+                                    'and',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.secondaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 0, bottom: 15, right: 20),
+                                  child: Text(
+                                    'Daniele De Vincenti',
+                                    style: TextStyle(
+                                      overflow: TextOverflow.clip,
+                                      color: colors.secondaryTextColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
