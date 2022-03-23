@@ -47,7 +47,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   DateTime _userSelectedDate = DateTime.now();
   TimeOfDay _time = TimeOfDay.now();
 
-  static const double padding = 50;
+  static const double padding = 30;
 
   var _editedEvent = Event(
     adminId: 0,
@@ -282,6 +282,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final locationHelper = Provider.of<LocationHelper>(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
 
     return _isLoading
         ? Center(
@@ -320,6 +321,30 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ),
                 ),
                 // Name
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 30,
+                    right: 20,
+                    bottom: 0,
+                  ),
+                  child: Text(
+                    'Name: ',
+                    style:
+                        TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: 30,
+                    right: 20,
+                  ),
+                  child: Text(
+                    'Give your new event a nice name',
+                    style: TextStyle(
+                        color: colors.secondaryTextColor, fontSize: 12),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 10,
@@ -366,6 +391,30 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   height: padding,
                 ),
                 // Date and Time
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 30,
+                    right: 20,
+                    bottom: 0,
+                  ),
+                  child: Text(
+                    'Date and Time: ',
+                    style:
+                        TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: 30,
+                    right: 20,
+                  ),
+                  child: Text(
+                    'Set the starting time of your event',
+                    style: TextStyle(
+                        color: colors.secondaryTextColor, fontSize: 12),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 10,
@@ -456,7 +505,30 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 const SizedBox(
                   height: padding,
                 ),
-
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 30,
+                    right: 20,
+                    bottom: 0,
+                  ),
+                  child: Text(
+                    'Location: ',
+                    style:
+                        TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: 30,
+                    right: 20,
+                  ),
+                  child: Text(
+                    'Set the starting location of your event',
+                    style: TextStyle(
+                        color: colors.secondaryTextColor, fontSize: 12),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 10,
@@ -582,6 +654,30 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 ),
                 const SizedBox(
                   height: padding,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 30,
+                    right: 20,
+                    bottom: 0,
+                  ),
+                  child: Text(
+                    'Length and duration: ',
+                    style:
+                        TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: 30,
+                    right: 20,
+                  ),
+                  child: Text(
+                    'Set how long the run is going to be and the time it will take',
+                    style: TextStyle(
+                        color: colors.secondaryTextColor, fontSize: 12),
+                  ),
                 ),
                 // Distance and Duration
                 Padding(
@@ -740,6 +836,31 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 //           },
                 //         ),
                 //       ),
+
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: 30,
+                    right: 20,
+                  ),
+                  child: Text(
+                    'Participants: ',
+                    style:
+                        TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: 30,
+                    right: 20,
+                  ),
+                  child: Text(
+                    'Depending on the location, set the maximum number of participants',
+                    style: TextStyle(
+                        color: colors.secondaryTextColor, fontSize: 12),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 10,
@@ -809,6 +930,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
                           backgroundColor: colors.primaryColor,
                           primary: colors.onPrimary,
                           textStyle: const TextStyle(fontSize: 16),
