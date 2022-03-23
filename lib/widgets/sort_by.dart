@@ -65,7 +65,7 @@ class SortByRow extends StatelessWidget {
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
     print('Building sort buttons: ' + currentSortButton.toString());
     return Container(
-      color: colors.onPrimary,
+      color: colors.background,
       padding: EdgeInsets.only(top: 15, bottom: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
