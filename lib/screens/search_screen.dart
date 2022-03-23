@@ -164,9 +164,17 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<Null> _handleRefresh() async {
     final events = Provider.of<Events>(context, listen: false);
-    events.fetchAndSetResultEvents(events.lastResultLat, events.lastResultLong,
-        events.lastResultMaxDistKm);
-    widget._resultEvents = events.resultEvents;
+
+    // the if check is to avoid when a refresh of the screen is made but there are no previous parameters of fetchAndSetResultEvents available
+    // for suggestedEvents is not a problem since there will always be an automatic request when building the first time
+
+    if (events.lastResultMaxDistKm == -1 ||
+        events.lastResultLat == -1 ||
+        events.lastResultLong == -1) {
+      events.fetchAndSetResultEvents(events.lastResultLat,
+          events.lastResultLong, events.lastResultMaxDistKm);
+      widget._resultEvents = events.resultEvents;
+    }
 
     events.fetchAndSetSuggestedEvents(events.lastSuggestedLat,
         events.lastSuggestedLong, events.lastSuggestedMaxDistKm);
