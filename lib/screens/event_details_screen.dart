@@ -43,8 +43,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         arguments: await Provider.of<Events>(context, listen: false)
             .fetchEventById(event.id),
       );
-
-      //setState(() {});
       return null;
     }
 
