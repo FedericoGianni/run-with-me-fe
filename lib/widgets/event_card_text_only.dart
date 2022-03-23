@@ -16,8 +16,9 @@ class EventItem extends StatelessWidget {
   final Event event;
   final int index;
   final int totAmount;
+  double border;
 
-  const EventItem(this.event, this.index, this.totAmount);
+  EventItem(this.event, this.index, this.totAmount, {this.border = 4.0});
 
   String _getDistanceAsString(LocationHelper locationHelper) {
     double distance = locationHelper.getDistanceBetween(
@@ -64,13 +65,12 @@ class EventItem extends StatelessWidget {
     } else {
       _participantsColor = colors.errorColor;
     }
-
     return InkWell(
       onTap: () => selectEvent(context),
       child: Card(
         color: colors.onPrimary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 4,
+        elevation: border,
         margin: const EdgeInsets.all(0),
         child: Column(children: [
           // Title row

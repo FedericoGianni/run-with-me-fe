@@ -56,7 +56,7 @@ class _TabsScreenState extends State<TabsScreen> {
       },
       {
         'title': 'Booked Events',
-        'page': const BookedEventsScreen(),
+        'page': BookedEventsScreen(),
         'appbar': const SizedBox.shrink(),
       },
       {
