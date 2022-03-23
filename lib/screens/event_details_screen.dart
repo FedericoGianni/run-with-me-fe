@@ -29,7 +29,7 @@ class EventDetailsScreen extends StatefulWidget {
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    var event = ModalRoute.of(context)?.settings.arguments as Event;
+    final event = ModalRoute.of(context)?.settings.arguments as Event;
     final user = Provider.of<User>(context, listen: false);
     final events = Provider.of<Events>(context, listen: false);
     final colors = Provider.of<CustomColorScheme>(context);
@@ -56,13 +56,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       // reload booked events
       events.fetchAndSetBookedEvents(userId);
 
-      // TODO reload page with updated event details
-      event = await events.fetchEventById(eventId).then((value) {
-        setState(() {
-          build(context);
-        });
-        return event;
-      });
+      // reload page with updated event details
+      Navigator.of(context).pushNamed(
+        EventDetailsScreen.routeName,
+        arguments: await Provider.of<Events>(context, listen: false)
+            .fetchEventById(event.id),
+      );
     }
 
     void _removeBookingFromEvent(int eventId, int userId) async {
@@ -84,11 +83,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       // reload booked events
       events.fetchAndSetBookedEvents(userId);
 
-      // TODO reload page with updated event details
-      Event updatedEvent = await events.fetchEventById(event.id);
-      setState(() {
-        event = updatedEvent;
-      });
+      // reload page with updated event details
+      Navigator.of(context).pushNamed(
+        EventDetailsScreen.routeName,
+        arguments: await Provider.of<Events>(context, listen: false)
+            .fetchEventById(event.id),
+      );
     }
 
     return Scaffold(

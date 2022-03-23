@@ -32,7 +32,7 @@ class EventItem extends StatelessWidget {
       return distance.toStringAsFixed(0) + " m away";
     } else {
       distance = distance / 1000;
-      return distance.toStringAsFixed(2) + " km away";
+      return distance.toStringAsFixed(0) + " km away";
     }
   }
 
