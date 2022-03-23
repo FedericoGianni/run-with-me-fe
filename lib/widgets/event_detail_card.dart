@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
+import '../methods/DateHelper.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import 'rating.dart';
@@ -40,9 +41,10 @@ class EventDetail extends StatelessWidget {
                         event.date.year.toString()),
                 UserInfoFilling(
                     'Time',
-                    event.date.hour.toString() +
+                    DateHelper.formatHourOrMinutes(event.date.hour.toString()) +
                         ":" +
-                        event.date.minute.toString()),
+                        DateHelper.formatHourOrMinutes(
+                            event.date.minute.toString())),
                 //UserInfoFilling('Email', "test" ?? ''),
               ],
             ),
