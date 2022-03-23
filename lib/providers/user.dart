@@ -12,6 +12,8 @@ import 'settings_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../classes/config.dart';
 
+final double DEFAULT_FITNESS_LEVEL = 3.5;
+
 class User with ChangeNotifier {
   final secureStorage = const FlutterSecureStorage();
 
@@ -24,7 +26,7 @@ class User with ChangeNotifier {
   int? height;
   int? age;
   int? sex;
-  double? fitnessLevel;
+  double? fitnessLevel = DEFAULT_FITNESS_LEVEL;
 
   String? cityName;
   String? cityId;
