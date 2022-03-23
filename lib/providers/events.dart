@@ -162,7 +162,7 @@ class Events with ChangeNotifier {
     }
   }
 
-  Future<bool> addBookingToEvent(int eventId, int userId) async {
+  Future<bool> addBookingToEvent(int eventId) async {
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(Config.baseUrl +
@@ -187,7 +187,7 @@ class Events with ChangeNotifier {
     }
   }
 
-  Future<bool> delBookingFromEvent(int eventId, int userId) async {
+  Future<bool> delBookingFromEvent(int eventId) async {
     var request =
         http.MultipartRequest('DELETE', Uri.parse(Config.baseUrl + '/booking'));
 
@@ -197,7 +197,7 @@ class Events with ChangeNotifier {
       request.headers.addAll(headers);
     }
 
-    request.fields.addAll({'user_id': userId.toString()});
+    request.fields.addAll({'event_id': eventId.toString()});
 
     http.StreamedResponse response = await request.send();
 
