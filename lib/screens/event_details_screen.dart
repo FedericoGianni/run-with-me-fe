@@ -4,6 +4,7 @@ import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/screens/booked_events_screen.dart';
 import 'package:runwithme/screens/search_screen.dart';
 import 'package:runwithme/widgets/event_detail_card.dart';
+import '../methods/DateHelper.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
@@ -127,9 +128,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           "/" +
                           event.createdAt.year.toString() +
                           " " +
-                          event.createdAt.hour.toString() +
+                          DateHelper.formatHourOrMinutes(
+                              event.createdAt.hour.toString()) +
                           ":" +
-                          event.createdAt.minute.toString(),
+                          DateHelper.formatHourOrMinutes(
+                              event.createdAt.minute.toString()),
                       style: TextStyle(
                           color: colors.secondaryTextColor,
                           fontSize: 10,
@@ -155,7 +158,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.5,
+                    width: MediaQuery.of(context).size.width / 2,
                     child: Text(
                       event.name,
                       overflow: TextOverflow.clip,
@@ -164,6 +167,42 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           fontSize: 24,
                           fontWeight: FontWeight.w900),
                     ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: event.userBooked
+                        ? TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: colors.errorColor,
+                                primary: colors.primaryTextColor,
+                                textStyle: const TextStyle(fontSize: 10),
+                                padding: const EdgeInsets.all(0)),
+                            onPressed: () => _removeBookingFromEvent(
+                                event.id, user.userId ?? -1),
+                            child: Text(
+                              'Unsubscribe',
+                              style: TextStyle(
+                                  color: colors.primaryTextColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          )
+                        : TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: colors.primaryColor,
+                                primary: colors.onPrimary,
+                                textStyle: const TextStyle(fontSize: 10),
+                                padding: const EdgeInsets.all(0)),
+                            onPressed: () =>
+                                _addBookingToEvent(event.id, user.userId ?? -1),
+                            child: Text(
+                              'Subscribe',
+                              style: TextStyle(
+                                  color: colors.primaryTextColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -196,51 +235,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             padding:
                 const EdgeInsets.only(bottom: 0, top: 10, left: 20, right: 20),
             sliver: SliverToBoxAdapter(child: EventDetail(event)),
-          ),
-          SliverPadding(
-            padding:
-                const EdgeInsets.only(bottom: 20, top: 50, left: 20, right: 20),
-            sliver: SliverToBoxAdapter(
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: 40,
-                  child: event.userBooked
-                      ? TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: colors.errorColor,
-                              primary: colors.onPrimary,
-                              textStyle: const TextStyle(fontSize: 10),
-                              padding: const EdgeInsets.all(0)),
-                          onPressed: () => _removeBookingFromEvent(
-                              event.id, user.userId ?? -1),
-                          child: Text(
-                            'Unsubscribe',
-                            style: TextStyle(
-                                color: colors.primaryTextColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        )
-                      : TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: colors.primaryColor,
-                              primary: colors.onPrimary,
-                              textStyle: const TextStyle(fontSize: 10),
-                              padding: const EdgeInsets.all(0)),
-                          onPressed: () =>
-                              _addBookingToEvent(event.id, user.userId ?? -1),
-                          child: Text(
-                            'Subscribe',
-                            style: TextStyle(
-                                color: colors.primaryTextColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                ),
-              ),
-            ),
           ),
         ],
       ),
