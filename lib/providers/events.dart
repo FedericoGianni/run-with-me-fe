@@ -15,14 +15,14 @@ class Events with ChangeNotifier {
   List<Event> _resultEvents = [];
 
   // save the last used parameters for fetchAndSetSuggestedEvents in case of refresh
-  double _lastSuggestedLat = 0.0;
-  double _lastSuggestedLong = 0.0;
-  int _lastSuggestedMaxDistKm = 0;
+  double _lastSuggestedLat = -1;
+  double _lastSuggestedLong = -1;
+  int _lastSuggestedMaxDistKm = -1;
 
   // save the last used parameters for fetchAndSetSuggestedEvents in case of refresh
-  double _lastResultLat = 0.0;
-  double _lastResultLong = 0.0;
-  int _lastResultMaxDistKm = 0;
+  double _lastResultLat = -1;
+  double _lastResultLong = -1;
+  int _lastResultMaxDistKm = -1;
 
   final secureStorage = const FlutterSecureStorage();
 
@@ -168,9 +168,7 @@ class Events with ChangeNotifier {
         Uri.parse(Config.baseUrl +
             '/booking/add' +
             '?event_id=' +
-            eventId.toString() +
-            '&user_id=' +
-            userId.toString()));
+            eventId.toString()));
 
     String? jwt = await secureStorage.read(key: 'jwt');
     if (jwt != null) {
@@ -199,8 +197,7 @@ class Events with ChangeNotifier {
       request.headers.addAll(headers);
     }
 
-    request.fields
-        .addAll({'user_id': userId.toString(), 'event_id': eventId.toString()});
+    request.fields.addAll({'user_id': userId.toString()});
 
     http.StreamedResponse response = await request.send();
 
