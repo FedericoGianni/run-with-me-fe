@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/events.dart';
+import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/screens/booked_events_screen.dart';
 import 'package:runwithme/screens/search_screen.dart';
 import 'package:runwithme/screens/tabs_screen.dart';
@@ -33,6 +34,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     final events = Provider.of<Events>(context, listen: false);
     final colors = Provider.of<CustomColorScheme>(context);
     final isLoggedIn = Provider.of<UserSettings>(context).isLoggedIn();
+    final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
     void _addBookingToEvent(int eventId, int userId) async {
       if (await events.addBookingToEvent(event.id)) {
@@ -216,7 +218,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 padding: const EdgeInsets.all(0)),
                             // TODO switch to user page
                             onPressed: () => {
-                              Navigator.pushNamed(context, UserScreen.routeName)
+                              Navigator.pop(context),
+                              pageIndex.setPage(Screens.USER.index)
                             },
                             child: Text(
                               'Login to Subscribe',
