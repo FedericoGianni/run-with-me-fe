@@ -9,6 +9,7 @@ import 'package:runwithme/widgets/sort_by.dart';
 import 'package:runwithme/widgets/splash.dart';
 
 import '../providers/events.dart';
+import '../providers/settings_manager.dart';
 import '../providers/user.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
@@ -62,9 +63,14 @@ class _SearchScreenState extends State<SearchScreen> {
       });
       Position userPosition =
           Provider.of<LocationHelper>(context).getLastKnownPosition();
+
       Provider.of<Events>(context)
           .fetchAndSetSuggestedEvents(
-              userPosition.latitude, userPosition.longitude, 5)
+              userPosition.latitude,
+              userPosition.longitude,
+              5,
+              //Provider.of<UserSettings>(context, listen: false).isLoggedIn())
+              false)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -74,6 +80,41 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  Future<Null> _handleRefresh() async {
+    widget._sortMenu = false;
+    widget._currentSortButton = SortButton.none;
+
+    final events = Provider.of<Events>(context, listen: false);
+    final user = Provider.of<User>(context, listen: false);
+    // the if check is to avoid when a refresh of the screen is made but there are no previous parameters of fetchAndSetResultEvents available
+    // for suggestedEvents is not a problem since there will always be an automatic request when building the first time
+
+    if (events.lastResultMaxDistKm == -1 ||
+        events.lastResultLat == -1 ||
+        events.lastResultLong == -1) {
+      events.fetchAndSetResultEvents(
+          events.lastResultLat,
+          events.lastResultLong,
+          events.lastResultMaxDistKm,
+          Provider.of<UserSettings>(context, listen: false).isLoggedIn());
+      widget._resultEvents = events.resultEvents;
+    }
+
+    events.fetchAndSetSuggestedEvents(
+        events.lastSuggestedLat,
+        events.lastSuggestedLong,
+        events.lastSuggestedMaxDistKm,
+        Provider.of<UserSettings>(context, listen: false).isLoggedIn());
+    widget._suggestedEvents = events.suggestedEvents
+        .where((element) =>
+            (element.difficultyLevel < user.fitnessLevel! + 1) &&
+            (element.difficultyLevel > user.fitnessLevel! - 1))
+        .toList();
+
+    setState(() {});
+    return null;
   }
 
   void __selectListView(colors) {
@@ -103,35 +144,6 @@ class _SearchScreenState extends State<SearchScreen> {
       _rowColor = colors.secondaryTextColor;
       _mapColor = colors.primaryColor;
     });
-  }
-
-  Future<Null> _handleRefresh() async {
-    widget._sortMenu = false;
-    widget._currentSortButton = SortButton.none;
-
-    final events = Provider.of<Events>(context, listen: false);
-    final user = Provider.of<User>(context, listen: false);
-    // the if check is to avoid when a refresh of the screen is made but there are no previous parameters of fetchAndSetResultEvents available
-    // for suggestedEvents is not a problem since there will always be an automatic request when building the first time
-
-    if (events.lastResultMaxDistKm == -1 ||
-        events.lastResultLat == -1 ||
-        events.lastResultLong == -1) {
-      events.fetchAndSetResultEvents(events.lastResultLat,
-          events.lastResultLong, events.lastResultMaxDistKm);
-      widget._resultEvents = events.resultEvents;
-    }
-
-    events.fetchAndSetSuggestedEvents(events.lastSuggestedLat,
-        events.lastSuggestedLong, events.lastSuggestedMaxDistKm);
-    widget._suggestedEvents = events.suggestedEvents
-        .where((element) =>
-            (element.difficultyLevel < user.fitnessLevel! + 1) &&
-            (element.difficultyLevel > user.fitnessLevel! - 1))
-        .toList();
-
-    setState(() {});
-    return null;
   }
 
   List<Widget> _buildContent(BuildContext context) {
@@ -316,10 +328,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   widget.formValues = value;
 
                   await events.fetchAndSetResultEvents(
-                    widget.formValues['city_lat'],
-                    widget.formValues['city_long'],
-                    widget.formValues['slider_value'].toInt() + 1 * 5,
-                  );
+                      widget.formValues['city_lat'],
+                      widget.formValues['city_long'],
+                      widget.formValues['slider_value'].toInt() + 1 * 5,
+                      Provider.of<UserSettings>(context, listen: false)
+                          .isLoggedIn());
                   widget._resultEvents = events.resultEvents;
 
                   if (!widget.formValues['show_full']) {

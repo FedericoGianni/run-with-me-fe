@@ -3,8 +3,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/screens/booked_events_screen.dart';
 import 'package:runwithme/screens/search_screen.dart';
+import 'package:runwithme/screens/tabs_screen.dart';
+import 'package:runwithme/screens/user_screen.dart';
 import 'package:runwithme/widgets/event_detail_card.dart';
 import '../methods/DateHelper.dart';
+import '../providers/settings_manager.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
@@ -29,6 +32,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     final user = Provider.of<User>(context, listen: false);
     final events = Provider.of<Events>(context, listen: false);
     final colors = Provider.of<CustomColorScheme>(context);
+    final isLoggedIn = Provider.of<UserSettings>(context).isLoggedIn();
 
     void _addBookingToEvent(int eventId, int userId) async {
       if (await events.addBookingToEvent(event.id)) {
@@ -170,36 +174,55 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
-                    child: event.userBooked
-                        ? TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: colors.errorColor,
-                                primary: colors.primaryTextColor,
-                                textStyle: const TextStyle(fontSize: 10),
-                                padding: const EdgeInsets.all(0)),
-                            onPressed: () => _removeBookingFromEvent(
-                                event.id, user.userId ?? -1),
-                            child: Text(
-                              'Unsubscribe',
-                              style: TextStyle(
-                                  color: colors.primaryTextColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          )
+                    child: isLoggedIn
+                        ? event.userBooked
+                            ? TextButton(
+                                style: TextButton.styleFrom(
+                                    backgroundColor: colors.errorColor,
+                                    primary: colors.primaryTextColor,
+                                    textStyle: const TextStyle(fontSize: 10),
+                                    padding: const EdgeInsets.all(0)),
+                                onPressed: () => _removeBookingFromEvent(
+                                    event.id, user.userId ?? -1),
+                                child: Text(
+                                  'Unsubscribe',
+                                  style: TextStyle(
+                                      color: colors.primaryTextColor,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
+                            : TextButton(
+                                style: TextButton.styleFrom(
+                                    backgroundColor: colors.primaryColor,
+                                    primary: colors.onPrimary,
+                                    textStyle: const TextStyle(fontSize: 10),
+                                    padding: const EdgeInsets.all(0)),
+                                onPressed: () => _addBookingToEvent(
+                                    event.id, user.userId ?? -1),
+                                child: Text(
+                                  'Subscribe',
+                                  style: TextStyle(
+                                      color: colors.primaryTextColor,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
                         : TextButton(
                             style: TextButton.styleFrom(
-                                backgroundColor: colors.primaryColor,
+                                backgroundColor: colors.secondaryColor,
                                 primary: colors.onPrimary,
                                 textStyle: const TextStyle(fontSize: 10),
                                 padding: const EdgeInsets.all(0)),
-                            onPressed: () =>
-                                _addBookingToEvent(event.id, user.userId ?? -1),
+                            // TODO switch to user page
+                            onPressed: () => {
+                              Navigator.pushNamed(context, UserScreen.routeName)
+                            },
                             child: Text(
-                              'Subscribe',
+                              'Login to Subscribe',
                               style: TextStyle(
                                   color: colors.primaryTextColor,
-                                  fontSize: 20,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
