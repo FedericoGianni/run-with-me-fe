@@ -31,9 +31,13 @@ class SortByButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    Color backgroundColor;
 
     if (id != activeId) {
       color = colors.secondaryTextColor;
+      backgroundColor = colors.onPrimary;
+    } else {
+      backgroundColor = colors.onPrimary;
     }
     return Container(
       height: 30,
@@ -57,11 +61,11 @@ class SortByButton extends StatelessWidget {
         },
       ),
       decoration: BoxDecoration(
-          color: Colors.transparent,
-          border: Border.all(
-            color: color,
-            width: 1,
-          ),
+          color: backgroundColor,
+          // border: Border.all(
+          //   color: backgroundColor,
+          //   width: 1,
+          // ),
           borderRadius: BorderRadius.all(Radius.circular(15))),
     );
   }

@@ -106,14 +106,25 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<Null> _handleRefresh() async {
+    widget._sortMenu = false;
+    widget._currentSortButton = SortButton.none;
+
     final events = Provider.of<Events>(context, listen: false);
+    final user = Provider.of<User>(context, listen: false);
+
     events.fetchAndSetResultEvents(events.lastResultLat, events.lastResultLong,
         events.lastResultMaxDistKm);
     widget._resultEvents = events.resultEvents;
 
     events.fetchAndSetSuggestedEvents(events.lastSuggestedLat,
         events.lastSuggestedLong, events.lastSuggestedMaxDistKm);
+    widget._suggestedEvents = events.suggestedEvents
+        .where((element) =>
+            (element.difficultyLevel < user.fitnessLevel! + 1) &&
+            (element.difficultyLevel > user.fitnessLevel! - 1))
+        .toList();
 
+    setState(() {});
     return null;
   }
 
@@ -323,9 +334,9 @@ class _SearchScreenState extends State<SearchScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 0),
+              padding: EdgeInsets.only(left: 10),
               height: 40,
-              width: 75,
+              width: 80,
               child: TextButton(
                 style: TextButton.styleFrom(
                     backgroundColor: colors.background,
@@ -337,12 +348,26 @@ class _SearchScreenState extends State<SearchScreen> {
                     widget._sortMenu = !widget._sortMenu;
                   });
                 },
-                child: Text(
-                  'Sort by',
-                  style: widget._sortMenu
-                      ? TextStyle(color: colors.secondaryColor, fontSize: 12)
-                      : TextStyle(
-                          color: colors.secondaryTextColor, fontSize: 12),
+                child: Row(
+                  children: [
+                    Text(
+                      'Sort by',
+                      style: widget._sortMenu
+                          ? TextStyle(
+                              color: colors.secondaryColor, fontSize: 12)
+                          : TextStyle(
+                              color: colors.secondaryTextColor, fontSize: 12),
+                    ),
+                    Icon(
+                      widget._sortMenu
+                          ? Icons.keyboard_arrow_right_rounded
+                          : Icons.keyboard_arrow_down_rounded,
+                      size: 16,
+                      color: widget._sortMenu
+                          ? colors.secondaryColor
+                          : colors.secondaryTextColor,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -409,14 +434,20 @@ class _SearchScreenState extends State<SearchScreen> {
     print("Rebuilding Page");
     final colors = Provider.of<CustomColorScheme>(context);
     final events = Provider.of<Events>(context);
+    final user = Provider.of<User>(context);
 
     if (_isLoading) {
       return const CustomLoadingAnimation();
     } else {
       // This if statement is used to avoid reloading resultEvents on setState when sorting events
+      // So basically here events are fetched only the first time.. in the future events will be fetched at reload
       if (widget._suggestedEvents.length == 0) {
         widget._resultEvents = events.resultEvents;
-        widget._suggestedEvents = events.suggestedEvents;
+        widget._suggestedEvents = events.suggestedEvents
+            .where((element) =>
+                (element.difficultyLevel < user.fitnessLevel! + 1) &&
+                (element.difficultyLevel > user.fitnessLevel! - 1))
+            .toList();
         print("Got events from provider");
       }
       widget._recentEvents = events.recentEvents;
