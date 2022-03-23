@@ -26,7 +26,7 @@ class EventDetail extends StatelessWidget {
           color: colors.onPrimary,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 2,
+          elevation: 4,
           margin: const EdgeInsets.symmetric(vertical: 10),
           child: Container(
             child: Column(
@@ -55,7 +55,7 @@ class EventDetail extends StatelessWidget {
           color: colors.onPrimary,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 2,
+          elevation: 4,
           margin: const EdgeInsets.symmetric(vertical: 10),
           child: Container(
             child: Column(
@@ -79,7 +79,7 @@ class EventDetail extends StatelessWidget {
           color: colors.onPrimary,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 2,
+          elevation: 4,
           margin: const EdgeInsets.symmetric(vertical: 10),
           child: Container(
             child: Column(
@@ -110,7 +110,7 @@ class EventDetail extends StatelessWidget {
           color: colors.onPrimary,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 2,
+          elevation: 4,
           margin: const EdgeInsets.symmetric(vertical: 10),
           child: Container(
             child: Column(

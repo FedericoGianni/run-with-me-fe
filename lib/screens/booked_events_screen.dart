@@ -247,7 +247,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 // Display a placeholder widget to visualize the shrinking size.
                 pinned: true,
                 snap: false,
-                elevation: 2,
+                elevation: 4,
                 flexibleSpace: FlexibleSpaceBar.createSettings(
                   currentExtent: 100,
                   child: settings.isLoggedIn()
@@ -415,7 +415,7 @@ class BookedEventsAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 2,
+      elevation: 4,
       child: Container(
         height: 100,
         padding: EdgeInsets.only(
