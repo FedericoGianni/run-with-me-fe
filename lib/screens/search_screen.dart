@@ -277,7 +277,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildAppbar(BuildContext context) {
     final events = Provider.of<Events>(context);
     final colors = Provider.of<CustomColorScheme>(context);
-    final double screenWidth = MediaQuery.of(context).size.width;
+    // final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     double _flexibleSpaceBarHeight;
 
@@ -369,9 +369,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             textStyle: const TextStyle(fontSize: 10),
                             padding: const EdgeInsets.all(0)),
                         onPressed: () {
-                          setState(() {
-                            widget._sortMenu = !widget._sortMenu;
-                          });
+                          if (_view != 3) {
+                            setState(() {
+                              widget._sortMenu = !widget._sortMenu;
+                            });
+                          }
                         },
                         child: Row(
                           children: [
@@ -485,6 +487,14 @@ class _SearchScreenState extends State<SearchScreen> {
     final colors = Provider.of<CustomColorScheme>(context);
     final events = Provider.of<Events>(context);
     final user = Provider.of<User>(context);
+    final double screenHeight = MediaQuery.of(context).size.height;
+    double _flexibleSpaceBarHeight;
+
+    if (widget._sortMenu) {
+      _flexibleSpaceBarHeight = screenHeight / 7.5;
+    } else {
+      _flexibleSpaceBarHeight = screenHeight / 20;
+    }
 
     if (_isLoading) {
       return const CustomLoadingAnimation();
@@ -509,7 +519,7 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: 190,
+                height: screenHeight / 6 + _flexibleSpaceBarHeight,
                 child: CustomScrollView(
                   slivers: [
                     _buildAppbar(
@@ -519,11 +529,14 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
               ),
-              // SizedBox(
-              //   child: CustomMapsSearch(),
-              //   width: double.infinity,
-              //   height: MediaQuery.of(context).size.height - 190 - 60,
-              // ),
+              SizedBox(
+                child: CustomMapsSearch(),
+                width: double.infinity,
+                height: screenHeight -
+                    screenHeight / 6 -
+                    _flexibleSpaceBarHeight -
+                    58,
+              ),
             ],
           ),
         );
