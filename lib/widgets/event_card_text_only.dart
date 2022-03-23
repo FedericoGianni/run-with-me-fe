@@ -83,7 +83,7 @@ class EventItem extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900),
               ),
             ),
