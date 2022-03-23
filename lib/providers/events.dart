@@ -90,34 +90,37 @@ class Events with ChangeNotifier {
   }
 
   Future<void> fetchAndSetSuggestedEvents(
-      double lat, double long, int max_dist_km) async {
+      double lat, double long, int max_dist_km, bool isLoggedIn) async {
     // 1. save parameters used in case of refresh
     _lastSuggestedLat = lat;
     _lastSuggestedLong = long;
     _lastSuggestedMaxDistKm = max_dist_km;
 
     // 2. actual call
-    fetchAndSetEvents(lat, long, max_dist_km, _suggestedEvents, true);
+    fetchAndSetEvents(lat, long, max_dist_km, _suggestedEvents, isLoggedIn);
   }
 
   Future<void> fetchAndSetResultEvents(
-      double lat, double long, int max_dist_km) async {
+      double lat, double long, int max_dist_km, bool isLoggedIn) async {
     // 1. save parameters used in case of refresh
     _lastResultLat = lat;
     _lastResultLong = long;
     _lastResultMaxDistKm = max_dist_km;
 
     // 2. actual call
-    await fetchAndSetEvents(lat, long, max_dist_km, _resultEvents, true);
+    await fetchAndSetEvents(lat, long, max_dist_km, _resultEvents, isLoggedIn);
   }
 
   Future<void> fetchAndSetEvents(double lat, double long, int max_dist_km,
       List<Event> events, bool auth) async {
+    // choose the right endpoint for events search based on authentication
+    String req = auth ? '/events/auth' : '/events';
+
     try {
       var request = http.MultipartRequest(
           'GET',
           Uri.parse(Config.baseUrl +
-              '/events/auth' +
+              req +
               '?lat=' +
               lat.toString() +
               '&long=' +
@@ -125,10 +128,12 @@ class Events with ChangeNotifier {
               '&max_dist_km=' +
               max_dist_km.toString()));
 
-      String? jwt = await secureStorage.read(key: 'jwt');
-      if (jwt != null) {
-        var headers = {'Authorization': 'Bearer ' + jwt};
-        request.headers.addAll(headers);
+      if (auth) {
+        String? jwt = await secureStorage.read(key: 'jwt');
+        if (jwt != null) {
+          var headers = {'Authorization': 'Bearer ' + jwt};
+          request.headers.addAll(headers);
+        }
       }
 
       print("fetchAndSetEvents calling API...");
@@ -148,7 +153,7 @@ class Events with ChangeNotifier {
           //print("received json [{$i}]: " + list[i].toString());
           //print("re-encoding single json: " + json.encode(list[i]));
 
-          events.add(eventFromJson(json.encode(list[i]), true));
+          events.add(eventFromJson(json.encode(list[i]), auth));
           //print("suggestedEvents.length: " +  _suggestedEvents.length.toString());
         }
       } else {
@@ -159,54 +164,6 @@ class Events with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       rethrow;
-    }
-  }
-
-  Future<bool> addBookingToEvent(int eventId, int userId) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(Config.baseUrl +
-            '/booking/add' +
-            '?event_id=' +
-            eventId.toString()));
-
-    String? jwt = await secureStorage.read(key: 'jwt');
-    if (jwt != null) {
-      var headers = {'Authorization': 'Bearer ' + jwt};
-      request.headers.addAll(headers);
-    }
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-      return true;
-    } else {
-      print(response.reasonPhrase);
-      return false;
-    }
-  }
-
-  Future<bool> delBookingFromEvent(int eventId, int userId) async {
-    var request =
-        http.MultipartRequest('DELETE', Uri.parse(Config.baseUrl + '/booking'));
-
-    String? jwt = await secureStorage.read(key: 'jwt');
-    if (jwt != null) {
-      var headers = {'Authorization': 'Bearer ' + jwt};
-      request.headers.addAll(headers);
-    }
-
-    request.fields.addAll({'user_id': userId.toString()});
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-      return true;
-    } else {
-      print(response.reasonPhrase);
-      return false;
     }
   }
 
@@ -252,6 +209,54 @@ class Events with ChangeNotifier {
     }
 
     return _events;
+  }
+
+  Future<bool> addBookingToEvent(int eventId) async {
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(Config.baseUrl +
+            '/booking/add' +
+            '?event_id=' +
+            eventId.toString()));
+
+    String? jwt = await secureStorage.read(key: 'jwt');
+    if (jwt != null) {
+      var headers = {'Authorization': 'Bearer ' + jwt};
+      request.headers.addAll(headers);
+    }
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+    } else {
+      print(response.reasonPhrase);
+      return false;
+    }
+  }
+
+  Future<bool> delBookingFromEvent(int eventId) async {
+    var request =
+        http.MultipartRequest('DELETE', Uri.parse(Config.baseUrl + '/booking'));
+
+    String? jwt = await secureStorage.read(key: 'jwt');
+    if (jwt != null) {
+      var headers = {'Authorization': 'Bearer ' + jwt};
+      request.headers.addAll(headers);
+    }
+
+    request.fields.addAll({'event_id': eventId.toString()});
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+    } else {
+      print(response.reasonPhrase);
+      return false;
+    }
   }
 
   Event eventFromJson(String value, bool auth) {
