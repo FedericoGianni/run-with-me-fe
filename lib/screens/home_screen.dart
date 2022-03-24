@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
+import 'package:runwithme/widgets/custom_map_home_page.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 import 'package:runwithme/widgets/splash.dart';
 
@@ -10,6 +11,7 @@ import '../providers/events.dart';
 import '../providers/locationHelper.dart';
 import '../providers/page_index.dart';
 import '../providers/user.dart';
+import '../widgets/custom_maps_event_detail.dart';
 import '../widgets/custom_scroll_behavior.dart';
 import '../widgets/event_card_text_only.dart';
 import '../widgets/gradientAppbar.dart';
@@ -26,7 +28,7 @@ class HomeScreen extends StatefulWidget {
   List<Event> _bookedEvents = [];
   List<Event> _futureBookedEvents = [];
   List<Event> _pastBookedEvents = [];
-  List<Event> _suggestedEvents = [];
+  //List<Event> _suggestedEvents = [];
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -70,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _isLoading = false;
           print("fetching events for home");
+          _buildPage();
         });
       });
     }
@@ -161,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Welcome back " + user.name.toString(),
+                "Welcome back, " + user.name.toString(),
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 20,
@@ -180,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: Text(
-                  "Search for an event",
+                  "Search for an event nearby",
                   overflow: TextOverflow.clip,
                   style: TextStyle(
                       color: colors.primaryTextColor,
@@ -209,19 +212,55 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        padding:
+            const EdgeInsets.only(bottom: 50, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "",
+                "You are here",
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.gps_fixed,
+                    size: 30,
+                  ),
+                  color: _gridColor,
+                  onPressed: () {
+                    pageIndex.setPage(Screens.EVENTS.index);
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 10,
+                ),
+              ),
             ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Card(
+            color: colors.onPrimary,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            elevation: 4,
+            margin: const EdgeInsets.all(0),
+            child: Container(
+              height: MediaQuery.of(context).size.height / 3,
+              width: MediaQuery.of(context).size.width / 2,
+              child: CustomMapsHome(),
+            ),
           ),
         ),
       ),
@@ -265,6 +304,43 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       SliverPadding(
+        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Text(
+                  "See all booked events",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.calendar_month,
+                    size: 30,
+                  ),
+                  color: _gridColor,
+                  onPressed: () {
+                    pageIndex.setPage(Screens.EVENTS.index);
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
         padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
@@ -300,6 +376,43 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             childCount: widget._pastBookedEvents.length,
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Text(
+                  "See all past events",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.auto_graph,
+                    size: 30,
+                  ),
+                  color: _gridColor,
+                  onPressed: () {
+                    pageIndex.setPage(Screens.EVENTS.index);
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 10,
+                ),
+              ),
+            ],
           ),
         ),
       ),
