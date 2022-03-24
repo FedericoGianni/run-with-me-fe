@@ -324,7 +324,8 @@ class _UserScreenState extends State<UserScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         elevation: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 0),
+                        margin: EdgeInsets.symmetric(
+                            vertical: 0 + multiDeviceSupport.tablet * 10),
                         child: Container(
                           child: Column(
                             children: [
@@ -340,7 +341,7 @@ class _UserScreenState extends State<UserScreen> {
                                         'Theme mode',
                                         style: TextStyle(
                                             color: colors.primaryTextColor,
-                                            fontSize: 18,
+                                            fontSize: multiDeviceSupport.h2,
                                             overflow: TextOverflow.ellipsis),
                                       ),
                                     ),
@@ -408,7 +409,8 @@ class _UserScreenState extends State<UserScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         elevation: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10 + multiDeviceSupport.tablet * 10),
                         child: Row(
                           children: [
                             Padding(
@@ -420,7 +422,7 @@ class _UserScreenState extends State<UserScreen> {
                                   style: TextStyle(
                                     overflow: TextOverflow.clip,
                                     color: colors.primaryColor,
-                                    fontSize: 18,
+                                    fontSize: multiDeviceSupport.h2,
                                   ),
                                 ),
                                 onPressed: _showMyDialog,
@@ -443,7 +445,8 @@ class _UserScreenState extends State<UserScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         elevation: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10 + multiDeviceSupport.tablet * 10),
                         child: Column(
                           children: [
                             Row(
@@ -456,7 +459,7 @@ class _UserScreenState extends State<UserScreen> {
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.primaryTextColor,
-                                      fontSize: 18,
+                                      fontSize: multiDeviceSupport.h2,
                                     ),
                                   ),
                                 ),
@@ -473,7 +476,7 @@ class _UserScreenState extends State<UserScreen> {
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,
-                                      fontSize: 18,
+                                      fontSize: multiDeviceSupport.h2,
                                     ),
                                   ),
                                 ),
@@ -485,7 +488,7 @@ class _UserScreenState extends State<UserScreen> {
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,
-                                      fontSize: 18,
+                                      fontSize: multiDeviceSupport.h2,
                                     ),
                                   ),
                                 ),
@@ -502,7 +505,7 @@ class _UserScreenState extends State<UserScreen> {
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,
-                                      fontSize: 18,
+                                      fontSize: multiDeviceSupport.h2,
                                     ),
                                   ),
                                 ),
@@ -514,7 +517,7 @@ class _UserScreenState extends State<UserScreen> {
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,
-                                      fontSize: 18,
+                                      fontSize: multiDeviceSupport.h2,
                                     ),
                                   ),
                                 ),
@@ -531,7 +534,7 @@ class _UserScreenState extends State<UserScreen> {
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,
-                                      fontSize: 18,
+                                      fontSize: multiDeviceSupport.h2,
                                     ),
                                   ),
                                 ),
@@ -543,7 +546,7 @@ class _UserScreenState extends State<UserScreen> {
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,
-                                      fontSize: 18,
+                                      fontSize: multiDeviceSupport.h2,
                                     ),
                                   ),
                                 ),
