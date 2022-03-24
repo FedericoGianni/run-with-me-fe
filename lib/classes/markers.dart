@@ -42,6 +42,7 @@ Map<String, Marker> markerGenerator(List<Event> eventList,
                     event,
                     i,
                     eventList.length,
+                    1,
                     border: 0.0,
                   )),
               Positioned(

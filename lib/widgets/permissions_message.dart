@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:runwithme/providers/color_scheme.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/page_index.dart';
 
 class PermissionMessage extends StatelessWidget {
@@ -14,6 +15,8 @@ class PermissionMessage extends StatelessWidget {
     final settings = Provider.of<UserSettings>(context);
     final double screenHeight = MediaQuery.of(context).size.height;
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     return SizedBox(
       height: double.infinity,
       child: Column(
@@ -28,7 +31,7 @@ class PermissionMessage extends StatelessWidget {
                     "Ohoh",
                     style: TextStyle(
                       color: colors.primaryColor,
-                      fontSize: 28,
+                      fontSize: multiDeviceSupport.title,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -37,13 +40,14 @@ class PermissionMessage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 0, bottom: 30),
                   child: Text(
                     'You need permissions to view this page',
-                    style:
-                        TextStyle(color: colors.primaryTextColor, fontSize: 14),
+                    style: TextStyle(
+                        color: colors.primaryTextColor,
+                        fontSize: multiDeviceSupport.h3),
                   ),
                 ),
                 Container(
-                  height: 35,
-                  width: 80,
+                  height: 35 + multiDeviceSupport.tablet * 5,
+                  width: 80 + multiDeviceSupport.tablet * 20,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: colors.secondaryColor,
@@ -54,7 +58,7 @@ class PermissionMessage extends StatelessWidget {
                       ' Login ',
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 15,
+                          fontSize: multiDeviceSupport.h3,
                           fontWeight: FontWeight.w600),
                     ),
                   ),

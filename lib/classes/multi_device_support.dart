@@ -12,6 +12,8 @@ class MultiDeviceSupport {
   double _h5 = 0.0;
   double _h0 = 0.0;
 
+  double _icons = 0.0;
+
   double _columnPadding = 0.0;
   double _paddingTop2 = 0.0;
   double _tablet = 0.0;
@@ -25,26 +27,35 @@ class MultiDeviceSupport {
       _columnPadding = screenWidth / 7;
       _paddingTop2 = screenHeight / 50;
       _title = 28;
+      _icons = 30;
       _h0 = 22;
       _h1 = 18;
       _h2 = 16;
       _h3 = 14;
       _h4 = 12;
+      _h5 = 10;
     } else {
       _columnPadding = screenWidth / 5;
       _paddingTop2 = screenHeight / 40;
       _tablet = 1;
       _title = 40;
+      _icons = 42;
+
       _h0 = 30;
       _h1 = 28;
       _h2 = 22;
       _h3 = 18;
       _h4 = 16;
+      _h5 = 14;
     }
   }
 
   double get tablet {
     return _tablet;
+  }
+
+  double get icons {
+    return _icons;
   }
 
   double get title {

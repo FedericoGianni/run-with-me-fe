@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/color_scheme.dart';
 
 enum SortButton {
@@ -31,6 +32,8 @@ class SortByButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     Color backgroundColor;
 
     if (id != activeId) {
@@ -40,8 +43,8 @@ class SortByButton extends StatelessWidget {
       backgroundColor = colors.onPrimary;
     }
     return Container(
-      height: 30,
-      width: 60,
+      height: 30 + multiDeviceSupport.tablet * 5,
+      width: 60 + multiDeviceSupport.tablet * 30,
       padding: EdgeInsets.all(0),
       child: TextButton(
         child: Text(
@@ -49,7 +52,7 @@ class SortByButton extends StatelessWidget {
           style: TextStyle(
             overflow: TextOverflow.clip,
             color: color,
-            fontSize: 10,
+            fontSize: multiDeviceSupport.h5,
             fontWeight: FontWeight.bold,
           ),
         ),
