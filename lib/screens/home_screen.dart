@@ -290,9 +290,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 "You are here",
                 style: TextStyle(
-                    color: colors.primaryTextColor,
+                    color: colors.secondaryTextColor,
                     fontSize: 18,
-                    fontWeight: FontWeight.w900),
+                    fontWeight: FontWeight.w600),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width / 3,
@@ -379,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "See all booked events",
                   overflow: TextOverflow.clip,
                   style: TextStyle(
-                      color: colors.primaryTextColor,
+                      color: colors.secondaryTextColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w900),
                 ),
@@ -471,7 +471,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "See all past events",
                   overflow: TextOverflow.clip,
                   style: TextStyle(
-                      color: colors.primaryTextColor,
+                      color: colors.secondaryTextColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w900),
                 ),
@@ -480,7 +480,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width / 3,
                 child: IconButton(
                   icon: const Icon(
-                    Icons.book,
+                    Icons.book_rounded,
                     size: 30,
                   ),
                   color: colors.primaryColor,
@@ -550,7 +550,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 "You ran: ",
                 style: TextStyle(
-                    color: colors.primaryTextColor,
+                    color: colors.secondaryTextColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w900),
               ),
@@ -574,7 +574,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 "Run durations: ",
                 style: TextStyle(
-                    color: colors.primaryTextColor,
+                    color: colors.secondaryTextColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w900),
               ),
