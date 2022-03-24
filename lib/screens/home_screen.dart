@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       SliverPadding(
         padding:
-            const EdgeInsets.only(bottom: 50, top: 20, left: 20, right: 20),
+            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,8 +174,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      // Grey line
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
+        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 50, right: 50),
+        sliver: SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: colors.onPrimary,
+                  width: 3.0,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 10, top: 0, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -213,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       SliverPadding(
         padding:
-            const EdgeInsets.only(bottom: 50, top: 20, left: 20, right: 20),
+            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -222,20 +238,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 "You are here",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width / 3,
                 child: IconButton(
                   icon: const Icon(
-                    Icons.gps_fixed,
+                    Icons.location_on,
                     size: 30,
                   ),
                   color: _gridColor,
-                  onPressed: () {
-                    pageIndex.setPage(Screens.EVENTS.index);
-                  },
+                  onPressed: () {},
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   splashRadius: 10,
@@ -246,7 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 20, right: 20),
+        padding:
+            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Card(
             color: colors.onPrimary,
@@ -257,9 +272,25 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 4,
             margin: const EdgeInsets.all(0),
             child: Container(
-              height: MediaQuery.of(context).size.height / 3,
-              width: MediaQuery.of(context).size.width / 2,
+              height: MediaQuery.of(context).size.height / 4,
+              width: MediaQuery.of(context).size.width / 3,
               child: CustomMapsHome(),
+            ),
+          ),
+        ),
+      ),
+      // Grey line
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+        sliver: SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: colors.onPrimary,
+                  width: 3.0,
+                ),
+              ),
             ),
           ),
         ),
@@ -337,6 +368,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+      // Grey line
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+        sliver: SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: colors.onPrimary,
+                  width: 3.0,
+                ),
+              ),
+            ),
           ),
         ),
       ),
