@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:runwithme/providers/locationHelper.dart';
 import 'package:uuid/uuid.dart';
 // import 'package:intl/intl.dart';
+import '../classes/multi_device_support.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import 'rating.dart';
@@ -22,7 +23,8 @@ class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     // name = name.replaceRange(5, name.length, '...');
     return Column(
       children: [
@@ -31,7 +33,8 @@ class UserInfo extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(
+              vertical: 10 + multiDeviceSupport.tablet * 10),
           child: Container(
             child: Column(
               children: [
@@ -48,7 +51,8 @@ class UserInfo extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(
+              vertical: 10 + multiDeviceSupport.tablet * 10),
           child: Container(
             child: Column(
               children: [
@@ -65,7 +69,8 @@ class UserInfo extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(
+              vertical: 10 + multiDeviceSupport.tablet * 10),
           child: Container(
             child: Column(
               children: [
@@ -80,7 +85,8 @@ class UserInfo extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(
+              vertical: 10 + multiDeviceSupport.tablet * 10),
           child: Container(
             child: Column(
               children: [
@@ -107,6 +113,8 @@ class UserInfoFilling extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     final colors = Provider.of<CustomColorScheme>(context);
     return Column(
@@ -117,7 +125,9 @@ class UserInfoFilling extends StatelessWidget {
               padding: EdgeInsets.only(top: 10),
               child: Text(
                 title,
-                style: TextStyle(color: colors.primaryTextColor, fontSize: 18),
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: multiDeviceSupport.h1),
               ),
             ),
           ],
@@ -125,14 +135,15 @@ class UserInfoFilling extends StatelessWidget {
         Row(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 5, bottom: 10),
+              padding: EdgeInsets.only(
+                  top: 5, bottom: 10 + multiDeviceSupport.tablet * 5),
               child: SizedBox(
                 width: screenWidth / 1.5,
                 child: Text(
                   description,
                   style: TextStyle(
                       color: colors.secondaryTextColor,
-                      fontSize: 18,
+                      fontSize: multiDeviceSupport.h2,
                       overflow: TextOverflow.ellipsis),
                 ),
               ),
