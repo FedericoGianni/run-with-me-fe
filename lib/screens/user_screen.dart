@@ -7,6 +7,7 @@ import 'package:runwithme/themes/custom_colors.dart';
 import 'package:runwithme/widgets/custom_alert_dialog.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 import 'package:runwithme/widgets/search_button.dart';
+import '../classes/multi_device_support.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/gradientAppbar.dart';
@@ -66,8 +67,8 @@ class _UserScreenState extends State<UserScreen> {
     final user = Provider.of<User>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-
-    print(screenHeight);
+    var textSizes = MultiDeviceSupport(context);
+    textSizes.init();
     if (colors.currentMode == 'dark') {
       isSelected = [false, true];
     } else if (colors.currentMode == 'light') {
@@ -128,20 +129,26 @@ class _UserScreenState extends State<UserScreen> {
                               Row(
                                 children: [
                                   Container(
-                                    width: screenWidth / 1.7,
+                                    width: screenWidth,
                                     padding: EdgeInsets.only(
-                                        top: 20, left: 20, bottom: 5),
+                                        top: 25 - 18 * textSizes.tablet,
+                                        left: 20,
+                                        bottom: 5),
                                     child: Column(
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              (user.username ?? 'No Name'),
-                                              style: TextStyle(
-                                                overflow: TextOverflow.clip,
-                                                color: colors.titleColor,
-                                                fontSize: 28,
-                                                fontWeight: FontWeight.bold,
+                                            SizedBox(
+                                              width: screenWidth / 1.1,
+                                              child: Text(
+                                                (user.username ?? 'No Name'),
+                                                style: TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  color: colors.titleColor,
+                                                  fontSize: textSizes.title,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -157,13 +164,15 @@ class _UserScreenState extends State<UserScreen> {
                                                 style: TextStyle(
                                                   overflow: TextOverflow.clip,
                                                   color: colors.titleColor,
-                                                  fontSize: 14,
+                                                  fontSize: textSizes.h3,
                                                 ),
                                               ),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.only(
-                                                  top: 0, left: 0),
+                                                  top: 0,
+                                                  left: 20 +
+                                                      textSizes.tablet * 40),
                                               child: Text(
                                                 'Since: ' +
                                                     user.createdAt!
@@ -183,47 +192,47 @@ class _UserScreenState extends State<UserScreen> {
                                                 style: TextStyle(
                                                   overflow: TextOverflow.clip,
                                                   color: colors.titleColor,
-                                                  fontSize: 14,
+                                                  fontSize: textSizes.h3,
                                                 ),
                                               ),
                                             )
                                           ],
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.start,
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Container(
-                                      height: 35,
-                                      // width: 60,
-                                      child: TextButton(
-                                        child: Text(
-                                          'Edit',
-                                          style: TextStyle(
-                                            overflow: TextOverflow.clip,
-                                            color: colors.titleColor,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          print("HEEEEEEEEEEEEEEEE");
-                                        },
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          border: Border.all(
-                                            color: colors.titleColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15))),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       horizontal: 20),
+                                  //   child: Container(
+                                  //     height: 35,
+                                  //     // width: 60,
+                                  //     child: TextButton(
+                                  //       child: Text(
+                                  //         'Edit',
+                                  //         style: TextStyle(
+                                  //           overflow: TextOverflow.clip,
+                                  //           color: colors.titleColor,
+                                  //           fontSize: textSizes.h3,
+                                  //           fontWeight: FontWeight.bold,
+                                  //         ),
+                                  //       ),
+                                  //       onPressed: () {
+                                  //         print("HEEEEEEEEEEEEEEEE");
+                                  //       },
+                                  //     ),
+                                  //     decoration: BoxDecoration(
+                                  //         color: Colors.transparent,
+                                  //         border: Border.all(
+                                  //           color: colors.titleColor,
+                                  //           width: 1,
+                                  //         ),
+                                  //         borderRadius: BorderRadius.all(
+                                  //             Radius.circular(15))),
+                                  //   ),
+                                  // ),
                                 ],
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -239,25 +248,35 @@ class _UserScreenState extends State<UserScreen> {
                   ),
                   // User info title
                   SliverPadding(
-                    padding: const EdgeInsets.only(
-                        bottom: 0, top: 40, left: 20, right: 20),
+                    padding: EdgeInsets.only(
+                        bottom: 0,
+                        top: 40,
+                        left: 20 + textSizes.tablet * 50,
+                        right: 20 + textSizes.tablet * 50),
                     sliver: SliverToBoxAdapter(
                         child: Text(
                       'User info',
                       style: TextStyle(
-                          color: colors.primaryTextColor, fontSize: 22),
+                          color: colors.primaryTextColor,
+                          fontSize: textSizes.h0),
                     )),
                   ),
                   // Actual list of cards with user infos
                   SliverPadding(
-                    padding: const EdgeInsets.only(
-                        bottom: 0, top: 20, left: 20, right: 20),
+                    padding: EdgeInsets.only(
+                        bottom: 0,
+                        top: 20,
+                        left: 20 + textSizes.tablet * 50,
+                        right: 20 + textSizes.tablet * 50),
                     sliver: SliverToBoxAdapter(child: UserInfo(user)),
                   ),
                   // Grey line
                   SliverPadding(
-                    padding: const EdgeInsets.only(
-                        bottom: 0, top: 40, left: 50, right: 50),
+                    padding: EdgeInsets.only(
+                        bottom: 0,
+                        top: 40,
+                        left: 50 + textSizes.tablet * 50,
+                        right: 50 + textSizes.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Container(
                         decoration: BoxDecoration(
@@ -273,19 +292,26 @@ class _UserScreenState extends State<UserScreen> {
                   ),
                   // User info title
                   SliverPadding(
-                    padding: const EdgeInsets.only(
-                        bottom: 0, top: 40, left: 20, right: 20),
+                    padding: EdgeInsets.only(
+                        bottom: 30,
+                        top: 40,
+                        left: 20 + textSizes.tablet * 50,
+                        right: 20 + textSizes.tablet * 50),
                     sliver: SliverToBoxAdapter(
                         child: Text(
                       'Settings',
                       style: TextStyle(
-                          color: colors.primaryTextColor, fontSize: 22),
+                          color: colors.primaryTextColor,
+                          fontSize: textSizes.h0),
                     )),
                   ),
                   // Actual list of cards with user infos
                   SliverPadding(
-                    padding: const EdgeInsets.only(
-                        bottom: 0, top: 10, left: 20, right: 20),
+                    padding: EdgeInsets.only(
+                        bottom: 0,
+                        top: 10,
+                        left: 20 + textSizes.tablet * 50,
+                        right: 20 + textSizes.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Card(
                         color: colors.onPrimary,
@@ -307,7 +333,7 @@ class _UserScreenState extends State<UserScreen> {
                                       child: Text(
                                         'Theme mode',
                                         style: TextStyle(
-                                            color: colors.primaryColor,
+                                            color: colors.primaryTextColor,
                                             fontSize: 18,
                                             overflow: TextOverflow.ellipsis),
                                       ),
@@ -365,8 +391,11 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                   ),
                   SliverPadding(
-                    padding: const EdgeInsets.only(
-                        bottom: 0, top: 10, left: 20, right: 20),
+                    padding: EdgeInsets.only(
+                        bottom: 0,
+                        top: 10,
+                        left: 20 + textSizes.tablet * 50,
+                        right: 20 + textSizes.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Card(
                         color: colors.onPrimary,
@@ -397,8 +426,11 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                   ),
                   SliverPadding(
-                    padding: const EdgeInsets.only(
-                        bottom: 40, top: 0, left: 20, right: 20),
+                    padding: EdgeInsets.only(
+                        bottom: 40,
+                        top: 0,
+                        left: 20 + textSizes.tablet * 50,
+                        right: 20 + textSizes.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Card(
                         color: colors.onPrimary,

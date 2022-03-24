@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../classes/multi_device_support.dart';
 import '../providers/locationHelper.dart';
 import 'custom_scroll_behavior.dart';
 
@@ -54,23 +55,28 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
-
+    var textSizes = MultiDeviceSupport(context);
+    textSizes.init();
     return AlertDialog(
       backgroundColor: colors.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       content: SizedBox(
-        height: 350,
+        height: 350 + textSizes.tablet * 100,
+        width: 500,
         child: Column(
           children: [
             Align(
               child: TextField(
                 autofocus: true,
                 controller: _controller,
-                style: TextStyle(color: colors.primaryTextColor),
+                style: TextStyle(
+                    color: colors.primaryTextColor, fontSize: textSizes.h2),
                 decoration: InputDecoration(
                   hintText: "Search",
-                  hintStyle: TextStyle(color: colors.secondaryTextColor),
+                  hintStyle: TextStyle(
+                      color: colors.secondaryTextColor, fontSize: textSizes.h2),
                   fillColor: colors.errorColor,
                   focusColor: colors.primaryTextColor,
                   floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -87,7 +93,7 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
               ),
             ),
             Container(
-              height: 300,
+              height: 300 + textSizes.tablet * 100,
               width: screenWidth,
               child: ScrollConfiguration(
                 behavior: CustomScrollBehavior(),
@@ -119,7 +125,8 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
                                   title: Text(
                                     _placeList[index]["description"],
                                     style: TextStyle(
-                                        color: colors.primaryTextColor),
+                                        color: colors.primaryTextColor,
+                                        fontSize: textSizes.h2),
                                   ),
                                 );
                               },
