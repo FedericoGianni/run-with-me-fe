@@ -26,6 +26,8 @@ class User with ChangeNotifier {
   int? height;
   int? age;
   int? sex;
+
+  // initialize to a default value to let suggestedEvent request works also if user is not registered/logged in
   double? fitnessLevel = DEFAULT_FITNESS_LEVEL;
 
   String? cityName;

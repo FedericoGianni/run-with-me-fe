@@ -60,10 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Provider.of<CustomColorScheme>(context);
+
     if (_isLoading) {
       return const CustomLoadingAnimation();
     } else {
-      return Center(child: Text("Welcome Back"));
+      return Center(
+          child: Text(
+        "Welcome Back Motherfucker",
+        style: TextStyle(color: colors.primaryColor),
+      ));
     }
   }
 }
