@@ -273,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 4,
             margin: const EdgeInsets.all(0),
             child: Container(
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 5,
               width: MediaQuery.of(context).size.width / 3,
               child: CustomMapsHome(),
             ),
