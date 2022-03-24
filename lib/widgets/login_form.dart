@@ -111,8 +111,8 @@ class _LoginFormState extends State<LoginForm> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     var settings = Provider.of<UserSettings>(context);
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     // This snackbar is used for the popup message in case of wrong credentials
     print(settings.isLoggedIn().toString());
@@ -130,7 +130,7 @@ class _LoginFormState extends State<LoginForm> {
                       "Log in to Run With Me",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: textSizes.h1,
+                          fontSize: multiDeviceSupport.h1,
                           height: 1.5,
                           fontWeight: FontWeight.w600),
                       textAlign: TextAlign.center,
@@ -145,7 +145,7 @@ class _LoginFormState extends State<LoginForm> {
                           "Not yet registered?",
                           style: TextStyle(
                               color: colors.primaryTextColor,
-                              fontSize: textSizes.h2,
+                              fontSize: multiDeviceSupport.h2,
                               height: 1.5,
                               fontWeight: FontWeight.normal),
                           textAlign: TextAlign.center,
@@ -168,7 +168,7 @@ class _LoginFormState extends State<LoginForm> {
                             'Subscribe',
                             style: TextStyle(
                                 color: colors.primaryColor,
-                                fontSize: textSizes.h2,
+                                fontSize: multiDeviceSupport.h2,
                                 height: 1.5,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -190,7 +190,8 @@ class _LoginFormState extends State<LoginForm> {
                 initialValue: _initValues['username'],
                 cursorColor: colors.primaryTextColor,
                 style: TextStyle(
-                    color: colors.primaryTextColor, fontSize: textSizes.h3),
+                    color: colors.primaryTextColor,
+                    fontSize: multiDeviceSupport.h3),
                 decoration: textFormDecoration('Username', context),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
@@ -220,7 +221,8 @@ class _LoginFormState extends State<LoginForm> {
                 obscureText: isTextObsured,
                 cursorColor: colors.primaryTextColor,
                 style: TextStyle(
-                    color: colors.primaryTextColor, fontSize: textSizes.h3),
+                    color: colors.primaryTextColor,
+                    fontSize: multiDeviceSupport.h3),
                 decoration: passwordFormDecoration(
                     'Password', eyeIcon, _togglePwdText, context),
                 textInputAction: TextInputAction.next,
@@ -252,7 +254,7 @@ class _LoginFormState extends State<LoginForm> {
                       style: TextButton.styleFrom(
                           primary: colors.secondaryTextColor,
                           textStyle: TextStyle(
-                            fontSize: textSizes.h3,
+                            fontSize: multiDeviceSupport.h3,
                             fontWeight: FontWeight.bold,
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 10)),
@@ -266,7 +268,7 @@ class _LoginFormState extends State<LoginForm> {
                                   BorderRadius.all(Radius.circular(10))),
                           backgroundColor: colors.primaryColor,
                           primary: colors.onPrimary,
-                          textStyle: TextStyle(fontSize: textSizes.h3),
+                          textStyle: TextStyle(fontSize: multiDeviceSupport.h3),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 10)),
                       onPressed: _saveForm,

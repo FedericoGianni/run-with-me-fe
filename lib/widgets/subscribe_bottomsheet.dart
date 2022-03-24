@@ -172,8 +172,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
     var settings = Provider.of<UserSettings>(context, listen: false);
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     final user = Provider.of<User>(context, listen: false);
     settings.setUser(user);
     final isValid = _form.currentState?.validate();
@@ -215,13 +215,14 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                       registerResult[1],
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: textSizes.h3,
+                          fontSize: multiDeviceSupport.h3,
                           overflow: TextOverflow.fade),
                     ),
                   ),
                 ],
               ),
-              margin: EdgeInsets.symmetric(horizontal: textSizes.columnPadding),
+              margin: EdgeInsets.symmetric(
+                  horizontal: multiDeviceSupport.columnPadding),
               // width: 20,
 
               padding: EdgeInsets.all(10),
@@ -264,13 +265,14 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                   "Register did not complete",
                   style: TextStyle(
                       color: colors.primaryTextColor,
-                      fontSize: textSizes.h3,
+                      fontSize: multiDeviceSupport.h3,
                       overflow: TextOverflow.fade),
                 ),
               ),
             ],
           ),
-          margin: EdgeInsets.symmetric(horizontal: textSizes.columnPadding),
+          margin: EdgeInsets.symmetric(
+              horizontal: multiDeviceSupport.columnPadding),
           // width: 20,
 
           padding: EdgeInsets.all(10),
@@ -305,14 +307,14 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   List<Widget> subscribeFormPage1(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     return [
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
           key: Key('username'),
@@ -322,7 +324,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           cursorColor: colors.primaryTextColor,
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
           ),
           decoration: textFormDecoration('Username', context),
           textInputAction: TextInputAction.next,
@@ -342,8 +344,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
           key: Key('email'),
@@ -352,7 +354,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           cursorColor: colors.primaryTextColor,
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
           ),
           decoration: textFormDecoration('Email', context),
           textInputAction: TextInputAction.next,
@@ -372,7 +374,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding, right: textSizes.columnPadding),
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding),
         child: TextFormField(
           key: Key('password'),
           focusNode: _pwd1FocusNode,
@@ -381,7 +384,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           cursorColor: colors.primaryTextColor,
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
           ),
           decoration: passwordFormDecoration(
               'Password', eyeIcon, _togglePwdText, context),
@@ -407,8 +410,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-          left: textSizes.columnPadding,
-          right: textSizes.columnPadding,
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
           bottom: padding,
         ),
         child: TextFormField(
@@ -419,7 +422,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           cursorColor: colors.primaryTextColor,
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
           ),
           decoration: passwordFormDecoration(
               'Repeat password', eyeIcon, _togglePwdText, context),
@@ -444,8 +447,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-          left: textSizes.columnPadding,
-          right: textSizes.columnPadding,
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
         ),
         child: Container(
           width: 70,
@@ -460,7 +463,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                     backgroundColor: colors.primaryColor,
                     primary: colors.onPrimary,
                     textStyle: TextStyle(
-                      fontSize: textSizes.h2,
+                      fontSize: multiDeviceSupport.h2,
                     ),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 10)),
@@ -477,36 +480,36 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   List<Widget> subscribeFormPage2(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     return [
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "What is your name:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
           key: Key('name'),
           autofocus: false,
           initialValue: _initValues['name'],
           cursorColor: colors.primaryTextColor,
-          style:
-              TextStyle(color: colors.primaryTextColor, fontSize: textSizes.h2),
+          style: TextStyle(
+              color: colors.primaryTextColor, fontSize: multiDeviceSupport.h2),
           decoration: textFormDecoration('Name', context),
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
@@ -525,30 +528,30 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "And your surname:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
           key: Key('surname'),
           focusNode: _surnameFocusNode,
           initialValue: _initValues['surname'],
           cursorColor: colors.primaryTextColor,
-          style:
-              TextStyle(color: colors.primaryTextColor, fontSize: textSizes.h2),
+          style: TextStyle(
+              color: colors.primaryTextColor, fontSize: multiDeviceSupport.h2),
           decoration: textFormDecoration('Surname', context),
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
@@ -567,8 +570,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -576,7 +579,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             "Your height:",
             style: TextStyle(
               color: colors.primaryTextColor,
-              fontSize: textSizes.h2,
+              fontSize: multiDeviceSupport.h2,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -584,7 +587,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             "And your age:",
             style: TextStyle(
               color: colors.primaryTextColor,
-              fontSize: textSizes.h2,
+              fontSize: multiDeviceSupport.h2,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -592,8 +595,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -606,7 +609,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                 initialValue: _initValues['height'],
                 cursorColor: colors.primaryTextColor,
                 style: TextStyle(
-                    color: colors.primaryTextColor, fontSize: textSizes.h2),
+                    color: colors.primaryTextColor,
+                    fontSize: multiDeviceSupport.h2),
                 decoration: textFormDecoration('Height', context),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -634,7 +638,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                 initialValue: _initValues['age'],
                 cursorColor: colors.primaryTextColor,
                 style: TextStyle(
-                    color: colors.primaryTextColor, fontSize: textSizes.h2),
+                    color: colors.primaryTextColor,
+                    fontSize: multiDeviceSupport.h2),
                 decoration: textFormDecoration('Age', context),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -659,22 +664,22 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "You define yourself as:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: FormField(
           builder: (FormFieldState<int> state) {
@@ -713,14 +718,14 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                                         'Sex',
                                         style: TextStyle(
                                             color: colors.secondaryTextColor,
-                                            fontSize: textSizes.h2),
+                                            fontSize: multiDeviceSupport.h2),
                                       )
                                     : Text(
                                         _sexCodes[int.parse(
                                             _initValues['sex'] ?? '-1')],
                                         style: TextStyle(
                                             color: colors.primaryTextColor,
-                                            fontSize: textSizes.h2),
+                                            fontSize: multiDeviceSupport.h2),
                                       )),
                           ],
                         ),
@@ -733,7 +738,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                               state.errorText ?? 'Nope',
                               style: TextStyle(
                                 color: colors.errorColor,
-                                fontSize: textSizes.h3,
+                                fontSize: multiDeviceSupport.h3,
                               ),
                             ),
                           )
@@ -755,22 +760,22 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "Your preferred location:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: FormField(
           builder: (FormFieldState<int> state) {
@@ -809,7 +814,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                                         'City',
                                         style: TextStyle(
                                             color: colors.secondaryTextColor,
-                                            fontSize: textSizes.h2),
+                                            fontSize: multiDeviceSupport.h2),
                                       )
                                     : Text(
                                         _initValues['city_name']
@@ -817,7 +822,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                                             .split(',')[0],
                                         style: TextStyle(
                                             color: colors.primaryTextColor,
-                                            fontSize: textSizes.h2),
+                                            fontSize: multiDeviceSupport.h2),
                                       )),
                           ],
                         ),
@@ -830,7 +835,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                               state.errorText ?? 'Nope',
                               style: TextStyle(
                                 color: colors.errorColor,
-                                fontSize: textSizes.h3,
+                                fontSize: multiDeviceSupport.h3,
                               ),
                             ),
                           )
@@ -852,8 +857,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-          left: textSizes.columnPadding,
-          right: textSizes.columnPadding,
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
         ),
         child: Container(
           width: 70,
@@ -867,7 +872,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     backgroundColor: colors.primaryColor,
                     primary: colors.onPrimary,
-                    textStyle: TextStyle(fontSize: textSizes.h2),
+                    textStyle: TextStyle(fontSize: multiDeviceSupport.h2),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 10)),
                 onPressed: _upPageIndex,
@@ -883,50 +888,50 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   List<Widget> subscribeFormPage3(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     return [
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 50),
         child: Text(
           "Now lets get your  fitness level!",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "How many times a week did you go running in the last six months:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
           key: Key('frequency'),
           autofocus: false,
           initialValue: _initValues['frequency'],
           cursorColor: colors.primaryTextColor,
-          style:
-              TextStyle(color: colors.primaryTextColor, fontSize: textSizes.h2),
+          style: TextStyle(
+              color: colors.primaryTextColor, fontSize: multiDeviceSupport.h2),
           decoration: textFormDecoration('Frequency', context),
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
@@ -947,30 +952,30 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "And for how long each time:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
           key: Key('duration'),
           focusNode: _durationFocusNode,
           initialValue: _initValues['duration'],
           cursorColor: colors.primaryTextColor,
-          style:
-              TextStyle(color: colors.primaryTextColor, fontSize: textSizes.h2),
+          style: TextStyle(
+              color: colors.primaryTextColor, fontSize: multiDeviceSupport.h2),
           decoration: textFormDecoration('Duration', context),
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
@@ -991,30 +996,30 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "How many kilometers do you go for:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
           key: Key('distance'),
           focusNode: _distanceFocusNode,
           initialValue: _initValues['distance'],
           cursorColor: colors.primaryTextColor,
-          style:
-              TextStyle(color: colors.primaryTextColor, fontSize: textSizes.h2),
+          style: TextStyle(
+              color: colors.primaryTextColor, fontSize: multiDeviceSupport.h2),
           decoration: textFormDecoration('Distance', context),
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.next,
@@ -1034,22 +1039,22 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
           "How fit do you feel you are:",
           style: TextStyle(
             color: colors.primaryTextColor,
-            fontSize: textSizes.h2,
+            fontSize: multiDeviceSupport.h2,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Padding(
         padding: EdgeInsets.only(
-            left: textSizes.columnPadding,
-            right: textSizes.columnPadding,
+            left: multiDeviceSupport.columnPadding,
+            right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: FormField(
           builder: (FormFieldState<int> state) {
@@ -1088,14 +1093,14 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                                         'Fitness',
                                         style: TextStyle(
                                             color: colors.secondaryTextColor,
-                                            fontSize: textSizes.h2),
+                                            fontSize: multiDeviceSupport.h2),
                                       )
                                     : Text(
                                         _fitCodes[int.parse(
                                             _initValues['fitness'] ?? '-1')],
                                         style: TextStyle(
                                             color: colors.primaryTextColor,
-                                            fontSize: textSizes.h2),
+                                            fontSize: multiDeviceSupport.h2),
                                       )),
                           ],
                         ),
@@ -1108,7 +1113,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                               state.errorText ?? 'Nope',
                               style: TextStyle(
                                 color: colors.errorColor,
-                                fontSize: textSizes.h3,
+                                fontSize: multiDeviceSupport.h3,
                               ),
                             ),
                           )
@@ -1132,8 +1137,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       ),
       Padding(
         padding: EdgeInsets.only(
-          left: textSizes.columnPadding,
-          right: textSizes.columnPadding,
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
         ),
         child: Container(
           width: 70,
@@ -1147,7 +1152,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     backgroundColor: colors.primaryColor,
                     primary: colors.onPrimary,
-                    textStyle: TextStyle(fontSize: textSizes.h2),
+                    textStyle: TextStyle(fontSize: multiDeviceSupport.h2),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 10)),
                 onPressed: _saveForm,
@@ -1164,8 +1169,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     if (!_isLoading) {
       return SizedBox(
@@ -1179,7 +1184,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
               children: <Widget>[
                 // Title row
                 Padding(
-                  padding: EdgeInsets.only(top: textSizes.paddingTop2),
+                  padding: EdgeInsets.only(top: multiDeviceSupport.paddingTop2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1207,7 +1212,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                         "Subscribe to Run With Me",
                         style: TextStyle(
                             color: colors.primaryTextColor,
-                            fontSize: textSizes.h1,
+                            fontSize: multiDeviceSupport.h1,
                             height: 1.5,
                             fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,

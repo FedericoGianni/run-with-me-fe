@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../classes/multi_device_support.dart';
 import '../themes/custom_colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -29,6 +30,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     return Scaffold(
       body: Center(
         child: ScaleTransition(
@@ -37,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen>
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
               "assets/icons/logo_gradient.png",
-              width: 180,
+              width: 180 + multiDeviceSupport.tablet * 90,
             ),
           ),
         ),
@@ -46,11 +49,11 @@ class _SplashScreenState extends State<SplashScreen>
         heightFactor: 1,
         child: Container(
           padding: const EdgeInsets.all(30),
-          child: const Text(
+          child: Text(
             'DIMA Project 2021',
             style: TextStyle(
                 color: Color(YELLOW_GREEN_DARK),
-                fontSize: 18,
+                fontSize: multiDeviceSupport.h1,
                 fontWeight: FontWeight.w500),
           ),
         ),

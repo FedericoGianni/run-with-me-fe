@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:runwithme/providers/event.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/color_scheme.dart';
 import '../providers/locationHelper.dart';
 import 'custom_sort_by_button.dart';
@@ -63,7 +64,7 @@ class SortByRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
-    print('Building sort buttons: ' + currentSortButton.toString());
+
     return Container(
       color: colors.background,
       padding: EdgeInsets.only(top: 15, bottom: 15),

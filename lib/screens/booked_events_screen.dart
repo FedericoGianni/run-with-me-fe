@@ -5,6 +5,7 @@ import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 import 'package:runwithme/widgets/splash.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/events.dart';
 import '../providers/user.dart';
 import '../widgets/custom_scroll_behavior.dart';
@@ -98,10 +99,19 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
 
   List<Widget> _buildPage() {
     final colors = Provider.of<CustomColorScheme>(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     return [
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        padding: EdgeInsets.only(
+          bottom: 0,
+          top: 20,
+          left: 20 + multiDeviceSupport.tablet * 30,
+          right: 20 + multiDeviceSupport.tablet * 30,
+        ),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,7 +120,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 "Booked events",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 20,
+                    fontSize: multiDeviceSupport.h0,
                     fontWeight: FontWeight.w900),
               ),
             ],
@@ -118,29 +128,34 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
         ),
       ),
       SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+        padding: EdgeInsets.only(
+            bottom: 40,
+            top: 20 + multiDeviceSupport.tablet * 30,
+            left: 20 + multiDeviceSupport.tablet * 30,
+            right: 20),
         sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             childAspectRatio: _aspectRatio,
             mainAxisSpacing: 15.0,
             crossAxisSpacing: 15.0,
-            maxCrossAxisExtent: 400 / _view,
+            maxCrossAxisExtent: (400 + multiDeviceSupport.tablet * 80) / _view,
+            mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return EventItem(
-                widget._futureBookedEvents[index],
-                index,
-                widget._futureBookedEvents.length,
-              );
+              return EventItem(widget._futureBookedEvents[index], index,
+                  widget._futureBookedEvents.length, _view);
             },
             childCount: widget._futureBookedEvents.length,
           ),
         ),
       ),
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        padding: EdgeInsets.only(
+            bottom: 0,
+            top: 20,
+            left: 20 + multiDeviceSupport.tablet * 30,
+            right: 20 + multiDeviceSupport.tablet * 30),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,7 +164,7 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 "Your past events",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 20,
+                    fontSize: multiDeviceSupport.h0,
                     fontWeight: FontWeight.w900),
               ),
             ],
@@ -157,21 +172,26 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
         ),
       ),
       SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+        padding: EdgeInsets.only(
+            bottom: 40,
+            top: 20,
+            left: 20 + multiDeviceSupport.tablet * 30,
+            right: 20 + multiDeviceSupport.tablet * 30),
         sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            childAspectRatio: _aspectRatio,
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 15.0,
-            maxCrossAxisExtent: 400 / _view,
-          ),
+              childAspectRatio: _aspectRatio,
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 15.0,
+              maxCrossAxisExtent:
+                  (400 + multiDeviceSupport.tablet * 100) / _view,
+              mainAxisExtent: 115 + multiDeviceSupport.tablet * 35),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return EventItem(
                 widget._pastBookedEvents[index],
                 index,
                 widget._pastBookedEvents.length,
+                _view,
               );
             },
             childCount: widget._pastBookedEvents.length,
@@ -188,6 +208,9 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final events = Provider.of<Events>(context);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
+
     if (widget._bookedEvents.length == 0) {
       widget._bookedEvents = events.bookedEvents;
 
@@ -223,10 +246,11 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
             slivers: [
               SliverAppBar(
                 stretch: false,
-                toolbarHeight: screenHeight / 6,
+                toolbarHeight:
+                    screenHeight / 6 - multiDeviceSupport.tablet * 50,
                 title: Container(
                   color: colors.onPrimary,
-                  height: screenHeight / 6,
+                  height: screenHeight / 6 - multiDeviceSupport.tablet * 50,
                   width: double.infinity,
                   padding: const EdgeInsets.only(
                     top: 50,
@@ -239,7 +263,9 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 ),
 
                 titleSpacing: 0,
-                expandedHeight: screenHeight / 6 + _flexibleSpaceBarHeight,
+                expandedHeight: screenHeight / 6 +
+                    _flexibleSpaceBarHeight -
+                    multiDeviceSupport.tablet * 50,
                 backgroundColor: colors.background,
 
                 // back up the list of items.
@@ -264,13 +290,15 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                                     Container(
                                       padding: EdgeInsets.only(left: 10),
                                       height: screenHeight / 20,
-                                      width: 80,
+                                      width:
+                                          80 + multiDeviceSupport.tablet * 35,
                                       child: TextButton(
                                         style: TextButton.styleFrom(
                                             backgroundColor: colors.background,
                                             primary: colors.onPrimary,
-                                            textStyle:
-                                                const TextStyle(fontSize: 10),
+                                            textStyle: TextStyle(
+                                                fontSize:
+                                                    multiDeviceSupport.h5),
                                             padding: const EdgeInsets.all(0)),
                                         onPressed: () {
                                           setState(() {
@@ -286,11 +314,14 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                                                   ? TextStyle(
                                                       color:
                                                           colors.secondaryColor,
-                                                      fontSize: 16)
+                                                      fontSize:
+                                                          multiDeviceSupport.h2)
                                                   : TextStyle(
                                                       color: colors
                                                           .secondaryTextColor,
-                                                      fontSize: 16),
+                                                      fontSize:
+                                                          multiDeviceSupport
+                                                              .h2),
                                             ),
                                             Icon(
                                               widget._sortMenu
@@ -313,18 +344,19 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                                           " results",
                                       style: TextStyle(
                                           color: colors.secondaryTextColor,
-                                          fontSize: 14),
+                                          fontSize: multiDeviceSupport.h3),
                                     ),
                                     Container(
-                                      width: 75,
+                                      width:
+                                          75 + multiDeviceSupport.tablet * 40,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           IconButton(
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.table_rows_outlined,
-                                              size: 30,
+                                              size: multiDeviceSupport.icons,
                                             ),
                                             color: _rowColor,
                                             onPressed: () {
@@ -335,15 +367,18 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                                             splashRadius: 10,
                                           ),
                                           IconButton(
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.grid_view_outlined,
-                                              size: 30,
+                                              size: multiDeviceSupport.icons,
                                             ),
                                             color: _gridColor,
                                             onPressed: () {
                                               __selectGridView(colors);
                                             },
-                                            padding: EdgeInsets.zero,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    multiDeviceSupport.tablet *
+                                                        30),
                                             constraints: const BoxConstraints(),
                                             splashRadius: 10,
                                           ),
