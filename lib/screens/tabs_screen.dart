@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/themes/custom_colors.dart';
+import '../classes/multi_device_support.dart';
 import '../providers/event.dart';
 
 // import '../widgets/main_drawer.dart';
@@ -82,6 +83,8 @@ class _TabsScreenState extends State<TabsScreen> {
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context);
     final user = Provider.of<User>(context, listen: false);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     locationHelper.setDefaultUserPosition(
       Position(
         longitude: user.cityLong ?? 0.0,
@@ -115,6 +118,7 @@ class _TabsScreenState extends State<TabsScreen> {
         currentIndex: pageIndex.index,
         type: BottomNavigationBarType.fixed,
         elevation: 4,
+        iconSize: 20 + multiDeviceSupport.tablet * 20,
         items: [
           BottomNavigationBarItem(
             backgroundColor: colors.primaryColor,

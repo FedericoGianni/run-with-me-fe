@@ -133,6 +133,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 events.suggestedEvents[index],
                 index,
                 events.suggestedEvents.length,
+                _view,
               );
             },
             childCount: _eventList.length,
@@ -184,6 +185,7 @@ class _EventsScreenState extends State<EventsScreen> {
                   events.recentEvents[index],
                   index,
                   events.recentEvents.length,
+                  _view,
                 ),
               );
             },

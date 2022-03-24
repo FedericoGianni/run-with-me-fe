@@ -70,8 +70,8 @@ class CustomTheme {
 
 InputDecoration textFormDecoration(String label, ctx) {
   final colors = Provider.of<CustomColorScheme>(ctx);
-  var textSizes = MultiDeviceSupport(ctx);
-  textSizes.init();
+  var multiDeviceSupport = MultiDeviceSupport(ctx);
+  multiDeviceSupport.init();
   return InputDecoration(
     labelText: label,
     floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -84,9 +84,10 @@ InputDecoration textFormDecoration(String label, ctx) {
       borderSide: BorderSide(color: colors.errorColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
-    labelStyle:
-        TextStyle(color: colors.secondaryTextColor, fontSize: textSizes.h2),
-    errorStyle: TextStyle(color: colors.errorColor, fontSize: textSizes.h3),
+    labelStyle: TextStyle(
+        color: colors.secondaryTextColor, fontSize: multiDeviceSupport.h2),
+    errorStyle:
+        TextStyle(color: colors.errorColor, fontSize: multiDeviceSupport.h3),
     fillColor: colors.onPrimary,
     filled: true,
     focusedBorder: OutlineInputBorder(
@@ -103,8 +104,8 @@ InputDecoration textFormDecoration(String label, ctx) {
 InputDecoration passwordFormDecoration(
     String label, Icon icon, toggleFunction, ctx) {
   final colors = Provider.of<CustomColorScheme>(ctx);
-  var textSizes = MultiDeviceSupport(ctx);
-  textSizes.init();
+  var multiDeviceSupport = MultiDeviceSupport(ctx);
+  multiDeviceSupport.init();
   return InputDecoration(
     suffixIcon: GestureDetector(
         child: icon,
@@ -122,9 +123,10 @@ InputDecoration passwordFormDecoration(
       borderSide: BorderSide(color: colors.errorColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
-    labelStyle:
-        TextStyle(color: colors.secondaryTextColor, fontSize: textSizes.h2),
-    errorStyle: TextStyle(color: colors.errorColor, fontSize: textSizes.h3),
+    labelStyle: TextStyle(
+        color: colors.secondaryTextColor, fontSize: multiDeviceSupport.h2),
+    errorStyle:
+        TextStyle(color: colors.errorColor, fontSize: multiDeviceSupport.h3),
     fillColor: colors.onPrimary,
     filled: true,
     focusedBorder: OutlineInputBorder(

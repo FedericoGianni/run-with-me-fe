@@ -8,6 +8,7 @@ import 'package:runwithme/widgets/custom_map_search.dart';
 import 'package:runwithme/widgets/custom_maps_new.dart';
 import 'package:runwithme/widgets/search_event_bottomsheet.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/settings_manager.dart';
 import '../widgets/permissions_message.dart';
 import '../widgets/search_button.dart';
@@ -290,6 +291,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
     final locationHelper = Provider.of<LocationHelper>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
     final settings = Provider.of<UserSettings>(context, listen: false);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     if (settings.isLoggedIn()) {
       return _isLoading
@@ -303,10 +306,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
               child: ListView(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(
+                    padding: EdgeInsets.only(
                       top: 10,
-                      left: 20.0,
-                      right: 20,
+                      left: 20.0 + multiDeviceSupport.tablet * 50,
+                      right: 20 + multiDeviceSupport.tablet * 50,
                     ),
                     child: Container(
                       padding: const EdgeInsets.only(bottom: 20),
@@ -960,20 +963,22 @@ class AddEventAppbar extends StatelessWidget {
     double statusBarHeight = MediaQuery.of(context).padding.top;
     final colors = Provider.of<CustomColorScheme>(context);
     PageIndex index = Provider.of<PageIndex>(context);
-
-    print(statusBarHeight);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
+    // print(statusBarHeight);
     return GradientAppBar(
         // ((MediaQuery.of(context).size.height / 14) + statusBarHeight), [
-        (75 + statusBarHeight),
+        (75 + statusBarHeight + multiDeviceSupport.tablet * 50),
         [
           Padding(
-            padding: EdgeInsets.all(statusBarHeight),
+            padding: EdgeInsets.all(
+                statusBarHeight + multiDeviceSupport.tablet * 25),
             child: Center(
               child: Text(
                 'Add new Event',
                 style: TextStyle(
                     color: colors.titleColor,
-                    fontSize: 20,
+                    fontSize: multiDeviceSupport.title,
                     fontWeight: FontWeight.bold),
               ),
             ),

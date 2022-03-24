@@ -14,18 +14,18 @@ class CustomOptionsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     return AlertDialog(
       backgroundColor: colors.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       content: SizedBox(
-        height: 180 + textSizes.tablet * 100,
+        height: 180 + multiDeviceSupport.tablet * 100,
         width: screenWidth / 2,
         child: Column(
           children: [
             Container(
-              height: 180 + textSizes.tablet * 50,
+              height: 180 + multiDeviceSupport.tablet * 50,
               width: screenWidth,
               child: ScrollConfiguration(
                 behavior: CustomScrollBehavior(),
@@ -36,7 +36,7 @@ class CustomOptionsDialog extends StatelessWidget {
                     SliverPadding(
                       padding: EdgeInsets.only(
                           bottom: 0,
-                          top: textSizes.tablet * 20,
+                          top: multiDeviceSupport.tablet * 20,
                           left: 0,
                           right: 0),
                       sliver: SliverToBoxAdapter(
@@ -54,13 +54,13 @@ class CustomOptionsDialog extends StatelessWidget {
                                     Navigator.of(context).pop(index);
                                   },
                                   title: Padding(
-                                    padding:
-                                        EdgeInsets.all(textSizes.tablet * 20.0),
+                                    padding: EdgeInsets.all(
+                                        multiDeviceSupport.tablet * 20.0),
                                     child: Text(
                                       options[index],
                                       style: TextStyle(
                                           color: colors.primaryTextColor,
-                                          fontSize: textSizes.h2),
+                                          fontSize: multiDeviceSupport.h2),
                                     ),
                                   ),
                                 );

@@ -67,8 +67,8 @@ class _UserScreenState extends State<UserScreen> {
     final user = Provider.of<User>(context);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    var textSizes = MultiDeviceSupport(context);
-    textSizes.init();
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     if (colors.currentMode == 'dark') {
       isSelected = [false, true];
     } else if (colors.currentMode == 'light') {
@@ -131,7 +131,8 @@ class _UserScreenState extends State<UserScreen> {
                                   Container(
                                     width: screenWidth,
                                     padding: EdgeInsets.only(
-                                        top: 25 - 18 * textSizes.tablet,
+                                        top:
+                                            25 - 18 * multiDeviceSupport.tablet,
                                         left: 20,
                                         bottom: 5),
                                     child: Column(
@@ -146,7 +147,8 @@ class _UserScreenState extends State<UserScreen> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   color: colors.titleColor,
-                                                  fontSize: textSizes.title,
+                                                  fontSize:
+                                                      multiDeviceSupport.title,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -164,7 +166,8 @@ class _UserScreenState extends State<UserScreen> {
                                                 style: TextStyle(
                                                   overflow: TextOverflow.clip,
                                                   color: colors.titleColor,
-                                                  fontSize: textSizes.h3,
+                                                  fontSize:
+                                                      multiDeviceSupport.h3,
                                                 ),
                                               ),
                                             ),
@@ -172,7 +175,9 @@ class _UserScreenState extends State<UserScreen> {
                                               padding: EdgeInsets.only(
                                                   top: 0,
                                                   left: 20 +
-                                                      textSizes.tablet * 40),
+                                                      multiDeviceSupport
+                                                              .tablet *
+                                                          40),
                                               child: Text(
                                                 'Since: ' +
                                                     user.createdAt!
@@ -192,7 +197,8 @@ class _UserScreenState extends State<UserScreen> {
                                                 style: TextStyle(
                                                   overflow: TextOverflow.clip,
                                                   color: colors.titleColor,
-                                                  fontSize: textSizes.h3,
+                                                  fontSize:
+                                                      multiDeviceSupport.h3,
                                                 ),
                                               ),
                                             )
@@ -215,7 +221,7 @@ class _UserScreenState extends State<UserScreen> {
                                   //         style: TextStyle(
                                   //           overflow: TextOverflow.clip,
                                   //           color: colors.titleColor,
-                                  //           fontSize: textSizes.h3,
+                                  //           fontSize: multiDeviceSupport.h3,
                                   //           fontWeight: FontWeight.bold,
                                   //         ),
                                   //       ),
@@ -251,14 +257,14 @@ class _UserScreenState extends State<UserScreen> {
                     padding: EdgeInsets.only(
                         bottom: 0,
                         top: 40,
-                        left: 20 + textSizes.tablet * 50,
-                        right: 20 + textSizes.tablet * 50),
+                        left: 20 + multiDeviceSupport.tablet * 50,
+                        right: 20 + multiDeviceSupport.tablet * 50),
                     sliver: SliverToBoxAdapter(
                         child: Text(
                       'User info',
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: textSizes.h0),
+                          fontSize: multiDeviceSupport.h0),
                     )),
                   ),
                   // Actual list of cards with user infos
@@ -266,8 +272,8 @@ class _UserScreenState extends State<UserScreen> {
                     padding: EdgeInsets.only(
                         bottom: 0,
                         top: 20,
-                        left: 20 + textSizes.tablet * 50,
-                        right: 20 + textSizes.tablet * 50),
+                        left: 20 + multiDeviceSupport.tablet * 50,
+                        right: 20 + multiDeviceSupport.tablet * 50),
                     sliver: SliverToBoxAdapter(child: UserInfo(user)),
                   ),
                   // Grey line
@@ -275,8 +281,8 @@ class _UserScreenState extends State<UserScreen> {
                     padding: EdgeInsets.only(
                         bottom: 0,
                         top: 40,
-                        left: 50 + textSizes.tablet * 50,
-                        right: 50 + textSizes.tablet * 50),
+                        left: 50 + multiDeviceSupport.tablet * 50,
+                        right: 50 + multiDeviceSupport.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Container(
                         decoration: BoxDecoration(
@@ -295,14 +301,14 @@ class _UserScreenState extends State<UserScreen> {
                     padding: EdgeInsets.only(
                         bottom: 30,
                         top: 40,
-                        left: 20 + textSizes.tablet * 50,
-                        right: 20 + textSizes.tablet * 50),
+                        left: 20 + multiDeviceSupport.tablet * 50,
+                        right: 20 + multiDeviceSupport.tablet * 50),
                     sliver: SliverToBoxAdapter(
                         child: Text(
                       'Settings',
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: textSizes.h0),
+                          fontSize: multiDeviceSupport.h0),
                     )),
                   ),
                   // Actual list of cards with user infos
@@ -310,8 +316,8 @@ class _UserScreenState extends State<UserScreen> {
                     padding: EdgeInsets.only(
                         bottom: 0,
                         top: 10,
-                        left: 20 + textSizes.tablet * 50,
-                        right: 20 + textSizes.tablet * 50),
+                        left: 20 + multiDeviceSupport.tablet * 50,
+                        right: 20 + multiDeviceSupport.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Card(
                         color: colors.onPrimary,
@@ -394,8 +400,8 @@ class _UserScreenState extends State<UserScreen> {
                     padding: EdgeInsets.only(
                         bottom: 0,
                         top: 10,
-                        left: 20 + textSizes.tablet * 50,
-                        right: 20 + textSizes.tablet * 50),
+                        left: 20 + multiDeviceSupport.tablet * 50,
+                        right: 20 + multiDeviceSupport.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Card(
                         color: colors.onPrimary,
@@ -429,8 +435,8 @@ class _UserScreenState extends State<UserScreen> {
                     padding: EdgeInsets.only(
                         bottom: 40,
                         top: 0,
-                        left: 20 + textSizes.tablet * 50,
-                        right: 20 + textSizes.tablet * 50),
+                        left: 20 + multiDeviceSupport.tablet * 50,
+                        right: 20 + multiDeviceSupport.tablet * 50),
                     sliver: SliverToBoxAdapter(
                       child: Card(
                         color: colors.onPrimary,
