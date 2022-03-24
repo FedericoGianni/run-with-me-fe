@@ -8,6 +8,7 @@ import 'package:runwithme/widgets/splash.dart';
 
 import '../providers/events.dart';
 import '../providers/locationHelper.dart';
+import '../providers/page_index.dart';
 import '../providers/user.dart';
 import '../widgets/custom_scroll_behavior.dart';
 import '../widgets/event_card_text_only.dart';
@@ -38,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Color _gridColor = Colors.deepOrange.shade900;
   var _isInit = true;
   var _isLoading = false;
+  static const int MAX_LENGTH = 2;
 
   @override
   void initState() {
@@ -53,13 +55,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // 1. fetch suggested events
 
-      Position userPosition =
-          Provider.of<LocationHelper>(context).getLastKnownPosition();
-      Provider.of<Events>(context).fetchAndSetSuggestedEvents(
-          userPosition.latitude,
-          userPosition.longitude,
-          5,
-          Provider.of<UserSettings>(context, listen: false).isLoggedIn());
+      // Position userPosition =
+      //     Provider.of<LocationHelper>(context).getLastKnownPosition();
+      // Provider.of<Events>(context).fetchAndSetSuggestedEvents(
+      //     userPosition.latitude,
+      //     userPosition.longitude,
+      //     5,
+      //     Provider.of<UserSettings>(context, listen: false).isLoggedIn());
 
       // 2. fetch booked events and divide past/future events
 
@@ -93,6 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  List<Event> _sortAndReduce(List<Event> events, int max) {
+    events.sort((a, b) => a.date.compareTo(b.date));
+    if (events.length >= max) {
+      events = events.sublist(0, max);
+    }
+    return events;
+  }
+
   Future<Null> _handleRefresh() async {
     widget._sortMenu = false;
     widget._currentSortButton = SortButton.none;
@@ -107,22 +117,31 @@ class _HomeScreenState extends State<HomeScreen> {
         .where((element) => element.date.isAfter(DateTime.now()))
         .toList();
 
+    widget._futureBookedEvents =
+        _sortAndReduce(widget._futureBookedEvents, MAX_LENGTH);
+
     widget._pastBookedEvents = widget._bookedEvents
         .where((element) => element.date.isBefore(DateTime.now()))
         .toList();
 
+    widget._pastBookedEvents =
+        _sortAndReduce(widget._pastBookedEvents, MAX_LENGTH);
+
     // 2. update suggested events
 
-    events.fetchAndSetSuggestedEvents(
-        events.lastSuggestedLat,
-        events.lastSuggestedLong,
-        events.lastSuggestedMaxDistKm,
-        Provider.of<UserSettings>(context, listen: false).isLoggedIn());
-    widget._suggestedEvents = events.suggestedEvents
-        .where((element) =>
-            (element.difficultyLevel < user.fitnessLevel! + 1) &&
-            (element.difficultyLevel > user.fitnessLevel! - 1))
-        .toList();
+    // events.fetchAndSetSuggestedEvents(
+    //     events.lastSuggestedLat,
+    //     events.lastSuggestedLong,
+    //     events.lastSuggestedMaxDistKm,
+    //     Provider.of<UserSettings>(context, listen: false).isLoggedIn());
+    // widget._suggestedEvents = events.suggestedEvents
+    //     .where((element) =>
+    //         (element.difficultyLevel < user.fitnessLevel! + 1) &&
+    //         (element.difficultyLevel > user.fitnessLevel! - 1))
+    //     .toList();
+
+    // widget._suggestedEvents =
+    //     _sortAndReduce(widget._suggestedEvents, MAX_LENGTH);
 
     setState(() {});
     return null;
@@ -130,16 +149,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> _buildPage() {
     final colors = Provider.of<CustomColorScheme>(context);
+    final user = Provider.of<User>(context, listen: false);
+    final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
     return [
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        padding:
+            const EdgeInsets.only(bottom: 50, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Suggested",
+                "Welcome back " + user.name.toString(),
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 20,
@@ -150,21 +172,39 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
-        sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            childAspectRatio: _aspectRatio,
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 15.0,
-            maxCrossAxisExtent: 400 / _view,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return EventItem(widget._suggestedEvents[index], index,
-                  widget._suggestedEvents.length);
-            },
-            childCount: widget._suggestedEvents.length,
+        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Text(
+                  "Search for an event",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.search,
+                    size: 30,
+                  ),
+                  color: _gridColor,
+                  onPressed: () {
+                    pageIndex.setPage(Screens.SEARCH.index);
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 10,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -175,7 +215,24 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Booked events",
+                "",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Your upcoming events",
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 20,
@@ -256,6 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final events = Provider.of<Events>(context);
+
     if (widget._bookedEvents.length == 0) {
       widget._bookedEvents = events.bookedEvents;
 
@@ -263,9 +321,15 @@ class _HomeScreenState extends State<HomeScreen> {
           .where((element) => element.date.isAfter(DateTime.now()))
           .toList();
 
+      widget._futureBookedEvents =
+          _sortAndReduce(widget._futureBookedEvents, MAX_LENGTH);
+
       widget._pastBookedEvents = widget._bookedEvents
           .where((element) => element.date.isBefore(DateTime.now()))
           .toList();
+
+      widget._pastBookedEvents =
+          _sortAndReduce(widget._pastBookedEvents, MAX_LENGTH);
     }
 
     double _flexibleSpaceBarHeight;
