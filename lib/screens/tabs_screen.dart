@@ -114,7 +114,7 @@ class _TabsScreenState extends State<TabsScreen> {
         selectedItemColor: colors.primaryColor,
         currentIndex: pageIndex.index,
         type: BottomNavigationBarType.fixed,
-        elevation: 2,
+        elevation: 4,
         items: [
           BottomNavigationBarItem(
             backgroundColor: colors.primaryColor,
