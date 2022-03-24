@@ -633,7 +633,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Run durations: ",
+                "Time running: ",
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 18,
