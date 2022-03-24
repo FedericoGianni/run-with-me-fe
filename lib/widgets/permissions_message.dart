@@ -18,19 +18,6 @@ class PermissionMessage extends StatelessWidget {
       height: double.infinity,
       child: Column(
         children: [
-          Container(
-            color: colors.onPrimary,
-            height: 123,
-            width: double.infinity,
-            padding: const EdgeInsets.only(
-              top: 50,
-              bottom: 20,
-            ),
-            child: Image.asset(
-              "assets/icons/logo_gradient.png",
-              width: 130,
-            ),
-          ),
           Center(
             heightFactor: 4.5,
             child: Column(
@@ -47,25 +34,24 @@ class PermissionMessage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 0, bottom: 30),
                   child: Text(
                     'You need permissions to view this page',
                     style:
                         TextStyle(color: colors.primaryTextColor, fontSize: 14),
                   ),
                 ),
-                SizedBox(
+                Container(
+                  height: 35,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: colors.secondaryColor,
+                  ),
                   child: TextButton(
-                    style: TextButton.styleFrom(
-                        backgroundColor: colors.secondaryColor,
-                        primary: colors.onPrimary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        textStyle: const TextStyle(fontSize: 20),
-                        padding: const EdgeInsets.all(0)),
                     onPressed: () => {pageIndex.setPage(Screens.USER.index)},
                     child: Text(
-                      'Login',
+                      ' Login ',
                       style: TextStyle(
                           color: colors.primaryTextColor,
                           fontSize: 15,
