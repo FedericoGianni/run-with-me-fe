@@ -301,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.location_on,
                     size: 30,
                   ),
-                  color: colors.primaryColor,
+                  color: colors.secondaryTextColor,
                   onPressed: () {},
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
@@ -526,9 +526,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.w900),
               ),
-              const Icon(
-                Icons.auto_graph,
-                size: 30,
+              IconButton(
+                icon: const Icon(
+                  Icons.auto_graph,
+                  size: 30,
+                ),
+                color: colors.secondaryTextColor,
+                onPressed: () {},
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                splashRadius: 10,
               ),
             ],
           ),
