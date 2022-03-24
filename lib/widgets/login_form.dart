@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_snackbar.dart';
 import 'package:runwithme/widgets/splash.dart';
+import '../classes/multi_device_support.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
@@ -107,7 +108,11 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     var settings = Provider.of<UserSettings>(context);
+    var textSizes = MultiDeviceSupport(context);
+    textSizes.init();
 
     // This snackbar is used for the popup message in case of wrong credentials
     print(settings.isLoggedIn().toString());
@@ -120,19 +125,19 @@ class _LoginFormState extends State<LoginForm> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 100.0),
+                    padding: EdgeInsets.only(top: screenHeight / 6),
                     child: Text(
                       "Log in to Run With Me",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 18,
+                          fontSize: textSizes.h1,
                           height: 1.5,
                           fontWeight: FontWeight.w600),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 40),
+                    padding: EdgeInsets.only(bottom: screenHeight / 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -140,7 +145,7 @@ class _LoginFormState extends State<LoginForm> {
                           "Not yet registered?",
                           style: TextStyle(
                               color: colors.primaryTextColor,
-                              fontSize: 16,
+                              fontSize: textSizes.h2,
                               height: 1.5,
                               fontWeight: FontWeight.normal),
                           textAlign: TextAlign.center,
@@ -163,7 +168,7 @@ class _LoginFormState extends State<LoginForm> {
                             'Subscribe',
                             style: TextStyle(
                                 color: colors.primaryColor,
-                                fontSize: 16,
+                                fontSize: textSizes.h2,
                                 height: 1.5,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -184,7 +189,8 @@ class _LoginFormState extends State<LoginForm> {
                 // autofocus: true,
                 initialValue: _initValues['username'],
                 cursorColor: colors.primaryTextColor,
-                style: TextStyle(color: colors.primaryTextColor),
+                style: TextStyle(
+                    color: colors.primaryTextColor, fontSize: textSizes.h3),
                 decoration: textFormDecoration('Username', context),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
@@ -213,7 +219,8 @@ class _LoginFormState extends State<LoginForm> {
                 initialValue: _initValues['password'],
                 obscureText: isTextObsured,
                 cursorColor: colors.primaryTextColor,
-                style: TextStyle(color: colors.primaryTextColor),
+                style: TextStyle(
+                    color: colors.primaryTextColor, fontSize: textSizes.h3),
                 decoration: passwordFormDecoration(
                     'Password', eyeIcon, _togglePwdText, context),
                 textInputAction: TextInputAction.next,
@@ -244,8 +251,10 @@ class _LoginFormState extends State<LoginForm> {
                     TextButton(
                       style: TextButton.styleFrom(
                           primary: colors.secondaryTextColor,
-                          textStyle: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
+                          textStyle: TextStyle(
+                            fontSize: textSizes.h3,
+                            fontWeight: FontWeight.bold,
+                          ),
                           padding: const EdgeInsets.symmetric(vertical: 10)),
                       onPressed: () {},
                       child: const Text('Forgot password?'),
@@ -257,7 +266,7 @@ class _LoginFormState extends State<LoginForm> {
                                   BorderRadius.all(Radius.circular(10))),
                           backgroundColor: colors.primaryColor,
                           primary: colors.onPrimary,
-                          textStyle: const TextStyle(fontSize: 16),
+                          textStyle: TextStyle(fontSize: textSizes.h3),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 10)),
                       onPressed: _saveForm,

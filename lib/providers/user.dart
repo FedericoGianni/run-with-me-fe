@@ -98,20 +98,23 @@ class User with ChangeNotifier {
         if (response.statusCode == 200) {
           print("user info get went correctly");
           var userInfo = json.decode(await response.stream.bytesToString());
+          print("User info: ");
           print(userInfo);
           age = userInfo['age'];
           sex = userInfo['sex'];
-          name = userInfo['name'];
-          surname = userInfo['surname'];
-          email = userInfo['email'];
+          name = userInfo['name'] ?? '';
+          surname = userInfo['surname'] ?? '';
+          email = userInfo['email'] ?? '';
 
-          Map<String, Object> city = await LocationHelper().getPlaceDetails(
-              placeId: userInfo['city'], sessionToken: Uuid().v4());
+          if (userInfo['city'] != null) {
+            Map<String, Object> city = await LocationHelper().getPlaceDetails(
+                placeId: userInfo['city'], sessionToken: Uuid().v4());
 
-          cityName = city['name'].toString();
-          cityId = city['place_id'].toString();
-          cityLat = double.parse(city['latitude'].toString());
-          cityLong = double.parse(city['longitude'].toString());
+            cityName = city['name'].toString();
+            cityId = city['place_id'].toString();
+            cityLat = double.parse(city['latitude'].toString());
+            cityLong = double.parse(city['longitude'].toString());
+          }
           createdAt = DateTime.fromMillisecondsSinceEpoch(
               12321232 * 1000); // userInfo['created_at']
           fitnessLevel = userInfo['fitness_level'];

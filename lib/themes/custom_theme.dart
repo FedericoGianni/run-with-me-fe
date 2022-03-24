@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:http/browser_client.dart';
 
+import '../classes/multi_device_support.dart';
 import 'custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +70,8 @@ class CustomTheme {
 
 InputDecoration textFormDecoration(String label, ctx) {
   final colors = Provider.of<CustomColorScheme>(ctx);
-
+  var textSizes = MultiDeviceSupport(ctx);
+  textSizes.init();
   return InputDecoration(
     labelText: label,
     floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -82,7 +84,9 @@ InputDecoration textFormDecoration(String label, ctx) {
       borderSide: BorderSide(color: colors.errorColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
-    labelStyle: TextStyle(color: colors.secondaryTextColor),
+    labelStyle:
+        TextStyle(color: colors.secondaryTextColor, fontSize: textSizes.h2),
+    errorStyle: TextStyle(color: colors.errorColor, fontSize: textSizes.h3),
     fillColor: colors.onPrimary,
     filled: true,
     focusedBorder: OutlineInputBorder(
@@ -99,7 +103,8 @@ InputDecoration textFormDecoration(String label, ctx) {
 InputDecoration passwordFormDecoration(
     String label, Icon icon, toggleFunction, ctx) {
   final colors = Provider.of<CustomColorScheme>(ctx);
-
+  var textSizes = MultiDeviceSupport(ctx);
+  textSizes.init();
   return InputDecoration(
     suffixIcon: GestureDetector(
         child: icon,
@@ -117,7 +122,9 @@ InputDecoration passwordFormDecoration(
       borderSide: BorderSide(color: colors.errorColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
-    labelStyle: TextStyle(color: colors.secondaryTextColor),
+    labelStyle:
+        TextStyle(color: colors.secondaryTextColor, fontSize: textSizes.h2),
+    errorStyle: TextStyle(color: colors.errorColor, fontSize: textSizes.h3),
     fillColor: colors.onPrimary,
     filled: true,
     focusedBorder: OutlineInputBorder(
