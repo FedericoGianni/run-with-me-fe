@@ -558,13 +558,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       SliverPadding(
         padding:
-            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+            const EdgeInsets.only(bottom: 10, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Weekly Stats",
+                "Weekly Stats: ",
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 20,
@@ -580,6 +580,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 splashRadius: 10,
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Last 7 days",
+                style: TextStyle(
+                    color: colors.secondaryTextColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900),
               ),
             ],
           ),
