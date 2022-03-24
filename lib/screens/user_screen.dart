@@ -79,7 +79,7 @@ class _UserScreenState extends State<UserScreen> {
         children: [
           Container(
             color: colors.background,
-            height: screenHeight - 56,
+            height: screenHeight - 56 - multiDeviceSupport.tablet * 14,
             child: ScrollConfiguration(
               behavior: CustomScrollBehavior(),
               child: CustomScrollView(
