@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:runwithme/methods/DateHelper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
@@ -28,6 +29,8 @@ class HomeScreen extends StatefulWidget {
   List<Event> _bookedEvents = [];
   List<Event> _futureBookedEvents = [];
   List<Event> _pastBookedEvents = [];
+  List<Event> _fullPastBookedEvents = [];
+  List<Event> _fullFutureBookedEvents = [];
   //List<Event> _suggestedEvents = [];
 
   @override
@@ -150,6 +153,36 @@ class _HomeScreenState extends State<HomeScreen> {
     return null;
   }
 
+  int calcWeeklyKms() {
+    int kms = 0;
+    //_pastBookedEvents is reduced to 2 events only, for stats purposes i need full booked events, but only in the past
+    Provider.of<Events>(context, listen: false)
+        .bookedEvents
+        .where((element) => element.date.isBefore(DateTime.now()))
+        .toList()
+        .forEach((event) {
+      if (DateHelper.diffInDays(event.date, DateTime.now()) <= 7) {
+        kms += event.averageLength;
+      }
+    });
+    return kms;
+  }
+
+  int calcWeeklyMins() {
+    int mins = 0;
+    //_pastBookedEvents is reduced to 2 events only, for stats purposes i need full booked events, but only in the past
+    Provider.of<Events>(context, listen: false)
+        .bookedEvents
+        .where((element) => element.date.isBefore(DateTime.now()))
+        .toList()
+        .forEach((event) {
+      if (DateHelper.diffInDays(event.date, DateTime.now()) <= 7) {
+        mins += event.averageDuration;
+      }
+    });
+    return mins;
+  }
+
   List<Widget> _buildPage() {
     final colors = Provider.of<CustomColorScheme>(context);
     final user = Provider.of<User>(context, listen: false);
@@ -214,42 +247,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.search,
                     size: 30,
                   ),
-                  color: _gridColor,
+                  color: colors.primaryColor,
                   onPressed: () {
                     pageIndex.setPage(Screens.SEARCH.index);
                   },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 10,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "You are here",
-                style: TextStyle(
-                    color: colors.primaryTextColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 3,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.location_on,
-                    size: 30,
-                  ),
-                  color: _gridColor,
-                  onPressed: () {},
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   splashRadius: 10,
@@ -276,6 +277,38 @@ class _HomeScreenState extends State<HomeScreen> {
               width: MediaQuery.of(context).size.width / 3,
               child: CustomMapsHome(),
             ),
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding:
+            const EdgeInsets.only(bottom: 20, top: 10, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "You are here",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.location_on,
+                    size: 30,
+                  ),
+                  color: colors.primaryColor,
+                  onPressed: () {},
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 10,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -358,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.calendar_month,
                     size: 30,
                   ),
-                  color: _gridColor,
+                  color: colors.primaryColor,
                   onPressed: () {
                     pageIndex.setPage(Screens.EVENTS.index);
                   },
@@ -447,10 +480,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width / 3,
                 child: IconButton(
                   icon: const Icon(
-                    Icons.auto_graph,
+                    Icons.book,
                     size: 30,
                   ),
-                  color: _gridColor,
+                  color: colors.primaryColor,
                   onPressed: () {
                     pageIndex.setPage(Screens.EVENTS.index);
                   },
@@ -458,6 +491,92 @@ class _HomeScreenState extends State<HomeScreen> {
                   constraints: const BoxConstraints(),
                   splashRadius: 10,
                 ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      // Grey line
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+        sliver: SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: colors.onPrimary,
+                  width: 3.0,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding:
+            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Weekly Stats",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900),
+              ),
+              const Icon(
+                Icons.auto_graph,
+                size: 30,
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "You ran: ",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+              Text(
+                calcWeeklyKms().toString() + " kms",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Run durations: ",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+              Text(
+                calcWeeklyMins().toString() + " mins",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
               ),
             ],
           ),
@@ -550,96 +669,46 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      height: screenHeight / 20,
-                                      width: 80,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            backgroundColor: colors.background,
-                                            primary: colors.onPrimary,
-                                            textStyle:
-                                                const TextStyle(fontSize: 10),
-                                            padding: const EdgeInsets.all(0)),
-                                        onPressed: () {
-                                          setState(() {
-                                            widget._sortMenu =
-                                                !widget._sortMenu;
-                                          });
-                                        },
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        width: 75,
                                         child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: [
-                                            Text(
-                                              'Sort by',
-                                              style: widget._sortMenu
-                                                  ? TextStyle(
-                                                      color:
-                                                          colors.secondaryColor,
-                                                      fontSize: 16)
-                                                  : TextStyle(
-                                                      color: colors
-                                                          .secondaryTextColor,
-                                                      fontSize: 16),
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.table_rows_outlined,
+                                                size: 30,
+                                              ),
+                                              color: _rowColor,
+                                              onPressed: () {
+                                                __selectListView(colors);
+                                              },
+                                              padding: EdgeInsets.zero,
+                                              constraints:
+                                                  const BoxConstraints(),
+                                              splashRadius: 10,
                                             ),
-                                            Icon(
-                                              widget._sortMenu
-                                                  ? Icons
-                                                      .keyboard_arrow_right_rounded
-                                                  : Icons
-                                                      .keyboard_arrow_down_rounded,
-                                              size: 18,
-                                              color: widget._sortMenu
-                                                  ? colors.secondaryColor
-                                                  : colors.secondaryTextColor,
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.grid_view_outlined,
+                                                size: 30,
+                                              ),
+                                              color: _gridColor,
+                                              onPressed: () {
+                                                __selectGridView(colors);
+                                              },
+                                              padding: EdgeInsets.zero,
+                                              constraints:
+                                                  const BoxConstraints(),
+                                              splashRadius: 10,
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    ),
-                                    Text(
-                                      widget._futureBookedEvents.length
-                                              .toString() +
-                                          " results",
-                                      style: TextStyle(
-                                          color: colors.secondaryTextColor,
-                                          fontSize: 14),
-                                    ),
-                                    Container(
-                                      width: 75,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.table_rows_outlined,
-                                              size: 30,
-                                            ),
-                                            color: _rowColor,
-                                            onPressed: () {
-                                              __selectListView(colors);
-                                            },
-                                            padding: EdgeInsets.zero,
-                                            constraints: const BoxConstraints(),
-                                            splashRadius: 10,
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.grid_view_outlined,
-                                              size: 30,
-                                            ),
-                                            color: _gridColor,
-                                            onPressed: () {
-                                              __selectGridView(colors);
-                                            },
-                                            padding: EdgeInsets.zero,
-                                            constraints: const BoxConstraints(),
-                                            splashRadius: 10,
-                                          ),
-                                        ],
                                       ),
                                     ),
                                   ],
