@@ -183,10 +183,54 @@ class _HomeScreenState extends State<HomeScreen> {
     return mins;
   }
 
+  List<int> calcWeeklyAvgPace() {
+    int distance = calcWeeklyKms();
+    int minutes = calcWeeklyMins();
+
+    List<int> avgPace = [];
+    int avgPaceMin;
+    int avgPaceSec;
+
+    int totalSeconds = minutes * 60;
+    double secondsPerKm = totalSeconds.toDouble() / distance.toDouble();
+
+    avgPaceMin = (secondsPerKm / 60).toInt();
+    avgPaceSec = (secondsPerKm - (avgPaceMin * 60)).toInt();
+
+    avgPace.add(avgPaceMin);
+    avgPace.add(avgPaceSec);
+
+    return avgPace;
+  }
+
+  List<int> calcWeeklyAvgPaceParams(int distance, int minutes) {
+    List<int> avgPace = [];
+    int avgPaceMin;
+    int avgPaceSec;
+
+    int totalSeconds = minutes * 60;
+    double secondsPerKm = totalSeconds.toDouble() / distance.toDouble();
+
+    avgPaceMin = (secondsPerKm / 60).toInt();
+    avgPaceSec = (secondsPerKm - (avgPaceMin * 60)).toInt();
+
+    avgPace.add(avgPaceMin);
+    avgPace.add(avgPaceSec);
+
+    return avgPace;
+  }
+
   List<Widget> _buildPage() {
     final colors = Provider.of<CustomColorScheme>(context);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
+
+    int weeklyDistance = calcWeeklyKms();
+    int weeklyDuration = calcWeeklyMins();
+    List<int> weeklyAvgPace =
+        calcWeeklyAvgPaceParams(weeklyDistance, weeklyDuration);
+    int weeklyAvgPaceMin = weeklyAvgPace[0];
+    int weeklyAvgPaceSec = weeklyAvgPace[1];
 
     return [
       SliverPadding(
@@ -555,7 +599,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.w900),
               ),
               Text(
-                calcWeeklyKms().toString() + " kms",
+                weeklyDistance.toString() + " kms",
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 18,
@@ -579,7 +623,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.w900),
               ),
               Text(
-                calcWeeklyMins().toString() + " mins",
+                weeklyDuration.toString() + " mins",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Avg pace: ",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+              Text(
+                weeklyAvgPaceMin.toString() +
+                    ":" +
+                    weeklyAvgPaceSec.toString() +
+                    " min/km",
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 18,
