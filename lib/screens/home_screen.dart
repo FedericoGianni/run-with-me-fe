@@ -612,7 +612,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "You ran: ",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.w900),
               ),
               Text(
@@ -636,7 +636,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Time running: ",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.w900),
               ),
               Text(
@@ -660,7 +660,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Avg pace: ",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.w900),
               ),
               Text(
