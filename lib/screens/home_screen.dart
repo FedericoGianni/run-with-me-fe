@@ -720,28 +720,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ],
                                 ),
-                                widget._sortMenu
-                                    ? SortByRow(
-                                        currentSortButton:
-                                            widget._currentSortButton,
-                                        eventLists: [
-                                          widget._futureBookedEvents,
-                                          widget._pastBookedEvents
-                                        ],
-                                        onTap: (activeSortButton, eventLists) {
-                                          setState(() {
-                                            // print(widget._suggestedEvents[0].name);
-                                            widget._currentSortButton =
-                                                activeSortButton;
-                                            widget._futureBookedEvents =
-                                                eventLists[0];
-                                            widget._pastBookedEvents =
-                                                eventLists[1];
-                                          });
-                                          // print(widget._currentSortButton.toString());
-                                        },
-                                      )
-                                    : SizedBox(),
                               ],
                             ),
                           ),
