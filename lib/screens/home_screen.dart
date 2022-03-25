@@ -24,13 +24,9 @@ import 'package:provider/provider.dart';
 import '../widgets/custom_sort_by_button.dart';
 import '../widgets/sort_by.dart';
 
-enum WeatherState { NOT_DOWNLOADED, DOWNLOADING, FINISHED_DOWNLOADING }
-
 class HomeScreen extends StatefulWidget {
   static const routeName = '/event';
 
-  bool _sortMenu = false;
-  SortButton _currentSortButton = SortButton.none;
   List<Event> _bookedEvents = [];
   List<Event> _futureBookedEvents = [];
   List<Event> _pastBookedEvents = [];
@@ -107,17 +103,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Event> _sortAndReduce(List<Event> events, int max) {
-    events.sort((a, b) => a.date.compareTo(b.date));
-    if (events.length >= max) {
-      events = events.sublist(0, max);
+    if (events.isNotEmpty) {
+      events.sort((a, b) => a.date.compareTo(b.date));
+      if (events.length >= max) {
+        events = events.sublist(0, max);
+      }
     }
     return events;
   }
 
   Future<Null> _handleRefresh() async {
-    widget._sortMenu = false;
-    widget._currentSortButton = SortButton.none;
-
     // 1. update booked events
     final user = Provider.of<User>(context, listen: false);
     int userId = user.userId ?? -1;
@@ -162,16 +157,22 @@ class _HomeScreenState extends State<HomeScreen> {
     final colors = Provider.of<CustomColorScheme>(context);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
-    // int _view = 2;
 
+    // WEEKLY STATS
+    // TODO check if
+    // they will be rebuilt automatically on changes because of booked events listening for changes
     StatsHelper statsHelper = StatsHelper(context);
 
     int weeklyDistance = statsHelper.calcWeeklyKms();
     int weeklyDuration = statsHelper.calcWeeklyMins();
     List<int> weeklyAvgPace =
         statsHelper.calcWeeklyAvgPaceParams(weeklyDistance, weeklyDuration);
-    int weeklyAvgPaceMin = weeklyAvgPace[0];
-    int weeklyAvgPaceSec = weeklyAvgPace[1];
+    int weeklyAvgPaceMin = 0;
+    int weeklyAvgPaceSec = 0;
+    if (weeklyAvgPace.isNotEmpty) {
+      weeklyAvgPaceMin = weeklyAvgPace[0];
+      weeklyAvgPaceSec = weeklyAvgPace[1];
+    }
 
     return [
       SliverPadding(
@@ -387,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width / 3,
                 child: IconButton(
                   icon: const Icon(
-                    Icons.calendar_month,
+                    Icons.calendar_view_month,
                     size: 30,
                   ),
                   color: colors.primaryColor,
@@ -665,11 +666,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     double _flexibleSpaceBarHeight;
 
-    if (widget._sortMenu) {
-      _flexibleSpaceBarHeight = screenHeight / 7.5;
-    } else {
-      _flexibleSpaceBarHeight = screenHeight / 20;
-    }
+    _flexibleSpaceBarHeight = screenHeight / 20;
 
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
