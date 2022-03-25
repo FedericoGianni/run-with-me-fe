@@ -7,6 +7,7 @@ import 'date_helper.dart';
 
 class StatsHelper {
   late BuildContext _context;
+  static const int lastDaysStats = 7;
 
   StatsHelper(context) {
     _context = context;
@@ -20,7 +21,7 @@ class StatsHelper {
         .where((element) => element.date.isBefore(DateTime.now()))
         .toList()
         .forEach((event) {
-      if (DateHelper.diffInDays(event.date, DateTime.now()) <= 7) {
+      if (DateHelper.diffInDays(event.date, DateTime.now()) <= lastDaysStats) {
         kms += event.averageLength;
       }
     });
@@ -35,7 +36,7 @@ class StatsHelper {
         .where((element) => element.date.isBefore(DateTime.now()))
         .toList()
         .forEach((event) {
-      if (DateHelper.diffInDays(event.date, DateTime.now()) <= 7) {
+      if (DateHelper.diffInDays(event.date, DateTime.now()) <= lastDaysStats) {
         mins += event.averageDuration;
       }
     });
