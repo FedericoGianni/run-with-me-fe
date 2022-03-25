@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:runwithme/providers/color_scheme.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 
+import '../classes/multi_device_support.dart';
+
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog(
       {required this.title,
@@ -21,7 +23,8 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     final settings = Provider.of<UserSettings>(context);
-
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     return AlertDialog(
       backgroundColor: colors.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -29,7 +32,7 @@ class CustomAlertDialog extends StatelessWidget {
         title,
         style: TextStyle(
           color: colors.primaryTextColor,
-          fontSize: 20,
+          fontSize: multiDeviceSupport.h0,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -40,7 +43,7 @@ class CustomAlertDialog extends StatelessWidget {
               message,
               style: TextStyle(
                 color: colors.secondaryTextColor,
-                fontSize: 16,
+                fontSize: multiDeviceSupport.h2,
               ),
             ),
           ],
@@ -52,7 +55,7 @@ class CustomAlertDialog extends StatelessWidget {
             'No',
             style: TextStyle(
               color: colors.primaryTextColor,
-              fontSize: 16,
+              fontSize: multiDeviceSupport.h2,
             ),
           ),
           onPressed: () {
@@ -65,7 +68,7 @@ class CustomAlertDialog extends StatelessWidget {
             'Yes',
             style: TextStyle(
               color: colors.primaryColor,
-              fontSize: 16,
+              fontSize: multiDeviceSupport.h2,
             ),
           ),
           onPressed: () {
