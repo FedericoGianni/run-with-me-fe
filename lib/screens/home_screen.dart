@@ -399,6 +399,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSpacing: 15.0,
             crossAxisSpacing: 15.0,
             maxCrossAxisExtent: 400 / _view,
+            mainAxisExtent: 115,
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
@@ -492,6 +493,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSpacing: 15.0,
             crossAxisSpacing: 15.0,
             maxCrossAxisExtent: 400 / _view,
+            mainAxisExtent: 115,
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
@@ -762,7 +764,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: settings.isLoggedIn()
                       ? FlexibleSpaceBar(
                           title: Container(
-                            height: _flexibleSpaceBarHeight,
+                            height: _flexibleSpaceBarHeight + 2,
                             child: Column(
                               children: [
                                 Row(
