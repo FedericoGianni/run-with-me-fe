@@ -7,7 +7,7 @@ import 'package:runwithme/screens/search_screen.dart';
 import 'package:runwithme/screens/tabs_screen.dart';
 import 'package:runwithme/screens/user_screen.dart';
 import 'package:runwithme/widgets/event_detail_card.dart';
-import '../methods/DateHelper.dart';
+import '../classes/date_helper.dart';
 import '../providers/settings_manager.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
