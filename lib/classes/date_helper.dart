@@ -42,4 +42,13 @@ class DateHelper {
     DateTime dayAfterTomorrow = DateTime.now().add(const Duration(days: 2));
     return DateFormat('EEEE').format(dayAfterTomorrow);
   }
+
+  static String dayOfWeekAfterXdays(int x) {
+    if (x != null) {
+      DateTime day = DateTime.now().add(Duration(days: x));
+      return DateFormat('EEEE').format(day);
+    }
+
+    return "";
+  }
 }

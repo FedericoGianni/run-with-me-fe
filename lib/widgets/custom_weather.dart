@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:weather/weather.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+import '../classes/custom_weather_element.dart';
+import '../classes/custom_weather_element.dart';
 import '../classes/date_helper.dart';
 import '../providers/color_scheme.dart';
 import '../providers/locationHelper.dart';
@@ -18,7 +20,8 @@ class WeatherWidget extends StatefulWidget {
 class _WeatherWidgetState extends State<WeatherWidget> {
   String key = '************REMOVED************';
   late WeatherFactory ws;
-  List<Weather> _data = [];
+  List<Weather> _todayData = [];
+  List<Weather> _forecastData = [];
   AppState _state = AppState.NOT_DOWNLOADED;
   double? lat, lon;
 
@@ -46,7 +49,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
     List<Weather> forecasts = await ws.fiveDayForecastByLocation(lat!, lon!);
     setState(() {
-      _data = forecasts;
+      _forecastData = forecasts;
       _state = AppState.FINISHED_DOWNLOADING;
       //print("APPSTATE DOWNLOADED FORECASTS!!!");
     });
@@ -63,7 +66,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
     Weather weather = await ws.currentWeatherByLocation(lat!, lon!);
     setState(() {
-      _data = [weather];
+      _todayData = [weather];
       _state = AppState.FINISHED_DOWNLOADING;
       //print("APPSTATE DOWNLOADED WEATHER!!!");
     });
@@ -80,6 +83,10 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     return int.parse(number.toString().substring(0, 1));
   }
 
+  int first2Digit(int number) {
+    return int.parse(number.toString().substring(0, 2));
+  }
+
   IconData? iconFromTemperature(Temperature temperature) {
     double tempInCelsius = temperature.celsius ?? 0.0;
 
@@ -93,6 +100,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
   Icon translateCodeIntoIcon(int? weatherCode) {
     int firstWeatherCodeDigit = firstDigit(weatherCode ?? 0);
+    //int first2Digits = first2Digit(weatherCode ?? 0);
     final colors = Provider.of<CustomColorScheme>(context);
 
     // Group 2xx: Thunderstorm
@@ -102,6 +110,14 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     // Group 7xx: Atmosphere
     // Group 800: Clear
     // Group 80x: Clouds
+
+    // TODO refactorare sto schifo
+    if (weatherCode == 800) {
+      return Icon(
+        WeatherIcons.day_sunny,
+        color: colors.primaryColor,
+      );
+    }
 
     switch (firstWeatherCodeDigit) {
       case 2:
@@ -155,153 +171,108 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     }
   }
 
-  CustomWeatherElement() {
-    String temp;
-    String location;
-    String country;
-    String weatherDesc;
-    Icon weatherIcon;
-  }
-
   Widget forecastWeather() {
     final colors = Provider.of<CustomColorScheme>(context);
     return Text("Forecast weatehr");
   }
 
+  Widget renderWeather(Weather? weather, int dayIndex) {
+    final colors = Provider.of<CustomColorScheme>(context);
+    String? desc = weather?.weatherDescription;
+    String day = DateHelper.dayOfWeekAfterXdays(dayIndex);
+
+    if (weather == null) {
+      return Row();
+    }
+
+    return Row(
+      children: [
+        translateCodeIntoIcon(weather.weatherConditionCode),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+        ),
+        Text(
+          day + ": ",
+          style: TextStyle(
+              color: colors.primaryTextColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w900),
+        ),
+        Text(
+          desc!,
+          style: TextStyle(
+              color: colors.primaryColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w900),
+        ),
+      ],
+    );
+  }
+
   Widget weather() {
     final colors = Provider.of<CustomColorScheme>(context);
 
-    Temperature todayTemp = Temperature(0);
-    String location = "";
-    String country = "";
-    String todayWeather = "";
-    Icon todayWeatherIcon = Icon(WeatherIcons.sandstorm);
+    // sort data by date
+    //_data.sort((a, b) => a.date!.compareTo(b.date!));
+    //_data = _data.sublist(0, 5);
 
-    Temperature tomorrowTemp = Temperature(0);
-    String tomorrowWeather = "";
-    Icon tomorrowWeatherIcon = Icon(WeatherIcons.sandstorm);
+    String location = _todayData.first.areaName.toString();
+    String country = _todayData.first.country.toString();
 
-    Temperature dayAfterTomorrowTemp = Temperature(0);
-    String dayAfterTomorrowWeather = "";
-    Icon dayAfterTomorrowWeatherIcon = Icon(WeatherIcons.sandstorm);
+    String desc = _todayData.first.weatherDescription ?? "";
 
-    for (var element in _data) {
-      // today weather data
-      if (element.date?.day == DateTime.now().day) {
-        todayTemp = element.temperature ?? Temperature(0);
-        location = element.areaName.toString();
-        country = element.country.toString();
-        todayWeatherIcon = translateCodeIntoIcon(element.weatherConditionCode);
-        todayWeather = element.weatherDescription.toString();
-      }
-
-      // tomorrow weather data
-      if (DateHelper.calculateDifference(element.date) == 1) {
-        tomorrowTemp = element.temperature ?? Temperature(0);
-        tomorrowWeather = element.weatherDescription.toString();
-        tomorrowWeatherIcon =
-            translateCodeIntoIcon(element.weatherConditionCode);
-      }
-
-      // 2 days
-      if (DateHelper.calculateDifference(element.date) == 2) {
-        dayAfterTomorrowTemp = element.temperature ?? Temperature(0);
-        dayAfterTomorrowWeather = element.weatherDescription.toString();
-        dayAfterTomorrowWeatherIcon =
-            translateCodeIntoIcon(element.weatherConditionCode);
-      }
-    }
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(
-        children: [
-          Icon(
-            Icons.calendar_month,
-            color: colors.primaryColor,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Icon(Icons.location_on, color: colors.primaryColor),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+              ),
+              Text(
+                location + ', ' + country,
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
           ),
-          Text(
-            DateHelper.formatDateTime(DateTime.now()),
-            style: TextStyle(
-                color: colors.primaryTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w900),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          Icon(Icons.location_on, color: colors.primaryColor),
-          Text(
-            location + ', ' + country,
-            style: TextStyle(
-                color: colors.primaryTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w900),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          Icon(iconFromTemperature(todayTemp), color: colors.primaryColor),
-          Text(
-            "Temperature: " + todayTemp.celsius!.toStringAsFixed(1) + " °C",
-            style: TextStyle(
-                color: colors.primaryTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w900),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          todayWeatherIcon,
-          Text(
-            "Today's Weather: " + todayWeather,
-            style: TextStyle(
-                color: colors.primaryTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w900),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          tomorrowWeatherIcon,
-          Text(
-            "Tomorrow: " + tomorrowWeather,
-            style: TextStyle(
-                color: colors.primaryTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w900),
-          ),
-        ],
-      ),
-      Row(
-        children: [
-          dayAfterTomorrowWeatherIcon,
-          Text(
-            DateHelper.dayOfWeekAfterTomorrow() +
-                ": " +
-                dayAfterTomorrowWeather,
-            style: TextStyle(
-                color: colors.primaryTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w900),
-          ),
-        ],
-      ),
-    ]);
-
-    // IconButton(
-    //   icon: const Icon(
-    //     Icons.location_on,
-    //     size: 30,
-    //   ),
-    //   color: colors.secondaryTextColor,
-    //   onPressed: () {},
-    //   padding: EdgeInsets.zero,
-    //   constraints: const BoxConstraints(),
-    //   splashRadius: 10,
-    // );
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: renderWeather(_todayData.first, 0),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: renderWeather(
+              _forecastData.isNotEmpty ? _forecastData[0] : null, 1),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: renderWeather(
+              _forecastData.isNotEmpty ? _forecastData[1] : null, 2),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: renderWeather(
+              _forecastData.isNotEmpty ? _forecastData[2] : null, 3),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: renderWeather(
+              _forecastData.isNotEmpty ? _forecastData[3] : null, 4),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: renderWeather(
+              _forecastData.isNotEmpty ? _forecastData[4] : null, 5),
+        ),
+      ],
+    );
   }
 
   Widget contentDownloading() {
