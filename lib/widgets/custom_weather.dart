@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:weather/weather.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-import '../classes/custom_weather_element.dart';
-import '../classes/custom_weather_element.dart';
 import '../classes/date_helper.dart';
 import '../providers/color_scheme.dart';
 import '../providers/locationHelper.dart';
