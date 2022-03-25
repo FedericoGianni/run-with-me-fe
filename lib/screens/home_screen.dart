@@ -26,6 +26,8 @@ import '../widgets/sort_by.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/event';
+  //bool _hideWeather = false;
+  //bool _hideMap = false;
 
   List<Event> _bookedEvents = [];
   List<Event> _futureBookedEvents = [];
@@ -181,8 +183,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Icon(
+                Icons.calendar_month,
+                color: colors.primaryColor,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+              ),
               Text(
-                "Welcome back, " + user.name.toString(),
+                DateHelper.formatDateTime(DateTime.now()),
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 20,
@@ -197,9 +206,56 @@ class _HomeScreenState extends State<HomeScreen> {
             const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Welcome back, " + user.name.toString(),
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+      // Grey line
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+        sliver: SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: colors.onPrimary,
+                  width: 3.0,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding:
+            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              WeatherWidget(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Weather",
+                    style: TextStyle(
+                        color: colors.primaryTextColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900),
+                  ),
+                  Padding(padding: const EdgeInsets.all(8)),
+                  WeatherWidget(),
+                ],
+              ),
             ],
           ),
         ),
