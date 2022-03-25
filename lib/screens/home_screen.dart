@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final colors = Provider.of<CustomColorScheme>(context);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
-    int _view = 2;
+    // int _view = 2;
 
     int weeklyDistance = calcWeeklyKms();
     int weeklyDuration = calcWeeklyMins();
