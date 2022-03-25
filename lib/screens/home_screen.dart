@@ -26,8 +26,8 @@ import '../widgets/sort_by.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/event';
-  //bool _hideWeather = false;
-  //bool _hideMap = false;
+  bool _hideWeather = false;
+  bool _hideMap = false;
 
   List<Event> _bookedEvents = [];
   List<Event> _futureBookedEvents = [];
