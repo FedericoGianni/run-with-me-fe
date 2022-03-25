@@ -5,8 +5,10 @@ import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_map_home_page.dart';
+import 'package:runwithme/widgets/custom_weather.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 import 'package:runwithme/widgets/splash.dart';
+import 'package:weather/weather.dart';
 
 import '../providers/events.dart';
 import '../providers/locationHelper.dart';
@@ -20,6 +22,8 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_sort_by_button.dart';
 import '../widgets/sort_by.dart';
+
+enum WeatherState { NOT_DOWNLOADED, DOWNLOADING, FINISHED_DOWNLOADING }
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/event';
@@ -234,6 +238,18 @@ class _HomeScreenState extends State<HomeScreen> {
     int weeklyAvgPaceSec = weeklyAvgPace[1];
 
     return [
+      SliverPadding(
+        padding:
+            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              WeatherWidget(),
+            ],
+          ),
+        ),
+      ),
       SliverPadding(
         padding:
             const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
