@@ -224,6 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final colors = Provider.of<CustomColorScheme>(context);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
+    int _view = 2;
 
     int weeklyDistance = calcWeeklyKms();
     int weeklyDuration = calcWeeklyMins();
@@ -405,6 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 widget._futureBookedEvents[index],
                 index,
                 widget._futureBookedEvents.length,
+                _view,
               );
             },
             childCount: widget._futureBookedEvents.length,
@@ -497,6 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 widget._pastBookedEvents[index],
                 index,
                 widget._pastBookedEvents.length,
+                _view,
               );
             },
             childCount: widget._pastBookedEvents.length,
