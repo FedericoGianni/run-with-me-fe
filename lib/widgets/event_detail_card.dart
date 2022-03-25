@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
+import '../classes/multi_device_support.dart';
 import '../methods/DateHelper.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
@@ -18,7 +19,8 @@ class EventDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     // name = name.replaceRange(5, name.length, '...');
     return Column(
       children: [
@@ -27,7 +29,8 @@ class EventDetail extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(
+              vertical: 10 + multiDeviceSupport.tablet * 10),
           child: Container(
             child: Column(
               children: [
@@ -56,7 +59,8 @@ class EventDetail extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(
+              vertical: 10 + multiDeviceSupport.tablet * 10),
           child: Container(
             child: Column(
               children: [
@@ -80,7 +84,8 @@ class EventDetail extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.symmetric(
+              vertical: 10 + multiDeviceSupport.tablet * 10),
           child: Container(
             child: Column(
               children: [
@@ -111,7 +116,9 @@ class EventDetail extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 4,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.only(
+              top: 10 + multiDeviceSupport.tablet * 10,
+              bottom: 20 + multiDeviceSupport.tablet * 20),
           child: Container(
             child: Column(
               children: [

@@ -99,53 +99,66 @@ class _TabsScreenState extends State<TabsScreen> {
     );
 
     if (!gotLocation) {
+      // We dont want locationHelper to look for user location everytime its rebuild, just the first one
       locationHelper.determinePosition(LocationAccuracy.best, context);
+      // And we absolutely dont want to start an ever living thread each  time
+      locationHelper.start().then((value) => null);
       gotLocation = true;
     }
     print("Rebuilding Tabs Screen");
-    return Scaffold(
-      backgroundColor: colors.background,
-      appBar: PreferredSize(
-        child: _pages[pageIndex.index]['appbar'],
-        preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
-      ),
-      body: _pages[pageIndex.index]['page'],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _selectPage,
-        backgroundColor: colors.onPrimary,
-        unselectedItemColor: colors.secondaryTextColor,
-        selectedItemColor: colors.primaryColor,
-        currentIndex: pageIndex.index,
-        type: BottomNavigationBarType.fixed,
-        elevation: 4,
-        iconSize: 20 + multiDeviceSupport.tablet * 20,
-        items: [
-          BottomNavigationBarItem(
-            backgroundColor: colors.primaryColor,
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: colors.primaryColor,
-            icon: Icon(Icons.search),
-            label: 'Browse',
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: colors.primaryColor,
-            icon: Icon(Icons.add_box_outlined),
-            label: 'New',
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: colors.primaryColor,
-            icon: Icon(Icons.event_outlined),
-            label: 'Events',
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: colors.primaryColor,
-            icon: Icon(Icons.person_outline),
-            label: 'User',
-          )
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        if (pageIndex.index == 0) {
+          return true;
+        } else {
+          _selectPage(0);
+          return false;
+        }
+      },
+      child: Scaffold(
+        backgroundColor: colors.background,
+        appBar: PreferredSize(
+          child: _pages[pageIndex.index]['appbar'],
+          preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
+        ),
+        body: _pages[pageIndex.index]['page'],
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: _selectPage,
+          backgroundColor: colors.onPrimary,
+          unselectedItemColor: colors.secondaryTextColor,
+          selectedItemColor: colors.primaryColor,
+          currentIndex: pageIndex.index,
+          type: BottomNavigationBarType.fixed,
+          elevation: 4,
+          iconSize: 20 + multiDeviceSupport.tablet * 20,
+          items: [
+            BottomNavigationBarItem(
+              backgroundColor: colors.primaryColor,
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: colors.primaryColor,
+              icon: Icon(Icons.search),
+              label: 'Browse',
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: colors.primaryColor,
+              icon: Icon(Icons.add_box_outlined),
+              label: 'New',
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: colors.primaryColor,
+              icon: Icon(Icons.event_outlined),
+              label: 'Events',
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: colors.primaryColor,
+              icon: Icon(Icons.person_outline),
+              label: 'User',
+            )
+          ],
+        ),
       ),
     );
   }
