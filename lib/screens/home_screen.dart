@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:runwithme/methods/DateHelper.dart';
-import 'package:runwithme/methods/stats_helper.dart';
+import 'package:runwithme/classes/date_helper.dart';
+import 'package:runwithme/classes/stats_helper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';

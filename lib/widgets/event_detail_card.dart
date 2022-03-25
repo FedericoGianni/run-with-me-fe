@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
-import '../methods/DateHelper.dart';
+import '../classes/date_helper.dart';
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import 'rating.dart';
