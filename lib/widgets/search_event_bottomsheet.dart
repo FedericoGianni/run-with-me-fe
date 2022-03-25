@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/widgets/custom_slider.dart';
+import '../classes/multi_device_support.dart';
 import '../themes/custom_colors.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
@@ -84,9 +85,12 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
     final locationHelper = Provider.of<LocationHelper>(context, listen: true);
 
     final double screenWidth = MediaQuery.of(context).size.width;
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     return Container(
       // color: colors.onPrimary,
-      height: MediaQuery.of(context).size.height / 1.5,
+      height: MediaQuery.of(context).size.height /
+          (1.5 + multiDeviceSupport.tablet * 0.2),
 
       decoration: BoxDecoration(
         color: colors.background,
@@ -101,7 +105,10 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
           scrollDirection: Axis.vertical,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 20 + multiDeviceSupport.tablet * 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -109,7 +116,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                     onPressed: () => Navigator.pop(context),
                     icon: Icon(
                       Icons.chevron_left_outlined,
-                      size: 30,
+                      size: multiDeviceSupport.icons,
                       color: colors.primaryTextColor,
                     ),
                   ),
@@ -117,14 +124,14 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                     'Search for an event',
                     style: TextStyle(
                       color: colors.primaryTextColor,
-                      fontSize: 20,
+                      fontSize: multiDeviceSupport.h0,
                     ),
                   ),
                   IconButton(
                     onPressed: acceptAndClose,
                     icon: Icon(
                       Icons.check,
-                      size: 30,
+                      size: multiDeviceSupport.icons,
                       color: colors.primaryColor,
                     ),
                   ),
@@ -133,14 +140,18 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                  left: screenWidth / 7, right: screenWidth / 7, bottom: 40),
+                  top: 10 + multiDeviceSupport.tablet * 40,
+                  left: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                  right: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                  bottom: 40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Show events that are full:',
-                    style:
-                        TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                    style: TextStyle(
+                        color: colors.primaryTextColor,
+                        fontSize: multiDeviceSupport.h2),
                   ),
                   Switch(
                     value: widget.formValues['show_full'],
@@ -159,18 +170,24 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: screenWidth / 7,
-                right: screenWidth / 7,
+                top: multiDeviceSupport.tablet * 20,
+                left: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                right: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
                 bottom: 15,
               ),
               child: Text(
                 'Location: ',
-                style: TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: multiDeviceSupport.h2),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(
-                  left: screenWidth / 7, right: screenWidth / 7, bottom: 40),
+                  top: multiDeviceSupport.tablet * 10,
+                  left: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                  right: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                  bottom: 40),
               child: Form(
                 key: _form,
                 child: FormField(
@@ -216,7 +233,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                               style: TextStyle(
                                                   color:
                                                       colors.secondaryTextColor,
-                                                  fontSize: 16),
+                                                  fontSize:
+                                                      multiDeviceSupport.h2),
                                             )
                                           : Text(
                                               widget.formValues['city_name']
@@ -225,7 +243,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                               style: TextStyle(
                                                   color:
                                                       colors.primaryTextColor,
-                                                  fontSize: 16),
+                                                  fontSize:
+                                                      multiDeviceSupport.h2),
                                             ),
                                       IconButton(
                                           onPressed: () {
@@ -254,6 +273,9 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                                   Icons.location_on_outlined,
                                                   color:
                                                       colors.secondaryTextColor,
+                                                  size:
+                                                      multiDeviceSupport.icons /
+                                                          1.3,
                                                 )
                                               : CustomLoadingCircleIcon())
                                     ],
@@ -268,7 +290,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                                       state.errorText ?? 'Nope',
                                       style: TextStyle(
                                         color: colors.errorColor,
-                                        fontSize: 12.2,
+                                        fontSize: multiDeviceSupport.h4,
                                       ),
                                     ),
                                   )
@@ -289,8 +311,9 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: screenWidth / 7,
-                right: screenWidth / 7,
+                top: multiDeviceSupport.tablet * 40,
+                left: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                right: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
               ),
               child: Text(
                 'Distance: 0km - ' +
@@ -298,25 +321,30 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                         .toString()
                         .split('.')[0] +
                     'km',
-                style: TextStyle(color: colors.primaryTextColor, fontSize: 16),
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: multiDeviceSupport.h2),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(
                 top: 5,
-                left: screenWidth / 7,
-                right: screenWidth / 7,
+                left: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                right: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
               ),
               child: Text(
                 'Maximum search distance in km',
-                style:
-                    TextStyle(color: colors.secondaryTextColor, fontSize: 12),
+                style: TextStyle(
+                    color: colors.secondaryTextColor,
+                    fontSize: multiDeviceSupport.h4),
               ),
             ),
             Padding(
                 padding: EdgeInsets.only(
-                  left: screenWidth / 8,
-                  right: screenWidth / 8,
+                  left: screenWidth / 12 +
+                      multiDeviceSupport.tablet * screenWidth / 18,
+                  right: screenWidth / 12 +
+                      multiDeviceSupport.tablet * screenWidth / 18,
                   top: 10,
                 ),
                 child: Column(
@@ -343,14 +371,19 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                   index = (index + 1) * 5;
                   return Text(
                     "$index",
-                    style: TextStyle(color: colors.secondaryTextColor),
+                    style: TextStyle(
+                        color: colors.secondaryTextColor,
+                        fontSize: multiDeviceSupport.h3),
                   );
                 }),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(
-                  left: screenWidth / 7, right: screenWidth / 7, bottom: 20),
+                  top: multiDeviceSupport.tablet * 40,
+                  left: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                  right: (screenWidth / 7) + multiDeviceSupport.tablet * 20,
+                  bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -358,7 +391,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                     child: Text(
                       'Reset',
                       style: TextStyle(
-                          color: colors.secondaryTextColor, fontSize: 14),
+                          color: colors.secondaryTextColor,
+                          fontSize: multiDeviceSupport.h2),
                     ),
                     onPressed: _clearForm,
                   ),
