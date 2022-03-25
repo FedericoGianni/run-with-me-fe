@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/methods/DateHelper.dart';
+import 'package:runwithme/methods/stats_helper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
@@ -157,83 +158,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return null;
   }
 
-  int calcWeeklyKms() {
-    int kms = 0;
-    //_pastBookedEvents is reduced to 2 events only, for stats purposes i need full booked events, but only in the past
-    Provider.of<Events>(context, listen: false)
-        .bookedEvents
-        .where((element) => element.date.isBefore(DateTime.now()))
-        .toList()
-        .forEach((event) {
-      if (DateHelper.diffInDays(event.date, DateTime.now()) <= 7) {
-        kms += event.averageLength;
-      }
-    });
-    return kms;
-  }
-
-  int calcWeeklyMins() {
-    int mins = 0;
-    //_pastBookedEvents is reduced to 2 events only, for stats purposes i need full booked events, but only in the past
-    Provider.of<Events>(context, listen: false)
-        .bookedEvents
-        .where((element) => element.date.isBefore(DateTime.now()))
-        .toList()
-        .forEach((event) {
-      if (DateHelper.diffInDays(event.date, DateTime.now()) <= 7) {
-        mins += event.averageDuration;
-      }
-    });
-    return mins;
-  }
-
-  List<int> calcWeeklyAvgPace() {
-    int distance = calcWeeklyKms();
-    int minutes = calcWeeklyMins();
-
-    List<int> avgPace = [];
-    int avgPaceMin;
-    int avgPaceSec;
-
-    int totalSeconds = minutes * 60;
-    double secondsPerKm = totalSeconds.toDouble() / distance.toDouble();
-
-    avgPaceMin = (secondsPerKm / 60).toInt();
-    avgPaceSec = (secondsPerKm - (avgPaceMin * 60)).toInt();
-
-    avgPace.add(avgPaceMin);
-    avgPace.add(avgPaceSec);
-
-    return avgPace;
-  }
-
-  List<int> calcWeeklyAvgPaceParams(int distance, int minutes) {
-    List<int> avgPace = [];
-    int avgPaceMin;
-    int avgPaceSec;
-
-    int totalSeconds = minutes * 60;
-    double secondsPerKm = totalSeconds.toDouble() / distance.toDouble();
-
-    avgPaceMin = (secondsPerKm / 60).toInt();
-    avgPaceSec = (secondsPerKm - (avgPaceMin * 60)).toInt();
-
-    avgPace.add(avgPaceMin);
-    avgPace.add(avgPaceSec);
-
-    return avgPace;
-  }
-
   List<Widget> _buildPage() {
     final colors = Provider.of<CustomColorScheme>(context);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
     // int _view = 2;
 
-    int weeklyDistance = calcWeeklyKms();
-    int weeklyDuration = calcWeeklyMins();
+    StatsHelper statsHelper = StatsHelper(context);
+
+    int weeklyDistance = statsHelper.calcWeeklyKms();
+    int weeklyDuration = statsHelper.calcWeeklyMins();
     List<int> weeklyAvgPace =
-        calcWeeklyAvgPaceParams(weeklyDistance, weeklyDuration);
+        statsHelper.calcWeeklyAvgPaceParams(weeklyDistance, weeklyDuration);
     int weeklyAvgPaceMin = weeklyAvgPace[0];
     int weeklyAvgPaceSec = weeklyAvgPace[1];
 
