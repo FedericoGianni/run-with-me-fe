@@ -255,8 +255,12 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return EventItem(widget._suggestedEvents[index], index,
-                  widget._suggestedEvents.length, _view);
+              return EventItem(
+                widget._suggestedEvents[index],
+                index,
+                widget._suggestedEvents.length,
+                _view,
+              );
             },
             childCount: widget._suggestedEvents.length,
           ),
