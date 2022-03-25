@@ -130,9 +130,9 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
       SliverPadding(
         padding: EdgeInsets.only(
             bottom: 40,
-            top: 20 + multiDeviceSupport.tablet * 30,
+            top: 20,
             left: 20 + multiDeviceSupport.tablet * 30,
-            right: 20),
+            right: 20 + multiDeviceSupport.tablet * 30),
         sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             childAspectRatio: _aspectRatio,

@@ -8,6 +8,7 @@ import 'package:runwithme/widgets/custom_scroll_behavior.dart';
 import 'package:runwithme/widgets/sort_by.dart';
 import 'package:runwithme/widgets/splash.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/events.dart';
 import '../providers/settings_manager.dart';
 import '../providers/user.dart';
@@ -87,6 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     final events = Provider.of<Events>(context, listen: false);
     final user = Provider.of<User>(context, listen: false);
+
     // the if check is to avoid when a refresh of the screen is made but there are no previous parameters of fetchAndSetResultEvents available
     // for suggestedEvents is not a problem since there will always be an automatic request when building the first time
 
@@ -148,7 +150,8 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Widget> _buildContent(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
     print("Rebuilding content");
-
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     // suggested events taken from Events provider, re-fetch the suggested events every time there is an update in the widget tree
 
     //print("suggestedEvents: " + _suggestedEvents.toString());
@@ -161,8 +164,11 @@ class _SearchScreenState extends State<SearchScreen> {
     return [
       if (widget._resultEvents.length > 0)
         SliverPadding(
-          padding:
-              const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+          padding: EdgeInsets.only(
+              bottom: 0,
+              top: 20,
+              left: 20 + multiDeviceSupport.tablet * 30,
+              right: 20 + multiDeviceSupport.tablet * 30),
           sliver: SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,7 +177,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   "Results",
                   style: TextStyle(
                       color: colors.primaryTextColor,
-                      fontSize: 20,
+                      fontSize: multiDeviceSupport.h0,
                       fontWeight: FontWeight.w900),
                 ),
               ],
@@ -180,14 +186,20 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       if (widget._resultEvents.length > 0)
         SliverPadding(
-          padding:
-              const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+          padding: EdgeInsets.only(
+            bottom: 40,
+            top: 20,
+            left: 20 + multiDeviceSupport.tablet * 30,
+            right: 20 + multiDeviceSupport.tablet * 30,
+          ),
           sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               childAspectRatio: _aspectRatio,
               mainAxisSpacing: 15.0,
               crossAxisSpacing: 15.0,
-              maxCrossAxisExtent: 400 / _view,
+              maxCrossAxisExtent:
+                  (400 + multiDeviceSupport.tablet * 80) / _view,
+              mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -205,7 +217,12 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        padding: EdgeInsets.only(
+          bottom: 0,
+          top: 20,
+          left: 20 + multiDeviceSupport.tablet * 30,
+          right: 20 + multiDeviceSupport.tablet * 30,
+        ),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -214,7 +231,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 "Suggested",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 20,
+                    fontSize: multiDeviceSupport.h0,
                     fontWeight: FontWeight.w900),
               ),
             ],
@@ -222,14 +239,19 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+        padding: EdgeInsets.only(
+          bottom: 40,
+          top: 20,
+          left: 20 + multiDeviceSupport.tablet * 30,
+          right: 20 + multiDeviceSupport.tablet * 30,
+        ),
         sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             childAspectRatio: _aspectRatio,
             mainAxisSpacing: 15.0,
             crossAxisSpacing: 15.0,
-            maxCrossAxisExtent: 400 / _view,
+            maxCrossAxisExtent: (400 + multiDeviceSupport.tablet * 80) / _view,
+            mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
           ),
           delegate: SliverChildBuilderDelegate(
             (context, index) {
@@ -242,7 +264,12 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       // Next, create a SliverList
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 20, right: 20),
+        padding: EdgeInsets.only(
+          bottom: 20,
+          top: 20,
+          left: 20 + multiDeviceSupport.tablet * 30,
+          right: 20 + multiDeviceSupport.tablet * 30,
+        ),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -251,7 +278,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 "Recently viewed",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 20,
+                    fontSize: multiDeviceSupport.h0,
                     fontWeight: FontWeight.w900),
               ),
             ],
@@ -263,16 +290,33 @@ class _SearchScreenState extends State<SearchScreen> {
           padding: const EdgeInsets.only(bottom: 15),
 
           // margin: EdgeInsets.only(bottom: 20, left: 15, right: 15),
-          height: (380.0 / _view) / _aspectRatio,
+          height:
+              ((380.0 + multiDeviceSupport.tablet * 80) / _view) / _aspectRatio,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             //itemCount: 10,
             itemCount: widget._recentEvents.length,
             itemBuilder: (context, index) {
+              double startingMargin = 0.0;
+              double endingMargin = 0.0;
+              if (index == 0) {
+                startingMargin = 20 + multiDeviceSupport.tablet * 20;
+              } else {
+                startingMargin = 0.0;
+              }
+              if (index == widget._recentEvents.length - 1) {
+                endingMargin = 20 + multiDeviceSupport.tablet * 30;
+              } else {
+                endingMargin = 0.0;
+              }
+
               return Container(
-                padding: const EdgeInsets.only(left: 7, bottom: 5, right: 7),
-                width: 370.0 / _view,
-                height: (370 / _view) / _aspectRatio,
+                margin: EdgeInsets.only(
+                  left: startingMargin,
+                  right: endingMargin,
+                ),
+                padding: EdgeInsets.only(left: 10, bottom: 5, right: 7),
+                width: (400 + multiDeviceSupport.tablet * 80) / _view,
                 child: EventItem(
                   widget._recentEvents[index],
                   index,
@@ -293,6 +337,8 @@ class _SearchScreenState extends State<SearchScreen> {
     // final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     double _flexibleSpaceBarHeight;
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     if (_rowColor == Colors.deepOrange.shade900) {
       __selectGridView(colors);
@@ -306,11 +352,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return SliverAppBar(
       stretch: false,
-      toolbarHeight: screenHeight / 6,
+      toolbarHeight: screenHeight / 6 - multiDeviceSupport.tablet * 30,
 
       title: GradientAppBar(
-        screenHeight / 6,
+        screenHeight / 6 - multiDeviceSupport.tablet * 30,
         [
+          SizedBox(
+            height: 10 + multiDeviceSupport.tablet * 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -352,7 +401,9 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
 
       titleSpacing: 0,
-      expandedHeight: screenHeight / 6 + _flexibleSpaceBarHeight,
+      expandedHeight: screenHeight / 6 -
+          multiDeviceSupport.tablet * 30 +
+          _flexibleSpaceBarHeight,
       backgroundColor: colors.background,
 
       // back up the list of items.
@@ -375,12 +426,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     Container(
                       padding: EdgeInsets.only(left: 10),
                       height: screenHeight / 20,
-                      width: 80,
+                      width: 100 + multiDeviceSupport.tablet * 60,
                       child: TextButton(
                         style: TextButton.styleFrom(
                             backgroundColor: colors.background,
                             primary: colors.onPrimary,
-                            textStyle: const TextStyle(fontSize: 10),
+                            textStyle:
+                                TextStyle(fontSize: multiDeviceSupport.h5),
                             padding: const EdgeInsets.all(0)),
                         onPressed: () {
                           if (_view != 3) {
@@ -396,10 +448,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               style: widget._sortMenu
                                   ? TextStyle(
                                       color: colors.secondaryColor,
-                                      fontSize: 16)
+                                      fontSize: multiDeviceSupport.h2)
                                   : TextStyle(
                                       color: colors.secondaryTextColor,
-                                      fontSize: 16),
+                                      fontSize: multiDeviceSupport.h2),
                             ),
                             Icon(
                               widget._sortMenu
@@ -417,48 +469,53 @@ class _SearchScreenState extends State<SearchScreen> {
                     Text(
                       widget._resultEvents.length.toString() + " results",
                       style: TextStyle(
-                          color: colors.secondaryTextColor, fontSize: 14),
+                          color: colors.secondaryTextColor,
+                          fontSize: multiDeviceSupport.h3),
                     ),
                     Container(
-                      width: 75,
+                      width: 100 + multiDeviceSupport.tablet * 60,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.map_outlined,
-                              size: 25,
+                              size: multiDeviceSupport.icons,
                             ),
                             color: _mapColor,
                             onPressed: () {
                               __selectMapView(colors);
                             },
-                            padding: EdgeInsets.zero,
+                            padding: EdgeInsets.only(
+                                right: multiDeviceSupport.tablet * 20),
                             constraints: const BoxConstraints(),
                             splashRadius: 10,
                           ),
                           IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.table_rows_outlined,
-                              size: 25,
+                              size: multiDeviceSupport.icons,
                             ),
                             color: _rowColor,
                             onPressed: () {
                               __selectListView(colors);
                             },
-                            padding: EdgeInsets.zero,
+                            padding: EdgeInsets.only(
+                                right: multiDeviceSupport.tablet * 20),
                             constraints: const BoxConstraints(),
                             splashRadius: 10,
                           ),
                           IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.grid_view_outlined,
-                              size: 25,
+                              size: multiDeviceSupport.icons,
                             ),
                             color: _gridColor,
                             onPressed: () {
                               __selectGridView(colors);
                             },
-                            padding: EdgeInsets.zero,
+                            padding: EdgeInsets.only(
+                                right: multiDeviceSupport.tablet * 30),
                             constraints: const BoxConstraints(),
                             splashRadius: 10,
                           ),
@@ -503,6 +560,8 @@ class _SearchScreenState extends State<SearchScreen> {
     final user = Provider.of<User>(context);
     final double screenHeight = MediaQuery.of(context).size.height;
     double _flexibleSpaceBarHeight;
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     if (widget._sortMenu) {
       _flexibleSpaceBarHeight = screenHeight / 7.5;
@@ -533,7 +592,9 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: screenHeight / 6 + _flexibleSpaceBarHeight,
+                height: screenHeight / 6 +
+                    _flexibleSpaceBarHeight -
+                    multiDeviceSupport.tablet * 12,
                 child: CustomScrollView(
                   slivers: [
                     _buildAppbar(

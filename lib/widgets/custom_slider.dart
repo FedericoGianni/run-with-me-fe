@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/color_scheme.dart';
 
 class customSlider extends StatefulWidget {
@@ -19,6 +20,8 @@ class _customSliderState extends State<customSlider> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     return SliderTheme(
       data: SliderThemeData(
           // activeTrackColor: colors.secondaryColor,
@@ -28,7 +31,8 @@ class _customSliderState extends State<customSlider> {
           showValueIndicator: ShowValueIndicator.never,
           valueIndicatorTextStyle: TextStyle(color: colors.primaryTextColor),
           // thumbColor: colors.background,
-          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10)),
+          thumbShape: RoundSliderThumbShape(
+              enabledThumbRadius: 10 + multiDeviceSupport.tablet * 3)),
       child: Slider(
         value: widget.sliderValue,
         max: 5,

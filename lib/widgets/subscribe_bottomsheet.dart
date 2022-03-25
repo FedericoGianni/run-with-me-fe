@@ -48,22 +48,22 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   List _fitCodes = ['Very unfit', 'Unfit', 'Average', 'Just fit', 'Very fit'];
 
   final _initValues = {
-    'username': 'aab',
-    'password': 'aab',
-    'email': 'aab',
-    'password2': 'aab',
-    'name': 'aab',
-    'surname': 'aab',
-    'height': '111',
-    'age': '111',
-    'sex': '1',
+    'username': '',
+    'password': '',
+    'email': '',
+    'password2': '',
+    'name': '',
+    'surname': '',
+    'height': '',
+    'age': '',
+    'sex': '-1',
     'city_id': '',
     'city_name': '',
-    'frequency': '1',
-    'duration': '1',
-    'distance': '1',
-    'fitness': '1',
-    'fitnessTotalValue': '4',
+    'frequency': '',
+    'duration': '',
+    'distance': '',
+    'fitness': '-1',
+    'fitnessTotalValue': '-1',
   };
 
   void _togglePwdText() {
