@@ -43,7 +43,7 @@ class _TabsScreenState extends State<TabsScreen> {
       {
         'title': 'Home',
         'page': HomeScreen(),
-        'appbar': const DefaultAppbar(),
+        'appbar': const SizedBox.shrink(),
       },
       {
         'title': 'Events',
