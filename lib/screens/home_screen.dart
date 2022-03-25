@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> _buildPage() {
-    final colors = Provider.of<CustomColorScheme>(context);
+    final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
     // int _view = 2;

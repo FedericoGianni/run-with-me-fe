@@ -306,7 +306,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               key: _form,
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: 30 + multiDeviceSupport.tablet * 50,
+                  left: 20 + multiDeviceSupport.tablet * 50,
                   right: 20 + multiDeviceSupport.tablet * 50,
                 ),
                 child: ScrollConfiguration(
