@@ -159,7 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
     // WEEKLY STATS
-    // TODO check if
     // they will be rebuilt automatically on changes because of booked events listening for changes
     StatsHelper statsHelper = StatsHelper(context);
 
@@ -182,7 +181,13 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              WeatherWidget(),
+              Text(
+                "Welcome back, " + user.name.toString(),
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900),
+              ),
             ],
           ),
         ),
@@ -192,15 +197,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                "Welcome back, " + user.name.toString(),
-                style: TextStyle(
-                    color: colors.primaryTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900),
-              ),
+              WeatherWidget(),
             ],
           ),
         ),
