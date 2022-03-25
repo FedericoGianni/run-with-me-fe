@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:runwithme/providers/event.dart';
 
 import 'dart:convert';
 import '../widgets/custom_alert_dialog.dart';

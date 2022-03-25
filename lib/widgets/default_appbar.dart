@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/color_scheme.dart';
+import '../providers/settings_manager.dart';
 import 'gradientAppbar.dart';
 
 class DefaultAppbar extends StatelessWidget {
@@ -8,9 +11,19 @@ class DefaultAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent));
-    return GradientAppBar(
-        75 + MediaQuery.of(context).padding.top, const [SizedBox.shrink()]);
+    return Material(
+      elevation: 4,
+      child: Container(
+        height: 130,
+        padding: EdgeInsets.only(
+          top: 10 + MediaQuery.of(context).padding.top,
+          bottom: 10,
+        ),
+        child: Image.asset(
+          "assets/icons/logo_gradient.png",
+          width: 130,
+        ),
+      ),
+    );
   }
 }
