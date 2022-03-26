@@ -188,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 DateHelper.formatDateTime(DateTime.now()),
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900),
               ),
               Padding(
@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Icon(
                 Icons.calendar_month,
                 color: colors.secondaryTextColor,
-                size: 32,
+                size: 24,
               ),
             ],
           ),
