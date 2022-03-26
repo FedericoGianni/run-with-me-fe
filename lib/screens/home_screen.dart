@@ -119,22 +119,26 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = Provider.of<User>(context, listen: false);
     int userId = user.userId ?? -1;
     final events = Provider.of<Events>(context, listen: false);
+
+    // 1.1 fetch booked events for user
     events.fetchAndSetBookedEvents(userId);
     widget._bookedEvents = events.bookedEvents;
+
+    // 1.2 separate future booked events and reduce list length
     widget._futureBookedEvents = widget._bookedEvents
         .where((element) => element.date.isAfter(DateTime.now()))
         .toList();
-
     widget._futureBookedEvents =
         _sortAndReduce(widget._futureBookedEvents, MAX_LENGTH);
 
+    // 1.3 separate past booked events and reduce list length
     widget._pastBookedEvents = widget._bookedEvents
         .where((element) => element.date.isBefore(DateTime.now()))
         .toList();
-
     widget._pastBookedEvents =
         _sortAndReduce(widget._pastBookedEvents, MAX_LENGTH);
 
+    // DEPRECATED should we display suggested events in homepage?
     // 2. update suggested events
 
     // events.fetchAndSetSuggestedEvents(
@@ -156,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> _buildPage() {
+    // PROVIDERS
     final colors = Provider.of<CustomColorScheme>(context);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
@@ -495,7 +500,7 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 4,
             margin: const EdgeInsets.all(0),
             child: Container(
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width / 3,
               child: CustomMapsHome(),
             ),
