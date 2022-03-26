@@ -234,14 +234,22 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   Widget weather() {
     final colors = Provider.of<CustomColorScheme>(context);
 
+    // forecast data are already sorted
     // sort data by date
     //_data.sort((a, b) => a.date!.compareTo(b.date!));
     //_data = _data.sublist(0, 5);
 
-    String location = _todayData.first.areaName.toString();
-    String country = _todayData.first.country.toString();
+    String location = "";
+    String country = "";
+    String desc = "";
 
-    String desc = _todayData.first.weatherDescription ?? "";
+    // to avoid bad state error
+    if (_todayData.isNotEmpty) {
+      location = _todayData.first.areaName.toString();
+      country = _todayData.first.country.toString();
+
+      desc = _todayData.first.weatherDescription ?? "";
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
