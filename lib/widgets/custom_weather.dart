@@ -96,10 +96,9 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     }
   }
 
-  Icon translateCodeIntoIcon(int? weatherCode) {
+  Icon translateCodeIntoIcon(int? weatherCode, Color color) {
     int firstWeatherCodeDigit = firstDigit(weatherCode ?? 0);
     //int first2Digits = first2Digit(weatherCode ?? 0);
-    final colors = Provider.of<CustomColorScheme>(context);
 
     // Group 2xx: Thunderstorm
     // Group 3xx: Drizzle
@@ -113,7 +112,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     if (weatherCode == 800) {
       return Icon(
         WeatherIcons.day_sunny,
-        color: colors.primaryColor,
+        color: color,
       );
     }
 
@@ -121,7 +120,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
       case 2:
         return Icon(
           WeatherIcons.thunderstorm,
-          color: colors.primaryColor,
+          color: color,
         );
         break;
 
@@ -129,42 +128,42 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         // TODO CHECK THIS ICON
         return Icon(
           WeatherIcons.rain_mix,
-          color: colors.primaryColor,
+          color: color,
         );
         break;
 
       case 5:
         return Icon(
           WeatherIcons.rain,
-          color: colors.primaryColor,
+          color: color,
         );
         break;
 
       case 6:
         return Icon(
           WeatherIcons.snow,
-          color: colors.primaryColor,
+          color: color,
         );
         break;
 
       case 7:
         return Icon(
           WeatherIcons.fog,
-          color: colors.primaryColor,
+          color: color,
         );
         break;
 
       case 8:
         return Icon(
           WeatherIcons.cloud,
-          color: colors.primaryColor,
+          color: color,
         );
         break;
 
       default:
         return new Icon(
           WeatherIcons.sunset,
-          color: colors.primaryColor,
+          color: color,
         );
     }
   }
@@ -177,7 +176,16 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   Widget renderWeather(Weather? weather, int dayIndex) {
     final colors = Provider.of<CustomColorScheme>(context);
     String? desc = weather?.weatherDescription;
-    String day = DateHelper.dayOfWeekAfterXdays(dayIndex);
+    String day;
+    String todayOrTomorrow = "";
+
+    if (dayIndex == 0) {
+      todayOrTomorrow = "Today";
+    } else if (dayIndex == 1) {
+      todayOrTomorrow = "Tomorrow";
+    }
+
+    day = DateHelper.dayOfWeekAfterXdays(dayIndex);
 
     if (weather == null) {
       return Row();
@@ -185,12 +193,26 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
     return Row(
       children: [
-        translateCodeIntoIcon(weather.weatherConditionCode),
+        translateCodeIntoIcon(
+            weather.weatherConditionCode,
+            todayOrTomorrow.isEmpty
+                ? colors.primaryColor
+                : colors.secondaryColor),
         Padding(
           padding: const EdgeInsets.all(8.0),
         ),
+        Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: Text(
+            todayOrTomorrow,
+            style: TextStyle(
+                color: colors.tertiaryTextColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w900),
+          ),
+        ),
         Text(
-          day + ": ",
+          day + " ",
           style: TextStyle(
               color: colors.primaryTextColor,
               fontSize: 18,
@@ -199,7 +221,9 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         Text(
           desc!,
           style: TextStyle(
-              color: colors.primaryColor,
+              color: todayOrTomorrow.isEmpty
+                  ? colors.primaryColor
+                  : colors.secondaryColor,
               fontSize: 18,
               fontWeight: FontWeight.w900),
         ),
@@ -226,7 +250,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              Icon(Icons.location_on, color: colors.primaryColor),
+              Icon(Icons.location_on, color: colors.secondaryColor),
               Padding(
                 padding: const EdgeInsets.all(8.0),
               ),
