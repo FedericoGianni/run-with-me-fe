@@ -244,7 +244,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
         // open new event detail screen
         Navigator.of(context).pushNamed(
           EventDetailsScreen.routeName,
-          arguments: await events.fetchEventById(newEventId),
+          arguments: await events.fetchEventById(newEventId, true),
         );
       } catch (error) {
         print(error);
