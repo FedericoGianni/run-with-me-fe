@@ -35,13 +35,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     final colors = Provider.of<CustomColorScheme>(context);
     final isLoggedIn = Provider.of<UserSettings>(context).isLoggedIn();
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
+    final settings = Provider.of<UserSettings>(context);
 
     Future<Null> _handleRefresh() async {
       // reload page with updated event details
       Navigator.of(context).popAndPushNamed(
         EventDetailsScreen.routeName,
         arguments: await Provider.of<Events>(context, listen: false)
-            .fetchEventById(event.id),
+            .fetchEventById(event.id, settings.isLoggedIn()),
       );
       return null;
     }
@@ -70,7 +71,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       Navigator.of(context).popAndPushNamed(
         EventDetailsScreen.routeName,
         arguments: await Provider.of<Events>(context, listen: false)
-            .fetchEventById(event.id),
+            .fetchEventById(event.id, settings.isLoggedIn()),
       );
     }
 
@@ -97,7 +98,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       Navigator.of(context).popAndPushNamed(
         EventDetailsScreen.routeName,
         arguments: await Provider.of<Events>(context, listen: false)
-            .fetchEventById(event.id),
+            .fetchEventById(event.id, settings.isLoggedIn()),
       );
     }
 
