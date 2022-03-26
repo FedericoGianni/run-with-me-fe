@@ -108,7 +108,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     // Group 800: Clear
     // Group 80x: Clouds
 
-    // TODO refactorare sto schifo
     if (weatherCode == 800) {
       return Icon(
         WeatherIcons.day_sunny,
@@ -168,11 +167,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     }
   }
 
-  Widget forecastWeather() {
-    final colors = Provider.of<CustomColorScheme>(context);
-    return Text("Forecast weatehr");
-  }
-
   Widget renderWeather(Weather? weather, int dayIndex) {
     final colors = Provider.of<CustomColorScheme>(context);
     String? desc = weather?.weatherDescription;
@@ -201,16 +195,16 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         Padding(
           padding: const EdgeInsets.all(8.0),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: Text(
-            todayOrTomorrow,
-            style: TextStyle(
-                color: colors.tertiaryTextColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w900),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(right: 4.0),
+        //   child: Text(
+        //     todayOrTomorrow,
+        //     style: TextStyle(
+        //         color: colors.tertiaryTextColor,
+        //         fontSize: 14,
+        //         fontWeight: FontWeight.w900),
+        //   ),
+        // ),
         Text(
           day + " ",
           style: TextStyle(
@@ -242,12 +236,17 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     String location = "";
     String country = "";
     String desc = "";
+    String todayTemp = "";
+    String todayTempMin = "";
+    String todayTempMax = "";
 
     // to avoid bad state error
     if (_todayData.isNotEmpty) {
       location = _todayData.first.areaName.toString();
       country = _todayData.first.country.toString();
-
+      todayTemp = _todayData.first.temperature.toString();
+      todayTempMin = _todayData.first.tempMin.toString();
+      todayTempMax = _todayData.first.tempMax.toString();
       desc = _todayData.first.weatherDescription ?? "";
     }
 
@@ -267,6 +266,45 @@ class _WeatherWidgetState extends State<WeatherWidget> {
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+          child: Row(
+            children: [
+              Icon(WeatherIcons.thermometer, color: colors.secondaryColor),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+              ),
+              Text(
+                "Today's Temperature: " + todayTemp,
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+              ),
+              Text(
+                "min: " +
+                    todayTempMin +
+                    "\n"
+                        "max: " +
+                    todayTempMax,
+                style: TextStyle(
+                    color: colors.secondaryTextColor,
+                    fontSize: 14,
                     fontWeight: FontWeight.w900),
               ),
             ],
