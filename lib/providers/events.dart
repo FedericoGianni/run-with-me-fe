@@ -307,7 +307,7 @@ class Events with ChangeNotifier {
     }
   }
 
-  Future<Event> fetchEventById(int eventId) async {
+  Future<Event> fetchEventById(int eventId, bool auth) async {
     Event event = new Event(
         id: -1,
         createdAt: DateTime.now(),
@@ -324,13 +324,17 @@ class Events with ChangeNotifier {
         currentParticipants: 0,
         maxParticipants: 0);
 
-    var request = http.MultipartRequest(
-        'GET', Uri.parse(Config.baseUrl + '/event/auth/' + eventId.toString()));
+    String req = auth ? '/event/auth/' : '/event/';
 
-    String? jwt = await secureStorage.read(key: 'jwt');
-    if (jwt != null) {
-      var headers = {'Authorization': 'Bearer ' + jwt};
-      request.headers.addAll(headers);
+    var request = http.MultipartRequest(
+        'GET', Uri.parse(Config.baseUrl + req + eventId.toString()));
+
+    if (auth) {
+      String? jwt = await secureStorage.read(key: 'jwt');
+      if (jwt != null) {
+        var headers = {'Authorization': 'Bearer ' + jwt};
+        request.headers.addAll(headers);
+      }
     }
 
     http.StreamedResponse response = await request.send();
@@ -340,7 +344,7 @@ class Events with ChangeNotifier {
       final stream = await response.stream.bytesToString().then((value) {
         print("200 OK, populating event with the receivded json");
         print("received json: " + value);
-        event = eventFromJson(value, true);
+        event = eventFromJson(value, auth);
       });
     } else {
       print(response.reasonPhrase);
