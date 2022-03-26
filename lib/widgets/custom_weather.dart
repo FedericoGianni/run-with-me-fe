@@ -242,12 +242,14 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
     // to avoid bad state error
     if (_todayData.isNotEmpty) {
-      location = _todayData.first.areaName.toString();
-      country = _todayData.first.country.toString();
-      todayTemp = _todayData.first.temperature.toString();
-      todayTempMin = _todayData.first.tempMin.toString();
-      todayTempMax = _todayData.first.tempMax.toString();
-      desc = _todayData.first.weatherDescription ?? "";
+      try {
+        location = _todayData.first.areaName.toString();
+        country = _todayData.first.country.toString();
+        todayTemp = _todayData.first.temperature.toString();
+        todayTempMin = _todayData.first.tempMin.toString();
+        todayTempMax = _todayData.first.tempMax.toString();
+        desc = _todayData.first.weatherDescription ?? "";
+      } on StateError {}
     }
 
     return Column(
