@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
+<<<<<<< HEAD
 import '../classes/multi_device_support.dart';
 import '../methods/DateHelper.dart';
+=======
+import '../classes/date_helper.dart';
+>>>>>>> feature/home_screen
 import '../themes/custom_colors.dart';
 import '../providers/event.dart';
 import 'rating.dart';
