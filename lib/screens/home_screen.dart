@@ -177,21 +177,74 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return [
       SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+        padding: const EdgeInsets.only(bottom: 0, top: 10, left: 20, right: 20),
         sliver: SliverToBoxAdapter(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(
-                Icons.calendar_month,
-                color: colors.primaryColor,
+              Text(
+                DateHelper.formatDateTime(DateTime.now()),
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
               ),
+              Icon(
+                Icons.calendar_month,
+                color: colors.secondaryTextColor,
+                size: 32,
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding:
+            const EdgeInsets.only(bottom: 20, top: 10, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Text(
-                DateHelper.formatDateTime(DateTime.now()),
+                "Welcome back, " + user.name.toString(),
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      // Grey line
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 50, right: 50),
+        sliver: SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: colors.onPrimary,
+                  width: 3.0,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Your upcoming events ",
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: 20,
@@ -203,17 +256,60 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       SliverPadding(
         padding:
-            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+        sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            childAspectRatio: _aspectRatio,
+            mainAxisSpacing: 15.0,
+            crossAxisSpacing: 15.0,
+            maxCrossAxisExtent: 400 / _view,
+            mainAxisExtent: 115,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return EventItem(
+                widget._futureBookedEvents[index],
+                index,
+                widget._futureBookedEvents.length,
+                _view,
+              );
+            },
+            childCount: widget._futureBookedEvents.length,
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 0),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Welcome back, " + user.name.toString(),
-                style: TextStyle(
-                    color: colors.primaryTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Text(
+                  "See all booked events",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.calendar_view_month,
+                    size: 30,
+                  ),
+                  color: colors.primaryColor,
+                  onPressed: () {
+                    pageIndex.setPage(Screens.EVENTS.index);
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 10,
+                ),
               ),
             ],
           ),
@@ -326,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 4,
             margin: const EdgeInsets.all(0),
             child: Container(
-              height: MediaQuery.of(context).size.height / 5,
+              height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width / 3,
               child: CustomMapsHome(),
             ),
@@ -381,194 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Your upcoming events",
-                style: TextStyle(
-                    color: colors.primaryTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900),
-              ),
-            ],
-          ),
-        ),
-      ),
-      SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
-        sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            childAspectRatio: _aspectRatio,
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 15.0,
-            maxCrossAxisExtent: 400 / _view,
-            mainAxisExtent: 115,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return EventItem(
-                widget._futureBookedEvents[index],
-                index,
-                widget._futureBookedEvents.length,
-                _view,
-              );
-            },
-            childCount: widget._futureBookedEvents.length,
-          ),
-        ),
-      ),
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: Text(
-                  "See all booked events",
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                      color: colors.primaryTextColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 3,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.calendar_view_month,
-                    size: 30,
-                  ),
-                  color: colors.primaryColor,
-                  onPressed: () {
-                    pageIndex.setPage(Screens.EVENTS.index);
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 10,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      // Grey line
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
-        sliver: SliverToBoxAdapter(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: colors.onPrimary,
-                  width: 3.0,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Your past events",
-                style: TextStyle(
-                    color: colors.primaryTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900),
-              ),
-            ],
-          ),
-        ),
-      ),
-      SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
-        sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            childAspectRatio: _aspectRatio,
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 15.0,
-            maxCrossAxisExtent: 400 / _view,
-            mainAxisExtent: 115,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return EventItem(
-                widget._pastBookedEvents[index],
-                index,
-                widget._pastBookedEvents.length,
-                _view,
-              );
-            },
-            childCount: widget._pastBookedEvents.length,
-          ),
-        ),
-      ),
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: Text(
-                  "See all past events",
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                      color: colors.primaryTextColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 3,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.book_rounded,
-                    size: 30,
-                  ),
-                  color: colors.primaryColor,
-                  onPressed: () {
-                    pageIndex.setPage(Screens.EVENTS.index);
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 10,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      // Grey line
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
-        sliver: SliverToBoxAdapter(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: colors.onPrimary,
-                  width: 3.0,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+
       SliverPadding(
         padding:
             const EdgeInsets.only(bottom: 10, top: 20, left: 20, right: 20),
@@ -685,6 +594,101 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: colors.primaryTextColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+      // Grey line
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+        sliver: SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: colors.onPrimary,
+                  width: 3.0,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      // PAST EVENTS
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Your past events",
+                style: TextStyle(
+                    color: colors.primaryTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding:
+            const EdgeInsets.only(bottom: 40, top: 20, left: 20, right: 20),
+        sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            childAspectRatio: _aspectRatio,
+            mainAxisSpacing: 15.0,
+            crossAxisSpacing: 15.0,
+            maxCrossAxisExtent: 400 / _view,
+            mainAxisExtent: 115,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return EventItem(
+                widget._pastBookedEvents[index],
+                index,
+                widget._pastBookedEvents.length,
+                _view,
+              );
+            },
+            childCount: widget._pastBookedEvents.length,
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 20),
+        sliver: SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Text(
+                  "See all past events",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.book_rounded,
+                    size: 30,
+                  ),
+                  color: colors.primaryColor,
+                  onPressed: () {
+                    pageIndex.setPage(Screens.EVENTS.index);
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 10,
+                ),
               ),
             ],
           ),
