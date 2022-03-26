@@ -8,7 +8,8 @@ import 'package:runwithme/screens/tabs_screen.dart';
 import 'package:runwithme/screens/user_screen.dart';
 import 'package:runwithme/widgets/event_detail_card.dart';
 import '../classes/multi_device_support.dart';
-import '../methods/DateHelper.dart';
+
+import '../classes/date_helper.dart';
 import '../providers/settings_manager.dart';
 import '../providers/user.dart';
 import '../themes/custom_colors.dart';
@@ -39,12 +40,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
+    final settings = Provider.of<UserSettings>(context);
+
     Future<Null> _handleRefresh() async {
       // reload page with updated event details
       Navigator.of(context).popAndPushNamed(
         EventDetailsScreen.routeName,
         arguments: await Provider.of<Events>(context, listen: false)
-            .fetchEventById(event.id),
+            .fetchEventById(event.id, settings.isLoggedIn()),
       );
       return null;
     }
@@ -73,7 +76,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       Navigator.of(context).popAndPushNamed(
         EventDetailsScreen.routeName,
         arguments: await Provider.of<Events>(context, listen: false)
-            .fetchEventById(event.id),
+            .fetchEventById(event.id, settings.isLoggedIn()),
       );
     }
 
@@ -100,7 +103,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       Navigator.of(context).popAndPushNamed(
         EventDetailsScreen.routeName,
         arguments: await Provider.of<Events>(context, listen: false)
-            .fetchEventById(event.id),
+            .fetchEventById(event.id, settings.isLoggedIn()),
       );
     }
 
