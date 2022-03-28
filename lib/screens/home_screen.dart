@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:runwithme/classes/date_helper.dart';
 import 'package:runwithme/classes/stats_helper.dart';
 import 'package:runwithme/providers/event.dart';
@@ -7,34 +6,23 @@ import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_map_home_page.dart';
 import 'package:runwithme/widgets/custom_weather.dart';
-import 'package:runwithme/widgets/permissions_message.dart';
-import 'package:runwithme/widgets/splash.dart';
-import 'package:weather/weather.dart';
 
 import '../providers/events.dart';
-import '../providers/locationHelper.dart';
 import '../providers/page_index.dart';
 import '../providers/user.dart';
-import '../widgets/custom_maps_event_detail.dart';
 import '../widgets/custom_scroll_behavior.dart';
 import '../widgets/event_card_text_only.dart';
-import '../widgets/gradientAppbar.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
-import '../widgets/custom_sort_by_button.dart';
-import '../widgets/sort_by.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/event';
-  bool _hideWeather = false;
-  bool _hideMap = false;
+  //bool _hideWeather = false;
+  //bool _hideMap = false;
 
   List<Event> _bookedEvents = [];
   List<Event> _futureBookedEvents = [];
   List<Event> _pastBookedEvents = [];
-  List<Event> _fullPastBookedEvents = [];
-  List<Event> _fullFutureBookedEvents = [];
-  //List<Event> _suggestedEvents = [];
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -114,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return events;
   }
 
-  Future<Null> _handleRefresh() async {
+  Future<void> _handleRefresh() async {
     // 1. update booked events
     final user = Provider.of<User>(context, listen: false);
     int userId = user.userId ?? -1;
@@ -156,7 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
     //     _sortAndReduce(widget._suggestedEvents, MAX_LENGTH);
 
     setState(() {});
-    return null;
   }
 
   List<Widget> _buildPage() {
@@ -195,8 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 18,
                     fontWeight: FontWeight.w900),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
               ),
               Icon(
                 Icons.calendar_month,
@@ -299,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -333,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -382,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -421,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 20,
                         fontWeight: FontWeight.w900),
                   ),
-                  Padding(padding: const EdgeInsets.all(8)),
+                  const Padding(padding: EdgeInsets.all(8)),
                   WeatherWidget(),
                 ],
               ),
@@ -498,8 +485,8 @@ class _HomeScreenState extends State<HomeScreen> {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 4,
             margin: const EdgeInsets.all(0),
-            child: Container(
-              height: MediaQuery.of(context).size.height / 3,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width / 3,
               child: CustomMapsHome(),
             ),
@@ -561,7 +548,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -601,7 +588,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -629,7 +616,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -664,7 +651,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -737,7 +724,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -764,7 +751,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -793,7 +780,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -827,7 +814,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -875,7 +862,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [],
+                  children: const [],
                 ),
               ),
             ),
@@ -890,7 +877,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final events = Provider.of<Events>(context);
 
-    if (widget._bookedEvents.length == 0) {
+    if (widget._bookedEvents.isEmpty) {
       widget._bookedEvents = events.bookedEvents;
 
       widget._futureBookedEvents = widget._bookedEvents
@@ -966,7 +953,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8),
-                                      child: Container(
+                                      child: SizedBox(
                                         width: 75,
                                         child: Row(
                                           mainAxisAlignment:

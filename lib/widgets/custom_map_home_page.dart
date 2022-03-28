@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/event.dart';
+import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/themes/custom_colors.dart';
 
 import '../providers/locationHelper.dart';
@@ -59,6 +60,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
   Widget build(BuildContext context) {
     Position userPosition =
         Provider.of<LocationHelper>(context).getLastKnownPosition();
+    final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
     Event fakeEvent = Event(
         id: -1,
@@ -77,7 +79,8 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
         maxParticipants: 0);
 
     return GoogleMap(
-      onTap: (_center) => {},
+      // switch to serach page and set view to map_view
+      onTap: (_center) => {pageIndex.setPage(Screens.SEARCH.index)},
       onMapCreated: _onMapCreated,
       onCameraMove: (position) {
         customInfoWindowController.onCameraMove!();
