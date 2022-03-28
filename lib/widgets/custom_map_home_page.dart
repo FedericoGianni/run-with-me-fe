@@ -86,7 +86,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
         customInfoWindowController.onCameraMove!();
       },
       mapType: MapType.normal,
-      zoomControlsEnabled: true,
+      zoomControlsEnabled: false,
       myLocationButtonEnabled: true,
       markers: Set<Marker>.of(
           markerGenerator([fakeEvent], customInfoWindowController, context)
