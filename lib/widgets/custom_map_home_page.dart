@@ -3,15 +3,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/page_index.dart';
-import 'package:runwithme/themes/custom_colors.dart';
 
 import '../providers/locationHelper.dart';
 import 'custom_info_window.dart';
-import 'default_appbar.dart';
-import '../models/map_style.dart';
 import '../classes/markers.dart';
-import '../methods/custom_alert_dialog.dart';
-import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 
 class CustomMapsHome extends StatefulWidget {
@@ -36,8 +31,6 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-
     setState(() {
       mapController?.moveCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -62,6 +55,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
         Provider.of<LocationHelper>(context).getLastKnownPosition();
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
+    // create a fakeEvent to have a marker displaying current user position
     Event fakeEvent = Event(
         id: -1,
         createdAt: DateTime.now(),
@@ -79,6 +73,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
         maxParticipants: 0);
 
     return GoogleMap(
+      // TODO
       // switch to serach page and set view to map_view
       onTap: (_center) => {pageIndex.setPage(Screens.SEARCH.index)},
       onMapCreated: _onMapCreated,

@@ -26,7 +26,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   @override
   void initState() {
     super.initState();
-    ws = new WeatherFactory(key);
+    ws = WeatherFactory(key);
   }
 
   @override
@@ -72,8 +72,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
   Widget contentFinishedDownload() {
     //print("CONTENT FINISHED DOWNLOAD");
-
-    // TODO return also forecasts weather
     return weather();
   }
 
@@ -90,9 +88,9 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
     // TODO add more cases
     if (tempInCelsius < 10) {
-      return Icon(Icons.ac_unit).icon;
+      return const Icon(Icons.ac_unit).icon;
     } else {
-      return Icon(WeatherIcons.sunset).icon;
+      return const Icon(WeatherIcons.sunset).icon;
     }
   }
 
@@ -160,7 +158,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         break;
 
       default:
-        return new Icon(
+        return Icon(
           WeatherIcons.sunset,
           color: color,
         );
@@ -260,8 +258,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
           child: Row(
             children: [
               Icon(Icons.location_on, color: colors.secondaryColor),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
               ),
               Text(
                 location + ', ' + country,
@@ -278,8 +276,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
           child: Row(
             children: [
               Icon(WeatherIcons.thermometer, color: colors.secondaryColor),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
               ),
               Text(
                 "Today's Temperature: " + todayTemp,
@@ -295,8 +293,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
           padding: const EdgeInsets.only(left: 50),
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(0.0),
+              const Padding(
+                padding: EdgeInsets.all(0.0),
               ),
               Text(
                 "min: " +
@@ -347,22 +345,18 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
   Widget contentDownloading() {
     //print("CONTENT DOWNLOADING");
-    return Container(
-      // margin: EdgeInsets.symmetric(
-      //     horizontal: MediaQuery.of(context).size.width / 5),
-      child: Column(children: [
-        Text(
-          'Fetching Weather...',
-          style: TextStyle(
-              color: Provider.of<CustomColorScheme>(context).primaryTextColor,
-              fontSize: 20,
-              fontWeight: FontWeight.w900),
-        ),
-        Container(
-            margin: EdgeInsets.only(top: 50),
-            child: Center(child: CircularProgressIndicator(strokeWidth: 5)))
-      ]),
-    );
+    return Column(children: [
+      Text(
+        'Fetching Weather...',
+        style: TextStyle(
+            color: Provider.of<CustomColorScheme>(context).primaryTextColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w900),
+      ),
+      Container(
+          margin: const EdgeInsets.only(top: 50),
+          child: const Center(child: CircularProgressIndicator(strokeWidth: 5)))
+    ]);
   }
 
   Widget contentNotDownloaded() {
