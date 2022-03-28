@@ -310,7 +310,12 @@ class _WeatherWidgetState extends State<WeatherWidget> {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: renderWeather(_todayData.first, 0),
+        ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             for (var i = 0; i < 5; i++)
               Padding(
