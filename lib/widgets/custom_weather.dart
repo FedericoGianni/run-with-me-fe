@@ -310,34 +310,14 @@ class _WeatherWidgetState extends State<WeatherWidget> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: renderWeather(_todayData.first, 0),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: renderWeather(
-              _forecastData.isNotEmpty ? _forecastData[0] : null, 1),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: renderWeather(
-              _forecastData.isNotEmpty ? _forecastData[1] : null, 2),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: renderWeather(
-              _forecastData.isNotEmpty ? _forecastData[2] : null, 3),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: renderWeather(
-              _forecastData.isNotEmpty ? _forecastData[3] : null, 4),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: renderWeather(
-              _forecastData.isNotEmpty ? _forecastData[4] : null, 5),
+        Column(
+          children: [
+            for (var i = 0; i < 5; i++)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: renderWeather(_forecastData[i], i + 1),
+              ),
+          ],
         ),
       ],
     );
