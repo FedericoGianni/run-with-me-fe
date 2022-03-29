@@ -17,7 +17,7 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../themes/custom_theme.dart';
 import 'custom_loading_animation.dart';
-import 'subscribe_bottomsheet.dart';
+import 'register_bottomsheet.dart';
 import 'custom_loading_circle_icon.dart';
 
 class LoginForm extends StatefulWidget {
@@ -165,7 +165,7 @@ class _LoginFormState extends State<LoginForm> {
                                 });
                           },
                           child: Text(
-                            'Subscribe',
+                            'Register',
                             style: TextStyle(
                                 color: colors.primaryColor,
                                 fontSize: multiDeviceSupport.h2,
