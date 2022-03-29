@@ -60,6 +60,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
   Widget build(BuildContext context) {
     Position userPosition =
         Provider.of<LocationHelper>(context).getLastKnownPosition();
+
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
     Event fakeEvent = Event(
