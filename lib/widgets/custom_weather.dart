@@ -312,7 +312,11 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: renderWeather(_todayData.first, 0),
+          child: _todayData.length > 0
+              ? renderWeather(_todayData.first, 0)
+              : SizedBox(
+                  child: Text("No data"),
+                ),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,7 +324,9 @@ class _WeatherWidgetState extends State<WeatherWidget> {
             for (var i = 0; i < 5; i++)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: renderWeather(_forecastData[i], i + 1),
+                child: _forecastData.isNotEmpty
+                    ? renderWeather(_forecastData[i], i + 1)
+                    : SizedBox.shrink(),
               ),
           ],
         ),
@@ -364,8 +370,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
           : contentNotDownloaded();
 
   void _coordinateInputs() {
-    Position userPosition =
-        Provider.of<LocationHelper>(context).getLastKnownPosition();
+    Position userPosition = Provider.of<LocationHelper>(context, listen: false)
+        .getLastKnownPosition();
 
     setState(() {
       lat = userPosition.latitude;
