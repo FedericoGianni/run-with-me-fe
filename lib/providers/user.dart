@@ -116,7 +116,7 @@ class User with ChangeNotifier {
             cityLong = double.parse(city['longitude'].toString());
           }
           createdAt = DateTime.fromMillisecondsSinceEpoch(
-              12321232 * 1000); // userInfo['created_at']
+              userInfo['created_at'].toInt() * 1000);
           fitnessLevel = userInfo['fitness_level'];
           height = userInfo['height'];
           username = userInfo['username'];
