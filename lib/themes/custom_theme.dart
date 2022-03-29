@@ -75,7 +75,8 @@ InputDecoration textFormDecoration(String label, ctx) {
   return InputDecoration(
     labelText: label,
     floatingLabelBehavior: FloatingLabelBehavior.auto,
-    floatingLabelStyle: TextStyle(color: colors.primaryColor),
+    floatingLabelStyle:
+        TextStyle(color: colors.primaryColor, fontSize: multiDeviceSupport.h2),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colors.errorColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -114,7 +115,8 @@ InputDecoration passwordFormDecoration(
         }),
     labelText: label,
     floatingLabelBehavior: FloatingLabelBehavior.auto,
-    floatingLabelStyle: TextStyle(color: colors.primaryColor),
+    floatingLabelStyle:
+        TextStyle(color: colors.primaryColor, fontSize: multiDeviceSupport.h2),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colors.errorColor),
       borderRadius: BorderRadius.all(Radius.circular(10)),

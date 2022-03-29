@@ -8,6 +8,7 @@ import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_map_home_page.dart';
 import 'package:runwithme/widgets/custom_weather.dart';
 
+import '../classes/multi_device_support.dart';
 import '../providers/events.dart';
 import '../providers/locationHelper.dart';
 import '../providers/page_index.dart';
@@ -152,9 +153,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
-    final settings = Provider.of<UserSettings>(context);
-    LocationHelper locationHelper = Provider.of<LocationHelper>(context);
-
+    final settings = Provider.of<UserSettings>(context, listen: false);
+    LocationHelper locationHelper =
+        Provider.of<LocationHelper>(context, listen: false);
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     // WEEKLY STATS
     // they will be rebuilt automatically on changes because of booked events listening for changes
     StatsHelper statsHelper = StatsHelper(context);
@@ -173,7 +176,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       // DATE
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 10, left: 20, right: 20),
+        padding: EdgeInsets.only(
+            bottom: 0,
+            top: 10,
+            left: 20 + multiDeviceSupport.tablet * 30,
+            right: 20 + multiDeviceSupport.tablet * 30),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -182,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 DateHelper.formatDateTime(DateTime.now()),
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 18,
+                    fontSize: multiDeviceSupport.h1,
                     fontWeight: FontWeight.w900),
               ),
               const Padding(
@@ -191,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Icon(
                 Icons.calendar_month,
                 color: colors.secondaryTextColor,
-                size: 24,
+                size: multiDeviceSupport.icons,
               ),
             ],
           ),
@@ -201,8 +208,12 @@ class _HomeScreenState extends State<HomeScreen> {
       // WELCOME PHRASE
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 10, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                bottom: 20,
+                top: 10,
+                left: 20 + multiDeviceSupport.tablet * 30,
+                right: 20 + multiDeviceSupport.tablet * 30,
+              ),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Welcome back, " + user.name.toString(),
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 18,
+                          fontSize: multiDeviceSupport.h0,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -219,8 +230,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           : SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 10, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 10,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -229,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Welcome",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 18,
+                          fontSize: multiDeviceSupport.h1,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -239,8 +253,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // Grey line
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 0, left: 50, right: 50),
+              padding: EdgeInsets.only(
+                  bottom: 20 + multiDeviceSupport.tablet * 10,
+                  top: 0 + multiDeviceSupport.tablet * 10,
+                  left: 50 + multiDeviceSupport.tablet * 30,
+                  right: 50 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(
@@ -267,8 +284,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // UPCOMING EVENTS
       settings.isLoggedIn()
           ? SliverPadding(
-              padding:
-                  const EdgeInsets.only(bottom: 0, top: 0, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 0 + multiDeviceSupport.tablet * 10,
+                  top: 0,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -277,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Your upcoming events ",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 20,
+                          fontSize: multiDeviceSupport.h0,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -295,15 +315,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 40, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                bottom: 40,
+                top: 20,
+                left: 20 + multiDeviceSupport.tablet * 30,
+                right: 20 + multiDeviceSupport.tablet * 30,
+              ),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   childAspectRatio: _aspectRatio,
                   mainAxisSpacing: 15.0,
                   crossAxisSpacing: 15.0,
-                  maxCrossAxisExtent: 400 / _view,
-                  mainAxisExtent: 115,
+                  maxCrossAxisExtent:
+                      (400 + multiDeviceSupport.tablet * 80) / _view,
+                  mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -330,8 +355,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
       settings.isLoggedIn()
           ? SliverPadding(
-              padding:
-                  const EdgeInsets.only(bottom: 30, top: 0, left: 20, right: 0),
+              padding: EdgeInsets.only(
+                bottom: 30,
+                top: 0,
+                left: 20 + multiDeviceSupport.tablet * 30,
+                right: 0 + multiDeviceSupport.tablet * 30,
+              ),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -343,16 +372,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: colors.primaryTextColor,
-                            fontSize: 18,
+                            fontSize: multiDeviceSupport.h1,
                             fontWeight: FontWeight.w900),
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 3,
+                      width: MediaQuery.of(context).size.width / 4,
                       child: IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.calendar_view_month,
-                          size: 30,
+                          size: multiDeviceSupport.icons,
                         ),
                         color: colors.primaryColor,
                         onPressed: () {
@@ -378,7 +407,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       // Grey line
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+        padding: EdgeInsets.only(
+            bottom: 0,
+            top: 0,
+            left: 50 + multiDeviceSupport.tablet * 30,
+            right: 50 + multiDeviceSupport.tablet * 30),
         sliver: SliverToBoxAdapter(
           child: Container(
             decoration: BoxDecoration(
@@ -396,8 +429,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // WEATHER
       locationHelper.isInitialized()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 20 + multiDeviceSupport.tablet * 10,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -409,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           "Weather",
                           style: TextStyle(
                               color: colors.primaryTextColor,
-                              fontSize: 20,
+                              fontSize: multiDeviceSupport.h0,
                               fontWeight: FontWeight.w900),
                         ),
                         const Padding(padding: EdgeInsets.all(8)),
@@ -421,8 +457,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           : SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 20,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -434,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: colors.primaryTextColor,
-                            fontSize: 20,
+                            fontSize: multiDeviceSupport.h1,
                             fontWeight: FontWeight.w900),
                       ),
                     ),
@@ -444,7 +483,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       // Grey line
       SliverPadding(
-        padding: const EdgeInsets.only(bottom: 20, top: 0, left: 50, right: 50),
+        padding: EdgeInsets.only(
+            bottom: 20 + multiDeviceSupport.tablet * 10,
+            top: 0 + multiDeviceSupport.tablet * 10,
+            left: 50 + multiDeviceSupport.tablet * 30,
+            right: 50 + multiDeviceSupport.tablet * 30),
         sliver: SliverToBoxAdapter(
           child: Container(
             decoration: BoxDecoration(
@@ -462,8 +505,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // EVENT SEARCH
       locationHelper.isInitialized()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 10, top: 0, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 10 + multiDeviceSupport.tablet * 10,
+                  top: 0,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -475,16 +521,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: colors.primaryTextColor,
-                            fontSize: 20,
+                            fontSize: multiDeviceSupport.h0,
                             fontWeight: FontWeight.w900),
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 3,
+                      width: MediaQuery.of(context).size.width / 4,
                       child: IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.search,
-                          size: 30,
+                          size: multiDeviceSupport.icons,
                         ),
                         color: colors.primaryColor,
                         onPressed: () {
@@ -500,8 +546,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           : SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 20,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -513,7 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: colors.primaryTextColor,
-                            fontSize: 20,
+                            fontSize: multiDeviceSupport.h1,
                             fontWeight: FontWeight.w900),
                       ),
                     ),
@@ -525,8 +574,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // MAP WITH CURRENT POS
       locationHelper.isInitialized()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 20,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Card(
                   color: colors.onPrimary,
@@ -538,7 +590,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: const EdgeInsets.all(0),
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height / 4,
-                    width: MediaQuery.of(context).size.width / 3,
+                    width: MediaQuery.of(context).size.width / 4,
                     child: CustomMapsHome(),
                   ),
                 ),
@@ -555,8 +607,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
       SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 20, top: 10, left: 20, right: 20),
+        padding: EdgeInsets.only(
+            bottom: 20,
+            top: 10,
+            left: 20 + multiDeviceSupport.tablet * 30,
+            right: 20 + multiDeviceSupport.tablet * 30),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -565,15 +620,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 "You are here",
                 style: TextStyle(
                     color: colors.primaryTextColor,
-                    fontSize: 18,
+                    fontSize: multiDeviceSupport.h1,
                     fontWeight: FontWeight.w600),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 4,
                 child: IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.location_on,
-                    size: 30,
+                    size: multiDeviceSupport.icons,
                   ),
                   color: colors.secondaryTextColor,
                   onPressed: () {},
@@ -589,8 +644,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // Grey line
       settings.isLoggedIn()
           ? SliverPadding(
-              padding:
-                  const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+              padding: EdgeInsets.only(
+                  bottom: 0 + multiDeviceSupport.tablet * 10,
+                  top: 0 + multiDeviceSupport.tablet * 10,
+                  left: 50 + multiDeviceSupport.tablet * 30,
+                  right: 50 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(
@@ -616,8 +674,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // WEEKLY STATS
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 10, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 10,
+                  top: 20,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -626,13 +687,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Weekly Stats: ",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 20,
+                          fontSize: multiDeviceSupport.h0,
                           fontWeight: FontWeight.w900),
                     ),
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.auto_graph,
-                        size: 30,
+                        size: multiDeviceSupport.icons,
                       ),
                       color: colors.secondaryTextColor,
                       onPressed: () {},
@@ -655,8 +716,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 0, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 0,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -665,7 +729,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Last 7 days",
                       style: TextStyle(
                           color: colors.secondaryTextColor,
-                          fontSize: 12,
+                          fontSize: multiDeviceSupport.h4,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -683,8 +747,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 0, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 0,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -693,14 +760,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       "You ran: ",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 17,
+                          fontSize: multiDeviceSupport.h2,
                           fontWeight: FontWeight.w900),
                     ),
                     Text(
                       weeklyDistance.toString() + " kms",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 18,
+                          fontSize: multiDeviceSupport.h2,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -718,8 +785,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 0, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 0,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -728,14 +798,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Time running: ",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 17,
+                          fontSize: multiDeviceSupport.h2,
                           fontWeight: FontWeight.w900),
                     ),
                     Text(
                       weeklyDuration.toString() + " mins",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 18,
+                          fontSize: multiDeviceSupport.h2,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -753,8 +823,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 20, top: 0, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 20,
+                  top: 0,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -763,7 +836,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Avg pace: ",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 17,
+                          fontSize: multiDeviceSupport.h2,
                           fontWeight: FontWeight.w900),
                     ),
                     Text(
@@ -773,7 +846,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           " min/km",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 18,
+                          fontSize: multiDeviceSupport.h2,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -792,8 +865,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // Grey line
       settings.isLoggedIn()
           ? SliverPadding(
-              padding:
-                  const EdgeInsets.only(bottom: 0, top: 0, left: 50, right: 50),
+              padding: EdgeInsets.only(
+                  bottom: 0 + multiDeviceSupport.tablet * 10,
+                  top: 0 + multiDeviceSupport.tablet * 10,
+                  left: 50 + multiDeviceSupport.tablet * 30,
+                  right: 50 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(
@@ -819,8 +895,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // PAST EVENTS
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 0, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 0,
+                  top: 20,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -829,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Your past events",
                       style: TextStyle(
                           color: colors.primaryTextColor,
-                          fontSize: 20,
+                          fontSize: multiDeviceSupport.h0,
                           fontWeight: FontWeight.w900),
                     ),
                   ],
@@ -847,15 +926,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 40, top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                bottom: 40,
+                top: 20,
+                left: 20 + multiDeviceSupport.tablet * 30,
+                right: 20 + multiDeviceSupport.tablet * 30,
+              ),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   childAspectRatio: _aspectRatio,
                   mainAxisSpacing: 15.0,
                   crossAxisSpacing: 15.0,
-                  maxCrossAxisExtent: 400 / _view,
-                  mainAxisExtent: 115,
+                  maxCrossAxisExtent:
+                      (400 + multiDeviceSupport.tablet * 80) / _view,
+                  mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -881,8 +965,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       settings.isLoggedIn()
           ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  bottom: 30, top: 0, left: 20, right: 20),
+              padding: EdgeInsets.only(
+                  bottom: 30 + multiDeviceSupport.tablet * 10,
+                  top: 0,
+                  left: 20 + multiDeviceSupport.tablet * 30,
+                  right: 20 + multiDeviceSupport.tablet * 30),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -894,16 +981,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: colors.primaryTextColor,
-                            fontSize: 18,
+                            fontSize: multiDeviceSupport.h1,
                             fontWeight: FontWeight.w900),
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 3,
+                      width: MediaQuery.of(context).size.width / 4,
                       child: IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.book_rounded,
-                          size: 30,
+                          size: multiDeviceSupport.icons,
                         ),
                         color: colors.primaryColor,
                         onPressed: () {
@@ -937,7 +1024,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final events = Provider.of<Events>(context);
-
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
     if (widget._bookedEvents.isEmpty) {
       widget._bookedEvents = events.bookedEvents;
 
@@ -975,14 +1063,15 @@ class _HomeScreenState extends State<HomeScreen> {
             slivers: [
               SliverAppBar(
                 stretch: false,
-                toolbarHeight: screenHeight / 6,
+                toolbarHeight:
+                    screenHeight / 6 - multiDeviceSupport.tablet * 30,
                 title: Container(
                   color: colors.onPrimary,
                   height: screenHeight / 6,
                   width: double.infinity,
-                  padding: const EdgeInsets.only(
-                    top: 50,
-                    bottom: 20,
+                  padding: EdgeInsets.only(
+                    top: 50 + multiDeviceSupport.tablet * 10,
+                    bottom: 20 + multiDeviceSupport.tablet * 20,
                   ),
                   child: Image.asset(
                     "assets/icons/logo_gradient.png",
@@ -991,7 +1080,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 titleSpacing: 0,
-                expandedHeight: screenHeight / 6 + _flexibleSpaceBarHeight,
+                expandedHeight: screenHeight / 6 -
+                    multiDeviceSupport.tablet * 30 +
+                    _flexibleSpaceBarHeight,
                 backgroundColor: colors.background,
 
                 // back up the list of items.
@@ -1015,15 +1106,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: SizedBox(
-                                        width: 75,
+                                        width:
+                                            70 + multiDeviceSupport.tablet * 40,
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
                                           children: [
                                             IconButton(
-                                              icon: const Icon(
+                                              icon: Icon(
                                                 Icons.table_rows_outlined,
-                                                size: 30,
+                                                size: multiDeviceSupport.icons,
                                               ),
                                               color: _rowColor,
                                               onPressed: () {
@@ -1035,9 +1127,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                               splashRadius: 10,
                                             ),
                                             IconButton(
-                                              icon: const Icon(
+                                              icon: Icon(
                                                 Icons.grid_view_outlined,
-                                                size: 30,
+                                                size: multiDeviceSupport.icons,
                                               ),
                                               color: _gridColor,
                                               onPressed: () {
