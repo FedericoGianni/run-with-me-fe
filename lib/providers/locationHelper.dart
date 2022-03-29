@@ -25,8 +25,8 @@ class LocationHelper with ChangeNotifier {
     speed: 0.0,
     speedAccuracy: 0.0,
   );
-  late Position _defaultUserPosition;
-  late Position _currentUserPosition;
+  Position? _defaultUserPosition;
+  Position? _currentUserPosition;
   LocationHelper();
 
   void setDefaultUserPosition(Position userPosition) {
@@ -40,9 +40,22 @@ class LocationHelper with ChangeNotifier {
     }
   }
 
-  Position _getDefaultUserLocation() {
+  bool isInitialized() {
+    if (_currentUserPosition == null) {
+      return false;
+    }
+
+    if (_currentUserPosition!.latitude == 0.0 &&
+        _currentUserPosition!.longitude == 0.0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Position? _getDefaultUserLocation() {
     print("Using default user location");
-    _lastKnownPosition = _defaultUserPosition;
+    _lastKnownPosition = _defaultUserPosition!;
     return _defaultUserPosition;
   }
 
@@ -80,7 +93,7 @@ class LocationHelper with ChangeNotifier {
     print("Closing background location thread");
   }
 
-  Future<Position> determinePosition(
+  Future<Position?> determinePosition(
       LocationAccuracy accuracy, var context) async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -145,7 +158,7 @@ class LocationHelper with ChangeNotifier {
         desiredAccuracy: LocationAccuracy.best,
         timeLimit: Duration(seconds: 10));
 
-    _lastKnownPosition = _currentUserPosition;
+    _lastKnownPosition = _currentUserPosition!;
     print("Location acquired");
     notifyListeners();
     return _currentUserPosition;
@@ -164,7 +177,7 @@ class LocationHelper with ChangeNotifier {
   Position getLastKnownPositionAndUpdate() {
     determinePosition(LocationAccuracy.best, context).then((value) {
       _currentUserPosition = value;
-      _lastKnownPosition = value;
+      _lastKnownPosition = value!;
     });
     return _lastKnownPosition;
   }
