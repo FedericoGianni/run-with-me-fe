@@ -40,7 +40,7 @@ class AddEventScreen extends StatefulWidget {
 
 class _AddEventScreenState extends State<AddEventScreen> {
   final _form = GlobalKey<FormState>();
-  final _nameFocusNode = FocusNode();
+  final _participantsFocusNode = FocusNode();
   final _distanceFocusNode = FocusNode();
   final _durationFocusNode = FocusNode();
   bool _isLoading = false;
@@ -69,9 +69,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
     startingPintLong: 0,
     id: null,
   );
-  final _initValues = {
-    'name': '',
-  };
 
   Future<Position> _getLocation() async {
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
@@ -280,7 +277,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   @override
   void dispose() {
-    _nameFocusNode.dispose();
+    _participantsFocusNode.dispose();
     _distanceFocusNode.dispose();
     _durationFocusNode.dispose();
     super.dispose();
@@ -289,12 +286,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
-    final locationHelper = Provider.of<LocationHelper>(context);
+    final locationHelper = Provider.of<LocationHelper>(context, listen: false);
     final double screenWidth = MediaQuery.of(context).size.width;
     final settings = Provider.of<UserSettings>(context, listen: false);
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
-
     if (settings.isLoggedIn()) {
       return _isLoading
           ? Center(
@@ -312,6 +308,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 child: ScrollConfiguration(
                   behavior: CustomScrollBehavior(),
                   child: ListView(
+                    cacheExtent: 2000,
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
@@ -350,14 +347,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           top: 10,
                         ),
                         child: TextFormField(
-                          initialValue: _initValues['name'],
+                          initialValue: '',
                           cursorColor: colors.primaryTextColor,
                           style: TextStyle(color: colors.primaryTextColor),
                           decoration: textFormDecoration('Name', context),
                           textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_nameFocusNode);
-                          },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please provide a value.';
@@ -365,24 +359,26 @@ class _AddEventScreenState extends State<AddEventScreen> {
                             return null;
                           },
                           onSaved: (value) {
-                            _editedEvent = Event(
-                              adminId: _editedEvent.adminId,
-                              averageDuration: _editedEvent.averageDuration,
-                              averageLength: _editedEvent.averageLength,
-                              averagePaceMin: _editedEvent.averagePaceMin,
-                              averagePaceSec: _editedEvent.averagePaceSec,
-                              createdAt: _editedEvent.createdAt,
-                              currentParticipants:
-                                  _editedEvent.currentParticipants,
-                              date: _editedEvent.date,
-                              difficultyLevel: _editedEvent.difficultyLevel,
-                              id: _editedEvent.id,
-                              maxParticipants: _editedEvent.maxParticipants,
-                              //change the event name with the name selected by the user
-                              name: value.toString(),
-                              startingPintLat: _editedEvent.startingPintLat,
-                              startingPintLong: _editedEvent.startingPintLong,
-                            );
+                            if (value != null) {
+                              _editedEvent = Event(
+                                adminId: _editedEvent.adminId,
+                                averageDuration: _editedEvent.averageDuration,
+                                averageLength: _editedEvent.averageLength,
+                                averagePaceMin: _editedEvent.averagePaceMin,
+                                averagePaceSec: _editedEvent.averagePaceSec,
+                                createdAt: _editedEvent.createdAt,
+                                currentParticipants:
+                                    _editedEvent.currentParticipants,
+                                date: _editedEvent.date,
+                                difficultyLevel: _editedEvent.difficultyLevel,
+                                id: _editedEvent.id,
+                                maxParticipants: _editedEvent.maxParticipants,
+                                //change the event name with the name selected by the user
+                                name: value.toString(),
+                                startingPintLat: _editedEvent.startingPintLat,
+                                startingPintLong: _editedEvent.startingPintLong,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -761,11 +757,13 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) {
                                   FocusScope.of(context)
-                                      .requestFocus(_nameFocusNode);
+                                      .requestFocus(_participantsFocusNode);
                                 },
                                 validator: (value) {
                                   if (value?.length == 0) {
                                     return 'Please provide a value.';
+                                  } else if (int.parse(value!) > 200) {
+                                    return 'Duration should be less than 200 minutes.';
                                   }
                                   return null;
                                 },
@@ -900,13 +898,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                 decoration: textFormDecoration(
                                     'Max participants', context),
                                 textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_nameFocusNode);
-                                },
+
                                 validator: (value) {
                                   if (value?.length == 0) {
                                     return 'Please provide a value.';
+                                  } else if (int.tryParse(value!)! > 200) {
+                                    return 'Max participants allowed is 200';
                                   }
                                   return null;
                                 },

@@ -304,12 +304,12 @@ class _SearchScreenState extends State<SearchScreen> {
               double startingMargin = 0.0;
               double endingMargin = 0.0;
               if (index == 0) {
-                startingMargin = 20 + multiDeviceSupport.tablet * 20;
+                startingMargin = 10 + multiDeviceSupport.tablet * 30;
               } else {
                 startingMargin = 0.0;
               }
               if (index == widget._recentEvents.length - 1) {
-                endingMargin = 20 + multiDeviceSupport.tablet * 30;
+                endingMargin = 10 + multiDeviceSupport.tablet * 30;
               } else {
                 endingMargin = 0.0;
               }
@@ -320,7 +320,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   right: endingMargin,
                 ),
                 padding: EdgeInsets.only(left: 10, bottom: 5, right: 7),
-                width: (400 + multiDeviceSupport.tablet * 80) / _view,
+                width: (370 + multiDeviceSupport.tablet * 110) / _view,
                 child: EventItem(
                   widget._recentEvents[index],
                   index,
@@ -396,7 +396,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             element.currentParticipants)
                         .toList();
                   }
-                  setState(() {});
+                  if (mounted) {
+                    setState(() {});
+                  }
                 },
               ),
             ],
