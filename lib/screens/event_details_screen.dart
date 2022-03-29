@@ -222,7 +222,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                     child: Text(
                                       'Unsubscribe',
                                       style: TextStyle(
-                                          color: colors.primaryTextColor,
+                                          color: colors.titleColor,
                                           fontSize: multiDeviceSupport.h2,
                                           fontWeight: FontWeight.w600),
                                     ),
@@ -242,7 +242,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                     child: Text(
                                       'Subscribe',
                                       style: TextStyle(
-                                          color: colors.primaryTextColor,
+                                          color: colors.titleColor,
                                           fontSize: multiDeviceSupport.h2,
                                           fontWeight: FontWeight.w600),
                                     ),
@@ -264,7 +264,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 child: Text(
                                   'Login to Subscribe',
                                   style: TextStyle(
-                                      color: colors.primaryTextColor,
+                                      color: colors.titleColor,
                                       fontSize: multiDeviceSupport.h4,
                                       fontWeight: FontWeight.w600),
                                 ),
