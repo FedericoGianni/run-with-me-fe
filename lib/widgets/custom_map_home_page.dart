@@ -53,6 +53,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
   Widget build(BuildContext context) {
     Position userPosition =
         Provider.of<LocationHelper>(context).getLastKnownPosition();
+
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
     // create a fakeEvent to have a marker displaying current user position
