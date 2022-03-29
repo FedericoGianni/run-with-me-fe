@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:runwithme/classes/date_helper.dart';
 import 'package:runwithme/classes/stats_helper.dart';
 import 'package:runwithme/providers/event.dart';
+import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_map_home_page.dart';
 import 'package:runwithme/widgets/custom_weather.dart';
 
 import '../providers/events.dart';
+import '../providers/locationHelper.dart';
 import '../providers/page_index.dart';
 import '../providers/user.dart';
 import '../widgets/custom_scroll_behavior.dart';
@@ -151,6 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = Provider.of<User>(context, listen: false);
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
     final settings = Provider.of<UserSettings>(context);
+    LocationHelper locationHelper = Provider.of<LocationHelper>(context);
 
     // WEEKLY STATS
     // they will be rebuilt automatically on changes because of booked events listening for changes
@@ -391,31 +394,54 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       // WEATHER
-      SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Weather",
-                    style: TextStyle(
-                        color: colors.primaryTextColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900),
-                  ),
-                  const Padding(padding: EdgeInsets.all(8)),
-                  WeatherWidget(),
-                ],
+      locationHelper.isInitialized()
+          ? SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 20, top: 20, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Weather",
+                          style: TextStyle(
+                              color: colors.primaryTextColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900),
+                        ),
+                        const Padding(padding: EdgeInsets.all(8)),
+                        WeatherWidget(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 20, top: 20, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Text(
+                        "Enable GPS to view Weather forecasts",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                            color: colors.primaryTextColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
       // Grey line
       SliverPadding(
         padding: const EdgeInsets.only(bottom: 20, top: 0, left: 50, right: 50),
@@ -434,65 +460,100 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       // EVENT SEARCH
-      SliverPadding(
-        padding: const EdgeInsets.only(bottom: 10, top: 0, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: Text(
-                  "Search for an event nearby",
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                      color: colors.primaryTextColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900),
+      locationHelper.isInitialized()
+          ? SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 10, top: 0, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Text(
+                        "Search for an event nearby",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                            color: colors.primaryTextColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.search,
+                          size: 30,
+                        ),
+                        color: colors.primaryColor,
+                        onPressed: () {
+                          pageIndex.setPage(Screens.SEARCH.index);
+                        },
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        splashRadius: 10,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 3,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.search,
-                    size: 30,
-                  ),
-                  color: colors.primaryColor,
-                  onPressed: () {
-                    pageIndex.setPage(Screens.SEARCH.index);
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 10,
+            )
+          : SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 20, top: 20, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Text(
+                        "Enable GPS to view your current location",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                            color: colors.primaryTextColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
 
       // MAP WITH CURRENT POS
-      SliverPadding(
-        padding:
-            const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
-        sliver: SliverToBoxAdapter(
-          child: Card(
-            color: colors.onPrimary,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 4,
-            margin: const EdgeInsets.all(0),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height / 4,
-              width: MediaQuery.of(context).size.width / 3,
-              child: CustomMapsHome(),
+      locationHelper.isInitialized()
+          ? SliverPadding(
+              padding: const EdgeInsets.only(
+                  bottom: 20, top: 20, left: 20, right: 20),
+              sliver: SliverToBoxAdapter(
+                child: Card(
+                  color: colors.onPrimary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  semanticContainer: true,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 4,
+                  margin: const EdgeInsets.all(0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 4,
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: CustomMapsHome(),
+                  ),
+                ),
+              ),
+            )
+          : SliverPadding(
+              padding: const EdgeInsets.all(0),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [],
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
+
       SliverPadding(
         padding:
             const EdgeInsets.only(bottom: 20, top: 10, left: 20, right: 20),
