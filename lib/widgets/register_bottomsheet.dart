@@ -41,10 +41,10 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   Icon eyeIcon = const Icon(
     Icons.remove_red_eye,
   );
-  static const double padding = 50;
+  static const double padding = 40;
   bool isTextObsured = true;
 
-  List _sexCodes = ["Don't know", 'Male', 'Female'];
+  List _sexCodes = ["Not specified", 'Male', 'Female'];
   List _fitCodes = ['Very unfit', 'Unfit', 'Average', 'Just fit', 'Very fit'];
 
   final _initValues = {
@@ -311,6 +311,33 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     multiDeviceSupport.init();
 
     return [
+      // Padding(
+      //   padding: EdgeInsets.only(
+      //     left: multiDeviceSupport.columnPadding,
+      //     right: multiDeviceSupport.columnPadding,
+      //     bottom: 10,
+      //   ),
+      //   child: Text(
+      //     'Username: ',
+      //     style: TextStyle(
+      //         color: colors.primaryTextColor, fontSize: multiDeviceSupport.h2),
+      //   ),
+      // ),
+
+      // Username
+      Padding(
+        padding: EdgeInsets.only(
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
+          bottom: 10,
+        ),
+        child: Text(
+          'Give yourself a nice username',
+          style: TextStyle(
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
+        ),
+      ),
       Padding(
         padding: EdgeInsets.only(
             left: multiDeviceSupport.columnPadding,
@@ -342,6 +369,20 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
+      // Email
+      Padding(
+        padding: EdgeInsets.only(
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
+          bottom: 10,
+        ),
+        child: Text(
+          'Here you should write your email',
+          style: TextStyle(
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
+        ),
+      ),
       Padding(
         padding: EdgeInsets.only(
             left: multiDeviceSupport.columnPadding,
@@ -364,12 +405,30 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please provide a value.';
+            } else if (!RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                .hasMatch(value)) {
+              return ' Please provide a valid email';
             }
             return null;
           },
           onSaved: (value) {
             _initValues['email'] = value!;
           },
+        ),
+      ),
+      // Password
+      Padding(
+        padding: EdgeInsets.only(
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
+          bottom: 10,
+        ),
+        child: Text(
+          'Write a strong password',
+          style: TextStyle(
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -405,8 +464,20 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
-      const SizedBox(
-        height: padding,
+      // Password 2
+      Padding(
+        padding: EdgeInsets.only(
+          top: padding,
+          left: multiDeviceSupport.columnPadding,
+          right: multiDeviceSupport.columnPadding,
+          bottom: 10,
+        ),
+        child: Text(
+          'Write it again just to be sure',
+          style: TextStyle(
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
+        ),
       ),
       Padding(
         padding: EdgeInsets.only(
@@ -484,6 +555,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     multiDeviceSupport.init();
 
     return [
+      // Name
       Padding(
         padding: EdgeInsets.only(
             left: multiDeviceSupport.columnPadding,
@@ -492,10 +564,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: Text(
           "What is your name:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -526,6 +596,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
+      // Surname
       Padding(
         padding: EdgeInsets.only(
             left: multiDeviceSupport.columnPadding,
@@ -534,10 +605,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: Text(
           "And your surname:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -568,6 +637,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
+      // Height and age
       Padding(
         padding: EdgeInsets.only(
             left: multiDeviceSupport.columnPadding,
@@ -576,20 +646,16 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
-            "Your height:",
+            "Your height in cm:",
             style: TextStyle(
-              color: colors.primaryTextColor,
-              fontSize: multiDeviceSupport.h2,
-              fontWeight: FontWeight.bold,
-            ),
+                color: colors.secondaryTextColor,
+                fontSize: multiDeviceSupport.h3),
           ),
           Text(
             "And your age:",
             style: TextStyle(
-              color: colors.primaryTextColor,
-              fontSize: multiDeviceSupport.h2,
-              fontWeight: FontWeight.bold,
-            ),
+                color: colors.secondaryTextColor,
+                fontSize: multiDeviceSupport.h3),
           ),
         ]),
       ),
@@ -600,6 +666,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             bottom: padding),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               width: screenWidth / 3.5,
@@ -622,6 +689,9 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                     return 'Please provide a value.';
                   } else if (int.tryParse(value) == null) {
                     return 'Please provide a valid height in cm';
+                  } else if (int.tryParse(value)! >= 240 ||
+                      int.tryParse(value)! <= 0) {
+                    return 'Please provide a valid age';
                   }
                   return null;
                 },
@@ -651,7 +721,11 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                     return 'Please provide a value.';
                   } else if (int.tryParse(value) == null) {
                     return 'Please provide a valid age';
+                  } else if (int.tryParse(value)! >= 240 ||
+                      int.tryParse(value)! <= 0) {
+                    return 'Please provide a valid age';
                   }
+
                   return null;
                 },
                 onSaved: (value) {
@@ -662,6 +736,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           ],
         ),
       ),
+      // Sex
       Padding(
         padding: EdgeInsets.only(
             left: multiDeviceSupport.columnPadding,
@@ -670,10 +745,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: Text(
           "You define yourself as:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -758,6 +831,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           },
         ),
       ),
+      // Location
       Padding(
         padding: EdgeInsets.only(
             left: multiDeviceSupport.columnPadding,
@@ -766,10 +840,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: Text(
           "Your preferred location:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -914,10 +986,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: Text(
           "How many times a week did you go running in the last six months:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -928,6 +998,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: TextFormField(
           key: Key('frequency'),
           autofocus: false,
+          keyboardType: TextInputType.number,
           initialValue: _initValues['frequency'],
           cursorColor: colors.primaryTextColor,
           style: TextStyle(
@@ -956,12 +1027,10 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             right: multiDeviceSupport.columnPadding,
             bottom: 10),
         child: Text(
-          "And for how long each time:",
+          "And for how many minutes each time:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -971,6 +1040,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             bottom: padding),
         child: TextFormField(
           key: Key('duration'),
+          keyboardType: TextInputType.number,
           focusNode: _durationFocusNode,
           initialValue: _initValues['duration'],
           cursorColor: colors.primaryTextColor,
@@ -1002,10 +1072,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: Text(
           "How many kilometers do you go for:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -1045,10 +1113,8 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
         child: Text(
           "How fit do you feel you are:",
           style: TextStyle(
-            color: colors.primaryTextColor,
-            fontSize: multiDeviceSupport.h2,
-            fontWeight: FontWeight.bold,
-          ),
+              color: colors.secondaryTextColor,
+              fontSize: multiDeviceSupport.h3),
         ),
       ),
       Padding(
@@ -1180,6 +1246,7 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           child: ScrollConfiguration(
             behavior: CustomScrollBehavior(),
             child: ListView(
+              key: Key(_pageIndex.toString()),
               scrollDirection: Axis.vertical,
               children: <Widget>[
                 // Title row
