@@ -1,15 +1,22 @@
-import 'package:test/test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
+import 'package:runwithme/providers/events.dart';
+
+class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
-  group('Test Group', () {
-    test('value should start at 0', () {
-      expect(0, 0);
-    });
+  Events events;
+  MockBuildContext _mockContext;
 
-    test('value should be incremented', () {
-      int counter = 0;
-      counter++;
-      expect(counter, 1);
-    });
+  setUp(() {
+    _mockContext = MockBuildContext();
+    final events = Provider.of<Events>(_mockContext, listen: false);
+  });
+
+  test('me testing', () {
+    // TODO
   });
 }
