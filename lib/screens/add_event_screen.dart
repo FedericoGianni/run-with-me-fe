@@ -994,8 +994,8 @@ class AddEventAppbar extends StatelessWidget {
         (75 + statusBarHeight + multiDeviceSupport.tablet * 50),
         [
           Padding(
-            padding: EdgeInsets.all(
-                statusBarHeight + multiDeviceSupport.tablet * 25),
+            padding: EdgeInsets.only(
+                top: statusBarHeight + multiDeviceSupport.tablet * 25),
             child: Center(
               child: Text(
                 'Add new Event',
