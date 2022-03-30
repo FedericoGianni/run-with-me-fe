@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Events with ChangeNotifier {
+  final int MAX_RECENT_EVENTS_LENGTH = 10;
   List<Event> _suggestedEvents = [];
   List<Event> _recentEvents = [];
   List<Event> _bookedEvents = [];
@@ -76,7 +77,7 @@ class Events with ChangeNotifier {
   void addRecentEvent(Event event) {
     //only add event if not already present in recently viewed list
     if (!_recentEvents.contains(event)) {
-      if (_recentEvents.length < 10) {
+      if (_recentEvents.length < MAX_RECENT_EVENTS_LENGTH) {
         _recentEvents.add(event);
       } else {
         //TODO not sure about this logic
