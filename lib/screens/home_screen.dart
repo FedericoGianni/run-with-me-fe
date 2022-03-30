@@ -65,11 +65,30 @@ class _HomeScreenState extends State<HomeScreen> {
       // 2. fetch booked events and divide past/future events
 
       int userId = Provider.of<User>(context).userId ?? -1;
-      Provider.of<Events>(context).fetchAndSetBookedEvents(userId).then((_) {
+      final events = Provider.of<Events>(context, listen: false);
+
+      // 1.1 fetch booked events for user
+      events.fetchAndSetBookedEvents(userId).then((_) {
         setState(() {
+          widget._bookedEvents = events.bookedEvents;
+
+          // 1.2 separate future booked events and reduce list length
+          widget._futureBookedEvents = widget._bookedEvents
+              .where((element) => element.date.isAfter(DateTime.now()))
+              .toList();
+          widget._futureBookedEvents =
+              _sortAndReduce(widget._futureBookedEvents, MAX_LENGTH);
+
+          // 1.3 separate past booked events and reduce list length
+          widget._pastBookedEvents = widget._bookedEvents
+              .where((element) => element.date.isBefore(DateTime.now()))
+              .toList();
+          widget._pastBookedEvents =
+              _sortAndReduce(widget._pastBookedEvents, MAX_LENGTH);
+
           _isLoading = false;
           print("fetching events for home");
-          _buildPage();
+          // _buildPage();
         });
       });
     }
@@ -314,35 +333,45 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
       settings.isLoggedIn()
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: 40,
-                top: 20,
-                left: 20 + multiDeviceSupport.tablet * 30,
-                right: 20 + multiDeviceSupport.tablet * 30,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  childAspectRatio: _aspectRatio,
-                  mainAxisSpacing: 15.0,
-                  crossAxisSpacing: 15.0,
-                  maxCrossAxisExtent:
-                      (400 + multiDeviceSupport.tablet * 80) / _view,
-                  mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return EventItem(
-                      widget._futureBookedEvents[index],
-                      index,
-                      widget._futureBookedEvents.length,
-                      _view,
-                    );
-                  },
-                  childCount: widget._futureBookedEvents.length,
-                ),
-              ),
-            )
+          ? !_isLoading
+              ? SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom: 40,
+                    top: 20,
+                    left: 20 + multiDeviceSupport.tablet * 30,
+                    right: 20 + multiDeviceSupport.tablet * 30,
+                  ),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      childAspectRatio: _aspectRatio,
+                      mainAxisSpacing: 15.0,
+                      crossAxisSpacing: 15.0,
+                      maxCrossAxisExtent:
+                          (400 + multiDeviceSupport.tablet * 80) / _view,
+                      mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return EventItem(
+                          widget._futureBookedEvents[index],
+                          index,
+                          widget._futureBookedEvents.length,
+                          _view,
+                        );
+                      },
+                      childCount: widget._futureBookedEvents.length,
+                    ),
+                  ),
+                )
+              : SliverToBoxAdapter(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Center(
+                        child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(strokeWidth: 3)),
+                      )))
           : SliverPadding(
               padding: const EdgeInsets.all(0),
               sliver: SliverToBoxAdapter(
@@ -925,35 +954,45 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
       settings.isLoggedIn()
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: 40,
-                top: 20,
-                left: 20 + multiDeviceSupport.tablet * 30,
-                right: 20 + multiDeviceSupport.tablet * 30,
-              ),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  childAspectRatio: _aspectRatio,
-                  mainAxisSpacing: 15.0,
-                  crossAxisSpacing: 15.0,
-                  maxCrossAxisExtent:
-                      (400 + multiDeviceSupport.tablet * 80) / _view,
-                  mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return EventItem(
-                      widget._pastBookedEvents[index],
-                      index,
-                      widget._pastBookedEvents.length,
-                      _view,
-                    );
-                  },
-                  childCount: widget._pastBookedEvents.length,
-                ),
-              ),
-            )
+          ? !_isLoading
+              ? SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom: 40,
+                    top: 20,
+                    left: 20 + multiDeviceSupport.tablet * 30,
+                    right: 20 + multiDeviceSupport.tablet * 30,
+                  ),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      childAspectRatio: _aspectRatio,
+                      mainAxisSpacing: 15.0,
+                      crossAxisSpacing: 15.0,
+                      maxCrossAxisExtent:
+                          (400 + multiDeviceSupport.tablet * 80) / _view,
+                      mainAxisExtent: 115 + multiDeviceSupport.tablet * 35,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return EventItem(
+                          widget._pastBookedEvents[index],
+                          index,
+                          widget._pastBookedEvents.length,
+                          _view,
+                        );
+                      },
+                      childCount: widget._pastBookedEvents.length,
+                    ),
+                  ),
+                )
+              : SliverToBoxAdapter(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Center(
+                        child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(strokeWidth: 3)),
+                      )))
           : SliverPadding(
               padding: const EdgeInsets.all(0),
               sliver: SliverToBoxAdapter(
@@ -1024,8 +1063,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final events = Provider.of<Events>(context);
+
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
+    print("REBUILDING HOME PAGE");
     if (widget._bookedEvents.isEmpty) {
       widget._bookedEvents = events.bookedEvents;
 
@@ -1052,117 +1093,109 @@ class _HomeScreenState extends State<HomeScreen> {
       __selectGridView(colors);
     }
 
-    if (_isLoading) {
-      return const CustomLoadingAnimation();
-    } else {
-      return RefreshIndicator(
-        onRefresh: _handleRefresh,
-        child: ScrollConfiguration(
-          behavior: CustomScrollBehavior(),
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                stretch: false,
-                toolbarHeight:
-                    screenHeight / 6 - multiDeviceSupport.tablet * 30,
-                title: Container(
-                  color: colors.onPrimary,
-                  height: screenHeight / 6,
-                  width: double.infinity,
-                  padding: EdgeInsets.only(
-                    top: 50 + multiDeviceSupport.tablet * 10,
-                    bottom: 20 + multiDeviceSupport.tablet * 20,
-                  ),
-                  child: Image.asset(
-                    "assets/icons/logo_gradient.png",
-                    width: 130,
-                  ),
+    return RefreshIndicator(
+      onRefresh: _handleRefresh,
+      child: ScrollConfiguration(
+        behavior: CustomScrollBehavior(),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              stretch: false,
+              toolbarHeight: screenHeight / 6 - multiDeviceSupport.tablet * 30,
+              title: Container(
+                color: colors.onPrimary,
+                height: screenHeight / 6,
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                  top: 50 + multiDeviceSupport.tablet * 10,
+                  bottom: 20 + multiDeviceSupport.tablet * 20,
                 ),
-
-                titleSpacing: 0,
-                expandedHeight: screenHeight / 6 -
-                    multiDeviceSupport.tablet * 30 +
-                    _flexibleSpaceBarHeight,
-                backgroundColor: colors.background,
-
-                // back up the list of items.
-                floating: true,
-                // Display a placeholder widget to visualize the shrinking size.
-                pinned: true,
-                snap: false,
-                elevation: 4,
-                flexibleSpace: FlexibleSpaceBar.createSettings(
-                  currentExtent: 100,
-                  child: settings.isLoggedIn()
-                      ? FlexibleSpaceBar(
-                          title: Container(
-                            height: _flexibleSpaceBarHeight + 2,
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: SizedBox(
-                                        width:
-                                            70 + multiDeviceSupport.tablet * 40,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.table_rows_outlined,
-                                                size: multiDeviceSupport.icons,
-                                              ),
-                                              color: _rowColor,
-                                              onPressed: () {
-                                                __selectListView(colors);
-                                              },
-                                              padding: EdgeInsets.zero,
-                                              constraints:
-                                                  const BoxConstraints(),
-                                              splashRadius: 10,
-                                            ),
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.grid_view_outlined,
-                                                size: multiDeviceSupport.icons,
-                                              ),
-                                              color: _gridColor,
-                                              onPressed: () {
-                                                __selectGridView(colors);
-                                              },
-                                              padding: EdgeInsets.zero,
-                                              constraints:
-                                                  const BoxConstraints(),
-                                              splashRadius: 10,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          titlePadding:
-                              const EdgeInsets.only(left: 5, right: 5),
-
-                          // Make the initial height of the SliverAppBar larger than normal.
-                        )
-                      : const SizedBox(),
+                child: Image.asset(
+                  "assets/icons/logo_gradient.png",
+                  width: 130,
                 ),
               ),
-              ..._buildPage()
-            ],
-          ),
+
+              titleSpacing: 0,
+              expandedHeight: screenHeight / 6 -
+                  multiDeviceSupport.tablet * 30 +
+                  _flexibleSpaceBarHeight,
+              backgroundColor: colors.background,
+
+              // back up the list of items.
+              floating: true,
+              // Display a placeholder widget to visualize the shrinking size.
+              pinned: true,
+              snap: false,
+              elevation: 4,
+              flexibleSpace: FlexibleSpaceBar.createSettings(
+                currentExtent: 100,
+                child: settings.isLoggedIn()
+                    ? FlexibleSpaceBar(
+                        title: Container(
+                          height: _flexibleSpaceBarHeight + 2,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: SizedBox(
+                                      width:
+                                          70 + multiDeviceSupport.tablet * 40,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.table_rows_outlined,
+                                              size: multiDeviceSupport.icons,
+                                            ),
+                                            color: _rowColor,
+                                            onPressed: () {
+                                              __selectListView(colors);
+                                            },
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                            splashRadius: 10,
+                                          ),
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.grid_view_outlined,
+                                              size: multiDeviceSupport.icons,
+                                            ),
+                                            color: _gridColor,
+                                            onPressed: () {
+                                              __selectGridView(colors);
+                                            },
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                            splashRadius: 10,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        titlePadding: const EdgeInsets.only(left: 5, right: 5),
+
+                        // Make the initial height of the SliverAppBar larger than normal.
+                      )
+                    : const SizedBox(),
+              ),
+            ),
+            ..._buildPage()
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }
