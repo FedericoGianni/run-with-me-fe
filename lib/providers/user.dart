@@ -42,6 +42,10 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
+  double get defaultFitnessLevel {
+    return DEFAULT_FITNESS_LEVEL;
+  }
+
   Future<List> register(username, email, password) async {
     try {
       // Makes the http request for the login
