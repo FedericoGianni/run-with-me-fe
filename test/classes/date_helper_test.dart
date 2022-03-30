@@ -11,7 +11,7 @@ void main() {
       ["Monday, Thuesday,  Wednesday, Thursday, Friday, Saturday, Sunday"]);
 
   group('[DATE HELPER]', () {
-    test('', () {
+    test('day of week after tomorrow returns a string', () {
       expect(DateHelper.dayOfWeekAfterTomorrow().isNotEmpty, true);
     });
   });
