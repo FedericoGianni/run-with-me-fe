@@ -4,7 +4,7 @@ import 'package:runwithme/providers/page_index.dart';
 void main() {
   PageIndex pageIndex = PageIndex();
 
-  group('[PAGE INDEX]]', () {
+  group('[PAGE INDEX]', () {
     test('pageIndex is set correctly', () {
       pageIndex.setPage(Screens.HOME.index);
       expect(pageIndex.index, Screens.HOME.index);
