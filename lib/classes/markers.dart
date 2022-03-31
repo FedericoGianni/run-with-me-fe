@@ -11,7 +11,7 @@ Map<String, Marker> markerGenerator(List<Event> eventList,
     CustomInfoWindowController _customInfoWindowController, ctx) {
   Map<String, Marker> _markers = {};
   BitmapDescriptor pinLocationIcon = BitmapDescriptor.defaultMarkerWithHue(197);
-  final colors = Provider.of<CustomColorScheme>(ctx);
+  final colors = Provider.of<CustomColorScheme>(ctx, listen: false);
 
   for (var i = 0; i < eventList.length; i++) {
     BitmapDescriptor.fromAssetImage(
