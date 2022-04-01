@@ -28,7 +28,7 @@ import 'package:runwithme/widgets/user_info_card.dart';
 void main() {
   User _fakeUser = User();
 
-  testWidgets('[SORT BY]', (WidgetTester tester) async {
+  testWidgets('[USER INFO CARD]', (WidgetTester tester) async {
     BookedEventsScreen bookedEventsScreen;
     await tester.pumpWidget(MultiProvider(
         providers: [
@@ -55,5 +55,8 @@ void main() {
     expect(find.text('Height'), findsOneWidget);
     expect(find.text('Age'), findsOneWidget);
     expect(find.text('Sex'), findsOneWidget);
+    expect(find.text('Fitness Level'), findsOneWidget);
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Default location'), findsOneWidget);
   });
 }
