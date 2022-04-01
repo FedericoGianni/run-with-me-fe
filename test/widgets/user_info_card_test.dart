@@ -29,7 +29,6 @@ void main() {
   User _fakeUser = User();
 
   testWidgets('[USER INFO CARD]', (WidgetTester tester) async {
-    BookedEventsScreen bookedEventsScreen;
     await tester.pumpWidget(MultiProvider(
         providers: [
           ChangeNotifierProvider<CustomColorScheme>.value(
