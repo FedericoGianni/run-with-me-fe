@@ -20,10 +20,11 @@ class SubscribeBottomSheet extends StatefulWidget {
   const SubscribeBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<SubscribeBottomSheet> createState() => _SubscribeBottomSheetState();
+  State<SubscribeBottomSheet> createState() => SubscribeBottomSheetState();
 }
 
-class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
+@visibleForTesting
+class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   final _form = GlobalKey<FormState>();
   int _pageIndex = 0;
   final _emailFocusNode = FocusNode();
@@ -65,6 +66,16 @@ class _SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
     'fitness': '-1',
     'fitnessTotalValue': '-1',
   };
+
+  @visibleForTesting
+  Map<String, String> get initValues {
+    return _initValues;
+  }
+
+  @visibleForTesting
+  GlobalKey<FormState> get formState {
+    return _form;
+  }
 
   void _togglePwdText() {
     setState(() {
