@@ -18,7 +18,7 @@ class PermissionMessage extends StatelessWidget {
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
     return SizedBox(
-      height: double.infinity,
+      //height: double.infinity,
       child: Column(
         children: [
           Center(
