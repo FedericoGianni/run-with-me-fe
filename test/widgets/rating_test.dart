@@ -10,7 +10,7 @@ import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/widgets/rating.dart';
 
 void main() {
-  testWidgets('[REGISTER BOTTOMSHEET]', (WidgetTester tester) async {
+  testWidgets('[RATING]', (WidgetTester tester) async {
     void setScreenSize({required int width, required int height}) {
       final dpi = tester.binding.window.devicePixelRatio;
       tester.binding.window.physicalSizeTestValue =
