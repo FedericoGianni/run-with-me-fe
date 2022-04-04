@@ -20,10 +20,11 @@ class CustomMapsNew extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CustomMapsNew> createState() => _CustomMapsNewState();
+  State<CustomMapsNew> createState() => CustomMapsNewState();
 }
 
-class _CustomMapsNewState extends State<CustomMapsNew> {
+@visibleForTesting
+class CustomMapsNewState extends State<CustomMapsNew> {
   late GoogleMapController mapController;
   late Set<Marker> markers = {};
 
@@ -43,7 +44,7 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
         return CustomMapPlaceSearch();
       },
     ).then((value) {
-      print(value);
+      //print(value);
       setState(() {
         widget.markerPosition = LatLng(value['latitude'], value['longitude']);
         widget.centerPosition = widget.markerPosition;
@@ -84,8 +85,8 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
     if (widget.markerPosition != const LatLng(0, 0)) {
       _handleTap(widget.markerPosition);
     }
-    final colors = Provider.of<CustomColorScheme>(context);
-    print('Rebuilding maps new');
+    final colors = Provider.of<CustomColorScheme>(context, listen: false);
+    //print('Rebuilding maps new');
     return Scaffold(
       body: Stack(
         children: [
@@ -137,7 +138,7 @@ class _CustomMapsNewState extends State<CustomMapsNew> {
                       color: colors.onPrimary,
                       border: Border.all(color: colors.onPrimary),
                       borderRadius: const BorderRadius.all(
-                        const Radius.circular(10.0),
+                        Radius.circular(10.0),
                       ),
                     ),
                     height: 50,
