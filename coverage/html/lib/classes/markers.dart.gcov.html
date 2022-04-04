@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">13</td>
             <td class="headerCovTableEntry">30</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntryLo">43.3 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-04-04 17:02:30</td>
+            <td class="headerValue">2022-04-04 22:23:22</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -69,25 +69,25 @@
 <a name="7"><span class="lineNum">       7 </span>            : import 'package:provider/provider.dart';</a>
 <a name="8"><span class="lineNum">       8 </span>            : import '../widgets/event_card_text_only.dart';</a>
 <a name="9"><span class="lineNum">       9 </span>            : </a>
-<a name="10"><span class="lineNum">      10 </span><span class="lineNoCov">          0 : Map&lt;String, Marker&gt; markerGenerator(List&lt;Event&gt; eventList,</span></a>
+<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          3 : Map&lt;String, Marker&gt; markerGenerator(List&lt;Event&gt; eventList,</span></a>
 <a name="11"><span class="lineNum">      11 </span>            :     CustomInfoWindowController _customInfoWindowController, ctx) {</a>
-<a name="12"><span class="lineNum">      12 </span><span class="lineNoCov">          0 :   Map&lt;String, Marker&gt; _markers = {};</span></a>
-<a name="13"><span class="lineNum">      13 </span><span class="lineNoCov">          0 :   BitmapDescriptor pinLocationIcon = BitmapDescriptor.defaultMarkerWithHue(197);</span></a>
-<a name="14"><span class="lineNum">      14 </span><span class="lineNoCov">          0 :   final colors = Provider.of&lt;CustomColorScheme&gt;(ctx, listen: false);</span></a>
+<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          3 :   Map&lt;String, Marker&gt; _markers = {};</span></a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineCov">          3 :   BitmapDescriptor pinLocationIcon = BitmapDescriptor.defaultMarkerWithHue(197);</span></a>
+<a name="14"><span class="lineNum">      14 </span><span class="lineCov">          3 :   final colors = Provider.of&lt;CustomColorScheme&gt;(ctx, listen: false);</span></a>
 <a name="15"><span class="lineNum">      15 </span>            : </a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 :   for (var i = 0; i &lt; eventList.length; i++) {</span></a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineNoCov">          0 :     BitmapDescriptor.fromAssetImage(</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          8 :   for (var i = 0; i &lt; eventList.length; i++) {</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          2 :     BitmapDescriptor.fromAssetImage(</span></a>
 <a name="18"><span class="lineNum">      18 </span>            :             const ImageConfiguration(devicePixelRatio: 2.5),</a>
 <a name="19"><span class="lineNum">      19 </span>            :             'assets/icons/icon.png')</a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineNoCov">          0 :         .then((onValue) {</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          4 :         .then((onValue) {</span></a>
 <a name="21"><span class="lineNum">      21 </span>            :       pinLocationIcon = onValue;</a>
 <a name="22"><span class="lineNum">      22 </span>            :     });</a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineNoCov">          0 :     Event event = eventList[i];</span></a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineNoCov">          0 :     String markerId = event.id.toString();</span></a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineNoCov">          0 :     Marker marker = Marker(</span></a>
-<a name="26"><span class="lineNum">      26 </span><span class="lineNoCov">          0 :       markerId: MarkerId(markerId),</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">          2 :     Event event = eventList[i];</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">          4 :     String markerId = event.id.toString();</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">          2 :     Marker marker = Marker(</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">          2 :       markerId: MarkerId(markerId),</span></a>
 <a name="27"><span class="lineNum">      27 </span>            :       icon: pinLocationIcon,</a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineNoCov">          0 :       position: LatLng(event.startingPintLat, event.startingPintLong),</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">          6 :       position: LatLng(event.startingPintLat, event.startingPintLong),</span></a>
 <a name="29"><span class="lineNum">      29 </span>            :       infoWindow: InfoWindow.noText,</a>
 <a name="30"><span class="lineNum">      30 </span><span class="lineNoCov">          0 :       onTap: () {</span></a>
 <a name="31"><span class="lineNum">      31 </span><span class="lineNoCov">          0 :         _customInfoWindowController.addInfoWindow!(</span></a>
@@ -127,7 +127,7 @@
 <a name="65"><span class="lineNum">      65 </span>            :       },</a>
 <a name="66"><span class="lineNum">      66 </span>            :     );</a>
 <a name="67"><span class="lineNum">      67 </span>            : </a>
-<a name="68"><span class="lineNum">      68 </span><span class="lineNoCov">          0 :     _markers[markerId] = marker;</span></a>
+<a name="68"><span class="lineNum">      68 </span><span class="lineCov">          2 :     _markers[markerId] = marker;</span></a>
 <a name="69"><span class="lineNum">      69 </span>            :   }</a>
 <a name="70"><span class="lineNum">      70 </span>            :   return _markers;</a>
 <a name="71"><span class="lineNum">      71 </span>            : }</a>
