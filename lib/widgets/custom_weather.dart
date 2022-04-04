@@ -5,6 +5,7 @@ import 'package:weather/weather.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import '../classes/date_helper.dart';
+import '../classes/weather_helper.dart';
 import '../providers/color_scheme.dart';
 import '../providers/locationHelper.dart';
 
@@ -12,10 +13,11 @@ enum AppState { NOT_DOWNLOADED, DOWNLOADING, FINISHED_DOWNLOADING }
 
 class WeatherWidget extends StatefulWidget {
   @override
-  _WeatherWidgetState createState() => _WeatherWidgetState();
+  WeatherWidgetState createState() => WeatherWidgetState();
 }
 
-class _WeatherWidgetState extends State<WeatherWidget> {
+@visibleForTesting
+class WeatherWidgetState extends State<WeatherWidget> {
   String key = '856822fd8e22db5e1ba48c0e7d69844a';
   late WeatherFactory ws;
   List<Weather> _todayData = [];
@@ -75,96 +77,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     return weather();
   }
 
-  int firstDigit(int number) {
-    return int.parse(number.toString().substring(0, 1));
-  }
-
-  int first2Digit(int number) {
-    return int.parse(number.toString().substring(0, 2));
-  }
-
-  IconData? iconFromTemperature(Temperature temperature) {
-    double tempInCelsius = temperature.celsius ?? 0.0;
-
-    // TODO add more cases
-    if (tempInCelsius < 10) {
-      return const Icon(Icons.ac_unit).icon;
-    } else {
-      return const Icon(WeatherIcons.sunset).icon;
-    }
-  }
-
-  Icon translateCodeIntoIcon(int? weatherCode, Color color) {
-    int firstWeatherCodeDigit = firstDigit(weatherCode ?? 0);
-    //int first2Digits = first2Digit(weatherCode ?? 0);
-
-    // Group 2xx: Thunderstorm
-    // Group 3xx: Drizzle
-    // Group 5xx: Rain
-    // Group 6xx: Snow
-    // Group 7xx: Atmosphere
-    // Group 800: Clear
-    // Group 80x: Clouds
-
-    if (weatherCode == 800) {
-      return Icon(
-        WeatherIcons.day_sunny,
-        color: color,
-      );
-    }
-
-    switch (firstWeatherCodeDigit) {
-      case 2:
-        return Icon(
-          WeatherIcons.thunderstorm,
-          color: color,
-        );
-        break;
-
-      case 3:
-        // TODO CHECK THIS ICON
-        return Icon(
-          WeatherIcons.rain_mix,
-          color: color,
-        );
-        break;
-
-      case 5:
-        return Icon(
-          WeatherIcons.rain,
-          color: color,
-        );
-        break;
-
-      case 6:
-        return Icon(
-          WeatherIcons.snow,
-          color: color,
-        );
-        break;
-
-      case 7:
-        return Icon(
-          WeatherIcons.fog,
-          color: color,
-        );
-        break;
-
-      case 8:
-        return Icon(
-          WeatherIcons.cloud,
-          color: color,
-        );
-        break;
-
-      default:
-        return Icon(
-          WeatherIcons.sunset,
-          color: color,
-        );
-    }
-  }
-
   Widget renderWeather(Weather? weather, int dayIndex) {
     final colors = Provider.of<CustomColorScheme>(context);
     String? desc = weather?.weatherDescription;
@@ -185,13 +97,13 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
     return Row(
       children: [
-        translateCodeIntoIcon(
+        WeatherHelper.translateCodeIntoIcon(
             weather.weatherConditionCode,
             todayOrTomorrow.isEmpty
                 ? colors.primaryColor
                 : colors.secondaryColor),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
         ),
         // Padding(
         //   padding: const EdgeInsets.only(right: 4.0),
@@ -312,9 +224,9 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _todayData.length > 0
+          child: _todayData.isNotEmpty
               ? renderWeather(_todayData.first, 0)
-              : SizedBox(
+              : const SizedBox(
                   child: Text("No data"),
                 ),
         ),
@@ -326,7 +238,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: _forecastData.isNotEmpty
                     ? renderWeather(_forecastData[i], i + 1)
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
               ),
           ],
         ),
