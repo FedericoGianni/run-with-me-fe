@@ -26,8 +26,16 @@ void main() {
 
       expect(WeatherHelper.translateCodeIntoIcon(800, Colors.amber).icon,
           WeatherIcons.day_sunny);
-      expect(WeatherHelper.translateCodeIntoIcon(80, Colors.amber).icon,
-          WeatherIcons.cloud);
+      expect(WeatherHelper.translateCodeIntoIcon(200, Colors.amber).icon,
+          WeatherIcons.thunderstorm);
+      expect(WeatherHelper.translateCodeIntoIcon(300, Colors.amber).icon,
+          WeatherIcons.rain_mix);
+      expect(WeatherHelper.translateCodeIntoIcon(500, Colors.amber).icon,
+          WeatherIcons.rain);
+      expect(WeatherHelper.translateCodeIntoIcon(600, Colors.amber).icon,
+          WeatherIcons.snow);
+      expect(WeatherHelper.translateCodeIntoIcon(700, Colors.amber).icon,
+          WeatherIcons.fog);
     });
   });
 }
