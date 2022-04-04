@@ -16,7 +16,6 @@ import '../widgets/search_event_bottomsheet.dart';
 import '../widgets/login_form.dart';
 import '../widgets/search_button.dart';
 import '../providers/user.dart';
-import '../widgets/loading_progress_indicator_UNUSED.dart';
 import '../widgets/user_info_card.dart';
 import 'dart:async';
 import 'dart:math';
