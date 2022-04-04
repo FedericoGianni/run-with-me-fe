@@ -100,6 +100,7 @@ class EventItem extends StatelessWidget {
                 event.currentParticipants.toString() +
                     '/' +
                     event.maxParticipants.toString(),
+                key: const Key("participants"),
                 style: event.currentParticipants == event.maxParticipants
                     ? TextStyle(
                         height: 0.3,
