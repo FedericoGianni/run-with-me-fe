@@ -36,6 +36,15 @@ void main() {
           WeatherIcons.snow);
       expect(WeatherHelper.translateCodeIntoIcon(700, Colors.amber).icon,
           WeatherIcons.fog);
+      expect(WeatherHelper.translateCodeIntoIcon(800, Colors.amber).icon,
+          WeatherIcons.cloud);
+      expect(WeatherHelper.translateCodeIntoIcon(900, Colors.amber).icon,
+          WeatherIcons.sunset);
+    });
+    test('first2digits', () {
+      //otherwise show Icon(WeatherIcons.sunset).icon
+
+      expect(WeatherHelper.first2Digit(800), 80);
     });
   });
 }
