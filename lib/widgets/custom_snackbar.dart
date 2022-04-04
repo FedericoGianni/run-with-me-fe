@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/color_scheme.dart';
 
 class CustomSnackbarProvider extends StatelessWidget {
-  CustomSnackbarProvider({
+  const CustomSnackbarProvider({
     Key? key,
     required this.ctx,
     required this.message,
@@ -22,7 +22,7 @@ class CustomSnackbarProvider extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               child: Text(
                 message,
                 style: TextStyle(
@@ -36,7 +36,7 @@ class CustomSnackbarProvider extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: screenWidth / 7),
         // width: 20,
 
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
 
         decoration: BoxDecoration(
             color: colors.background,
@@ -44,13 +44,13 @@ class CustomSnackbarProvider extends StatelessWidget {
               color: colors.errorColor,
               width: 1,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+            borderRadius: const BorderRadius.all(Radius.circular(15))),
       ),
       backgroundColor: Colors.transparent,
       elevation: 0,
       behavior: SnackBarBehavior.fixed,
-      duration: Duration(seconds: 1),
-      padding: EdgeInsets.only(bottom: 40),
+      duration: const Duration(seconds: 1),
+      padding: const EdgeInsets.only(bottom: 40),
     );
 
     return snackbar;
@@ -59,6 +59,6 @@ class CustomSnackbarProvider extends StatelessWidget {
   //Don't ducking ask me why but it just works so at this point I'm going with this.
   @override
   Widget build(BuildContext context) {
-    return SizedBox();
+    return const SizedBox();
   }
 }
