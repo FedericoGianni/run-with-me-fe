@@ -45,7 +45,7 @@ class SortByButton extends StatelessWidget {
     return Container(
       height: 30 + multiDeviceSupport.tablet * 5,
       width: 60 + multiDeviceSupport.tablet * 30,
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       child: TextButton(
         child: Text(
           title,
@@ -69,7 +69,7 @@ class SortByButton extends StatelessWidget {
           //   color: backgroundColor,
           //   width: 1,
           // ),
-          borderRadius: BorderRadius.all(Radius.circular(15))),
+          borderRadius: const BorderRadius.all(Radius.circular(15))),
     );
   }
 }
