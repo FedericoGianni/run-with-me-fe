@@ -19,7 +19,6 @@ import 'screens/booked_events_screen.dart';
 import 'screens/event_details_screen.dart';
 import 'screens/search_screen.dart';
 import 'widgets/custom_map_search.dart';
-import 'widgets/slide_DEPRECATED.dart';
 import 'providers/color_scheme.dart';
 import 'providers/events.dart';
 import 'providers/page_index.dart';
