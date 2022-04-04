@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../classes/multi_device_support.dart';
 import '../providers/color_scheme.dart';
 
-class customSlider extends StatefulWidget {
-  customSlider(
+class CustomSlider extends StatefulWidget {
+  CustomSlider(
       {required this.sliderValue, required this.onSliderMove, Key? key})
       : super(key: key);
 
@@ -13,10 +13,10 @@ class customSlider extends StatefulWidget {
   late final Function(double) onSliderMove;
 
   @override
-  State<customSlider> createState() => _customSliderState();
+  State<CustomSlider> createState() => _CustomSliderState();
 }
 
-class _customSliderState extends State<customSlider> {
+class _CustomSliderState extends State<CustomSlider> {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
