@@ -84,12 +84,12 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   iconColor: colors.secondaryTextColor,
                   prefixIconColor: colors.secondaryTextColor,
-                  prefixIcon: Icon(Icons.map),
+                  prefixIcon: const Icon(Icons.map),
                   suffixIcon: IconButton(
                     onPressed: () {
                       _controller.clear();
                     },
-                    icon: Icon(Icons.cancel),
+                    icon: const Icon(Icons.cancel),
                   ),
                 ),
               ),
@@ -111,7 +111,7 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: _placeList.length,
                               itemBuilder: (context, index) {
