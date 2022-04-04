@@ -8,7 +8,6 @@ import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/widgets/register_bottomsheet.dart';
-import 'package:runwithme/widgets/search_button.dart';
 
 void main() {
   testWidgets('[REGISTER BOTTOMSHEET]', (WidgetTester tester) async {
@@ -68,13 +67,38 @@ void main() {
     await tester.enterText(find.byKey(const Key('password')), "test1");
 
     var element = subscribeBottomSheet.createElement();
-    final state = element.state as SubscribeBottomSheetState;
+    var state = element.state as SubscribeBottomSheetState;
     expect(state.initValues.containsKey("password"), true);
     //print("password initial value: " + password.initialValue.toString());
 
-    TextFormField password2 =
-        find.byKey(Key('password')).evaluate().single.widget as TextFormField;
+    TextFormField password2 = find
+        .byKey(const Key('password'))
+        .evaluate()
+        .single
+        .widget as TextFormField;
 
     await tester.enterText(find.byKey(Key('password2')), "test2");
+
+    expect(
+        tester
+            .state<SubscribeBottomSheetState>(find.byType(SubscribeBottomSheet))
+            .pageIndex,
+        0);
+
+    // TEST 1st page and then go to 2nd page
+    await tester.enterText(find.byKey(const Key('username')), "user");
+    await tester.enterText(find.byKey(const Key('email')), "test@test.com");
+    await tester.enterText(find.byKey(const Key('password')), "passw0rd!");
+    await tester.enterText(find.byKey(const Key('password2')), "passw0rd!");
+
+    // go to second page
+    await tester.tap(find.byKey(Key("next1")));
+
+    // now i should see name textfield to ensure i am on 2nd page after pressing next button
+    expect(
+        tester
+            .state<SubscribeBottomSheetState>(find.byType(SubscribeBottomSheet))
+            .pageIndex,
+        1);
   });
 }
