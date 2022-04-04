@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-04-04 16:29:09</td>
+            <td class="headerValue">2022-04-04 16:57:32</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -80,12 +80,12 @@
 <a name="18"><span class="lineNum">      18 </span>            :   double _paddingTop2 = 0.0;</a>
 <a name="19"><span class="lineNum">      19 </span>            :   double _tablet = 0.0;</a>
 <a name="20"><span class="lineNum">      20 </span>            : </a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">         10 :   MultiDeviceSupport(this.context);</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">         12 :   MultiDeviceSupport(this.context);</span></a>
 <a name="22"><span class="lineNum">      22 </span>            : </a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineCov">          9 :   void init() {</span></a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineCov">         45 :     screenHeight = MediaQuery.of(context).size.height;</span></a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         45 :     screenWidth = MediaQuery.of(context).size.width;</span></a>
-<a name="26"><span class="lineNum">      26 </span><span class="lineCov">         18 :     if (screenWidth &lt; 800) {</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">         11 :   void init() {</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">         55 :     screenHeight = MediaQuery.of(context).size.height;</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         55 :     screenWidth = MediaQuery.of(context).size.width;</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">         22 :     if (screenWidth &lt; 800) {</span></a>
 <a name="27"><span class="lineNum">      27 </span><span class="lineCov">          3 :       _columnPadding = screenWidth / 7;</span></a>
 <a name="28"><span class="lineNum">      28 </span><span class="lineCov">          3 :       _paddingTop2 = screenHeight / 50;</span></a>
 <a name="29"><span class="lineNum">      29 </span><span class="lineCov">          1 :       _title = 28;</span></a>
@@ -97,23 +97,23 @@
 <a name="35"><span class="lineNum">      35 </span><span class="lineCov">          1 :       _h4 = 12;</span></a>
 <a name="36"><span class="lineNum">      36 </span><span class="lineCov">          1 :       _h5 = 10;</span></a>
 <a name="37"><span class="lineNum">      37 </span>            :     } else {</a>
-<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         24 :       _columnPadding = screenWidth / 5;</span></a>
-<a name="39"><span class="lineNum">      39 </span><span class="lineCov">         24 :       _paddingTop2 = screenHeight / 40;</span></a>
-<a name="40"><span class="lineNum">      40 </span><span class="lineCov">          8 :       _tablet = 1;</span></a>
-<a name="41"><span class="lineNum">      41 </span><span class="lineCov">          8 :       _title = 40;</span></a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          8 :       _icons = 42;</span></a>
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         30 :       _columnPadding = screenWidth / 5;</span></a>
+<a name="39"><span class="lineNum">      39 </span><span class="lineCov">         30 :       _paddingTop2 = screenHeight / 40;</span></a>
+<a name="40"><span class="lineNum">      40 </span><span class="lineCov">         10 :       _tablet = 1;</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">         10 :       _title = 40;</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">         10 :       _icons = 42;</span></a>
 <a name="43"><span class="lineNum">      43 </span>            : </a>
-<a name="44"><span class="lineNum">      44 </span><span class="lineCov">          8 :       _h0 = 30;</span></a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          8 :       _h1 = 28;</span></a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineCov">          8 :       _h2 = 22;</span></a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">          8 :       _h3 = 18;</span></a>
-<a name="48"><span class="lineNum">      48 </span><span class="lineCov">          8 :       _h4 = 16;</span></a>
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          8 :       _h5 = 14;</span></a>
+<a name="44"><span class="lineNum">      44 </span><span class="lineCov">         10 :       _h0 = 30;</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">         10 :       _h1 = 28;</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">         10 :       _h2 = 22;</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">         10 :       _h3 = 18;</span></a>
+<a name="48"><span class="lineNum">      48 </span><span class="lineCov">         10 :       _h4 = 16;</span></a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">         10 :       _h5 = 14;</span></a>
 <a name="50"><span class="lineNum">      50 </span>            :     }</a>
 <a name="51"><span class="lineNum">      51 </span>            :   }</a>
 <a name="52"><span class="lineNum">      52 </span>            : </a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">          7 :   double get tablet {</span></a>
-<a name="54"><span class="lineNum">      54 </span><span class="lineCov">          7 :     return _tablet;</span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">          9 :   double get tablet {</span></a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">          9 :     return _tablet;</span></a>
 <a name="55"><span class="lineNum">      55 </span>            :   }</a>
 <a name="56"><span class="lineNum">      56 </span>            : </a>
 <a name="57"><span class="lineNum">      57 </span><span class="lineCov">          1 :   double get icons {</span></a>
@@ -140,8 +140,8 @@
 <a name="78"><span class="lineNum">      78 </span><span class="lineCov">          5 :     return _h1;</span></a>
 <a name="79"><span class="lineNum">      79 </span>            :   }</a>
 <a name="80"><span class="lineNum">      80 </span>            : </a>
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">          5 :   double get h2 {</span></a>
-<a name="82"><span class="lineNum">      82 </span><span class="lineCov">          5 :     return _h2;</span></a>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">          6 :   double get h2 {</span></a>
+<a name="82"><span class="lineNum">      82 </span><span class="lineCov">          6 :     return _h2;</span></a>
 <a name="83"><span class="lineNum">      83 </span>            :   }</a>
 <a name="84"><span class="lineNum">      84 </span>            : </a>
 <a name="85"><span class="lineNum">      85 </span><span class="lineCov">          4 :   double get h3 {</span></a>
