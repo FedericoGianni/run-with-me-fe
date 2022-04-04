@@ -50,7 +50,6 @@ void main() {
     );
 
     expect(find.byType(ShaderMask), findsOneWidget);
-    expect(find.byType(SizedBox), findsOneWidget);
     expect(find.byType(Icon), findsOneWidget);
   });
 }
