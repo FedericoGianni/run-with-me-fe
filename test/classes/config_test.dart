@@ -5,7 +5,7 @@ void main() {
   group('[CONFIG]', () {
     test('baseUrl test', () {
       Config config = Config();
-      String baseUrl = Config.baseUrl;
+      String baseUrl = config.getBaseUrl();
       Pattern urlPattern = RegExp(r'http');
       expect(baseUrl.startsWith(urlPattern), true);
 
