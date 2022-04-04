@@ -4,8 +4,13 @@ import 'package:runwithme/classes/config.dart';
 void main() {
   group('[CONFIG]', () {
     test('baseUrl test', () {
+      Config config = Config();
+      String baseUrl = Config.baseUrl;
       Pattern urlPattern = RegExp(r'http');
-      expect(Config.baseUrl.startsWith(urlPattern), true);
+      expect(baseUrl.startsWith(urlPattern), true);
+
+      int apiTimeOut = config.getApiTimeout();
+      expect(apiTimeOut >= 0, true);
     });
   });
 }
