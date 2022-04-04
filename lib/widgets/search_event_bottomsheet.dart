@@ -349,7 +349,7 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                 ),
                 child: Column(
                   children: [
-                    customSlider(
+                    CustomSlider(
                       sliderValue: widget.formValues['slider_value'],
                       onSliderMove: (value) {
                         setState(() {
