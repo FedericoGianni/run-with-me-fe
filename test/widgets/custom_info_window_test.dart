@@ -7,9 +7,12 @@ import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/providers/user.dart';
-import 'package:runwithme/widgets/custom_loading_animation.dart';
+import 'package:runwithme/widgets/custom_info_window.dart';
 
 void main() {
+  CustomInfoWindowController _customInfoWindowController =
+      CustomInfoWindowController();
+
   testWidgets('[CUSTOM LOADGIN ANIMATION TEST]', (WidgetTester tester) async {
     void setScreenSize({required int width, required int height}) {
       final dpi = tester.binding.window.devicePixelRatio;
@@ -38,11 +41,17 @@ void main() {
             value: User(),
           ),
         ],
-        child: const MaterialApp(
+        child: MaterialApp(
             home: Material(
-          child: CustomLoadingAnimation(),
+          child: Stack(
+            children: [
+              CustomInfoWindow(
+                controller: _customInfoWindowController,
+              ),
+            ],
+          ),
         ))));
 
-    expect(find.byType(ScaleTransition), findsWidgets);
+    expect(find.byType(Visibility), findsOneWidget);
   });
 }
