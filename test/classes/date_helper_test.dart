@@ -6,7 +6,7 @@ void main() {
 
   //friday
   DateTime friday = DateTime.parse("2021-12-31");
-  DateTime saturday = DateTime.parse("2022-1-01");
+  DateTime saturday = DateTime.parse("2022-01-01");
   List<String> weekDays = [];
   weekDays.addAll(
       ["Monday, Thuesday,  Wednesday, Thursday, Friday, Saturday, Sunday"]);
@@ -17,7 +17,7 @@ void main() {
     });
 
     test('diff in days', () {
-      expect(DateHelper.diffInDays(friday, saturday), 1);
+      expect(DateHelper.diffInDays(saturday, friday), 1);
     });
   });
 }
