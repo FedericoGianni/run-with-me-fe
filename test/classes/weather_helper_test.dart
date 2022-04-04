@@ -36,7 +36,7 @@ void main() {
           WeatherIcons.snow);
       expect(WeatherHelper.translateCodeIntoIcon(700, Colors.amber).icon,
           WeatherIcons.fog);
-      expect(WeatherHelper.translateCodeIntoIcon(800, Colors.amber).icon,
+      expect(WeatherHelper.translateCodeIntoIcon(820, Colors.amber).icon,
           WeatherIcons.cloud);
       expect(WeatherHelper.translateCodeIntoIcon(900, Colors.amber).icon,
           WeatherIcons.sunset);
