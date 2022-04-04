@@ -1,7 +1,3 @@
-// import 'dart:html';
-
-// ignore_for_file: unnecessary_const
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -24,10 +20,11 @@ class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<LoginForm> createState() => LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+@visibleForTesting
+class LoginFormState extends State<LoginForm> {
   final _form = GlobalKey<FormState>();
   final _pwdFocusNode = FocusNode();
   Icon eyeIcon = const Icon(
@@ -40,6 +37,14 @@ class _LoginFormState extends State<LoginForm> {
     'username': '',
     'password': '',
   };
+
+  Map<String, String> get initValues {
+    return _initValues;
+  }
+
+  GlobalKey<FormState> get form {
+    return _form;
+  }
 
   void _togglePwdText() {
     setState(() {
@@ -73,15 +78,16 @@ class _LoginFormState extends State<LoginForm> {
 
     final isValid = _form.currentState?.validate();
     if (isValid == null || !isValid) {
+      //print("current form not valid");
       return;
     }
     _form.currentState?.save();
-    print("Logging in");
+    //print("Logging in");
     setState(() {
       _isLoading = true;
     });
 
-    print("isLoading is true");
+    //print("isLoading is true");
     settings.setUser(user);
     List loginResult = await settings.userLogin(
         _initValues['username'], _initValues['password']);
@@ -94,13 +100,13 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(snackbarProvider.provide());
-      print("isLoading is false1");
+      //print("isLoading is false1");
       setState(() {
         _isLoading = false;
       });
     } else {
       _isLoading = false;
-      print("isLoading is false2");
+      //print("isLoading is false2");
     }
   }
 
@@ -115,7 +121,7 @@ class _LoginFormState extends State<LoginForm> {
     multiDeviceSupport.init();
 
     // This snackbar is used for the popup message in case of wrong credentials
-    print(settings.isLoggedIn().toString());
+    //print(settings.isLoggedIn().toString());
     if (!_isLoading) {
       return Form(
         key: _form,
@@ -151,14 +157,15 @@ class _LoginFormState extends State<LoginForm> {
                           textAlign: TextAlign.center,
                         ),
                         TextButton(
+                          key: const Key("register"),
                           onPressed: () {
                             showModalBottomSheet(
                                 enableDrag: false,
                                 isScrollControlled: true,
                                 backgroundColor: colors.background,
                                 shape: const RoundedRectangleBorder(
-                                    borderRadius: const BorderRadius.vertical(
-                                        top: const Radius.circular(15))),
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(15))),
                                 context: context,
                                 builder: (_) {
                                   return const SubscribeBottomSheet();
@@ -186,6 +193,7 @@ class _LoginFormState extends State<LoginForm> {
               padding: EdgeInsets.only(
                   top: 10, left: screenWidth / 7, right: screenWidth / 7),
               child: TextFormField(
+                key: const Key("usernameForm"),
                 // autofocus: true,
                 initialValue: _initValues['username'],
                 cursorColor: colors.primaryTextColor,
@@ -216,6 +224,7 @@ class _LoginFormState extends State<LoginForm> {
               padding: EdgeInsets.only(
                   top: 10, left: screenWidth / 7, right: screenWidth / 7),
               child: TextFormField(
+                key: const Key("passwordForm"),
                 focusNode: _pwdFocusNode,
                 initialValue: _initValues['password'],
                 obscureText: isTextObsured,
@@ -262,6 +271,7 @@ class _LoginFormState extends State<LoginForm> {
                       child: const Text('Forgot password?'),
                     ),
                     TextButton(
+                      key: const Key("login"),
                       style: TextButton.styleFrom(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
