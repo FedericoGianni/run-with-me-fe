@@ -45,6 +45,10 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   static const double padding = 40;
   bool isTextObsured = true;
 
+  int get pageIndex {
+    return _pageIndex;
+  }
+
   List _sexCodes = ["Not specified", 'Male', 'Female'];
   List _fitCodes = ['Very unfit', 'Unfit', 'Average', 'Just fit', 'Very fit'];
 
@@ -93,6 +97,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
   }
 
   void _upPageIndex() {
+    print("upPageIndex");
     setState(() {
       final isValid = _form.currentState?.validate();
       if (isValid == null || !isValid) {
@@ -136,7 +141,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
       _initValues['city_name'] = value['name'].toString();
       _initValues['city_id'] = value['place_id'].toString();
       setState(() {
-        print("bellazio");
+        //print("bellazio");
         print(_initValues.keys);
       });
     });
@@ -221,7 +226,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     child: Text(
                       registerResult[1],
                       style: TextStyle(
@@ -236,7 +241,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                   horizontal: multiDeviceSupport.columnPadding),
               // width: 20,
 
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
 
               decoration: BoxDecoration(
                   color: colors.background,
@@ -246,13 +251,13 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                         : colors.errorColor,
                     width: 1,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
+                  borderRadius: const BorderRadius.all(Radius.circular(15))),
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,
             behavior: SnackBarBehavior.floating,
-            duration: Duration(seconds: 2),
-            padding: EdgeInsets.only(bottom: 40),
+            duration: const Duration(seconds: 2),
+            padding: const EdgeInsets.only(bottom: 40),
           );
           ScaffoldMessenger.of(context)
             ..removeCurrentSnackBar()
@@ -271,7 +276,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: Text(
                   "Register did not complete",
                   style: TextStyle(
@@ -286,7 +291,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
               horizontal: multiDeviceSupport.columnPadding),
           // width: 20,
 
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
 
           decoration: BoxDecoration(
               color: colors.background,
@@ -295,13 +300,13 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
                     registerResult[0] ? colors.primaryColor : colors.errorColor,
                 width: 1,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
-        duration: Duration(seconds: 2),
-        padding: EdgeInsets.only(bottom: 40),
+        duration: const Duration(seconds: 2),
+        padding: const EdgeInsets.only(bottom: 40),
       );
       ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
@@ -400,7 +405,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
-          key: Key('email'),
+          key: const Key('email'),
           focusNode: _emailFocusNode,
           initialValue: _initValues['email'],
           cursorColor: colors.primaryTextColor,
@@ -447,7 +452,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             left: multiDeviceSupport.columnPadding,
             right: multiDeviceSupport.columnPadding),
         child: TextFormField(
-          key: Key('password'),
+          key: const Key('password'),
           focusNode: _pwd1FocusNode,
           initialValue: _initValues['password'],
           obscureText: isTextObsured,
@@ -497,7 +502,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
           bottom: padding,
         ),
         child: TextFormField(
-          key: Key('password2'),
+          key: const Key('password2'),
           focusNode: _pwd2FocusNode,
           initialValue: _initValues['password2'],
           obscureText: isTextObsured,
@@ -539,6 +544,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
+                key: const Key("next1"),
                 style: TextButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -585,7 +591,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
-          key: Key('name'),
+          key: const Key('name'),
           autofocus: false,
           initialValue: _initValues['name'],
           cursorColor: colors.primaryTextColor,
@@ -626,7 +632,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             right: multiDeviceSupport.columnPadding,
             bottom: padding),
         child: TextFormField(
-          key: Key('surname'),
+          key: const Key('surname'),
           focusNode: _surnameFocusNode,
           initialValue: _initValues['surname'],
           cursorColor: colors.primaryTextColor,
@@ -682,7 +688,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             SizedBox(
               width: screenWidth / 3.5,
               child: TextFormField(
-                key: Key('height'),
+                key: const Key('height'),
                 focusNode: _heightFocusNode,
                 initialValue: _initValues['height'],
                 cursorColor: colors.primaryTextColor,
@@ -714,7 +720,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             SizedBox(
               width: screenWidth / 3.5,
               child: TextFormField(
-                key: Key('age'),
+                key: const Key('age'),
                 focusNode: _ageFocusNode,
                 initialValue: _initValues['age'],
                 cursorColor: colors.primaryTextColor,
@@ -950,6 +956,7 @@ class SubscribeBottomSheetState extends State<SubscribeBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
+                key: const Key("next2"),
                 style: TextButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
