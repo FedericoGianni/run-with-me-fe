@@ -61,6 +61,11 @@ class UserSettings with ChangeNotifier {
     this.user = user;
   }
 
+  @visibleForTesting
+  void setisLoggedIn(bool set) {
+    settings.isLoggedIn = set;
+  }
+
   void _saveLoginCredentials(username, password, jwt, userId) {
     secureStorage.write(key: 'username', value: username);
     secureStorage.write(key: 'password', value: password);
