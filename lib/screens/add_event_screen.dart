@@ -35,10 +35,11 @@ class AddEventScreen extends StatefulWidget {
   bool _isSearching = false;
 
   @override
-  State<AddEventScreen> createState() => _AddEventScreenState();
+  State<AddEventScreen> createState() => AddEventScreenState();
 }
 
-class _AddEventScreenState extends State<AddEventScreen> {
+@visibleForTesting
+class AddEventScreenState extends State<AddEventScreen> {
   final _form = GlobalKey<FormState>();
   final _participantsFocusNode = FocusNode();
   final _distanceFocusNode = FocusNode();
@@ -69,6 +70,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
     startingPintLong: 0,
     id: null,
   );
+
+  Event get editedEvent {
+    return _editedEvent;
+  }
 
   Future<Position> _getLocation() async {
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
@@ -212,27 +217,27 @@ class _AddEventScreenState extends State<AddEventScreen> {
     if (_editedEvent.id != null) {
       // await Provider.of<Events>(context, listen: false)
       //     .updateProduct(_editedEvent.id, _editedEvent);
-      print("Here I should edit the Event");
+      // print("Here I should edit the Event");
     } else {
       try {
-        print("test markerposition: " + markerPosition.toString());
+        // print("test markerposition: " + markerPosition.toString());
 
-        print("_editedEvent.adminId: " + _editedEvent.adminId.toString());
-        print("_editedEvent.avgDuration: " +
-            _editedEvent.averageDuration.toString());
-        print(
-            "_editedEvent.avgLength: " + _editedEvent.averageLength.toString());
-        print(
-            "_editedEvent.avgPace: " + _editedEvent.averagePaceMin.toString());
-        print("_editedEvent.date: " + _editedEvent.date.toString());
-        print("_editedEvent.id: " + _editedEvent.id.toString());
-        print("_editedEvent.maxParticipants: " +
-            _editedEvent.maxParticipants.toString());
-        print("_editedEvent.name: " + _editedEvent.name.toString());
-        print("_editedEvent.strartingPointLat: " +
-            _editedEvent.startingPintLat.toString());
-        print("_editedEvent.startingPointLong: " +
-            _editedEvent.startingPintLong.toString());
+        // print("_editedEvent.adminId: " + _editedEvent.adminId.toString());
+        // print("_editedEvent.avgDuration: " +
+        //     _editedEvent.averageDuration.toString());
+        // print(
+        //     "_editedEvent.avgLength: " + _editedEvent.averageLength.toString());
+        // print(
+        //     "_editedEvent.avgPace: " + _editedEvent.averagePaceMin.toString());
+        // print("_editedEvent.date: " + _editedEvent.date.toString());
+        // print("_editedEvent.id: " + _editedEvent.id.toString());
+        // print("_editedEvent.maxParticipants: " +
+        //     _editedEvent.maxParticipants.toString());
+        // print("_editedEvent.name: " + _editedEvent.name.toString());
+        // print("_editedEvent.strartingPointLat: " +
+        //     _editedEvent.startingPintLat.toString());
+        // print("_editedEvent.startingPointLong: " +
+        //     _editedEvent.startingPintLong.toString());
 
         // add event and return id of the newly generated event
         int newEventId = await Provider.of<Events>(context, listen: false)
@@ -248,11 +253,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
         await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('An error occurred!'),
-            content: Text('Something went wrong.'),
+            title: const Text('An error occurred!'),
+            content: const Text('Something went wrong.'),
             actions: <Widget>[
               FlatButton(
-                child: Text('Okay'),
+                child: const Text('Okay'),
                 onPressed: () {
                   // Navigator.of(ctx).pop();
                 },
@@ -311,7 +316,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     cacheExtent: 2000,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 10,
                         ),
                         child: Container(
@@ -321,7 +326,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       ),
                       // Name
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           bottom: 0,
                         ),
                         child: Text(
@@ -332,7 +337,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 5,
                         ),
                         child: Text(
@@ -343,10 +348,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 10,
                         ),
                         child: TextFormField(
+                          key: const Key("name"),
                           initialValue: '',
                           cursorColor: colors.primaryTextColor,
                           style: TextStyle(color: colors.primaryTextColor),
@@ -387,7 +393,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       ),
                       // Date and Time
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           bottom: 0,
                         ),
                         child: Text(
@@ -398,7 +404,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 5,
                         ),
                         child: Text(
@@ -409,7 +415,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 10,
                         ),
                         child: Row(
@@ -501,7 +507,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         height: padding,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           bottom: 0,
                         ),
                         child: Text(
@@ -512,7 +518,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 5,
                         ),
                         child: Text(
@@ -648,7 +654,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                                   color:
                                                       colors.secondaryTextColor,
                                                 )
-                                              : CustomLoadingCircleIcon())),
+                                              : const CustomLoadingCircleIcon())),
                                 ],
                               ),
                             ),
@@ -659,7 +665,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         height: padding,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           bottom: 0,
                         ),
                         child: Text(
@@ -670,7 +676,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 5,
                         ),
                         child: Text(
@@ -857,7 +863,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       //       ),
 
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 5,
                         ),
                         child: Text(
@@ -868,7 +874,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 5,
                         ),
                         child: Text(
@@ -973,7 +979,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               ),
             );
     } else {
-      return PermissionMessage();
+      return const PermissionMessage();
     }
   }
 }
