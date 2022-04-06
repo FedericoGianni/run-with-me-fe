@@ -11,7 +11,6 @@ import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/screens/booked_events_screen.dart';
 import 'package:runwithme/screens/event_details_screen.dart';
-import 'package:runwithme/screens/events_result_screen.dart';
 import 'package:runwithme/widgets/event_card_text_only.dart';
 
 // MOCK PROVIDERS
@@ -72,14 +71,7 @@ void main() {
             value: User(),
           ),
         ],
-        child: MaterialApp(
-            // initialRoute: '/', // default is '/'
-            // routes: {
-            //   '/': (ctx) => const EventDetailsScreen(),
-            //   //EventsScreen.routeName: (ctx) => EventsScreen(),
-            //   EventDetailsScreen.routeName: (ctx) => const EventDetailsScreen(),
-            // },
-            onGenerateRoute: (settings) {
+        child: MaterialApp(onGenerateRoute: (settings) {
           return MaterialPageRoute(
             settings:
                 // event detail gets event from route settings.arguments
@@ -117,7 +109,7 @@ void main() {
 
     expect(find.byType(Text), findsWidgets);
 
-    // the event inside detail screen should be the first from _fakeEvent
+    // the event inside detail screen should be _fakeEvent found in settings.argument
     Event detailEvent = tester
         .state<EventDetailsScreenState>(find.byType(EventDetailsScreen))
         .event;
