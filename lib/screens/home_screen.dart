@@ -220,6 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       "Welcome back, " + user.name.toString(),
+                      key: const Key("welcome_logged"),
                       style: TextStyle(
                           color: colors.primaryTextColor,
                           fontSize: multiDeviceSupport.h0,
@@ -241,6 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       "Welcome",
+                      key: const Key("welcome_not_logged"),
                       style: TextStyle(
                           color: colors.primaryTextColor,
                           fontSize: multiDeviceSupport.h1,
