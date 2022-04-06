@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
@@ -28,7 +25,6 @@ import 'package:runwithme/widgets/custom_sort_by_button.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 import 'package:runwithme/widgets/sort_by.dart';
 import 'package:runwithme/widgets/splash.dart';
-import 'package:runwithme/widgets/user_info_card.dart';
 
 void main() {
   testWidgets('[SPLASH]', (WidgetTester tester) async {

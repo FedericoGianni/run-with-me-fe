@@ -11,7 +11,14 @@ import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/screens/add_event_screen.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 
+// MOCK PROVIDERS
+import 'mock_events_provider.dart';
+import 'mock_user_settings_provider.dart';
+
 void main() {
+  MockEventsProvider mockEventsProvider = MockEventsProvider();
+  MockUserSettingsProvider mockUserSettingsProvider =
+      MockUserSettingsProvider();
   testWidgets('[ADD EVENT SCREEN]', (WidgetTester tester) async {
     void setScreenSize({required int width, required int height}) {
       final dpi = tester.binding.window.devicePixelRatio;
@@ -26,12 +33,12 @@ void main() {
       providers: [
         ChangeNotifierProvider<CustomColorScheme>.value(
             value: CustomColorScheme()),
-        ChangeNotifierProvider<Events>.value(value: Events()),
+        ChangeNotifierProvider<Events>.value(value: mockEventsProvider),
         ChangeNotifierProvider<LocationHelper>.value(
           value: LocationHelper(),
         ),
         ChangeNotifierProvider<UserSettings>.value(
-          value: UserSettings(),
+          value: mockUserSettingsProvider,
         ),
         ChangeNotifierProvider<PageIndex>.value(
           value: PageIndex(),
@@ -48,13 +55,7 @@ void main() {
       )),
     ));
 
-    expect(
-        tester
-            .state<AddEventScreenState>(find.byType(AddEventScreen))
-            .editedEvent
-            .currentParticipants,
-        0);
-
+    // getting widget and context in case we need for testing purposes
     AddEventScreen addEventScreen = find
         .byType(AddEventScreen)
         .first
@@ -62,23 +63,65 @@ void main() {
         .single
         .widget as AddEventScreen;
 
-    // settings isloggedin is false so it should show permission message
-    expect(find.byType(PermissionMessage), findsOneWidget);
-
     final BuildContext context =
         tester.state<AddEventScreenState>(find.byType(AddEventScreen)).context;
-    var userSettings = Provider.of<UserSettings>(context, listen: false);
 
-    tester.state<AddEventScreenState>(find.byType(AddEventScreen)).setState(() {
-      userSettings.setisLoggedIn(true);
-    });
+    // editedEvent should be initialized
+    expect(
+        tester
+            .state<AddEventScreenState>(find.byType(AddEventScreen))
+            .editedEvent
+            .currentParticipants,
+        0);
 
-    expect(userSettings.isLoggedIn(), true);
+    // settings isloggedin should be false so it should show permission message
+    expect(mockUserSettingsProvider.isLoggedIn(), false);
+    expect(find.byType(PermissionMessage), findsOneWidget);
 
+    // now let's fake login, isLoggedIn should be true so the ui will not render permission message
+    mockUserSettingsProvider.setisLoggedIn(true);
+    expect(mockUserSettingsProvider.isLoggedIn(), true);
+
+    // rebuild the ui with settings.isLoggedIn now true
+    tester
+        .state<AddEventScreenState>(find.byType(AddEventScreen))
+        .setState(() {});
+    await tester.pump();
+
+    // now it should show add event form instead of permission message
+    expect(find.byType(Form), findsOneWidget);
+
+    // let's try to add form text name
+    await tester.enterText(find.byKey(const Key('name')), "test");
+    TextFormField name =
+        find.byKey(const Key('name')).evaluate().single.widget as TextFormField;
+    name.onSaved!("test");
+
+    tester.state<AddEventScreenState>(find.byType(AddEventScreen)).saveForm();
+    expect(
+        tester
+            .state<AddEventScreenState>(find.byType(AddEventScreen))
+            .editedEvent
+            .name,
+        "test");
+
+    // marker position should be initialized
     expect(
         tester
             .state<AddEventScreenState>(find.byType(AddEventScreen))
             .markerPosition,
         const LatLng(0, 0));
+
+    // adding event to the mockEventProvider
+    mockEventsProvider.addEvent(tester
+        .state<AddEventScreenState>(find.byType(AddEventScreen))
+        .editedEvent);
+
+    // expect that the event is actually added to the event list
+    expect(
+        mockEventsProvider.dummyEvents.contains(tester
+            .state<AddEventScreenState>(find.byType(AddEventScreen))
+            .editedEvent),
+        true);
   });
 }
