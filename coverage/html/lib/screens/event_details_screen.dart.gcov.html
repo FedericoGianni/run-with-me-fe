@@ -94,7 +94,7 @@
 <a name="32"><span class="lineNum">      32 </span>            : class _EventDetailsScreenState extends State&lt;EventDetailsScreen&gt; {</a>
 <a name="33"><span class="lineNum">      33 </span><span class="lineNoCov">          0 :   @override</span></a>
 <a name="34"><span class="lineNum">      34 </span>            :   Widget build(BuildContext context) {</a>
-<a name="35"><span class="lineNum">      35 </span><span class="lineNoCov">          0 :     final event = ModalRoute.of(context)?.settings.arguments as Event;</span></a>
+<a name="35"><span class="lineNum">      35 </span><span class="lineNoCov">          0 :     final event = ModalRoute.of(context)?. as Event;</span></a>
 <a name="36"><span class="lineNum">      36 </span><span class="lineNoCov">          0 :     final user = Provider.of&lt;User&gt;(context, listen: false);</span></a>
 <a name="37"><span class="lineNum">      37 </span><span class="lineNoCov">          0 :     final events = Provider.of&lt;Events&gt;(context, listen: false);</span></a>
 <a name="38"><span class="lineNum">      38 </span><span class="lineNoCov">          0 :     final colors = Provider.of&lt;CustomColorScheme&gt;(context);</span></a>
