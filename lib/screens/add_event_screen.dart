@@ -280,6 +280,11 @@ class AddEventScreenState extends State<AddEventScreen> {
     pageIndex.setPage(0);
   }
 
+  @visibleForTesting
+  void saveForm() {
+    _saveForm();
+  }
+
   @override
   void dispose() {
     _participantsFocusNode.dispose();
@@ -313,6 +318,8 @@ class AddEventScreenState extends State<AddEventScreen> {
                 child: ScrollConfiguration(
                   behavior: CustomScrollBehavior(),
                   child: ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
                     cacheExtent: 2000,
                     children: <Widget>[
                       Padding(
