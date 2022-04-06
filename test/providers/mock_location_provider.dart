@@ -60,4 +60,11 @@ class MockLocationProvider extends Mock implements LocationHelper {
   bool isInitialized() {
     return true;
   }
+
+  @override
+  double getDistanceBetween(
+      {startLatitude, startLongitude, endLatitude, endLongitude}) {
+    return Geolocator.distanceBetween(
+        startLatitude, startLongitude, endLatitude, endLongitude);
+  }
 }
