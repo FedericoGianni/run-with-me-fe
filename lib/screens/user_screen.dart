@@ -29,10 +29,11 @@ class UserScreen extends StatefulWidget {
   static const routeName = '/user';
 
   @override
-  State<UserScreen> createState() => _UserScreenState();
+  State<UserScreen> createState() => UserScreenState();
 }
 
-class _UserScreenState extends State<UserScreen> {
+@visibleForTesting
+class UserScreenState extends State<UserScreen> {
   List<bool> isSelected = [false, false];
 
   Future<void> _showMyDialog() async {
@@ -357,7 +358,7 @@ class _UserScreenState extends State<UserScreen> {
                                       // fillColor: colors.background,
                                       highlightColor: colors.onPrimary,
                                       splashColor: colors.background,
-                                      children: <Widget>[
+                                      children: const <Widget>[
                                         Icon(Icons.light_mode),
                                         Icon(Icons.dark_mode),
                                       ],
@@ -384,13 +385,13 @@ class _UserScreenState extends State<UserScreen> {
                                       },
                                       isSelected: isSelected,
                                     ),
-                                    padding: EdgeInsets.all(0),
+                                    padding: const EdgeInsets.all(0),
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 10),
                         ),
                       ),
@@ -594,7 +595,7 @@ class UserAppbar extends StatelessWidget {
                     fontWeight: FontWeight.w700),
               ),
               height: 100,
-              padding: EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 25),
             )
           : Container(
               height: 100,
