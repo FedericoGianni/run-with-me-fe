@@ -12,8 +12,8 @@ import 'package:runwithme/screens/add_event_screen.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 
 // MOCK PROVIDERS
-import 'mock_events_provider.dart';
-import 'mock_user_settings_provider.dart';
+import '../providers/mock_events_provider.dart';
+import '../providers/mock_user_settings_provider.dart';
 
 void main() {
   MockEventsProvider mockEventsProvider = MockEventsProvider();
@@ -104,6 +104,45 @@ void main() {
             .editedEvent
             .name,
         "test");
+
+    // let's try to add form distance
+    await tester.enterText(find.byKey(const Key('distance')), "10");
+    TextFormField distance = find
+        .byKey(const Key('distance'))
+        .evaluate()
+        .single
+        .widget as TextFormField;
+    distance.onSaved!("10");
+
+    tester.state<AddEventScreenState>(find.byType(AddEventScreen)).saveForm();
+    expect(
+        tester
+            .state<AddEventScreenState>(find.byType(AddEventScreen))
+            .editedEvent
+            .averageLength,
+        10);
+
+    // let's try to add invalid duration
+    await tester.enterText(find.byKey(const Key('distance')), "300");
+    TextFormField duration = find
+        .byKey(const Key('duration'))
+        .evaluate()
+        .single
+        .widget as TextFormField;
+    expect(duration.validator!("300"),
+        "Duration should be less than 200 minutes.");
+
+    // let's try to add valid duration
+    await tester.enterText(find.byKey(const Key('duration')), "30");
+    duration.onSaved!("30");
+
+    tester.state<AddEventScreenState>(find.byType(AddEventScreen)).saveForm();
+    expect(
+        tester
+            .state<AddEventScreenState>(find.byType(AddEventScreen))
+            .editedEvent
+            .averageDuration,
+        30);
 
     // marker position should be initialized
     expect(
