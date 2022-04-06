@@ -133,27 +133,27 @@ class _TabsScreenState extends State<TabsScreen> {
           items: [
             BottomNavigationBarItem(
               backgroundColor: colors.primaryColor,
-              icon: Icon(Icons.home_outlined),
+              icon: const Icon(Icons.home_outlined),
               label: 'Home',
             ),
             BottomNavigationBarItem(
               backgroundColor: colors.primaryColor,
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               label: 'Browse',
             ),
             BottomNavigationBarItem(
               backgroundColor: colors.primaryColor,
-              icon: Icon(Icons.add_box_outlined),
+              icon: const Icon(Icons.add_box_outlined),
               label: 'New',
             ),
             BottomNavigationBarItem(
               backgroundColor: colors.primaryColor,
-              icon: Icon(Icons.event_outlined),
+              icon: const Icon(Icons.event_outlined),
               label: 'Events',
             ),
             BottomNavigationBarItem(
               backgroundColor: colors.primaryColor,
-              icon: Icon(Icons.person_outline),
+              icon: const Icon(Icons.person_outline),
               label: 'User',
             )
           ],
