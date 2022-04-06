@@ -10,7 +10,6 @@ import 'package:runwithme/widgets/splash.dart';
 
 import 'themes/custom_theme.dart';
 import 'widgets/event_card_text_only.dart';
-import 'screens/events_result_screen.dart';
 import 'screens/tabs_screen.dart';
 import 'screens/add_event_screen.dart';
 import 'screens/user_screen.dart';
@@ -89,7 +88,6 @@ class _MyAppState extends State<MyApp> {
                 initialRoute: '/', // default is '/'
                 routes: {
                   '/': (ctx) => TabsScreen(),
-                  EventsScreen.routeName: (ctx) => EventsScreen(),
                   AddEventScreen.routeName: (ctx) => AddEventScreen(),
                   BookedEventsScreen.routeName: (ctx) => BookedEventsScreen(),
                   UserScreen.routeName: (ctx) => UserScreen(),
