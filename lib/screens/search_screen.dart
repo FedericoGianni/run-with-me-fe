@@ -37,11 +37,28 @@ class SearchScreen extends StatefulWidget {
   List<Event> _suggestedEvents = [];
   List<Event> _recentEvents = [];
   List<Event> _resultEvents = [];
+
+  // @visibleForTesting
+  // List<Event> get suggestedEvents {
+  //   return _suggestedEvents;
+  // }
+
+  // @visibleForTesting
+  // List<Event> get recentEvents {
+  //   return _recentEvents;
+  // }
+
+  // @visibleForTesting
+  // List<Event> get resultEvents {
+  //   return _resultEvents;
+  // }
+
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchScreen> createState() => SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+@visibleForTesting
+class SearchScreenState extends State<SearchScreen> {
   int _view = 2;
   double _aspectRatio = 1.4;
   Color _rowColor = Colors.deepOrange.shade900;
