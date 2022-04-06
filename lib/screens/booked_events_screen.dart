@@ -25,10 +25,11 @@ class BookedEventsScreen extends StatefulWidget {
   List<Event> _pastBookedEvents = [];
 
   @override
-  State<BookedEventsScreen> createState() => _BookedEventsScreenState();
+  State<BookedEventsScreen> createState() => BookedEventsScreenState();
 }
 
-class _BookedEventsScreenState extends State<BookedEventsScreen> {
+@visibleForTesting
+class BookedEventsScreenState extends State<BookedEventsScreen> {
   int _view = 2;
   double _aspectRatio = 1.4;
   Color _rowColor = Colors.deepOrange.shade900;
@@ -425,13 +426,13 @@ class _BookedEventsScreenState extends State<BookedEventsScreen> {
                 ..._buildPage()
               else
                 SliverPadding(
-                  padding:
-                      EdgeInsets.only(bottom: 0, top: 20, left: 20, right: 20),
+                  padding: const EdgeInsets.only(
+                      bottom: 0, top: 20, left: 20, right: 20),
                   sliver: SliverToBoxAdapter(
                     child: Container(
                       height: screenHeight / 1.3,
                       width: screenWidth,
-                      child: PermissionMessage(),
+                      child: const PermissionMessage(),
                     ),
                     // Next, create a SliverList
                   ),

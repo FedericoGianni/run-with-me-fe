@@ -5,6 +5,8 @@ import 'package:runwithme/models/dummy_events.dart';
 
 class MockEventsProvider extends Mock implements Events {
   List<Event> dummyEvents = dummy;
+  @override
+  List<Event> bookedEvents = [];
 
   @override
   Future<void> fetchAndSetResultEvents(
@@ -20,8 +22,14 @@ class MockEventsProvider extends Mock implements Events {
 
   @override
   Future<List<Event>> fetchAndSetBookedEvents(int userId) async {
-    suggestedEvents.addAll(dummyEvents);
+    bookedEvents.addAll(dummyEvents);
     return dummyEvents;
+  }
+
+  @override
+  Future<void> fetchAndSetEvents(double lat, double long, int max_dist_km,
+      List<Event> events, bool auth) async {
+    events.addAll(dummyEvents);
   }
 
   @override
@@ -33,5 +41,10 @@ class MockEventsProvider extends Mock implements Events {
   Future<int> addEvent(Event event) async {
     dummyEvents.add(event);
     return dummyEvents.length;
+  }
+
+  @override
+  Future<Event> fetchEventById(int eventId, bool auth) async {
+    return dummyEvents.first;
   }
 }
