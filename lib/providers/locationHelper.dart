@@ -59,6 +59,20 @@ class LocationHelper with ChangeNotifier {
     return _defaultUserPosition;
   }
 
+  @visibleForTesting
+  Position? getDefaultUserLocation() {
+    return _getDefaultUserLocation();
+  }
+
+  @visibleForTesting
+  Future<void> showMyDialog(title, message, onAccept, onDismiss) {
+    return _showMyDialog(
+        title: title,
+        message: message,
+        onAccept: onAccept,
+        onDismiss: onDismiss);
+  }
+
   Future<void> _showMyDialog({
     context,
     required String title,
