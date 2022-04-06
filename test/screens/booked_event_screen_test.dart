@@ -8,6 +8,7 @@ import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/screens/booked_events_screen.dart';
+import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/permissions_message.dart';
 
 // MOCK PROVIDERS
@@ -49,8 +50,13 @@ void main() {
       child: MaterialApp(
           home: SingleChildScrollView(
         child: Material(
-          child:
-              SizedBox(height: 2000, width: 2000, child: BookedEventsScreen()),
+          child: SizedBox(
+              height: 1080,
+              width: 1920,
+              child: MediaQuery(
+                  // to avoid render flex overflow in testing phase
+                  data: const MediaQueryData(textScaleFactor: 0.5),
+                  child: BookedEventsScreen())),
         ),
       )),
     ));
@@ -67,27 +73,30 @@ void main() {
         .state<BookedEventsScreenState>(find.byType(BookedEventsScreen))
         .context;
 
-    // tester
-    //     .state<BookedEventsScreenState>(find.byType(BookedEventsScreen))
-    //     .didChangeDependencies();
-
     // settings isloggedin should be false so it should show permission message
     expect(mockUserSettingsProvider.isLoggedIn(), false);
-    print(mockUserSettingsProvider.isLoggedIn());
 
-    //expect(find.byType(PermissionMessage), findsOneWidget);
+    // expect CustomLoadingAnimation widget
+    expect(find.byType(CustomLoadingAnimation), findsOneWidget);
 
-    // // now let's fake login, isLoggedIn should be true so the ui will not render permission message
-    // mockUserSettingsProvider.setisLoggedIn(true);
-    // expect(mockUserSettingsProvider.isLoggedIn(), true);
+    // now if we rebuild the UI we should have permission message page cause we are not loddeg in
+    await tester.pump();
+    expect(find.byType(PermissionMessage), findsOneWidget);
 
-    // // // rebuild the ui with settings.isLoggedIn now true
-    // // tester
-    // //     .state<BookedEventsScreenState>(find.byType(BookedEventsScreen))
-    // //     .setState(() {});
-    // // await tester.pump();
+    // now let's set isLoggedIn to true, rebuild UI and expect to not find permission message anymore
+    mockUserSettingsProvider.setisLoggedIn(true);
+    expect(mockUserSettingsProvider.isLoggedIn(), true);
 
-    // // now it should show add event form instead of permission message
-    // // expect(find.byType(RefreshIndicator), findsOneWidget);
+    tester
+        .state<BookedEventsScreenState>(find.byType(BookedEventsScreen))
+        .setState(() {});
+    await tester.pump();
+
+    expect(find.byType(PermissionMessage), findsNothing);
+    expect(find.byKey(const Key("booked_events")), findsOneWidget);
+    expect(find.byKey(const Key("past_events")), findsOneWidget);
+
+    // now since i created the widget it should have fetched booked events
+    expect(mockEventsProvider.bookedEvents.isNotEmpty, true);
   });
 }

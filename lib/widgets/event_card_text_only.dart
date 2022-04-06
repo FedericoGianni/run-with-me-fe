@@ -100,6 +100,7 @@ class EventItem extends StatelessWidget {
                 event.currentParticipants.toString() +
                     '/' +
                     event.maxParticipants.toString(),
+                overflow: TextOverflow.ellipsis,
                 key: const Key("participants"),
                 style: event.currentParticipants == event.maxParticipants
                     ? TextStyle(
@@ -137,6 +138,7 @@ class EventItem extends StatelessWidget {
                             DateTime.parse(event.date.toString()),
                           )
                           .toString(),
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       height: 1,
                       color: colors.secondaryTextColor,
@@ -182,6 +184,7 @@ class EventItem extends StatelessWidget {
                 height: 15,
                 child: Text(
                   _getDistanceAsString(locationHelper),
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       height: 0.3,
                       color: colors.secondaryTextColor,
@@ -212,6 +215,7 @@ class EventItem extends StatelessWidget {
                 height: 15,
                 child: Text(
                   event.averageLength.toString() + ' km',
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       height: 0.3,
                       color: colors.secondaryTextColor,
@@ -226,12 +230,3 @@ class EventItem extends StatelessWidget {
     );
   }
 }
-
-
-
-// Rating(
-//                       value: event.difficultyLevel,
-//                       color: colorGradient,
-//                       size: 12,
-//                     ),
-//                   ],
