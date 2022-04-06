@@ -11,7 +11,6 @@ import '../providers/event.dart';
 // import './favorites_screen.dart';
 import '../providers/locationHelper.dart';
 import '../providers/user.dart';
-import 'events_result_screen.dart';
 import 'add_event_screen.dart';
 import 'user_screen.dart';
 import 'home_screen.dart';
