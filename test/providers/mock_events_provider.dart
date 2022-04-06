@@ -6,23 +6,52 @@ import 'package:runwithme/models/dummy_events.dart';
 class MockEventsProvider extends Mock implements Events {
   List<Event> dummyEvents = dummy;
   @override
-  List<Event> bookedEvents = [];
+  List<Event> _bookedEvents = [];
+
+  @override
+  List<Event> _suggestedEvents = [];
+
+  @override
+  List<Event> _resultEvents = [];
+
+  @override
+  List<Event> _recentEvents = [];
+
+  @override
+  List<Event> get suggestedEvents {
+    return [..._suggestedEvents];
+  }
+
+  @override
+  List<Event> get recentEvents {
+    return [..._recentEvents];
+  }
+
+  @override
+  List<Event> get bookedEvents {
+    return [..._bookedEvents];
+  }
+
+  @override
+  List<Event> get resultEvents {
+    return [..._resultEvents];
+  }
 
   @override
   Future<void> fetchAndSetResultEvents(
       double lat, double long, int max_dist_km, bool isLoggedIn) async {
-    bookedEvents.addAll(dummyEvents);
+    _bookedEvents.addAll(dummyEvents);
   }
 
   @override
   Future<void> fetchAndSetSuggestedEvents(
       double lat, double long, int max_dist_km, bool isLoggedIn) async {
-    suggestedEvents.addAll(dummyEvents);
+    _suggestedEvents.addAll(dummyEvents);
   }
 
   @override
   Future<List<Event>> fetchAndSetBookedEvents(int userId) async {
-    bookedEvents.addAll(dummyEvents);
+    _bookedEvents.addAll(dummyEvents);
     return dummyEvents;
   }
 
