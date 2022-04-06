@@ -18,4 +18,9 @@ class MockUserSettingsProvider extends Mock implements UserSettings {
   void setisLoggedIn(bool set) {
     settings.isLoggedIn = set;
   }
+
+  @override
+  Future<bool> loadSettings() async {
+    return false;
+  }
 }
