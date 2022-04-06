@@ -5,7 +5,7 @@ void main() {
   FileManager fileManager = FileManager();
 
   group('[FILE MANAGER]', () {
-    test('', () async {
+    test('file manager can read/write to memory', () async {
       await fileManager.writeFile("a", "a");
       fileManager.readFile("a");
       expect(fileManager.fileName, "a");

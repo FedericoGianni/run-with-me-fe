@@ -119,6 +119,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
             children: [
               Text(
                 "Booked events",
+                key: const Key("booked_events"),
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: multiDeviceSupport.h0,
@@ -163,6 +164,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
             children: [
               Text(
                 "Your past events",
+                key: const Key("past_events"),
                 style: TextStyle(
                     color: colors.primaryTextColor,
                     fontSize: multiDeviceSupport.h0,
