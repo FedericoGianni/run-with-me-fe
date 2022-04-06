@@ -26,10 +26,15 @@ class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({Key? key}) : super(key: key);
 
   @override
-  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
+  State<EventDetailsScreen> createState() => EventDetailsScreenState();
 }
 
-class _EventDetailsScreenState extends State<EventDetailsScreen> {
+@visibleForTesting
+class EventDetailsScreenState extends State<EventDetailsScreen> {
+  Event get event {
+    return ModalRoute.of(context)?.settings.arguments as Event;
+  }
+
   @override
   Widget build(BuildContext context) {
     final event = ModalRoute.of(context)?.settings.arguments as Event;
@@ -248,6 +253,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                     ),
                                   )
                             : TextButton(
+                                key: const Key("loginToSubscribe"),
                                 style: TextButton.styleFrom(
                                     backgroundColor: colors.secondaryColor,
                                     primary: colors.onPrimary,
