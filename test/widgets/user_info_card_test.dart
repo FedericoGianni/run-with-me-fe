@@ -13,7 +13,6 @@ import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/screens/add_event_screen.dart';
 import 'package:runwithme/screens/booked_events_screen.dart';
 import 'package:runwithme/screens/event_details_screen.dart';
-import 'package:runwithme/screens/events_result_screen.dart';
 import 'package:runwithme/screens/home_screen.dart';
 import 'package:runwithme/screens/search_screen.dart';
 import 'package:runwithme/screens/tabs_screen.dart';
