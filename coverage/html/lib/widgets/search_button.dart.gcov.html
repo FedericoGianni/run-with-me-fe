@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-04-06 20:17:54</td>
+            <td class="headerValue">2022-04-06 21:37:27</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -69,19 +69,19 @@
 <a name="7"><span class="lineNum">       7 </span>            : import 'package:provider/provider.dart';</a>
 <a name="8"><span class="lineNum">       8 </span>            : </a>
 <a name="9"><span class="lineNum">       9 </span>            : class SearchButton extends StatelessWidget {</a>
-<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          1 :   const SearchButton(this.icon, this.text,</span></a>
+<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          2 :   const SearchButton(this.icon, this.text,</span></a>
 <a name="11"><span class="lineNum">      11 </span>            :       {required this.formValues, required this.onSubmitting, Key? key})</a>
-<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          1 :       : super(key: key);</span></a>
+<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          2 :       : super(key: key);</span></a>
 <a name="13"><span class="lineNum">      13 </span>            :   final Icon icon;</a>
 <a name="14"><span class="lineNum">      14 </span>            :   final Text text;</a>
 <a name="15"><span class="lineNum">      15 </span>            :   final Function(Map&lt;String, dynamic&gt;) onSubmitting;</a>
 <a name="16"><span class="lineNum">      16 </span>            :   final Map&lt;String, dynamic&gt; formValues;</a>
 <a name="17"><span class="lineNum">      17 </span>            : </a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          2 :   @override</span></a>
 <a name="19"><span class="lineNum">      19 </span>            :   Widget build(BuildContext context) {</a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          1 :     final colors = Provider.of&lt;CustomColorScheme&gt;(context);</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          2 :     final colors = Provider.of&lt;CustomColorScheme&gt;(context);</span></a>
 <a name="21"><span class="lineNum">      21 </span>            : </a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          1 :     return GestureDetector(</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          2 :     return GestureDetector(</span></a>
 <a name="23"><span class="lineNum">      23 </span><span class="lineNoCov">          0 :       onTap: () {</span></a>
 <a name="24"><span class="lineNum">      24 </span><span class="lineNoCov">          0 :         showModalBottomSheet(</span></a>
 <a name="25"><span class="lineNum">      25 </span>            :             isScrollControlled: true,</a>
@@ -99,27 +99,27 @@
 <a name="37"><span class="lineNum">      37 </span>            :               );</a>
 <a name="38"><span class="lineNum">      38 </span>            :             });</a>
 <a name="39"><span class="lineNum">      39 </span>            :       },</a>
-<a name="40"><span class="lineNum">      40 </span><span class="lineCov">          1 :       child: Container(</span></a>
+<a name="40"><span class="lineNum">      40 </span><span class="lineCov">          2 :       child: Container(</span></a>
 <a name="41"><span class="lineNum">      41 </span>            :         margin: const EdgeInsets.only(</a>
 <a name="42"><span class="lineNum">      42 </span>            :           // left: MediaQuery.of(context).size.width / 10,</a>
 <a name="43"><span class="lineNum">      43 </span>            :           // right: MediaQuery.of(context).size.width / 10,</a>
 <a name="44"><span class="lineNum">      44 </span>            :           top: 45,</a>
 <a name="45"><span class="lineNum">      45 </span>            :         ),</a>
 <a name="46"><span class="lineNum">      46 </span>            :         height: 45,</a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">          4 :         width: MediaQuery.of(context).size.width / 1.5,</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">          8 :         width: MediaQuery.of(context).size.width / 1.5,</span></a>
 <a name="48"><span class="lineNum">      48 </span>            :         padding: const EdgeInsets.only(left: 25),</a>
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          1 :         decoration: BoxDecoration(</span></a>
-<a name="50"><span class="lineNum">      50 </span><span class="lineCov">          1 :           color: colors.background,</span></a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          2 :         decoration: BoxDecoration(</span></a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">          2 :           color: colors.background,</span></a>
 <a name="51"><span class="lineNum">      51 </span>            :           // set border width</a>
 <a name="52"><span class="lineNum">      52 </span>            :           borderRadius: const BorderRadius.all(</a>
 <a name="53"><span class="lineNum">      53 </span>            :             Radius.circular(10.0),</a>
 <a name="54"><span class="lineNum">      54 </span>            :           ), // set rounded corner radius</a>
 <a name="55"><span class="lineNum">      55 </span>            :         ),</a>
 <a name="56"><span class="lineNum">      56 </span>            :         // set rounded corner radius</a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          1 :         child: Row(</span></a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          1 :           children: [</span></a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">          1 :             icon,</span></a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">          1 :             text,</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          2 :         child: Row(</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          2 :           children: [</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">          2 :             icon,</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">          2 :             text,</span></a>
 <a name="61"><span class="lineNum">      61 </span>            :           ],</a>
 <a name="62"><span class="lineNum">      62 </span>            :         ),</a>
 <a name="63"><span class="lineNum">      63 </span>            :       ),</a>
