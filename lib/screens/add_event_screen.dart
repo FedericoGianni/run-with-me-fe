@@ -705,6 +705,7 @@ class AddEventScreenState extends State<AddEventScreen> {
                               width: MediaQuery.of(context).size.width /
                                   (2.5 + multiDeviceSupport.tablet * 0.3),
                               child: TextFormField(
+                                key: const Key("distance"),
                                 keyboardType: TextInputType.number,
                                 initialValue: '',
                                 cursorColor: colors.primaryTextColor,
@@ -759,6 +760,7 @@ class AddEventScreenState extends State<AddEventScreen> {
                               width: MediaQuery.of(context).size.width /
                                   (2.5 + multiDeviceSupport.tablet * 0.3),
                               child: TextFormField(
+                                key: const Key("duration"),
                                 focusNode: _durationFocusNode,
                                 keyboardType: TextInputType.number,
                                 initialValue: '',
