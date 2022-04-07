@@ -25,10 +25,11 @@ import '../providers/page_index.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
-  _TabsScreenState createState() => _TabsScreenState();
+  TabsScreenState createState() => TabsScreenState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+@visibleForTesting
+class TabsScreenState extends State<TabsScreen> {
   late List<Map> _pages;
   bool gotLocation = false;
 
@@ -66,6 +67,11 @@ class _TabsScreenState extends State<TabsScreen> {
       },
     ];
     super.initState();
+  }
+
+  @visibleForTesting
+  void selectPage(int index) {
+    _selectPage(index);
   }
 
   void _selectPage(int index) {
