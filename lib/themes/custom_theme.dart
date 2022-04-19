@@ -8,6 +8,7 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 
 class CustomTheme {
+  /// Custom colors definition for the light theme
   static ThemeData get lightTheme {
     return ThemeData(
         // textTheme: GoogleFonts.robotoTextTheme(),
@@ -26,6 +27,7 @@ class CustomTheme {
         ));
   }
 
+  /// Custom colors definition for the dark theme
   static ThemeData get darkTheme {
     return ThemeData(
         // textTheme: GoogleFonts.robotoTextTheme(),
@@ -68,6 +70,7 @@ class CustomTheme {
   }
 }
 
+/// Stylings for the text inputs in forms
 InputDecoration textFormDecoration(String label, ctx) {
   final colors = Provider.of<CustomColorScheme>(ctx);
   var multiDeviceSupport = MultiDeviceSupport(ctx);
@@ -102,6 +105,7 @@ InputDecoration textFormDecoration(String label, ctx) {
   );
 }
 
+/// Stylings for the password inputs in forms
 InputDecoration passwordFormDecoration(
     String label, Icon icon, toggleFunction, ctx) {
   final colors = Provider.of<CustomColorScheme>(ctx);

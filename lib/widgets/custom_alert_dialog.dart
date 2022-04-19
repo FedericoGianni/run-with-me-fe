@@ -5,6 +5,10 @@ import 'package:runwithme/providers/settings_manager.dart';
 
 import '../classes/multi_device_support.dart';
 
+/// A widget used to show alert dialogs according to the app theme.
+/// <br />Accept as inputs the [title] of the alert dialog, the main [message],
+///the [onDismiss] method to be called if the user dismisses the dialog and
+///finally the [onAccept] method to be called if the user accept the dialog,
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog(
       {required this.title,

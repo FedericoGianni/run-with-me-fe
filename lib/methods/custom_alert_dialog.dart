@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import '../widgets/custom_alert_dialog.dart';
+import '../widgets/custom_maps_new.dart';
 
+///Thid method of generating a custom alert dialog is now DEPRECATED but it is still used in [CustomMapsNew] so it should remain in place.
+///<br /> To create an alert dialog use [CustomAlertDialog] instead
 Future<void> customAlertDialog(
     context, Text title, List<Widget> bodyList, colors) async {
   return showDialog<void>(

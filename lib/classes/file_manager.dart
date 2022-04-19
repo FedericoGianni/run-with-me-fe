@@ -18,6 +18,7 @@ class FileManager {
     return File('$path/$fileName');
   }
 
+  /// Read from a specified file
   Future<String> readFile(String fName) async {
     try {
       fileName = fName;
@@ -33,6 +34,7 @@ class FileManager {
     }
   }
 
+  /// Writes to a specified file
   Future<File> writeFile(String counter, String fName) async {
     fileName = fName;
     final file = await _localFile;
@@ -42,6 +44,7 @@ class FileManager {
     return file.writeAsString(counter);
   }
 
+  /// Deletes a specified file
   Future<bool> deleteFile(fName) async {
     fileName = fName;
     try {

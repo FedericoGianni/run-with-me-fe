@@ -1,12 +1,15 @@
 import 'package:intl/intl.dart';
 
+/// A class to help with date and time management and formatting
 class DateHelper {
+  /// Determines if the time is to be expressed in hours or minutes.
   static String formatHourOrMinutes(String input) {
     return input.toString().length < 2
         ? "0" + input.toString()
         : input.toString();
   }
 
+  /// Computes the number of days between two dates.
   static int diffInDays(DateTime date1, DateTime date2) {
     return ((date1.difference(date2) -
                     Duration(hours: date1.hour) +
@@ -30,6 +33,7 @@ class DateHelper {
     return -99999;
   }
 
+  ///Return formatted datetime as string.
   static String formatDateTime(DateTime dateTime) {
     return dateTime.day.toString() +
         "/" +

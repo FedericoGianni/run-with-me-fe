@@ -1,6 +1,24 @@
 import '../themes/custom_colors.dart';
 import 'package:flutter/material.dart';
 
+/// Provider responsible for setting all colors used in the project.
+/// <br /> When referring to a color somewhere, this provider should be used.
+///
+/// To change theme mode programmatically:
+/// ```dart
+/// CustomColorScheme colors = CustomColorScheme();
+/// colors.setDarkMode();
+/// ```
+/// or
+/// ```dart
+/// CustomColorScheme colors = CustomColorScheme();
+/// colors.setLightMode();
+/// ```
+/// To use a color in the UI :
+/// ```dart
+/// CustomColorScheme colors = CustomColorScheme();
+/// Color color = colors.primaryColor;
+/// ```
 class CustomColorScheme with ChangeNotifier {
   Color titleColor = Colors.amber.shade900;
   Color primaryColor = Colors.amber.shade900;

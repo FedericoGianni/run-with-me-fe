@@ -1,3 +1,4 @@
+/// A class containing basic configuration settings that can be changed during development but that are immutable when the app is compiled
 class Config {
   static const String baseUrl = 'https://runwithme.msuki.tk';
   int apiTimeout = 20;
