@@ -1,3 +1,6 @@
+///{@category Classes}
+///A module responsible for file handling, it should be used to
+///safely store and manipulate files.
 import 'dart:async';
 import 'dart:io';
 
@@ -18,7 +21,7 @@ class FileManager {
     return File('$path/$fileName');
   }
 
-  /// Read from a specified file
+  /// Read from a specified file [fName]
   Future<String> readFile(String fName) async {
     try {
       fileName = fName;
@@ -34,17 +37,17 @@ class FileManager {
     }
   }
 
-  /// Writes to a specified file
-  Future<File> writeFile(String counter, String fName) async {
+  /// Writes a String [content] to a specified file [fName].
+  Future<File> writeFile(String content, String fName) async {
     fileName = fName;
     final file = await _localFile;
 
     // Write the
 
-    return file.writeAsString(counter);
+    return file.writeAsString(content);
   }
 
-  /// Deletes a specified file
+  /// Deletes a specified file [fName]
   Future<bool> deleteFile(fName) async {
     fileName = fName;
     try {

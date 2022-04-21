@@ -1,3 +1,5 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 import '../classes/multi_device_support.dart';
 import '../themes/custom_colors.dart';

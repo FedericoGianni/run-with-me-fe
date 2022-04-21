@@ -1,3 +1,6 @@
+///{@category Providers}
+
+/// A provider responsible for all the location related functions.
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,6 +11,8 @@ import 'package:runwithme/providers/event.dart';
 import 'dart:convert';
 import '../widgets/custom_alert_dialog.dart';
 
+///The helper responsible for actually checking the user location permissions in the
+///background and retrieving the user position.
 class LocationHelper with ChangeNotifier {
   var context;
   bool searchingForLocation = false;
@@ -29,6 +34,8 @@ class LocationHelper with ChangeNotifier {
   Position? _currentUserPosition;
   LocationHelper();
 
+  ///Sets the default user position to either the position decided by the user during
+  ///registration or to null island (0.0, 0.0) if the user isn't logged in.
   void setDefaultUserPosition(Position userPosition) {
     print("Setting default user location");
 
@@ -40,6 +47,7 @@ class LocationHelper with ChangeNotifier {
     }
   }
 
+  /// Checks whether the [LocationHelper] module has already been initialized at startup or not.
   bool isInitialized() {
     if (_currentUserPosition == null) {
       return false;
@@ -53,6 +61,7 @@ class LocationHelper with ChangeNotifier {
     return true;
   }
 
+  /// Gets the default user position. This is a private method used if location services or permissions are disabled.
   Position? _getDefaultUserLocation() {
     print("Using default user location");
     _lastKnownPosition = _defaultUserPosition!;
@@ -73,6 +82,7 @@ class LocationHelper with ChangeNotifier {
         onDismiss: onDismiss);
   }
 
+  ///Private method used to prompt the user with an alert dialog asking to turn on location services.
   Future<void> _showMyDialog({
     context,
     required String title,
@@ -96,6 +106,7 @@ class LocationHelper with ChangeNotifier {
     );
   }
 
+  ///Starts the background permanent thread to check for location periodically.
   Future<void> start() async {
     print("Starting background location thread");
     keepBackgroundThreadAlive = true;
@@ -107,6 +118,7 @@ class LocationHelper with ChangeNotifier {
     print("Closing background location thread");
   }
 
+  /// Tries to determine the current user position, even asking the user for the correct permissions if needed.
   Future<Position?> determinePosition(
       LocationAccuracy accuracy, var context) async {
     bool serviceEnabled;
@@ -196,6 +208,7 @@ class LocationHelper with ChangeNotifier {
     return _lastKnownPosition;
   }
 
+  ///Gets all the necessary details for a given place from the Google Places APIs, by its [placeId] and current [sessionToken].
   Future<Map<String, Object>> getPlaceDetails({
     required String placeId,
     required String sessionToken,
@@ -222,6 +235,7 @@ class LocationHelper with ChangeNotifier {
     }
   }
 
+  ///Gets the top 5 suggested places for a given string from the Google Places APIs, by its [input] string and current [sessionToken].
   Future<List> getSuggestion({
     required String input,
     required String sessionToken,

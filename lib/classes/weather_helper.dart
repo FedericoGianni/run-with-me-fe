@@ -1,3 +1,5 @@
+///{@category Classes}
+///A method for retrieving the correct icons depending on the forecasted weather conditions.
 import 'package:flutter/material.dart';
 import 'package:weather/weather.dart';
 import 'package:weather_icons/weather_icons.dart';

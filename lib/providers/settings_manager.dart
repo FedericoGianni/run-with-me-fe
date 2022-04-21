@@ -1,3 +1,6 @@
+///{@category Providers}
+
+/// A provider responsible for all the settings related functions.
 import 'dart:async';
 import 'dart:convert';
 
@@ -9,26 +12,37 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../providers/user.dart';
 import '../classes/config.dart';
 
+///All theme modes enumerated by name.
 enum CustomThemeMode {
   dark,
   light,
 }
 
+///All notification modes enumerated by name.
+///This Enum is DEPRECATED.
 enum NotificationMode {
   all,
   important,
   off,
 }
 
+///All map styles enumerated by name.
+///This Enum is DEPRECATED.
 enum MapStyle {
   light,
   dark,
 }
 
+///The helper responsible for the user settings.
 class UserSettings with ChangeNotifier {
+  ///The name of the file in which to store all settings as a JSON.
   String settingsFileName = 'settings.json';
+
+  ///Bool that indicates whether location services are enables or not in the app settings.
   bool location = false;
 
+  ///Default theme mode at first startup is light.
+  ///The app will then remember any user modification to this setting.
   CustomThemeMode mode = CustomThemeMode.light;
   late CustomColorScheme colors;
   Settings settings = Settings();
@@ -36,15 +50,19 @@ class UserSettings with ChangeNotifier {
   late User user;
   Config config = Config();
 
+  ///Sets the appropriate color scheme depending on the current theme mode.
   void setColorScheme(colors) {
     this.colors = colors;
   }
 
+  ///DEPRECATED
+  ///Initially used to toggle on or off the location services.
   void toggleLocalization() {
     location = !location;
     notifyListeners();
   }
 
+  ///Sets the theme mode to one of the possible theme modes depending on the input [mode].
   void setThemeMode(mode) {
     print("here");
     if (mode == CustomThemeMode.light) {
@@ -73,15 +91,19 @@ class UserSettings with ChangeNotifier {
     secureStorage.write(key: 'userId', value: userId);
   }
 
+  ///Returns a bool indicating whether the current user is logged in or not.
   bool isLoggedIn() {
     return settings.isLoggedIn;
   }
 
+  ///Writes all current settings to file and notify any listeners of the changes.
   void _saveSettingsAndNotify() {
     FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
     notifyListeners();
   }
 
+  ///Loads user settings from the settings file into memory,
+  ///changes all internal toggles accordingly, then notifies all listeners.
   Future<bool> loadSettings() async {
     // First it reads software settings from file
     var settingsString = await FileManager().readFile(settingsFileName);
@@ -108,6 +130,8 @@ class UserSettings with ChangeNotifier {
     return true;
   }
 
+  ///Performs all the necessary preliminary check, then execute the login
+  ///request with the [userName] and [password] parameters in order to actually log in the current user
   Future<List> userLogin(userName, password) async {
     print('SettingsManager.userLogin');
     try {
@@ -159,6 +183,7 @@ class UserSettings with ChangeNotifier {
     }
   }
 
+  ///Checks whether the current user login credentials stored in memory are corret or not.
   Future<void> _checkUserCredentials() async {
     print("checking user crendentials...");
     String? username = await secureStorage.read(key: 'username');
@@ -216,6 +241,8 @@ class UserSettings with ChangeNotifier {
     }
   }
 
+  ///Perform a user logout request to notify the backend of the logout,
+  ///then deletes all user credentials from the device storage.
   Future<void> userLogout() async {
     await secureStorage.delete(key: 'username');
     await secureStorage.delete(key: 'password');
@@ -226,6 +253,7 @@ class UserSettings with ChangeNotifier {
   }
 }
 
+/// Object storing all possible user defined settings.
 class Settings {
   CustomThemeMode theme = CustomThemeMode.light;
   bool location = false;
@@ -233,6 +261,7 @@ class Settings {
   MapStyle mapStyle = MapStyle.light;
   bool isLoggedIn = false;
 
+  ///Converts the JSON representation of the settings back into the settings object.
   fromJson(Map<String, dynamic> json) {
     theme = CustomThemeMode.values
         .firstWhere((e) => describeEnum(e) == json['theme']);
@@ -244,6 +273,8 @@ class Settings {
     isLoggedIn = json['loggedIn'] == 'true';
   }
 
+  /// Converts the current settings object back into its JSON representation in
+  /// order to store it into memory.
   Map<String, dynamic> toJson() => {
         'theme': theme.name,
         'location': location.toString(),

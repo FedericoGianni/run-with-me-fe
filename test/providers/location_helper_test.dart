@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 
 void main() {
   LocationHelper locationHelper = LocationHelper();

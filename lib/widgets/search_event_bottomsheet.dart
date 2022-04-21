@@ -1,7 +1,9 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:runwithme/widgets/custom_slider.dart';
 import '../classes/multi_device_support.dart';
 import '../themes/custom_colors.dart';

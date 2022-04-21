@@ -1,10 +1,12 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/page_index.dart';
 
-import '../providers/locationHelper.dart';
+import '../providers/location_helper.dart';
 import 'custom_info_window.dart';
 import '../classes/markers.dart';
 import 'package:provider/provider.dart';

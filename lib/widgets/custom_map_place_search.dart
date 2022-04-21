@@ -1,3 +1,5 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runwithme/providers/color_scheme.dart';
@@ -6,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../classes/multi_device_support.dart';
-import '../providers/locationHelper.dart';
+import '../providers/location_helper.dart';
 import 'custom_scroll_behavior.dart';
 
 class CustomMapPlaceSearch extends StatefulWidget {

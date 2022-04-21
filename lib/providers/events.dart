@@ -1,3 +1,5 @@
+///{@category Providers}
+/// A provider that handles all events present on the app at a given time.
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
@@ -8,11 +10,21 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+///This provider is also responsible for all the event related API requests.
 class Events with ChangeNotifier {
+  ///The max number of recent events is fixed to 10 to avoid accumulation.
   final int MAX_RECENT_EVENTS_LENGTH = 10;
+
+  ///List of suggested events to show to the user in the corresponding section.
   List<Event> _suggestedEvents = [];
+
+  ///List of events that the user just watched.
   List<Event> _recentEvents = [];
+
+  ///List of booked events to show to the user in the corresponding section.
   List<Event> _bookedEvents = [];
+
+  ///List of events returned by the backend based on a search done by the user.
   List<Event> _resultEvents = [];
   late Event eventDetail;
 
@@ -68,11 +80,12 @@ class Events with ChangeNotifier {
     return [..._resultEvents];
   }
 
+  ///Retrieves a specific event from the suggested list by its [id].
   Event findById(int id) {
     return _suggestedEvents.firstWhere((event) => event.id == id);
   }
 
-  // add an event to the recently viewed event list
+  /// Adds an event to the recently viewed event list.
   // only keep 10 events, if limit is exceeded replace the oldest
   void addRecentEvent(Event event) {
     //only add event if not already present in recently viewed list
@@ -91,6 +104,8 @@ class Events with ChangeNotifier {
     }
   }
 
+  /// Gets suggested events from the backend, filtered by latitude [lat], longitude [long], the max distance from the user [max_dist_km] in kilometers and
+  /// whether the user is logged in or not [isLoggedIn] and then it puts them in the [_suggestedEvents] list.
   Future<void> fetchAndSetSuggestedEvents(
       double lat, double long, int max_dist_km, bool isLoggedIn) async {
     // 1. save parameters used in case of refresh
@@ -102,6 +117,11 @@ class Events with ChangeNotifier {
     fetchAndSetEvents(lat, long, max_dist_km, _suggestedEvents, isLoggedIn);
   }
 
+  /// Gets events from the backend based on the input parameters such as the latitude [lat],
+  /// the longitude [long], the max distance from the user [max_dist_km] in kilometers and
+  /// whether the user is logged in or not [isLoggedIn].
+  ///
+  /// Finally it puts them in [_suggestedEvents]
   Future<void> fetchAndSetResultEvents(
       double lat, double long, int max_dist_km, bool isLoggedIn) async {
     // 1. save parameters used in case of refresh
@@ -113,6 +133,7 @@ class Events with ChangeNotifier {
     await fetchAndSetEvents(lat, long, max_dist_km, _resultEvents, isLoggedIn);
   }
 
+  /// Generic fetch and set method, this should not be used as it is an internal method only.
   Future<void> fetchAndSetEvents(double lat, double long, int max_dist_km,
       List<Event> events, bool auth) async {
     // choose the right endpoint for events search based on authentication
@@ -169,6 +190,7 @@ class Events with ChangeNotifier {
     }
   }
 
+  /// Gets all user booked events from the backend and it puts them in [_bookedEvents]
   Future<List<Event>> fetchAndSetBookedEvents(int userId) async {
     List<Event> _events = [];
 
@@ -213,6 +235,7 @@ class Events with ChangeNotifier {
     return _events;
   }
 
+  /// Add a booking for the current user to a specific event by its [eventId].
   Future<bool> addBookingToEvent(int eventId) async {
     var request = http.MultipartRequest(
         'POST',
@@ -238,6 +261,7 @@ class Events with ChangeNotifier {
     }
   }
 
+  /// Deletes a booking for the current user to a specific event by its [eventId].
   Future<bool> delBookingFromEvent(int eventId) async {
     var request =
         http.MultipartRequest('DELETE', Uri.parse(Config.baseUrl + '/booking'));
@@ -308,6 +332,8 @@ class Events with ChangeNotifier {
     }
   }
 
+  /// Perform a get request to retrieve a specific event by its [eventId].
+  /// Also it needs to know if the user is authenticated or not [auth] to use the correct request accordingly.
   Future<Event> fetchEventById(int eventId, bool auth) async {
     Event event = new Event(
         id: -1,

@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_const
+///{@category Screens}
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,7 @@ import 'package:runwithme/widgets/search_button.dart';
 import '../classes/multi_device_support.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
-import '../widgets/gradientAppbar.dart';
+import '../widgets/gradient_appbar.dart';
 import '../providers/settings_manager.dart';
 import '../widgets/search_event_bottomsheet.dart';
 import '../widgets/login_form.dart';

@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:runwithme/providers/color_scheme.dart';
 import 'package:runwithme/providers/events.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/providers/user.dart';
-import 'package:runwithme/widgets/halfFilledIcon.dart';
+import 'package:runwithme/widgets/half_filled_icon.dart';
 
 void main() {
   testWidgets('[HALF FILLED ICON]', (WidgetTester tester) async {

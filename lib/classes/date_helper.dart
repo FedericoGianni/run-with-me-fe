@@ -1,6 +1,7 @@
+///{@category Classes}
+/// A class to help with date and time management and formatting
 import 'package:intl/intl.dart';
 
-/// A class to help with date and time management and formatting
 class DateHelper {
   /// Determines if the time is to be expressed in hours or minutes.
   static String formatHourOrMinutes(String input) {
@@ -42,11 +43,13 @@ class DateHelper {
         dateTime.year.toString();
   }
 
+  /// Returns the day of the week as a String for tomorrow
   static String dayOfWeekAfterTomorrow() {
     DateTime dayAfterTomorrow = DateTime.now().add(const Duration(days: 2));
     return DateFormat('EEEE').format(dayAfterTomorrow);
   }
 
+  /// Returns the day of the week as a String for [x] days from today
   static String dayOfWeekAfterXdays(int x) {
     if (x != null) {
       DateTime day = DateTime.now().add(Duration(days: x));

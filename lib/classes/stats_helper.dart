@@ -1,3 +1,5 @@
+///{@category Classes}
+///A module to precompute the statistics that are presented to the user in the home screen.
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:runwithme/classes/date_helper.dart';
@@ -13,6 +15,7 @@ class StatsHelper {
     _context = context;
   }
 
+  /// Computes the user total weekly run distance in kilometers
   int calcWeeklyKms() {
     int kms = 0;
     //_pastBookedEvents is reduced to 2 events only, for stats purposes i need full booked events, but only in the past
@@ -28,6 +31,7 @@ class StatsHelper {
     return kms;
   }
 
+  /// Computes the user total weekly run distance in minutes
   int calcWeeklyMins() {
     int mins = 0;
     //_pastBookedEvents is reduced to 2 events only, for stats purposes i need full booked events, but only in the past
@@ -43,6 +47,7 @@ class StatsHelper {
     return mins;
   }
 
+  /// Computes the user average weekly pace.
   List<int> calcWeeklyAvgPace() {
     int distance = calcWeeklyKms();
     int minutes = calcWeeklyMins();
@@ -63,6 +68,7 @@ class StatsHelper {
     return avgPace;
   }
 
+  /// Computes the user average weekly pace based on total [distance] and [minutes] run.
   List<int> calcWeeklyAvgPaceParams(int distance, int minutes) {
     List<int> avgPace = [];
     int avgPaceMin;

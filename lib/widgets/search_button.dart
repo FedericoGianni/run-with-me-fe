@@ -1,3 +1,5 @@
+///{@category Widgets}
+
 // ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';

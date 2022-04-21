@@ -1,7 +1,9 @@
+///{@category Screens}
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_scroll_behavior.dart';
@@ -13,7 +15,7 @@ import '../providers/events.dart';
 import '../providers/settings_manager.dart';
 import '../providers/user.dart';
 import '../widgets/event_card_text_only.dart';
-import '../widgets/gradientAppbar.dart';
+import '../widgets/gradient_appbar.dart';
 // import '../themes/custom_colors.dart';
 import '../widgets/custom_map_search.dart';
 import '../widgets/search_event_bottomsheet.dart';

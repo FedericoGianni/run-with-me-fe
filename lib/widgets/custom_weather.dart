@@ -1,3 +1,5 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +9,7 @@ import 'package:weather_icons/weather_icons.dart';
 import '../classes/date_helper.dart';
 import '../classes/weather_helper.dart';
 import '../providers/color_scheme.dart';
-import '../providers/locationHelper.dart';
+import '../providers/location_helper.dart';
 
 enum AppState { NOT_DOWNLOADED, DOWNLOADING, FINISHED_DOWNLOADING }
 

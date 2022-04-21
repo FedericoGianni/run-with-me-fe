@@ -1,9 +1,12 @@
+///{@category Providers}
+/// A provider responsible for all the user related functions.
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:uuid/uuid.dart';
 import '../classes/file_manager.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +17,7 @@ import '../classes/config.dart';
 
 final double DEFAULT_FITNESS_LEVEL = 3.5;
 
+///User object containing all user informations along with all the relative API request methods.
 class User with ChangeNotifier {
   final secureStorage = const FlutterSecureStorage();
 
@@ -30,13 +34,21 @@ class User with ChangeNotifier {
   // initialize to a default value to let suggestedEvent request works also if user is not registered/logged in
   double? fitnessLevel = DEFAULT_FITNESS_LEVEL;
 
+  ///The city name of the default location selected by the user
   String? cityName;
+
+  ///The city id of the default location selected by the user, as per the Google places API
   String? cityId;
+
+  ///The latitude of the default location selected by the user, as per the Google places API
   double? cityLat;
+
+  ///The longitude of the default location selected by the user, as per the Google places API
   double? cityLong;
 
   Config config = Config();
 
+  ///Sets the id of the user and notifies all listeners.
   void setId(userId) {
     this.userId = userId;
     notifyListeners();
@@ -46,6 +58,8 @@ class User with ChangeNotifier {
     return DEFAULT_FITNESS_LEVEL;
   }
 
+  ///Makes the register request with the [username], [email] and [password] as parameters,
+  ///returns true or false accordingly.
   Future<List> register(username, email, password) async {
     try {
       // Makes the http request for the login
@@ -85,6 +99,7 @@ class User with ChangeNotifier {
     }
   }
 
+  ///Gets all the user informations with a request to the backend.
   Future<bool> getUserInfo() async {
     try {
       // Makes the http request for the login
@@ -138,6 +153,7 @@ class User with ChangeNotifier {
     }
   }
 
+  ///Updates any user information that is sent along with the request. Any parameter missing will just be ignored.
   Future<bool> updateUser() async {
     try {
       // Makes the http request for the login

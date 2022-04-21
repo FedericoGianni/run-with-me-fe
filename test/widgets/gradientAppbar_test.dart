@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:runwithme/providers/color_scheme.dart';
 import 'package:runwithme/providers/events.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/providers/user.dart';
-import 'package:runwithme/widgets/gradientAppbar.dart';
+import 'package:runwithme/widgets/gradient_appbar.dart';
 
 void main() {
   testWidgets('[GRADIENT APP BAR]', (WidgetTester tester) async {

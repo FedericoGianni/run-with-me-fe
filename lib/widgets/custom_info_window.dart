@@ -1,4 +1,6 @@
-/// A widget based custom info window for google_maps_flutter package.
+///{@category Widgets}
+
+/// A widget based window used to display a map from google_maps_flutter package.
 library custom_info_window;
 
 import 'dart:io';

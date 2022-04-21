@@ -1,3 +1,5 @@
+///{@category Screens}
+
 import 'package:flutter/material.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/settings_manager.dart';
@@ -10,12 +12,14 @@ import '../providers/events.dart';
 import '../providers/user.dart';
 import '../widgets/custom_scroll_behavior.dart';
 import '../widgets/event_card_text_only.dart';
-import '../widgets/gradientAppbar.dart';
+import '../widgets/gradient_appbar.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_sort_by_button.dart';
 import '../widgets/sort_by.dart';
 
+///A stateful widget responsible for showing all user's booked event page.
+///It contains all the UI elements as well as all the underlying methods necessary to make it work.
 class BookedEventsScreen extends StatefulWidget {
   static const routeName = '/event';
   bool _sortMenu = false;
@@ -60,6 +64,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
     super.didChangeDependencies();
   }
 
+  ///Used internally to switch to a list view for all booked events.
   void __selectListView(colors) {
     setState(() {
       _view = 1;
@@ -69,6 +74,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
     });
   }
 
+  ///Used internally to switch to a grid view for all booked events.
   void __selectGridView(colors) {
     setState(() {
       _view = 2;
@@ -78,6 +84,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
     });
   }
 
+  ///Used internally to handle a drop down to refresh user input.
   Future<Null> _handleRefresh() async {
     widget._sortMenu = false;
     widget._currentSortButton = SortButton.none;
@@ -446,6 +453,11 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
     }
   }
 }
+
+///A stateful widget responsible for the appBar in the booked event page.
+///
+///This appBar is DEPRECATED, to change the appBar appearance in this page,
+///refer to the [SliverAppBar] directly in [BookedEventsScreen].
 
 class BookedEventsAppbar extends StatelessWidget {
   const BookedEventsAppbar({Key? key}) : super(key: key);

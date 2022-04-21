@@ -1,0 +1,9 @@
+dartdoc:
+  categories:
+    "Screen":
+      markdown: doc/Screens.md
+      name: Screens
+  categoryOrder: ["Screens"]
+  favicon: ./assets/icons/icon.png
+
+

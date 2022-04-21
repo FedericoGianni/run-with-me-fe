@@ -1,8 +1,10 @@
+///{@category Screens}
+
 import 'package:flutter/material.dart';
 import 'package:runwithme/classes/date_helper.dart';
 import 'package:runwithme/classes/stats_helper.dart';
 import 'package:runwithme/providers/event.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_map_home_page.dart';
@@ -10,7 +12,7 @@ import 'package:runwithme/widgets/custom_weather.dart';
 
 import '../classes/multi_device_support.dart';
 import '../providers/events.dart';
-import '../providers/locationHelper.dart';
+import '../providers/location_helper.dart';
 import '../providers/page_index.dart';
 import '../providers/user.dart';
 import '../widgets/custom_scroll_behavior.dart';

@@ -1,3 +1,5 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runwithme/providers/color_scheme.dart';

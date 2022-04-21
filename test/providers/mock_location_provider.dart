@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:mockito/mockito.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 
 class MockLocationProvider extends Mock implements LocationHelper {
   @override

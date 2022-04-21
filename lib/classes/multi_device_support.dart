@@ -1,5 +1,8 @@
+///{@category Classes}
+///Custom module used to manage multidevice support.
 import 'package:flutter/material.dart';
 
+/// This module dinamically generates dimensions for UI elements based on the current device screen sizes.
 class MultiDeviceSupport {
   final context;
   double screenHeight = 0.0;
@@ -20,6 +23,7 @@ class MultiDeviceSupport {
 
   MultiDeviceSupport(this.context);
 
+  /// Does the setup of the dimensions according to the current device screen width and height.
   void init() {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;

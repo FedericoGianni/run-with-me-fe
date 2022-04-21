@@ -1,9 +1,10 @@
 // ignore_for_file: unnecessary_const
-
+///{@category Screens}
+///The app screen used to add new events.
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:runwithme/widgets/custom_map_search.dart';
 import 'package:runwithme/widgets/custom_maps_new.dart';
 import 'package:runwithme/widgets/search_event_bottomsheet.dart';
@@ -17,7 +18,7 @@ import '../widgets/search_button.dart';
 import '../widgets/event_card_text_only.dart';
 import '../themes/custom_colors.dart';
 import '../themes/custom_theme.dart';
-import '../widgets/gradientAppbar.dart';
+import '../widgets/gradient_appbar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import '../providers/page_index.dart';
@@ -30,6 +31,8 @@ import '../providers/events.dart';
 import '../providers/user.dart';
 import 'event_details_screen.dart';
 
+///A stateful widget responsible for the add event page.
+///It contains all the UI elements as well as all the underlying methods.
 class AddEventScreen extends StatefulWidget {
   static const routeName = '/add_event';
   bool _isSearching = false;
@@ -54,6 +57,7 @@ class AddEventScreenState extends State<AddEventScreen> {
 
   static const double padding = 30;
 
+  ///The new event that is currently being created by the user.
   var _editedEvent = Event(
     adminId: 0,
     averageDuration: 0,
@@ -75,6 +79,7 @@ class AddEventScreenState extends State<AddEventScreen> {
     return _editedEvent;
   }
 
+  ///Gets the current user location and returns it as a [Position] object.
   Future<Position> _getLocation() async {
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
 
@@ -91,6 +96,7 @@ class AddEventScreenState extends State<AddEventScreen> {
         speedAccuracy: 0);
   }
 
+  ///Opens up the default date picker popup dialog and lets the user pick a date.
   void _presentDatePicker() {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     showDatePicker(
@@ -144,6 +150,7 @@ class AddEventScreenState extends State<AddEventScreen> {
     });
   }
 
+  ///Opens up the default time picker popup dialog and lets the user pick a time.
   void _selectTime() async {
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
 
@@ -200,6 +207,9 @@ class AddEventScreenState extends State<AddEventScreen> {
     setState(() {});
   }
 
+  ///Saves the form in its current state, then it creates a new event object and appends it to the events list.
+  ///
+  ///If it is successful, it pushes the current page to display the newly created event.
   Future<void> _saveForm() async {
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
     final events = Provider.of<Events>(context, listen: false);
@@ -215,30 +225,8 @@ class AddEventScreenState extends State<AddEventScreen> {
 
     //editedEvent.id è null finchè il backend non gli ritorna un id
     if (_editedEvent.id != null) {
-      // await Provider.of<Events>(context, listen: false)
-      //     .updateProduct(_editedEvent.id, _editedEvent);
-      // print("Here I should edit the Event");
     } else {
       try {
-        // print("test markerposition: " + markerPosition.toString());
-
-        // print("_editedEvent.adminId: " + _editedEvent.adminId.toString());
-        // print("_editedEvent.avgDuration: " +
-        //     _editedEvent.averageDuration.toString());
-        // print(
-        //     "_editedEvent.avgLength: " + _editedEvent.averageLength.toString());
-        // print(
-        //     "_editedEvent.avgPace: " + _editedEvent.averagePaceMin.toString());
-        // print("_editedEvent.date: " + _editedEvent.date.toString());
-        // print("_editedEvent.id: " + _editedEvent.id.toString());
-        // print("_editedEvent.maxParticipants: " +
-        //     _editedEvent.maxParticipants.toString());
-        // print("_editedEvent.name: " + _editedEvent.name.toString());
-        // print("_editedEvent.strartingPointLat: " +
-        //     _editedEvent.startingPintLat.toString());
-        // print("_editedEvent.startingPointLong: " +
-        //     _editedEvent.startingPintLong.toString());
-
         // add event and return id of the newly generated event
         int newEventId = await Provider.of<Events>(context, listen: false)
             .addEvent(_editedEvent);
@@ -266,13 +254,6 @@ class AddEventScreenState extends State<AddEventScreen> {
           ),
         );
       }
-      // finally {
-      //   setState(() {
-      //     _isLoading = false;
-      //   });
-      //   Navigator.of(context).pop();
-
-      // }
     }
     setState(() {
       _isLoading = false;
@@ -817,59 +798,6 @@ class AddEventScreenState extends State<AddEventScreen> {
                       const SizedBox(
                         height: padding,
                       ),
-                      // PACE per ora non lo mettiamo, se non viene specificato il backend lo calcola automaticamente da distanza e km
-                      // oppure posso fare il calcolo in addEvent dentro la classe event in provider se non gli arriva pace
-                      // Padding(
-                      //   padding: const EdgeInsets.only(
-                      //     top: 10,
-                      //     left: 20.0,
-                      //     right: 20,
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       SizedBox(
-                      //         width: MediaQuery.of(context).size.width / 2.3,
-                      //         child: TextFormField(
-                      //           keyboardType: TextInputType.number,
-                      //           initialValue: '',
-                      //           cursorColor: colors.primaryTextColor,
-                      //           style: TextStyle(color: colors.primaryTextColor),
-                      //           decoration:
-                      //               textFormDecoration('Pace (mins/km)', context),
-                      //           textInputAction: TextInputAction.next,
-                      //           onFieldSubmitted: (_) {
-                      //             FocusScope.of(context)
-                      //                 .requestFocus(_durationFocusNode);
-                      //           },
-                      //           validator: (value) {
-                      //             if (value?.length == 0) {
-                      //               return 'Please provide a value.';
-                      //             }
-                      //             return null;
-                      //           },
-                      //           onSaved: (value) {
-                      //             if (value != null) {
-                      //               _editedEvent = Event(
-                      //                 adminId: _editedEvent.adminId,
-                      //                 averageDuration: _editedEvent.averageDuration,
-                      //                 averageLength: _editedEvent.averageLength,
-                      //                 averagePace: _editedEvent.averagePace,
-                      //                 createdAt: _editedEvent.createdAt,
-                      //                 currentParticipants:
-                      //                     _editedEvent.currentParticipants,
-                      //                 date: _editedEvent.date,
-                      //                 difficultyLevel: _editedEvent.difficultyLevel,
-                      //                 id: _editedEvent.id,
-                      //                 maxParticipants: _editedEvent.maxParticipants,
-                      //                 name: _editedEvent.name,
-                      //                 startingPintLat: _editedEvent.startingPintLat,
-                      //                 startingPintLong: _editedEvent.startingPintLong,
-                      //               );
-                      //             }
-                      //           },
-                      //         ),
-                      //       ),
 
                       Padding(
                         padding: const EdgeInsets.only(
@@ -992,6 +920,8 @@ class AddEventScreenState extends State<AddEventScreen> {
     }
   }
 }
+
+///A stateful widget responsible for the appBar in the add event page.
 
 class AddEventAppbar extends StatelessWidget {
   const AddEventAppbar({Key? key}) : super(key: key);

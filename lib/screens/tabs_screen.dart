@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_const
+///{@category Screens}
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,7 +10,7 @@ import '../providers/event.dart';
 
 // import '../widgets/main_drawer.dart';
 // import './favorites_screen.dart';
-import '../providers/locationHelper.dart';
+import '../providers/location_helper.dart';
 import '../providers/user.dart';
 import 'add_event_screen.dart';
 import 'user_screen.dart';

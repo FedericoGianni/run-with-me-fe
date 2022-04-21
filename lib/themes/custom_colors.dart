@@ -1,5 +1,9 @@
-/// List of static custom colors to be used throughout the project
+///{@category Themes}
+
+/// A list of static custom colors to be used throughout the project
 import 'package:flutter/material.dart';
+
+/// Just saying something here
 
 const YELLOW_GREEN_DARK = 0xFF759B1C;
 const YELLOW_GREEN = 0xFF9CCF26;

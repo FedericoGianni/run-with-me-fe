@@ -1,3 +1,5 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 
 class CustomScrollBehavior extends ScrollBehavior {

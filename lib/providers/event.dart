@@ -1,7 +1,10 @@
-import 'package:flutter/cupertino.dart';
+///{@category Providers}
 
 /// Object describing a general event in all its properties.
+import 'package:flutter/cupertino.dart';
+
 /// This is also a provider since an event can be modified by some other module.
+
 class Event with ChangeNotifier {
   /// The unique id of the [Event]
   var id;

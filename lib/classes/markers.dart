@@ -1,3 +1,5 @@
+///{@category Classes}
+///Module used to generate a set of markers in Google maps given a list of events.
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +9,7 @@ import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/event_card_text_only.dart';
 
+///Module used to generate a set of markers in Google maps given a list of events [eventList]
 Map<String, Marker> markerGenerator(List<Event> eventList,
     CustomInfoWindowController _customInfoWindowController, ctx) {
   Map<String, Marker> _markers = {};

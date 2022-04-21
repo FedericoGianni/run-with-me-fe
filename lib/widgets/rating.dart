@@ -1,8 +1,10 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
-import 'halfFilledIcon.dart';
+import 'half_filled_icon.dart';
 import '../themes/custom_colors.dart';
 
 class Rating extends StatelessWidget {

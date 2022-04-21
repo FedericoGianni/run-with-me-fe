@@ -1,7 +1,9 @@
+///{@category Providers}
+
+/// Provider responsible for setting all colors used in the project, dinamically based on the current theme mode.
 import '../themes/custom_colors.dart';
 import 'package:flutter/material.dart';
 
-/// Provider responsible for setting all colors used in the project.
 /// <br /> When referring to a color somewhere, this provider should be used.
 ///
 /// To change theme mode programmatically:
@@ -32,6 +34,7 @@ class CustomColorScheme with ChangeNotifier {
   Color errorColor = Colors.amber.shade900;
   String currentMode = '';
 
+  ///Sets all colors to the appropriate dark theme color
   void setDarkMode() {
     titleColor = const Color(MAGNOLIA);
     primaryColor = const Color(CG_BLUE_HEX);
@@ -44,10 +47,10 @@ class CustomColorScheme with ChangeNotifier {
     background = const Color(JET_BLACK_DARK);
     errorColor = const Color(ERROR);
     currentMode = 'dark';
-    print("DarkMode");
     notifyListeners();
   }
 
+  ///Sets all colors to the appropriate light theme color
   void setLightMode() {
     titleColor = const Color(MAGNOLIA);
     primaryColor = const Color(CG_BLUE_HEX);
@@ -60,8 +63,6 @@ class CustomColorScheme with ChangeNotifier {
     background = const Color(PLATINUM);
     errorColor = const Color(ERROR);
     currentMode = 'light';
-    print("LightMode");
-
     notifyListeners();
   }
 }

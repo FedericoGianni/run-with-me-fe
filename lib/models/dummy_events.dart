@@ -1,3 +1,4 @@
+///@nodoc
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/events.dart';
 

@@ -1,6 +1,8 @@
+///{@category Widgets}
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:runwithme/providers/locationHelper.dart';
+import 'package:runwithme/providers/location_helper.dart';
 import 'package:uuid/uuid.dart';
 // import 'package:intl/intl.dart';
 import '../classes/multi_device_support.dart';
