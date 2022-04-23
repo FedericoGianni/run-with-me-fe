@@ -33,6 +33,19 @@ const MAGNOLIA_LIGHT = 0xFFFCFCFC;
 
 const ERROR = 0xFFCE2525;
 
+//                                light                   dark
+// Title Color                    MAGNOLIA                MAGNOLIA
+// Primary Color                  CG_BLUE_HEX             CG_BLUE_HEX
+// Secondary Color                YELLOW_GREEN            YELLOW_GREEN
+// Primary Light Color            CG_BLUE_HEX_LIGHT       CG_BLUE_HEX_LIGHT
+// Primary Text Color             JET_BLACK               PLATINUM
+// Secondary Text Color           SILVER_CHALICE          SILVER_CHALICE
+// Tertiary Text Color            PLATINUM_DARK           PLATINUM_DARK
+// On Primary Color               MAGNOLIA                DARK1
+// Background Color               PLATINUM                JET_BLACK_DARK
+// Error Color                    ERROR                   ERROR
+
+
 // class CustomColors {
 //   static const primaryColor = Color(CG_BLUE_HEX);
 //   static const secondaryColor = Color(YELLOW_GREEN);
