@@ -48,11 +48,13 @@ class WeatherWidgetState extends State<WeatherWidget> {
     });
 
     List<Weather> forecasts = await ws.fiveDayForecastByLocation(lat!, lon!);
-    setState(() {
-      _forecastData = forecasts;
-      _state = AppState.FINISHED_DOWNLOADING;
-      //print("APPSTATE DOWNLOADED FORECASTS!!!");
-    });
+    if (mounted) {
+      setState(() {
+        _forecastData = forecasts;
+        _state = AppState.FINISHED_DOWNLOADING;
+        //print("APPSTATE DOWNLOADED FORECASTS!!!");
+      });
+    }
   }
 
   void queryWeather() async {
@@ -65,11 +67,13 @@ class WeatherWidgetState extends State<WeatherWidget> {
     });
 
     Weather weather = await ws.currentWeatherByLocation(lat!, lon!);
-    setState(() {
-      _todayData = [weather];
-      _state = AppState.FINISHED_DOWNLOADING;
-      //print("APPSTATE DOWNLOADED WEATHER!!!");
-    });
+    if (mounted) {
+      setState(() {
+        _todayData = [weather];
+        _state = AppState.FINISHED_DOWNLOADING;
+        //print("APPSTATE DOWNLOADED WEATHER!!!");
+      });
+    }
   }
 
   Widget contentFinishedDownload() {

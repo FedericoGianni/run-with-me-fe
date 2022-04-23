@@ -275,7 +275,7 @@ class LoginFormState extends State<LoginForm> {
                       style: TextButton.styleFrom(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
+                                  BorderRadius.all(Radius.circular(15))),
                           backgroundColor: colors.primaryColor,
                           primary: colors.onPrimary,
                           textStyle: TextStyle(fontSize: multiDeviceSupport.h3),

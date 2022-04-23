@@ -361,8 +361,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
                 )),
             Padding(
               padding: EdgeInsets.only(
-                left: screenWidth / 10,
-                right: screenWidth / 11,
+                left: screenWidth / 25,
+                right: screenWidth / 45,
                 bottom: 40,
               ),
               child: Row(
