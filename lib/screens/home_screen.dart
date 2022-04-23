@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:runwithme/classes/connection_manager.dart';
 import 'package:runwithme/classes/date_helper.dart';
 import 'package:runwithme/classes/stats_helper.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/locationHelper.dart';
 import 'package:runwithme/providers/settings_manager.dart';
+import 'package:runwithme/widgets/custom_alert_dialog_only_accept.dart';
 import 'package:runwithme/widgets/custom_loading_animation.dart';
 import 'package:runwithme/widgets/custom_map_home_page.dart';
 import 'package:runwithme/widgets/custom_weather.dart';
@@ -13,6 +16,7 @@ import '../providers/events.dart';
 import '../providers/locationHelper.dart';
 import '../providers/page_index.dart';
 import '../providers/user.dart';
+import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_scroll_behavior.dart';
 import '../widgets/event_card_text_only.dart';
 import '../providers/color_scheme.dart';
@@ -1058,6 +1062,30 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
+  Future<void> _showMyDialog({
+    context,
+    required String title,
+    required String message,
+    required Function onAccept,
+  }) async {
+    // var settings = Provider.of<UserSettings>(context, listen: false);
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: CustomAlertDialogAcceptOnly(
+            title: title,
+            message: message,
+            onAccept: () => onAccept(),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
@@ -1065,9 +1093,22 @@ class _HomeScreenState extends State<HomeScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final events = Provider.of<Events>(context);
+    ConnectionManager connectionManager = ConnectionManager();
 
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
+    connectionManager.isConnectionAvailable().then((connection) {
+      if (!connection) {
+        print("No fucking connection you idiot!!");
+        _showMyDialog(
+            context: context,
+            title: "No Internet Connection!",
+            message:
+                "This app cannot function properly without a working internet connection. \n\nPlease turn it on and retry.",
+            onAccept: () =>
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop'));
+      }
+    });
     print("REBUILDING HOME PAGE");
     if (widget._bookedEvents.isEmpty) {
       widget._bookedEvents = events.bookedEvents;
