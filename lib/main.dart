@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:runwithme/classes/connection_manager.dart';
 import 'package:runwithme/providers/events.dart';
 import 'package:runwithme/providers/page_index.dart';
 import 'package:runwithme/providers/settings_manager.dart';
 import 'package:runwithme/providers/user.dart';
+import 'package:runwithme/widgets/custom_alert_dialog.dart';
 import 'package:runwithme/widgets/splash.dart';
 
 import 'themes/custom_theme.dart';
@@ -46,6 +48,7 @@ class _MyAppState extends State<MyApp> {
     // ignore: prefer_const_constructors
     home: SplashScreen(),
   );
+
   @override
   Widget build(BuildContext context) {
     var userSettings = UserSettings();
