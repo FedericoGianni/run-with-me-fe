@@ -130,6 +130,8 @@ class LocationHelper with ChangeNotifier {
             return _getDefaultUserLocation();
           },
           onDismiss: () {
+            // Disable background gps
+            keepBackgroundThreadAlive = false;
             // If user selected no, default user position is going to be used instead
             return _getDefaultUserLocation();
           });
@@ -152,6 +154,8 @@ class LocationHelper with ChangeNotifier {
             permission = await Geolocator.requestPermission();
           },
           onDismiss: () {
+            keepBackgroundThreadAlive = false;
+
             // If user selected no, default user position is going to be used instead
             return _getDefaultUserLocation();
           });

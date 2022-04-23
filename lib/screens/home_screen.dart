@@ -1135,7 +1135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: settings.isLoggedIn()
                     ? FlexibleSpaceBar(
                         title: Container(
-                          height: _flexibleSpaceBarHeight + 2,
+                          height: _flexibleSpaceBarHeight + 3,
                           child: Column(
                             children: [
                               Row(
