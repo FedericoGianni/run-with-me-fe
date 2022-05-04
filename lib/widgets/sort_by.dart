@@ -99,7 +99,7 @@ class SortByRow extends StatelessWidget {
             },
           ),
           SortByButton(
-            title: 'Lenght',
+            title: 'Length',
             color: Color.fromARGB(255, 59, 146, 143),
             id: SortButton.lenght,
             activeId: currentSortButton,
