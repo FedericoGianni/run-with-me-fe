@@ -45,7 +45,7 @@ class CustomMapsSearch extends StatelessWidget {
           zoomControlsEnabled: false,
           myLocationButtonEnabled: true,
           markers: Set<Marker>.of(markerGenerator(
-                  events.suggestedEvents, customInfoWindowController, context)
+                  events.resultEvents, customInfoWindowController, context)
               .values),
           initialCameraPosition: CameraPosition(
             target: _center,

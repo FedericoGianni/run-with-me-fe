@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
   bool splash = true;
   var customColorScheme = CustomColorScheme();
   Widget routeWidget = const MaterialApp(
+    debugShowCheckedModeBanner: false,
     // ignore: prefer_const_constructors
     home: SplashScreen(),
   );
