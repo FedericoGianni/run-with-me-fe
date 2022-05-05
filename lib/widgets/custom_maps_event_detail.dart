@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/themes/custom_colors.dart';
 
+import '../providers/settings_manager.dart';
 import 'custom_info_window.dart';
 import 'default_appbar.dart';
 import '../models/map_style.dart';
@@ -14,6 +15,8 @@ import 'package:provider/provider.dart';
 class CustomMapsEvent extends StatelessWidget {
   late GoogleMapController mapController;
   late Set<Marker> markers;
+  late UserSettings settings;
+
   Event event;
 
   CustomMapsEvent({required this.event});
@@ -25,11 +28,13 @@ class CustomMapsEvent extends StatelessWidget {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     customInfoWindowController.googleMapController = controller;
-    // mapController.setMapStyle(_mapThemes[5]['style']);
+    mapController.setMapStyle(settings.settings.mapStyle);
   }
 
   @override
   Widget build(BuildContext context) {
+    settings = Provider.of<UserSettings>(context, listen: false);
+
     return GoogleMap(
       onTap: (_center) => {},
       onMapCreated: _onMapCreated,

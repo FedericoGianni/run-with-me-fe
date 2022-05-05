@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:runwithme/models/map_style.dart';
+
 import '../providers/color_scheme.dart';
 import '../classes/file_manager.dart';
 import 'package:flutter/foundation.dart';
@@ -18,11 +20,6 @@ enum NotificationMode {
   all,
   important,
   off,
-}
-
-enum MapStyle {
-  light,
-  dark,
 }
 
 class UserSettings with ChangeNotifier {
@@ -49,8 +46,10 @@ class UserSettings with ChangeNotifier {
     print("here");
     if (mode == CustomThemeMode.light) {
       colors.setLightMode();
+      settings.mapStyle = MapStyle().light;
     } else if (mode == CustomThemeMode.dark) {
       colors.setDarkMode();
+      settings.mapStyle = MapStyle().night;
     }
     settings.theme = mode;
     FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
@@ -97,8 +96,10 @@ class UserSettings with ChangeNotifier {
     // await Future.delayed(const Duration(milliseconds: 2000));
     if (settings.theme == CustomThemeMode.dark) {
       colors.setDarkMode();
+      settings.mapStyle = MapStyle().night;
     } else {
       colors.setLightMode();
+      settings.mapStyle = MapStyle().light;
     }
 
     // Then it checks for user credentials
@@ -230,7 +231,7 @@ class Settings {
   CustomThemeMode theme = CustomThemeMode.light;
   bool location = false;
   NotificationMode notification = NotificationMode.off;
-  MapStyle mapStyle = MapStyle.light;
+  var mapStyle = MapStyle().light;
   bool isLoggedIn = false;
 
   fromJson(Map<String, dynamic> json) {
@@ -239,8 +240,8 @@ class Settings {
     location = json['location'] == 'true';
     notification = NotificationMode.values
         .firstWhere((e) => describeEnum(e) == json['notification']);
-    mapStyle =
-        MapStyle.values.firstWhere((e) => describeEnum(e) == json['map_style']);
+    // mapStyle = MapStyleMode.values
+    //     .firstWhere((e) => describeEnum(e) == json['map_style']);
     isLoggedIn = json['loggedIn'] == 'true';
   }
 
@@ -248,7 +249,7 @@ class Settings {
         'theme': theme.name,
         'location': location.toString(),
         'notification': notification.name,
-        'map_style': mapStyle.name,
+        // 'map_style': mapStyle.name,
         'loggedIn': isLoggedIn.toString(),
       };
 }
