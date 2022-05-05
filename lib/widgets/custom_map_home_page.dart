@@ -4,7 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/providers/event.dart';
 import 'package:runwithme/providers/page_index.dart';
 
+import '../models/map_style.dart';
 import '../providers/locationHelper.dart';
+import '../providers/settings_manager.dart';
 import 'custom_info_window.dart';
 import '../classes/markers.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,7 @@ class CustomMapsHome extends StatefulWidget {
 class _CustomMapsHomeState extends State<CustomMapsHome> {
   GoogleMapController? mapController;
   late Set<Marker> markers;
+  late UserSettings settings;
 
   CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
@@ -26,7 +29,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     customInfoWindowController.googleMapController = controller;
-    // mapController.setMapStyle(_mapThemes[5]['style']);
+    mapController!.setMapStyle(settings.settings.mapStyle);
   }
 
   @override
@@ -53,6 +56,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
   Widget build(BuildContext context) {
     Position userPosition =
         Provider.of<LocationHelper>(context).getLastKnownPosition();
+    settings = Provider.of<UserSettings>(context, listen: false);
 
     final pageIndex = Provider.of<PageIndex>(context, listen: false);
 
