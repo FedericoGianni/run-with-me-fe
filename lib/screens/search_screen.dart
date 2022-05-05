@@ -109,16 +109,26 @@ class SearchScreenState extends State<SearchScreen> {
     // the if check is to avoid when a refresh of the screen is made but there are no previous parameters of fetchAndSetResultEvents available
     // for suggestedEvents is not a problem since there will always be an automatic request when building the first time
 
-    if (events.lastResultMaxDistKm == -1 ||
-        events.lastResultLat == -1 ||
-        events.lastResultLong == -1) {
-      events.fetchAndSetResultEvents(
-          events.lastResultLat,
-          events.lastResultLong,
-          events.lastResultMaxDistKm,
-          Provider.of<UserSettings>(context, listen: false).isLoggedIn());
-      widget._resultEvents = events.resultEvents;
+    // if (events.lastResultMaxDistKm == -1 ||
+    //     events.lastResultLat == -1 ||
+    //     events.lastResultLong == -1) {
+    await events.fetchAndSetResultEvents(
+        events.lastResultLat,
+        events.lastResultLong,
+        events.lastResultMaxDistKm,
+        Provider.of<UserSettings>(context, listen: false).isLoggedIn());
+    widget._resultEvents = events.resultEvents;
+
+    if (!widget.formValues['show_full']) {
+      widget._resultEvents = widget._resultEvents
+          .where((element) =>
+              element.maxParticipants != element.currentParticipants)
+          .toList();
     }
+    if (mounted) {
+      setState(() {});
+    }
+    // }
 
     events.fetchAndSetSuggestedEvents(
         events.lastSuggestedLat,
