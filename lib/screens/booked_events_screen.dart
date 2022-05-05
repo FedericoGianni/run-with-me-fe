@@ -84,7 +84,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
 
     int userId = Provider.of<User>(context, listen: false).userId ?? -1;
     final events = Provider.of<Events>(context, listen: false);
-    events.fetchAndSetBookedEvents(userId);
+    await events.fetchAndSetBookedEvents(userId);
     widget._bookedEvents = events.bookedEvents;
     widget._futureBookedEvents = widget._bookedEvents
         .where((element) => element.date.isAfter(DateTime.now()))
