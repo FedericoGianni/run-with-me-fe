@@ -14,8 +14,7 @@ class CustomMapsSearch extends StatelessWidget {
   late GoogleMapController mapController;
   late Set<Marker> markers;
 
-  CustomInfoWindowController customInfoWindowController =
-      CustomInfoWindowController();
+  late CustomInfoWindowController customInfoWindowController;
 
   //TODO change _center with the user city
 
@@ -32,6 +31,8 @@ class CustomMapsSearch extends StatelessWidget {
     final Position userPosition = locationHelper.getLastKnownPosition();
     final LatLng _center =
         LatLng(userPosition.latitude, userPosition.longitude);
+
+    customInfoWindowController = CustomInfoWindowController();
 
     return Stack(
       children: [
