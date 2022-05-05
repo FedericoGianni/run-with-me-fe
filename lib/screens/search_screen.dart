@@ -80,7 +80,8 @@ class SearchScreenState extends State<SearchScreen> {
         _isLoading = true;
       });
       Position userPosition =
-          Provider.of<LocationHelper>(context).getLastKnownPosition();
+          Provider.of<LocationHelper>(context, listen: false)
+              .getLastKnownPosition();
 
       Provider.of<Events>(context)
           .fetchAndSetSuggestedEvents(
