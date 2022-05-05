@@ -74,11 +74,20 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     widget.controller.hideInfoWindow = _hideInfoWindow;
   }
 
+  // @override
+  // void didUpdateWidget(oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   widget.controller.addInfoWindow = _addInfoWindow;
+  //   widget.controller.onCameraMove = _onCameraMove;
+  //   widget.controller.hideInfoWindow = _hideInfoWindow;
+  // }
+
   /// Calculate the position on [CustomInfoWindow] and redraw on screen.
   void _updateInfoWindow() async {
     if (_latLng == null ||
         _child == null ||
         widget.controller.googleMapController == null) {
+      print("ERROR: Google map controller should not be null");
       return;
     }
     ScreenCoordinate screenCoordinate = await widget
