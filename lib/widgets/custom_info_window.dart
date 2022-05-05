@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:runwithme/models/map_style.dart';
 
 /// Controller to add, update and control the custom info window.
 class CustomInfoWindowController {

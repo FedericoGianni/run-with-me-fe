@@ -484,7 +484,7 @@ class UserScreenState extends State<UserScreen> {
                                   padding: const EdgeInsets.only(
                                       top: 5, bottom: 15, right: 20),
                                   child: Text(
-                                    '1.012.041',
+                                    '1.013.010',
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,

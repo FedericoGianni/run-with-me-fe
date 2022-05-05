@@ -1,4 +1,4 @@
-final List<dynamic> _mapThemes = [
+final List<dynamic> mapThemes = [
   {
     'name': 'Standard',
     'style': MapStyle().dark,
@@ -38,6 +38,7 @@ final List<dynamic> _mapThemes = [
 ];
 
 class MapStyle {
+  final light = null;
   final String aubergine = """
     [
       {
