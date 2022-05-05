@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runwithme/themes/custom_colors.dart';
 
+import '../providers/settings_manager.dart';
 import 'custom_info_window.dart';
 import 'custom_map_place_search.dart';
 import 'default_appbar.dart';
@@ -27,6 +28,7 @@ class CustomMapsNew extends StatefulWidget {
 class CustomMapsNewState extends State<CustomMapsNew> {
   late GoogleMapController mapController;
   late Set<Marker> markers = {};
+  late UserSettings settings;
 
   CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
@@ -34,6 +36,7 @@ class CustomMapsNewState extends State<CustomMapsNew> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     customInfoWindowController.googleMapController = controller;
+    mapController.setMapStyle(settings.settings.mapStyle);
   }
 
   Future<void> _showPlacesDialog() async {
@@ -85,6 +88,7 @@ class CustomMapsNewState extends State<CustomMapsNew> {
     if (widget.markerPosition != const LatLng(0, 0)) {
       _handleTap(widget.markerPosition);
     }
+    settings = Provider.of<UserSettings>(context, listen: false);
     final colors = Provider.of<CustomColorScheme>(context, listen: false);
     //print('Rebuilding maps new');
     return Scaffold(

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/events.dart';
 import '../providers/locationHelper.dart';
+import '../providers/settings_manager.dart';
 import 'custom_info_window.dart';
 import 'default_appbar.dart';
 import '../models/map_style.dart';
@@ -13,6 +14,7 @@ import '../classes/markers.dart';
 class CustomMapsSearch extends StatelessWidget {
   late GoogleMapController mapController;
   late Set<Marker> markers;
+  late UserSettings settings;
 
   CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
@@ -22,13 +24,15 @@ class CustomMapsSearch extends StatelessWidget {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     customInfoWindowController.googleMapController = controller;
-    // mapController.setMapStyle(_mapThemes[5]['style']);
+    mapController.setMapStyle(settings.settings.mapStyle);
   }
 
   @override
   Widget build(BuildContext context) {
     final events = Provider.of<Events>(context);
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
+    settings = Provider.of<UserSettings>(context, listen: false);
+
     final Position userPosition = locationHelper.getLastKnownPosition();
     final LatLng _center =
         LatLng(userPosition.latitude, userPosition.longitude);
