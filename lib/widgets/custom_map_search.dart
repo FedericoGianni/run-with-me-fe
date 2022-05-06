@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../providers/events.dart';
 import '../providers/locationHelper.dart';
 import '../providers/settings_manager.dart';
+import '../providers/user.dart';
 import 'custom_info_window.dart';
 import 'default_appbar.dart';
 import '../models/map_style.dart';
@@ -32,6 +33,7 @@ class CustomMapsSearch extends StatelessWidget {
     final events = Provider.of<Events>(context);
     final locationHelper = Provider.of<LocationHelper>(context, listen: false);
     settings = Provider.of<UserSettings>(context, listen: false);
+    final user = Provider.of<User>(context, listen: false);
 
     final Position userPosition = locationHelper.getLastKnownPosition();
     final LatLng _center =
@@ -49,7 +51,10 @@ class CustomMapsSearch extends StatelessWidget {
           zoomControlsEnabled: false,
           myLocationButtonEnabled: true,
           markers: Set<Marker>.of(markerGenerator(
-                  events.resultEvents, customInfoWindowController, context)
+                  events.resultEvents,
+                  events.suggestedEvents(user.fitnessLevel),
+                  customInfoWindowController,
+                  context)
               .values),
           initialCameraPosition: CameraPosition(
             target: _center,
