@@ -18,7 +18,7 @@ class MockEventsProvider extends Mock implements Events {
   List<Event> _recentEvents = [];
 
   @override
-  List<Event> get suggestedEvents {
+  List<Event> suggestedEvents(double? fitnessLevel) {
     return [..._suggestedEvents];
   }
 
