@@ -45,7 +45,8 @@ class CustomMapsEvent extends StatelessWidget {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: true,
       markers: Set<Marker>.of(
-          markerGenerator([event], customInfoWindowController, context).values),
+          markerGenerator([], [event], customInfoWindowController, context)
+              .values),
       initialCameraPosition: CameraPosition(
         target: LatLng(event.startingPintLat, event.startingPintLong),
         zoom: 13.0,

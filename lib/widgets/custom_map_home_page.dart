@@ -89,7 +89,7 @@ class _CustomMapsHomeState extends State<CustomMapsHome> {
       zoomControlsEnabled: false,
       myLocationButtonEnabled: true,
       markers: Set<Marker>.of(
-          markerGenerator([fakeEvent], customInfoWindowController, context)
+          markerGenerator([fakeEvent], [], customInfoWindowController, context)
               .values),
       initialCameraPosition: CameraPosition(
         target: LatLng(userPosition.latitude, userPosition.longitude),

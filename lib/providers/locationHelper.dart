@@ -174,7 +174,7 @@ class LocationHelper with ChangeNotifier {
     print("Getting Location");
     _currentUserPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        timeLimit: Duration(seconds: 20));
+        timeLimit: Duration(seconds: 60));
 
     _lastKnownPosition = _currentUserPosition!;
     print("Location acquired");
