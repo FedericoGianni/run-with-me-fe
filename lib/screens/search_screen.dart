@@ -131,7 +131,7 @@ class SearchScreenState extends State<SearchScreen> {
     }
     // }
 
-    events.fetchAndSetSuggestedEvents(
+    await events.fetchAndSetSuggestedEvents(
         events.lastSuggestedLat,
         events.lastSuggestedLong,
         events.lastSuggestedMaxDistKm,
@@ -142,7 +142,9 @@ class SearchScreenState extends State<SearchScreen> {
             (element.difficultyLevel > user.fitnessLevel! - 1))
         .toList();
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     return null;
   }
 
