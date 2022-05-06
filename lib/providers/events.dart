@@ -52,8 +52,14 @@ class Events with ChangeNotifier {
     return _lastResultMaxDistKm;
   }
 
-  List<Event> get suggestedEvents {
-    return [..._suggestedEvents];
+  List<Event> suggestedEvents(double? fitnessLevel) {
+    return [
+      ..._suggestedEvents
+          .where((element) =>
+              (element.difficultyLevel < fitnessLevel! + 1) &&
+              (element.difficultyLevel > fitnessLevel - 1))
+          .toList()
+    ];
   }
 
   List<Event> get recentEvents {

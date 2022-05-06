@@ -48,9 +48,20 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
       setState(() {
         _isLoading = true;
       });
-      int userId = Provider.of<User>(context).userId ?? -1;
-      Provider.of<Events>(context).fetchAndSetBookedEvents(userId).then((_) {
+      int userId = Provider.of<User>(context, listen: false).userId ?? -1;
+
+      final events = Provider.of<Events>(context, listen: true);
+
+      events.fetchAndSetBookedEvents(userId).then((_) {
         setState(() {
+          widget._bookedEvents = events.bookedEvents;
+          widget._futureBookedEvents = widget._bookedEvents
+              .where((element) => element.date.isAfter(DateTime.now()))
+              .toList();
+
+          widget._pastBookedEvents = widget._bookedEvents
+              .where((element) => element.date.isBefore(DateTime.now()))
+              .toList();
           _isLoading = false;
           print("fetching events for booked_events_screen");
         });
@@ -214,17 +225,17 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
 
-    if (widget._bookedEvents.length == 0) {
-      widget._bookedEvents = events.bookedEvents;
+    // if (widget._bookedEvents.length == 0) {
+    widget._bookedEvents = events.bookedEvents;
 
-      widget._futureBookedEvents = widget._bookedEvents
-          .where((element) => element.date.isAfter(DateTime.now()))
-          .toList();
+    widget._futureBookedEvents = widget._bookedEvents
+        .where((element) => element.date.isAfter(DateTime.now()))
+        .toList();
 
-      widget._pastBookedEvents = widget._bookedEvents
-          .where((element) => element.date.isBefore(DateTime.now()))
-          .toList();
-    }
+    widget._pastBookedEvents = widget._bookedEvents
+        .where((element) => element.date.isBefore(DateTime.now()))
+        .toList();
+    // }
 
     double _flexibleSpaceBarHeight;
 

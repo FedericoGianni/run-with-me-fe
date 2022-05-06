@@ -136,11 +136,11 @@ class SearchScreenState extends State<SearchScreen> {
         events.lastSuggestedLong,
         events.lastSuggestedMaxDistKm,
         Provider.of<UserSettings>(context, listen: false).isLoggedIn());
-    widget._suggestedEvents = events.suggestedEvents
-        .where((element) =>
-            (element.difficultyLevel < user.fitnessLevel! + 1) &&
-            (element.difficultyLevel > user.fitnessLevel! - 1))
-        .toList();
+    widget._suggestedEvents = events.suggestedEvents(user.fitnessLevel);
+    // .where((element) =>
+    //     (element.difficultyLevel < user.fitnessLevel! + 1) &&
+    //     (element.difficultyLevel > user.fitnessLevel! - 1))
+    // .toList();
 
     if (mounted) {
       setState(() {});
@@ -612,11 +612,7 @@ class SearchScreenState extends State<SearchScreen> {
       // So basically here events are fetched only the first time.. in the future events will be fetched at reload
       if (widget._suggestedEvents.length == 0) {
         widget._resultEvents = events.resultEvents;
-        widget._suggestedEvents = events.suggestedEvents
-            .where((element) =>
-                (element.difficultyLevel < user.fitnessLevel! + 1) &&
-                (element.difficultyLevel > user.fitnessLevel! - 1))
-            .toList();
+        widget._suggestedEvents = events.suggestedEvents(user.fitnessLevel);
         print("Got events from provider");
       }
       widget._recentEvents = events.recentEvents;
