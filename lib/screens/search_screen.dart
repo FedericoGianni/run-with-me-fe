@@ -569,12 +569,12 @@ class SearchScreenState extends State<SearchScreen> {
                         ],
                         onTap: (activeSortButton, eventLists) {
                           setState(() {
-                            print(widget._suggestedEvents[0].name);
+                            // print(widget._suggestedEvents[0].name);
                             widget._currentSortButton = activeSortButton;
                             widget._resultEvents = eventLists[0];
                             widget._suggestedEvents = eventLists[1];
                           });
-                          print(widget._currentSortButton.toString());
+                          // print(widget._currentSortButton.toString());
                         },
                       )
                     : SizedBox(),

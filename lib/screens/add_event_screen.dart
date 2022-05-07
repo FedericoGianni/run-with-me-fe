@@ -317,613 +317,254 @@ class AddEventScreenState extends State<AddEventScreen> {
                 ),
                 child: ScrollConfiguration(
                   behavior: CustomScrollBehavior(),
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    cacheExtent: 2000,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          height: 30,
-                        ),
-                      ),
-                      // Name
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 0,
-                        ),
-                        child: Text(
-                          'Name: ',
-                          style: TextStyle(
-                              color: colors.primaryTextColor,
-                              fontSize: multiDeviceSupport.h2),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
-                        ),
-                        child: Text(
-                          'Give your new event a nice name',
-                          style: TextStyle(
-                              color: colors.secondaryTextColor,
-                              fontSize: multiDeviceSupport.h4),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: TextFormField(
-                          key: const Key("name"),
-                          initialValue: '',
-                          cursorColor: colors.primaryTextColor,
-                          style: TextStyle(color: colors.primaryTextColor),
-                          decoration: textFormDecoration('Name', context),
-                          textInputAction: TextInputAction.next,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please provide a value.';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            if (value != null) {
-                              _editedEvent = Event(
-                                adminId: _editedEvent.adminId,
-                                averageDuration: _editedEvent.averageDuration,
-                                averageLength: _editedEvent.averageLength,
-                                averagePaceMin: _editedEvent.averagePaceMin,
-                                averagePaceSec: _editedEvent.averagePaceSec,
-                                createdAt: _editedEvent.createdAt,
-                                currentParticipants:
-                                    _editedEvent.currentParticipants,
-                                date: _editedEvent.date,
-                                difficultyLevel: _editedEvent.difficultyLevel,
-                                id: _editedEvent.id,
-                                maxParticipants: _editedEvent.maxParticipants,
-                                //change the event name with the name selected by the user
-                                name: value.toString(),
-                                startingPintLat: _editedEvent.startingPintLat,
-                                startingPintLong: _editedEvent.startingPintLong,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: padding,
-                      ),
-                      // Date and Time
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 0,
-                        ),
-                        child: Text(
-                          'Date and Time: ',
-                          style: TextStyle(
-                              color: colors.primaryTextColor,
-                              fontSize: multiDeviceSupport.h2),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
-                        ),
-                        child: Text(
-                          'Set the starting time of your event',
-                          style: TextStyle(
-                              color: colors.secondaryTextColor,
-                              fontSize: multiDeviceSupport.h4),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: _presentDatePicker,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width /
-                                    (2.5 + multiDeviceSupport.tablet * 0.3),
-                                decoration: BoxDecoration(
-                                  color: colors.onPrimary,
-                                  border: Border.all(color: colors.onPrimary),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ),
-                                ),
-                                height: 60,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          _userSelectedDate == null
-                                              ? 'No Date Chosen!'
-                                              : DateFormat.yMMMd()
-                                                  .format(_userSelectedDate),
-                                          style: TextStyle(
-                                              color: colors.secondaryTextColor,
-                                              fontSize: multiDeviceSupport.h4),
-                                        ),
-                                      ),
-                                      Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Icon(
-                                            Icons.calendar_today_outlined,
-                                            color: colors.secondaryTextColor,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: _selectTime,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width /
-                                    (2.5 + multiDeviceSupport.tablet * 0.3),
-                                decoration: BoxDecoration(
-                                  color: colors.onPrimary,
-                                  border: Border.all(color: colors.onPrimary),
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(10.0),
-                                  ),
-                                ),
-                                height: 60,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          _userSelectedDate == null
-                                              ? 'No Date Chosen!'
-                                              : _time.format(context),
-                                          style: TextStyle(
-                                              color: colors.secondaryTextColor,
-                                              fontSize: multiDeviceSupport.h4),
-                                        ),
-                                      ),
-                                      Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Icon(
-                                            Icons.watch_later_outlined,
-                                            color: colors.secondaryTextColor,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: padding,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 0,
-                        ),
-                        child: Text(
-                          'Location: ',
-                          style: TextStyle(
-                              color: colors.primaryTextColor,
-                              fontSize: multiDeviceSupport.h2),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
-                        ),
-                        child: Text(
-                          'Set the starting location of your event',
-                          style: TextStyle(
-                              color: colors.secondaryTextColor,
-                              fontSize: multiDeviceSupport.h4),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            _getLocation().then((value) async {
-                              var a = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CustomMapsNew(
-                                    markerPosition: markerPosition,
-                                    centerPosition:
-                                        markerPosition == LatLng(0, 0)
-                                            ? LatLng(
-                                                value.latitude, value.longitude)
-                                            : markerPosition,
-                                  ),
-                                ),
-                              );
-                              setState(() {
-                                if (a != null) {
-                                  markerPosition = a;
-                                  _editedEvent = Event(
-                                    adminId: _editedEvent.adminId,
-                                    averageDuration:
-                                        _editedEvent.averageDuration,
-                                    averageLength: _editedEvent.averageLength,
-                                    averagePaceMin: _editedEvent.averagePaceMin,
-                                    averagePaceSec: _editedEvent.averagePaceSec,
-                                    createdAt: _editedEvent.createdAt,
-                                    currentParticipants:
-                                        _editedEvent.currentParticipants,
-                                    date: _editedEvent.date,
-                                    difficultyLevel:
-                                        _editedEvent.difficultyLevel,
-                                    id: _editedEvent.id,
-                                    maxParticipants:
-                                        _editedEvent.maxParticipants,
-                                    name: _editedEvent.name,
-                                    startingPintLat: markerPosition.latitude,
-                                    startingPintLong: markerPosition.longitude,
-                                  );
-                                }
-                              });
-                            });
-                          },
-                          // initialValue: markerPosition.toString(),,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // scrollDirection: Axis.vertical,
+                      // shrinkWrap: true,
+                      // cacheExtent: 2000,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                          ),
                           child: Container(
-                            width: MediaQuery.of(context).size.width /
-                                (2.5 + multiDeviceSupport.tablet * 0.3),
-                            decoration: BoxDecoration(
-                              color: colors.onPrimary,
-                              border: Border.all(color: colors.onPrimary),
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-                            height: 60,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: markerPosition == LatLng(0, 0)
-                                          ? Text(
-                                              'Search Location',
-                                              style: TextStyle(
-                                                  color:
-                                                      colors.secondaryTextColor,
-                                                  fontSize:
-                                                      multiDeviceSupport.h2),
-                                            )
-                                          : Text(
-                                              'Location Selected',
-                                              style: TextStyle(
-                                                  color: colors.primaryColor),
-                                            )),
-                                  Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            Position position = locationHelper
-                                                .getLastKnownPositionAndUpdate();
-                                            if (mounted) {
-                                              setState(() {
-                                                markerPosition = LatLng(
-                                                    position.latitude,
-                                                    position.longitude);
-                                                _editedEvent = Event(
-                                                  adminId: _editedEvent.adminId,
-                                                  averageDuration: _editedEvent
-                                                      .averageDuration,
-                                                  averageLength: _editedEvent
-                                                      .averageLength,
-                                                  averagePaceMin: _editedEvent
-                                                      .averagePaceMin,
-                                                  averagePaceSec: _editedEvent
-                                                      .averagePaceSec,
-                                                  createdAt:
-                                                      _editedEvent.createdAt,
-                                                  currentParticipants:
-                                                      _editedEvent
-                                                          .currentParticipants,
-                                                  date: _editedEvent.date,
-                                                  difficultyLevel: _editedEvent
-                                                      .difficultyLevel,
-                                                  id: _editedEvent.id,
-                                                  maxParticipants: _editedEvent
-                                                      .maxParticipants,
-                                                  name: _editedEvent.name,
-                                                  startingPintLat:
-                                                      markerPosition.latitude,
-                                                  startingPintLong:
-                                                      markerPosition.longitude,
-                                                );
-                                              });
-                                            } else {}
-                                          },
-                                          icon: !widget._isSearching
-                                              ? Icon(
-                                                  Icons.location_on_outlined,
-                                                  color:
-                                                      colors.secondaryTextColor,
-                                                )
-                                              : const CustomLoadingCircleIcon())),
-                                ],
-                              ),
-                            ),
+                            padding: const EdgeInsets.only(bottom: 20),
+                            height: 30,
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: padding,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 0,
+                        // Name
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 0,
+                          ),
+                          child: Text(
+                            'Name: ',
+                            style: TextStyle(
+                                color: colors.primaryTextColor,
+                                fontSize: multiDeviceSupport.h2),
+                          ),
                         ),
-                        child: Text(
-                          'Length and duration: ',
-                          style: TextStyle(
-                              color: colors.primaryTextColor,
-                              fontSize: multiDeviceSupport.h2),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          child: Text(
+                            'Give your new event a nice name',
+                            style: TextStyle(
+                                color: colors.secondaryTextColor,
+                                fontSize: multiDeviceSupport.h4),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: TextFormField(
+                            key: const Key("name"),
+                            initialValue: '',
+                            cursorColor: colors.primaryTextColor,
+                            style: TextStyle(color: colors.primaryTextColor),
+                            decoration: textFormDecoration('Name', context),
+                            textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please provide a value.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              if (value != null) {
+                                _editedEvent = Event(
+                                  adminId: _editedEvent.adminId,
+                                  averageDuration: _editedEvent.averageDuration,
+                                  averageLength: _editedEvent.averageLength,
+                                  averagePaceMin: _editedEvent.averagePaceMin,
+                                  averagePaceSec: _editedEvent.averagePaceSec,
+                                  createdAt: _editedEvent.createdAt,
+                                  currentParticipants:
+                                      _editedEvent.currentParticipants,
+                                  date: _editedEvent.date,
+                                  difficultyLevel: _editedEvent.difficultyLevel,
+                                  id: _editedEvent.id,
+                                  maxParticipants: _editedEvent.maxParticipants,
+                                  //change the event name with the name selected by the user
+                                  name: value.toString(),
+                                  startingPintLat: _editedEvent.startingPintLat,
+                                  startingPintLong:
+                                      _editedEvent.startingPintLong,
+                                );
+                              }
+                            },
+                          ),
                         ),
-                        child: Text(
-                          'Set how long the run is going to be and the time it will take',
-                          style: TextStyle(
-                              color: colors.secondaryTextColor,
-                              fontSize: multiDeviceSupport.h4),
+                        const SizedBox(
+                          height: padding,
                         ),
-                      ),
-                      // Distance and Duration
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
+                        // Date and Time
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 0,
+                          ),
+                          child: Text(
+                            'Date and Time: ',
+                            style: TextStyle(
+                                color: colors.primaryTextColor,
+                                fontSize: multiDeviceSupport.h2),
+                          ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width /
-                                  (2.5 + multiDeviceSupport.tablet * 0.3),
-                              child: TextFormField(
-                                key: const Key("distance"),
-                                keyboardType: TextInputType.number,
-                                initialValue: '',
-                                cursorColor: colors.primaryTextColor,
-                                style:
-                                    TextStyle(color: colors.primaryTextColor),
-                                decoration: textFormDecoration(
-                                    'Distance (km)', context),
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_durationFocusNode);
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please provide a value.';
-                                  } else if (int.parse(value) > 200) {
-                                    return 'Distance should be less than 200km.';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  if (value != null) {
-                                    _editedEvent = Event(
-                                      adminId: _editedEvent.adminId,
-                                      averageDuration:
-                                          _editedEvent.averageDuration,
-                                      averageLength: int.parse(value),
-                                      averagePaceMin:
-                                          _editedEvent.averagePaceMin,
-                                      averagePaceSec:
-                                          _editedEvent.averagePaceSec,
-                                      createdAt: _editedEvent.createdAt,
-                                      currentParticipants:
-                                          _editedEvent.currentParticipants,
-                                      date: _editedEvent.date,
-                                      difficultyLevel:
-                                          _editedEvent.difficultyLevel,
-                                      id: _editedEvent.id,
-                                      maxParticipants:
-                                          _editedEvent.maxParticipants,
-                                      name: _editedEvent.name,
-                                      startingPintLat:
-                                          _editedEvent.startingPintLat,
-                                      startingPintLong:
-                                          _editedEvent.startingPintLong,
-                                    );
-                                  }
-                                },
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          child: Text(
+                            'Set the starting time of your event',
+                            style: TextStyle(
+                                color: colors.secondaryTextColor,
+                                fontSize: multiDeviceSupport.h4),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: _presentDatePicker,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width /
+                                      (2.5 + multiDeviceSupport.tablet * 0.3),
+                                  decoration: BoxDecoration(
+                                    color: colors.onPrimary,
+                                    border: Border.all(color: colors.onPrimary),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  height: 60,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            _userSelectedDate == null
+                                                ? 'No Date Chosen!'
+                                                : DateFormat.yMMMd()
+                                                    .format(_userSelectedDate),
+                                            style: TextStyle(
+                                                color:
+                                                    colors.secondaryTextColor,
+                                                fontSize:
+                                                    multiDeviceSupport.h4),
+                                          ),
+                                        ),
+                                        Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            child: Icon(
+                                              Icons.calendar_today_outlined,
+                                              color: colors.secondaryTextColor,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width /
-                                  (2.5 + multiDeviceSupport.tablet * 0.3),
-                              child: TextFormField(
-                                key: const Key("duration"),
-                                focusNode: _durationFocusNode,
-                                keyboardType: TextInputType.number,
-                                initialValue: '',
-                                cursorColor: colors.primaryTextColor,
-                                style:
-                                    TextStyle(color: colors.primaryTextColor),
-                                decoration: textFormDecoration(
-                                    'Duration (minutes)', context),
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_participantsFocusNode);
-                                },
-                                validator: (value) {
-                                  if (value?.length == 0) {
-                                    return 'Please provide a value.';
-                                  } else if (int.parse(value!) > 200) {
-                                    return 'Duration should be less than 200 minutes.';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  if (value != null) {
-                                    _editedEvent = Event(
-                                      adminId: _editedEvent.adminId,
-                                      averageDuration: int.parse(value),
-                                      averageLength: _editedEvent.averageLength,
-                                      averagePaceMin:
-                                          _editedEvent.averagePaceMin,
-                                      averagePaceSec:
-                                          _editedEvent.averagePaceSec,
-                                      createdAt: _editedEvent.createdAt,
-                                      currentParticipants:
-                                          _editedEvent.currentParticipants,
-                                      date: _editedEvent.date,
-                                      difficultyLevel:
-                                          _editedEvent.difficultyLevel,
-                                      id: _editedEvent.id,
-                                      maxParticipants:
-                                          _editedEvent.maxParticipants,
-                                      name: _editedEvent.name,
-                                      startingPintLat:
-                                          _editedEvent.startingPintLat,
-                                      startingPintLong:
-                                          _editedEvent.startingPintLong,
-                                    );
-                                  }
-                                },
+                              GestureDetector(
+                                onTap: _selectTime,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width /
+                                      (2.5 + multiDeviceSupport.tablet * 0.3),
+                                  decoration: BoxDecoration(
+                                    color: colors.onPrimary,
+                                    border: Border.all(color: colors.onPrimary),
+                                    borderRadius: const BorderRadius.all(
+                                      const Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  height: 60,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            _userSelectedDate == null
+                                                ? 'No Date Chosen!'
+                                                : _time.format(context),
+                                            style: TextStyle(
+                                                color:
+                                                    colors.secondaryTextColor,
+                                                fontSize:
+                                                    multiDeviceSupport.h4),
+                                          ),
+                                        ),
+                                        Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            child: Icon(
+                                              Icons.watch_later_outlined,
+                                              color: colors.secondaryTextColor,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: padding,
-                      ),
-                      // PACE per ora non lo mettiamo, se non viene specificato il backend lo calcola automaticamente da distanza e km
-                      // oppure posso fare il calcolo in addEvent dentro la classe event in provider se non gli arriva pace
-                      // Padding(
-                      //   padding: const EdgeInsets.only(
-                      //     top: 10,
-                      //     left: 20.0,
-                      //     right: 20,
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       SizedBox(
-                      //         width: MediaQuery.of(context).size.width / 2.3,
-                      //         child: TextFormField(
-                      //           keyboardType: TextInputType.number,
-                      //           initialValue: '',
-                      //           cursorColor: colors.primaryTextColor,
-                      //           style: TextStyle(color: colors.primaryTextColor),
-                      //           decoration:
-                      //               textFormDecoration('Pace (mins/km)', context),
-                      //           textInputAction: TextInputAction.next,
-                      //           onFieldSubmitted: (_) {
-                      //             FocusScope.of(context)
-                      //                 .requestFocus(_durationFocusNode);
-                      //           },
-                      //           validator: (value) {
-                      //             if (value?.length == 0) {
-                      //               return 'Please provide a value.';
-                      //             }
-                      //             return null;
-                      //           },
-                      //           onSaved: (value) {
-                      //             if (value != null) {
-                      //               _editedEvent = Event(
-                      //                 adminId: _editedEvent.adminId,
-                      //                 averageDuration: _editedEvent.averageDuration,
-                      //                 averageLength: _editedEvent.averageLength,
-                      //                 averagePace: _editedEvent.averagePace,
-                      //                 createdAt: _editedEvent.createdAt,
-                      //                 currentParticipants:
-                      //                     _editedEvent.currentParticipants,
-                      //                 date: _editedEvent.date,
-                      //                 difficultyLevel: _editedEvent.difficultyLevel,
-                      //                 id: _editedEvent.id,
-                      //                 maxParticipants: _editedEvent.maxParticipants,
-                      //                 name: _editedEvent.name,
-                      //                 startingPintLat: _editedEvent.startingPintLat,
-                      //                 startingPintLong: _editedEvent.startingPintLong,
-                      //               );
-                      //             }
-                      //           },
-                      //         ),
-                      //       ),
-
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
+                        const SizedBox(
+                          height: padding,
                         ),
-                        child: Text(
-                          'Participants: ',
-                          style: TextStyle(
-                              color: colors.primaryTextColor,
-                              fontSize: multiDeviceSupport.h2),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 0,
+                          ),
+                          child: Text(
+                            'Location: ',
+                            style: TextStyle(
+                                color: colors.primaryTextColor,
+                                fontSize: multiDeviceSupport.h2),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 5,
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          child: Text(
+                            'Set the starting location of your event',
+                            style: TextStyle(
+                                color: colors.secondaryTextColor,
+                                fontSize: multiDeviceSupport.h4),
+                          ),
                         ),
-                        child: Text(
-                          'Depending on the location, set the maximum number of participants',
-                          style: TextStyle(
-                              color: colors.secondaryTextColor,
-                              fontSize: multiDeviceSupport.h4),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width /
-                                  (2.5 + multiDeviceSupport.tablet * 0.3),
-                              child: TextFormField(
-                                // focusNode: _durationFocusNode,
-                                keyboardType: TextInputType.number,
-                                initialValue: '',
-                                cursorColor: colors.primaryTextColor,
-                                style:
-                                    TextStyle(color: colors.primaryTextColor),
-                                decoration: textFormDecoration(
-                                    'Max participants', context),
-                                textInputAction: TextInputAction.next,
-
-                                validator: (value) {
-                                  if (value?.length == 0) {
-                                    return 'Please provide a value.';
-                                  } else if (int.tryParse(value!)! > 200) {
-                                    return 'Max participants allowed is 200';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  if (value != null) {
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              _getLocation().then((value) async {
+                                var a = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CustomMapsNew(
+                                      markerPosition: markerPosition,
+                                      centerPosition: markerPosition ==
+                                              LatLng(0, 0)
+                                          ? LatLng(
+                                              value.latitude, value.longitude)
+                                          : markerPosition,
+                                    ),
+                                  ),
+                                );
+                                setState(() {
+                                  if (a != null) {
+                                    markerPosition = a;
                                     _editedEvent = Event(
                                       adminId: _editedEvent.adminId,
                                       averageDuration:
@@ -940,49 +581,426 @@ class AddEventScreenState extends State<AddEventScreen> {
                                       difficultyLevel:
                                           _editedEvent.difficultyLevel,
                                       id: _editedEvent.id,
-                                      maxParticipants: int.parse(value),
+                                      maxParticipants:
+                                          _editedEvent.maxParticipants,
                                       name: _editedEvent.name,
-                                      startingPintLat:
-                                          _editedEvent.startingPintLat,
+                                      startingPintLat: markerPosition.latitude,
                                       startingPintLong:
-                                          _editedEvent.startingPintLong,
+                                          markerPosition.longitude,
                                     );
                                   }
-                                },
+                                });
+                              });
+                            },
+                            // initialValue: markerPosition.toString(),,
+                            child: Container(
+                              // width: MediaQuery.of(context).size.width /
+                              //     (2.5 + multiDeviceSupport.tablet * 0.3),
+                              decoration: BoxDecoration(
+                                color: colors.onPrimary,
+                                border: Border.all(color: colors.onPrimary),
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(10.0),
+                                ),
+                              ),
+                              height: 60,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: markerPosition == LatLng(0, 0)
+                                            ? Text(
+                                                'Search Location',
+                                                style: TextStyle(
+                                                    color: colors
+                                                        .secondaryTextColor,
+                                                    fontSize:
+                                                        multiDeviceSupport.h2),
+                                              )
+                                            : Text(
+                                                'Location Selected',
+                                                style: TextStyle(
+                                                    color: colors.primaryColor),
+                                              )),
+                                    Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              Position position = locationHelper
+                                                  .getLastKnownPositionAndUpdate();
+                                              if (mounted) {
+                                                setState(() {
+                                                  markerPosition = LatLng(
+                                                      position.latitude,
+                                                      position.longitude);
+                                                  _editedEvent = Event(
+                                                    adminId:
+                                                        _editedEvent.adminId,
+                                                    averageDuration:
+                                                        _editedEvent
+                                                            .averageDuration,
+                                                    averageLength: _editedEvent
+                                                        .averageLength,
+                                                    averagePaceMin: _editedEvent
+                                                        .averagePaceMin,
+                                                    averagePaceSec: _editedEvent
+                                                        .averagePaceSec,
+                                                    createdAt:
+                                                        _editedEvent.createdAt,
+                                                    currentParticipants:
+                                                        _editedEvent
+                                                            .currentParticipants,
+                                                    date: _editedEvent.date,
+                                                    difficultyLevel:
+                                                        _editedEvent
+                                                            .difficultyLevel,
+                                                    id: _editedEvent.id,
+                                                    maxParticipants:
+                                                        _editedEvent
+                                                            .maxParticipants,
+                                                    name: _editedEvent.name,
+                                                    startingPintLat:
+                                                        markerPosition.latitude,
+                                                    startingPintLong:
+                                                        markerPosition
+                                                            .longitude,
+                                                  );
+                                                });
+                                              } else {}
+                                            },
+                                            icon: !widget._isSearching
+                                                ? Icon(
+                                                    Icons.location_on_outlined,
+                                                    color: colors
+                                                        .secondaryTextColor,
+                                                  )
+                                                : const CustomLoadingCircleIcon())),
+                                  ],
+                                ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: padding,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: Container(
-                          width: 70,
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                backgroundColor: colors.primaryColor,
-                                primary: colors.onPrimary,
-                                textStyle:
-                                    TextStyle(fontSize: multiDeviceSupport.h2),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 10)),
-                            onPressed: _saveForm,
-                            child: const Text('Create'),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: padding,
-                      ),
-                    ],
+                        const SizedBox(
+                          height: padding,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 0,
+                          ),
+                          child: Text(
+                            'Length and duration: ',
+                            style: TextStyle(
+                                color: colors.primaryTextColor,
+                                fontSize: multiDeviceSupport.h2),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          child: Text(
+                            'Set how long the run is going to be and the time it will take',
+                            style: TextStyle(
+                                color: colors.secondaryTextColor,
+                                fontSize: multiDeviceSupport.h4),
+                          ),
+                        ),
+                        // Distance and Duration
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width /
+                                    (2.5 + multiDeviceSupport.tablet * 0.3),
+                                child: TextFormField(
+                                  key: const Key("distance"),
+                                  keyboardType: TextInputType.number,
+                                  initialValue: '',
+                                  cursorColor: colors.primaryTextColor,
+                                  style:
+                                      TextStyle(color: colors.primaryTextColor),
+                                  decoration: textFormDecoration(
+                                      'Distance (km)', context),
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_durationFocusNode);
+                                  },
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please provide a value.';
+                                    } else if (int.parse(value) > 200) {
+                                      return 'Distance should be less than 200km.';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    if (value != null) {
+                                      _editedEvent = Event(
+                                        adminId: _editedEvent.adminId,
+                                        averageDuration:
+                                            _editedEvent.averageDuration,
+                                        averageLength: int.parse(value),
+                                        averagePaceMin:
+                                            _editedEvent.averagePaceMin,
+                                        averagePaceSec:
+                                            _editedEvent.averagePaceSec,
+                                        createdAt: _editedEvent.createdAt,
+                                        currentParticipants:
+                                            _editedEvent.currentParticipants,
+                                        date: _editedEvent.date,
+                                        difficultyLevel:
+                                            _editedEvent.difficultyLevel,
+                                        id: _editedEvent.id,
+                                        maxParticipants:
+                                            _editedEvent.maxParticipants,
+                                        name: _editedEvent.name,
+                                        startingPintLat:
+                                            _editedEvent.startingPintLat,
+                                        startingPintLong:
+                                            _editedEvent.startingPintLong,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width /
+                                    (2.5 + multiDeviceSupport.tablet * 0.3),
+                                child: TextFormField(
+                                  key: const Key("duration"),
+                                  focusNode: _durationFocusNode,
+                                  keyboardType: TextInputType.number,
+                                  initialValue: '',
+                                  cursorColor: colors.primaryTextColor,
+                                  style:
+                                      TextStyle(color: colors.primaryTextColor),
+                                  decoration: textFormDecoration(
+                                      'Duration (minutes)', context),
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_participantsFocusNode);
+                                  },
+                                  validator: (value) {
+                                    if (value?.length == 0) {
+                                      return 'Please provide a value.';
+                                    } else if (int.parse(value!) > 200) {
+                                      return 'Duration should be less than 200 minutes.';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    if (value != null) {
+                                      _editedEvent = Event(
+                                        adminId: _editedEvent.adminId,
+                                        averageDuration: int.parse(value),
+                                        averageLength:
+                                            _editedEvent.averageLength,
+                                        averagePaceMin:
+                                            _editedEvent.averagePaceMin,
+                                        averagePaceSec:
+                                            _editedEvent.averagePaceSec,
+                                        createdAt: _editedEvent.createdAt,
+                                        currentParticipants:
+                                            _editedEvent.currentParticipants,
+                                        date: _editedEvent.date,
+                                        difficultyLevel:
+                                            _editedEvent.difficultyLevel,
+                                        id: _editedEvent.id,
+                                        maxParticipants:
+                                            _editedEvent.maxParticipants,
+                                        name: _editedEvent.name,
+                                        startingPintLat:
+                                            _editedEvent.startingPintLat,
+                                        startingPintLong:
+                                            _editedEvent.startingPintLong,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: padding,
+                        ),
+                        // PACE per ora non lo mettiamo, se non viene specificato il backend lo calcola automaticamente da distanza e km
+                        // oppure posso fare il calcolo in addEvent dentro la classe event in provider se non gli arriva pace
+                        // Padding(
+                        //   padding: const EdgeInsets.only(
+                        //     top: 10,
+                        //     left: 20.0,
+                        //     right: 20,
+                        //   ),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       SizedBox(
+                        //         width: MediaQuery.of(context).size.width / 2.3,
+                        //         child: TextFormField(
+                        //           keyboardType: TextInputType.number,
+                        //           initialValue: '',
+                        //           cursorColor: colors.primaryTextColor,
+                        //           style: TextStyle(color: colors.primaryTextColor),
+                        //           decoration:
+                        //               textFormDecoration('Pace (mins/km)', context),
+                        //           textInputAction: TextInputAction.next,
+                        //           onFieldSubmitted: (_) {
+                        //             FocusScope.of(context)
+                        //                 .requestFocus(_durationFocusNode);
+                        //           },
+                        //           validator: (value) {
+                        //             if (value?.length == 0) {
+                        //               return 'Please provide a value.';
+                        //             }
+                        //             return null;
+                        //           },
+                        //           onSaved: (value) {
+                        //             if (value != null) {
+                        //               _editedEvent = Event(
+                        //                 adminId: _editedEvent.adminId,
+                        //                 averageDuration: _editedEvent.averageDuration,
+                        //                 averageLength: _editedEvent.averageLength,
+                        //                 averagePace: _editedEvent.averagePace,
+                        //                 createdAt: _editedEvent.createdAt,
+                        //                 currentParticipants:
+                        //                     _editedEvent.currentParticipants,
+                        //                 date: _editedEvent.date,
+                        //                 difficultyLevel: _editedEvent.difficultyLevel,
+                        //                 id: _editedEvent.id,
+                        //                 maxParticipants: _editedEvent.maxParticipants,
+                        //                 name: _editedEvent.name,
+                        //                 startingPintLat: _editedEvent.startingPintLat,
+                        //                 startingPintLong: _editedEvent.startingPintLong,
+                        //               );
+                        //             }
+                        //           },
+                        //         ),
+                        //       ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          child: Text(
+                            'Participants: ',
+                            style: TextStyle(
+                                color: colors.primaryTextColor,
+                                fontSize: multiDeviceSupport.h2),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          child: Text(
+                            'Depending on the location, set the maximum number of participants',
+                            style: TextStyle(
+                                color: colors.secondaryTextColor,
+                                fontSize: multiDeviceSupport.h4),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width /
+                                    (2.5 + multiDeviceSupport.tablet * 0.3),
+                                child: TextFormField(
+                                  // focusNode: _durationFocusNode,
+                                  keyboardType: TextInputType.number,
+                                  initialValue: '',
+                                  cursorColor: colors.primaryTextColor,
+                                  style:
+                                      TextStyle(color: colors.primaryTextColor),
+                                  decoration: textFormDecoration(
+                                      'Max participants', context),
+                                  textInputAction: TextInputAction.next,
+
+                                  validator: (value) {
+                                    if (value?.length == 0) {
+                                      return 'Please provide a value.';
+                                    } else if (int.tryParse(value!)! > 200) {
+                                      return 'Max participants allowed is 200';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    if (value != null) {
+                                      _editedEvent = Event(
+                                        adminId: _editedEvent.adminId,
+                                        averageDuration:
+                                            _editedEvent.averageDuration,
+                                        averageLength:
+                                            _editedEvent.averageLength,
+                                        averagePaceMin:
+                                            _editedEvent.averagePaceMin,
+                                        averagePaceSec:
+                                            _editedEvent.averagePaceSec,
+                                        createdAt: _editedEvent.createdAt,
+                                        currentParticipants:
+                                            _editedEvent.currentParticipants,
+                                        date: _editedEvent.date,
+                                        difficultyLevel:
+                                            _editedEvent.difficultyLevel,
+                                        id: _editedEvent.id,
+                                        maxParticipants: int.parse(value),
+                                        name: _editedEvent.name,
+                                        startingPintLat:
+                                            _editedEvent.startingPintLat,
+                                        startingPintLong:
+                                            _editedEvent.startingPintLong,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: padding,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: Container(
+                            // width: 70,
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  backgroundColor: colors.primaryColor,
+                                  primary: colors.onPrimary,
+                                  textStyle: TextStyle(
+                                      fontSize: multiDeviceSupport.h2),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 10)),
+                              onPressed: _saveForm,
+                              child: const Text('Create'),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: padding,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
