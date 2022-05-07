@@ -36,7 +36,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
   Color _gridColor = Colors.deepOrange.shade900;
   var _isInit = true;
   var _isLoading = false;
-
+  bool _areSorted = false;
   @override
   void initState() {
     super.initState();
@@ -51,7 +51,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
       int userId = Provider.of<User>(context, listen: false).userId ?? -1;
 
       final events = Provider.of<Events>(context, listen: true);
-
+      widget._sortMenu = false;
       events.fetchAndSetBookedEvents(userId).then((_) {
         setState(() {
           widget._bookedEvents = events.bookedEvents;
@@ -224,19 +224,22 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
     final events = Provider.of<Events>(context);
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
+    // This if is used to check if a user has pushed a sort button.
+    //If its the case, the events are not to be reloaded from the provider.
+    if (!_areSorted) {
+      widget._bookedEvents = events.bookedEvents;
 
-    // if (widget._bookedEvents.length == 0) {
-    widget._bookedEvents = events.bookedEvents;
+      widget._futureBookedEvents = widget._bookedEvents
+          .where((element) => element.date.isAfter(DateTime.now()))
+          .toList();
 
-    widget._futureBookedEvents = widget._bookedEvents
-        .where((element) => element.date.isAfter(DateTime.now()))
-        .toList();
-
-    widget._pastBookedEvents = widget._bookedEvents
-        .where((element) => element.date.isBefore(DateTime.now()))
-        .toList();
-    // }
-
+      widget._pastBookedEvents = widget._bookedEvents
+          .where((element) => element.date.isBefore(DateTime.now()))
+          .toList();
+    }
+    // areSorted is used to tell if the build method was called by a sort button setState().
+    //If it is true the events should not be reloaded but then it is to be set to false for future use.
+    _areSorted = false;
     double _flexibleSpaceBarHeight;
 
     if (widget._sortMenu) {
@@ -411,6 +414,7 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
                                         ],
                                         onTap: (activeSortButton, eventLists) {
                                           setState(() {
+                                            _areSorted = true;
                                             // print(widget._suggestedEvents[0].name);
                                             widget._currentSortButton =
                                                 activeSortButton;
