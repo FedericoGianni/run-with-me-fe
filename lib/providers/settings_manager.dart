@@ -162,58 +162,66 @@ class UserSettings with ChangeNotifier {
 
   Future<void> _checkUserCredentials() async {
     print("checking user crendentials...");
-    String? username = await secureStorage.read(key: 'username');
-    String? password = await secureStorage.read(key: 'password');
-    if (username != null && password != null) {
-      try {
-        // Makes the http request for the login
-        var request = http.MultipartRequest(
-            'POST', Uri.parse(config.getBaseUrl() + '/login'));
-        request.fields.addAll({
-          'username': username,
-          'password': password,
-        });
-        http.StreamedResponse response = await request
-            .send()
-            .timeout(Duration(seconds: config.getApiTimeout()));
+    try {
+      String? username = await secureStorage.read(key: 'username');
+      String? password = await secureStorage.read(key: 'password');
 
-        if (response.statusCode == 200) {
-          // Decode the jwt from the response
-          var jwt = json.decode(await response.stream.bytesToString());
-          // Saves users info into safe storage for future use
-          print(jwt);
-          await secureStorage.write(key: 'jwt', value: jwt['access_token']);
-          await secureStorage.write(
-              key: 'userId', value: jwt['user_id'].toString());
-          // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
-          // Saves the new isLoggedIn value to file and notify all listeners
-          FileManager()
-              .writeFile(json.encode(settings.toJson()), settingsFileName);
-          notifyListeners();
-          user.userId = jwt['user_id'];
-          print("setting user info");
+      if (username != null && password != null) {
+        try {
+          // Makes the http request for the login
+          var request = http.MultipartRequest(
+              'POST', Uri.parse(config.getBaseUrl() + '/login'));
+          request.fields.addAll({
+            'username': username,
+            'password': password,
+          });
+          http.StreamedResponse response = await request
+              .send()
+              .timeout(Duration(seconds: config.getApiTimeout()));
 
-          settings.isLoggedIn = await user.getUserInfo();
-        } else {
+          if (response.statusCode == 200) {
+            // Decode the jwt from the response
+            var jwt = json.decode(await response.stream.bytesToString());
+            // Saves users info into safe storage for future use
+            print(jwt);
+            await secureStorage.write(key: 'jwt', value: jwt['access_token']);
+            await secureStorage.write(
+                key: 'userId', value: jwt['user_id'].toString());
+            // Set isLoggedIn to true, This variable is used internally as a soft lock to avoid checking for the jwt every time
+            // Saves the new isLoggedIn value to file and notify all listeners
+            FileManager()
+                .writeFile(json.encode(settings.toJson()), settingsFileName);
+            notifyListeners();
+            user.userId = jwt['user_id'];
+            print("setting user info");
+
+            settings.isLoggedIn = await user.getUserInfo();
+          } else {
+            settings.isLoggedIn = false;
+            FileManager()
+                .writeFile(json.encode(settings.toJson()), settingsFileName);
+            notifyListeners();
+          }
+        } catch (error) {
           settings.isLoggedIn = false;
           FileManager()
               .writeFile(json.encode(settings.toJson()), settingsFileName);
           notifyListeners();
+          print(
+              "Could not get user Info, probably because user is not logged in");
         }
-      } catch (error) {
+      } else {
+        print("Login credentials are empty");
+        // IsLoggedIn is set to false so that the app knows not to render registered content
         settings.isLoggedIn = false;
         FileManager()
             .writeFile(json.encode(settings.toJson()), settingsFileName);
         notifyListeners();
-        print(
-            "Could not get user Info, probably because user is not logged in");
       }
-    } else {
-      print("Login credentials are empty");
-      // IsLoggedIn is set to false so that the app knows not to render registered content
-      settings.isLoggedIn = false;
-      FileManager().writeFile(json.encode(settings.toJson()), settingsFileName);
-      notifyListeners();
+    } catch (_) {
+      print(_);
+      print("SSL ERROR: DELETING ALL USER ASSOCIATED KEYS");
+      secureStorage.deleteAll();
     }
   }
 
