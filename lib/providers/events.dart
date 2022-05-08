@@ -80,21 +80,23 @@ class Events with ChangeNotifier {
 
   // add an event to the recently viewed event list
   // only keep 10 events, if limit is exceeded replace the oldest
-  void addRecentEvent(Event event) {
-    //only add event if not already present in recently viewed list
-    if (!_recentEvents.contains(event)) {
-      if (_recentEvents.length < MAX_RECENT_EVENTS_LENGTH) {
-        _recentEvents.add(event);
-      } else {
-        //TODO not sure about this logic
-        _recentEvents.removeAt(0);
-        // shift all remaining events to the left of 1
-        _recentEvents = _recentEvents.sublist(1, 9);
-        // add new event
-        _recentEvents.add(event);
-      }
-      notifyListeners();
+  void addRecentEvent(Event newEvent) {
+    // if recentEvents is empty just add the first otherwise forEach never iterates
+    if (_recentEvents.isEmpty) {
+      _recentEvents.add(newEvent);
+    } else if (_recentEvents.length < MAX_RECENT_EVENTS_LENGTH) {
+      // if list is not and event is already present, update
+      _recentEvents.removeWhere((element) => element.id == newEvent.id);
+      _recentEvents.add(newEvent);
+    } else {
+      // recent event is full
+      _recentEvents.removeAt(0);
+      // shift all remaining events to the left of 1
+      _recentEvents = _recentEvents.sublist(1, 9);
+      // add new event
+      addRecentEvent(newEvent);
     }
+    notifyListeners();
   }
 
   Future<void> fetchAndSetSuggestedEvents(
