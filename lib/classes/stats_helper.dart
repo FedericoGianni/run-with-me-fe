@@ -19,11 +19,15 @@ class StatsHelper {
     Provider.of<Events>(_context, listen: false)
         .bookedEvents
         .where((element) => element.date.isBefore(DateTime.now()))
+        .where((element) =>
+            DateHelper.diffInDays(DateTime.now(), element.date) <=
+            lastDaysStats)
         .toList()
         .forEach((event) {
-      if (DateHelper.diffInDays(event.date, DateTime.now()) <= lastDaysStats) {
-        kms += event.averageLength;
-      }
+      // print("adding " + event.averageLength.toString() + " to stats");
+      // print("diffInDays: " +
+      //     DateHelper.diffInDays(DateTime.now(), event.date).toString());
+      kms += event.averageLength;
     });
     return kms;
   }
@@ -34,11 +38,12 @@ class StatsHelper {
     Provider.of<Events>(_context, listen: false)
         .bookedEvents
         .where((element) => element.date.isBefore(DateTime.now()))
+        .where((element) =>
+            DateHelper.diffInDays(DateTime.now(), element.date) <=
+            lastDaysStats)
         .toList()
         .forEach((event) {
-      if (DateHelper.diffInDays(event.date, DateTime.now()) <= lastDaysStats) {
-        mins += event.averageDuration;
-      }
+      mins += event.averageDuration;
     });
     return mins;
   }
