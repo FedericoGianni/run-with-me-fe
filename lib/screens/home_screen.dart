@@ -1150,8 +1150,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: screenHeight / 6,
                 width: double.infinity,
                 padding: EdgeInsets.only(
-                  top: 50 + multiDeviceSupport.tablet * 10,
-                  bottom: 20 + multiDeviceSupport.tablet * 20,
+                  top: 50 +
+                      multiDeviceSupport.tablet * 10 -
+                      10 * multiDeviceSupport.isLandscape,
+                  bottom: 20 +
+                      multiDeviceSupport.tablet * 20 -
+                      10 * multiDeviceSupport.isLandscape,
                 ),
                 child: Image.asset(
                   "assets/icons/logo_gradient.png",

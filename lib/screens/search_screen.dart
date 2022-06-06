@@ -67,6 +67,7 @@ class SearchScreenState extends State<SearchScreen> {
 
   var _isInit = true;
   var _isLoading = false;
+  bool _areSorted = false;
 
   @override
   void initState() {
@@ -126,9 +127,9 @@ class SearchScreenState extends State<SearchScreen> {
               element.maxParticipants != element.currentParticipants)
           .toList();
     }
-    if (mounted) {
-      setState(() {});
-    }
+    // if (mounted) {
+    //   setState(() {});
+    // }
     // }
 
     await events.fetchAndSetSuggestedEvents(
@@ -383,13 +384,16 @@ class SearchScreenState extends State<SearchScreen> {
     } else {
       _flexibleSpaceBarHeight = screenHeight / 20;
     }
-
+    var toolbarHeight = screenHeight / 6 - multiDeviceSupport.tablet * 30;
+    if (toolbarHeight < 150) {
+      toolbarHeight = 150;
+    }
+    ;
     return SliverAppBar(
       stretch: false,
-      toolbarHeight: screenHeight / 6 - multiDeviceSupport.tablet * 30,
-
+      toolbarHeight: toolbarHeight,
       title: GradientAppBar(
-        screenHeight / 6 - multiDeviceSupport.tablet * 30,
+        toolbarHeight,
         [
           SizedBox(
             height: 10 + multiDeviceSupport.tablet * 20,
@@ -569,6 +573,7 @@ class SearchScreenState extends State<SearchScreen> {
                         ],
                         onTap: (activeSortButton, eventLists) {
                           setState(() {
+                            _areSorted = true;
                             // print(widget._suggestedEvents[0].name);
                             widget._currentSortButton = activeSortButton;
                             widget._resultEvents = eventLists[0];
@@ -604,6 +609,11 @@ class SearchScreenState extends State<SearchScreen> {
     } else {
       _flexibleSpaceBarHeight = screenHeight / 20;
     }
+
+    if (!_areSorted) {
+      widget._resultEvents = events.resultEvents;
+    }
+    _areSorted = false;
 
     if (_isLoading) {
       return const CustomLoadingAnimation();
