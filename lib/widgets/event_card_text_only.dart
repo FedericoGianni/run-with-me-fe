@@ -157,19 +157,21 @@ class EventItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 10 + multiDeviceSupport.tablet * 10,
-                    vertical: 0),
-                height: 15,
-                child: Text(
-                  _getDistanceAsString(locationHelper),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      height: 0.3,
-                      color: colors.secondaryTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: multiDeviceSupport.h4),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 10 + multiDeviceSupport.tablet * 10,
+                      vertical: 0),
+                  height: 15 + multiDeviceSupport.isLandscape == 1 ? 20 : 0,
+                  child: Text(
+                    _getDistanceAsString(locationHelper),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        height: 0.3,
+                        color: colors.secondaryTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: multiDeviceSupport.h4),
+                  ),
                 ),
               ),
             ],
@@ -180,27 +182,30 @@ class EventItem extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: 10 + multiDeviceSupport.tablet * 10,
-                    vertical: 2),
+                    vertical: 2 + multiDeviceSupport.isLandscape == 1 ? 20 : 0),
                 child: Rating(
                   value: event.difficultyLevel,
                   color: colorGradient,
                   size: multiDeviceSupport.h4,
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(
-                    left: 10 + multiDeviceSupport.tablet * 10,
-                    top: 10,
-                    right: 10 + multiDeviceSupport.tablet * 10),
-                height: 15,
-                child: Text(
-                  event.averageLength.toString() + ' km',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      height: 0.3,
-                      color: colors.secondaryTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: multiDeviceSupport.h4),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(
+                      left: 10 + multiDeviceSupport.tablet * 10,
+                      top: 10,
+                      right: 10 + multiDeviceSupport.tablet * 10),
+                  height: 15 + multiDeviceSupport.isLandscape == 1 ? 20 : 0,
+                  child: Text(
+                    event.averageLength.toString() + ' km',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        height:
+                            0.3 + multiDeviceSupport.isLandscape == 1 ? 1 : 0,
+                        color: colors.secondaryTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: multiDeviceSupport.h4),
+                  ),
                 ),
               ),
             ],
