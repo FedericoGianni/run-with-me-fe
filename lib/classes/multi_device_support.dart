@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class MultiDeviceSupport {
   final context;
+  var currentOrientation;
   double screenHeight = 0.0;
   double screenWidth = 0.0;
   double _title = 0.0;
@@ -23,6 +24,7 @@ class MultiDeviceSupport {
   void init() {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
+
     if (screenWidth < 800) {
       _columnPadding = screenWidth / 7;
       _paddingTop2 = screenHeight / 50;
@@ -47,6 +49,14 @@ class MultiDeviceSupport {
       _h3 = 18;
       _h4 = 16;
       _h5 = 14;
+    }
+  }
+
+  double get isLandscape {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 

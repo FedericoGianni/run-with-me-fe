@@ -28,8 +28,8 @@ import 'widgets/splash.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
@@ -58,6 +58,8 @@ class _MyAppState extends State<MyApp> {
     userSettings.setUser(userInfo);
     userSettings.setColorScheme(customColorScheme);
     // customColorScheme.setDarkMode();
+    // SystemChrome.setPreferredOrientations(
+    //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     if (splash == true) {
       userSettings.loadSettings().then((value) {
