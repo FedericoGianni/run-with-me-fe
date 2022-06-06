@@ -1144,10 +1144,12 @@ class _HomeScreenState extends State<HomeScreen> {
           slivers: [
             SliverAppBar(
               stretch: false,
-              toolbarHeight: screenHeight / 6 - multiDeviceSupport.tablet * 30,
+              toolbarHeight: screenHeight / 6 -
+                  multiDeviceSupport.tablet * 30 +
+                  30 * multiDeviceSupport.isLandscape,
               title: Container(
                 color: colors.onPrimary,
-                height: screenHeight / 6,
+                height: screenHeight / 6 + 30 * multiDeviceSupport.isLandscape,
                 width: double.infinity,
                 padding: EdgeInsets.only(
                   top: 50 +
@@ -1166,7 +1168,8 @@ class _HomeScreenState extends State<HomeScreen> {
               titleSpacing: 0,
               expandedHeight: screenHeight / 6 -
                   multiDeviceSupport.tablet * 30 +
-                  _flexibleSpaceBarHeight,
+                  _flexibleSpaceBarHeight +
+                  30 * multiDeviceSupport.isLandscape,
               backgroundColor: colors.background,
 
               // back up the list of items.

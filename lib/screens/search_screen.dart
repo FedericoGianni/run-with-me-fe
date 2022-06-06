@@ -380,11 +380,15 @@ class SearchScreenState extends State<SearchScreen> {
     }
 
     if (widget._sortMenu) {
-      _flexibleSpaceBarHeight = screenHeight / 7.5;
+      _flexibleSpaceBarHeight =
+          screenHeight / 7.5 + multiDeviceSupport.isLandscape * 20;
     } else {
-      _flexibleSpaceBarHeight = screenHeight / 20;
+      _flexibleSpaceBarHeight =
+          screenHeight / 20 + multiDeviceSupport.isLandscape * 20;
     }
-    var toolbarHeight = screenHeight / 6 - multiDeviceSupport.tablet * 30;
+    var toolbarHeight = screenHeight / 6 -
+        multiDeviceSupport.tablet * 30 +
+        multiDeviceSupport.isLandscape * 50;
     if (toolbarHeight < 150) {
       toolbarHeight = 150;
     }
@@ -396,7 +400,9 @@ class SearchScreenState extends State<SearchScreen> {
         toolbarHeight,
         [
           SizedBox(
-            height: 10 + multiDeviceSupport.tablet * 20,
+            height: 10 +
+                multiDeviceSupport.tablet * 20 -
+                multiDeviceSupport.isLandscape * 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -443,7 +449,8 @@ class SearchScreenState extends State<SearchScreen> {
       titleSpacing: 0,
       expandedHeight: screenHeight / 6 -
           multiDeviceSupport.tablet * 30 +
-          _flexibleSpaceBarHeight,
+          _flexibleSpaceBarHeight +
+          multiDeviceSupport.isLandscape * 50,
       backgroundColor: colors.background,
 
       // back up the list of items.
@@ -465,7 +472,8 @@ class SearchScreenState extends State<SearchScreen> {
                   children: [
                     Container(
                       padding: EdgeInsets.only(left: 10),
-                      height: screenHeight / 20,
+                      height: screenHeight / 20 +
+                          multiDeviceSupport.isLandscape * 20,
                       width: 100 + multiDeviceSupport.tablet * 60,
                       child: TextButton(
                         style: TextButton.styleFrom(
