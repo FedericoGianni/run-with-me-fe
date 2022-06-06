@@ -10,6 +10,7 @@ import 'package:runwithme/providers/user.dart';
 import 'package:runwithme/widgets/custom_alert_dialog.dart';
 import 'package:runwithme/widgets/splash.dart';
 
+import 'classes/multi_device_support.dart';
 import 'themes/custom_theme.dart';
 import 'widgets/event_card_text_only.dart';
 import 'screens/tabs_screen.dart';
@@ -58,8 +59,8 @@ class _MyAppState extends State<MyApp> {
     userSettings.setUser(userInfo);
     userSettings.setColorScheme(customColorScheme);
     // customColorScheme.setDarkMode();
-    // SystemChrome.setPreferredOrientations(
-    //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     if (splash == true) {
       userSettings.loadSettings().then((value) {
