@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MultiDeviceSupport {
   final context;
@@ -49,6 +50,24 @@ class MultiDeviceSupport {
       _h3 = 18;
       _h4 = 16;
       _h5 = 14;
+    }
+  }
+
+  void setPossibleOrientations() {
+    print('DImensions');
+    print(screenHeight);
+    print(screenWidth);
+    if (_tablet == 1) {
+      print("Allowing Landscape mode");
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     }
   }
 
