@@ -389,10 +389,7 @@ class SearchScreenState extends State<SearchScreen> {
     var toolbarHeight = screenHeight / 6 -
         multiDeviceSupport.tablet * 30 +
         multiDeviceSupport.isLandscape * 50;
-    if (toolbarHeight < 150) {
-      toolbarHeight = 150;
-    }
-    ;
+
     return SliverAppBar(
       stretch: false,
       toolbarHeight: toolbarHeight,
@@ -613,9 +610,11 @@ class SearchScreenState extends State<SearchScreen> {
     multiDeviceSupport.init();
 
     if (widget._sortMenu) {
-      _flexibleSpaceBarHeight = screenHeight / 7.5;
+      _flexibleSpaceBarHeight =
+          screenHeight / 7.5 + multiDeviceSupport.isLandscape * 20;
     } else {
-      _flexibleSpaceBarHeight = screenHeight / 20;
+      _flexibleSpaceBarHeight =
+          screenHeight / 20 + multiDeviceSupport.isLandscape * 20;
     }
 
     if (!_areSorted) {
@@ -644,7 +643,8 @@ class SearchScreenState extends State<SearchScreen> {
                 width: double.infinity,
                 height: screenHeight / 6 +
                     _flexibleSpaceBarHeight -
-                    multiDeviceSupport.tablet * 12,
+                    multiDeviceSupport.tablet * 12 +
+                    multiDeviceSupport.isLandscape * 40,
                 child: CustomScrollView(
                   slivers: [
                     _buildAppbar(
@@ -660,7 +660,8 @@ class SearchScreenState extends State<SearchScreen> {
                 height: screenHeight -
                     screenHeight / 6 -
                     _flexibleSpaceBarHeight -
-                    58,
+                    58 -
+                    multiDeviceSupport.isLandscape * 40,
               ),
             ],
           ),
