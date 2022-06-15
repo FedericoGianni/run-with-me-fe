@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';
+import '../classes/multi_device_support.dart';
 import '../themes/custom_colors.dart';
 import 'search_event_bottomsheet.dart';
 import '../providers/color_scheme.dart';
@@ -18,6 +19,10 @@ class SearchButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
 
     return GestureDetector(
       onTap: () {
@@ -28,6 +33,11 @@ class SearchButton extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                     top: const Radius.circular(15))),
             context: context,
+            constraints: BoxConstraints(
+              maxWidth: multiDeviceSupport.isLandscape == 1
+                  ? screenWidth / 1.2
+                  : double.infinity,
+            ),
             builder: (_) {
               return SearchEventBottomSheet(
                 formValues: formValues,

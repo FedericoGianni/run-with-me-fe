@@ -60,6 +60,140 @@ class UserScreenState extends State<UserScreen> {
     });
   }
 
+  List<Widget> _buildAppbar() {
+    final colors = Provider.of<CustomColorScheme>(context);
+    var settings = Provider.of<UserSettings>(context);
+    final user = Provider.of<User>(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
+    if (multiDeviceSupport.isLandscape == 1) {
+      return [
+        Row(
+          children: [
+            Container(
+              width: screenWidth / 3,
+              padding: EdgeInsets.only(
+                  top: 25 - 18 * multiDeviceSupport.tablet,
+                  left: 20,
+                  bottom: 5),
+              child: Text(
+                (user.username ?? 'No Name'),
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  color: colors.titleColor,
+                  fontSize: multiDeviceSupport.title,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Container(
+                  width: screenWidth / 8,
+                  child: Text(
+                    'USER ID: ' + (user.userId.toString()),
+                    style: TextStyle(
+                      overflow: TextOverflow.clip,
+                      color: colors.titleColor,
+                      fontSize: multiDeviceSupport.h3,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: screenWidth / 8,
+                  child: Text(
+                    'Since: ' +
+                        user.createdAt!.toLocal().day.toString() +
+                        '/' +
+                        user.createdAt!.toLocal().month.toString() +
+                        '/' +
+                        user.createdAt!.toLocal().year.toString(),
+                    style: TextStyle(
+                      overflow: TextOverflow.clip,
+                      color: colors.titleColor,
+                      fontSize: multiDeviceSupport.h3,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+      ];
+    } else {
+      return [
+        Row(
+          children: [
+            Container(
+              width: screenWidth,
+              padding: EdgeInsets.only(
+                  top: 25 - 18 * multiDeviceSupport.tablet,
+                  left: 20,
+                  bottom: 5),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: screenWidth / 1.1,
+                        child: Text(
+                          (user.username ?? 'No Name'),
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            color: colors.titleColor,
+                            fontSize: multiDeviceSupport.title,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Text(
+                          'USER ID: ' + (user.userId.toString()),
+                          style: TextStyle(
+                            overflow: TextOverflow.clip,
+                            color: colors.titleColor,
+                            fontSize: multiDeviceSupport.h3,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 0, left: 20 + multiDeviceSupport.tablet * 40),
+                        child: Text(
+                          'Since: ' +
+                              user.createdAt!.toLocal().day.toString() +
+                              '/' +
+                              user.createdAt!.toLocal().month.toString() +
+                              '/' +
+                              user.createdAt!.toLocal().year.toString(),
+                          style: TextStyle(
+                            overflow: TextOverflow.clip,
+                            color: colors.titleColor,
+                            fontSize: multiDeviceSupport.h3,
+                          ),
+                        ),
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.start,
+                  ),
+                ],
+              ),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+      ];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Provider.of<CustomColorScheme>(context);
@@ -88,7 +222,7 @@ class UserScreenState extends State<UserScreen> {
                 slivers: [
                   SliverAppBar(
                     pinned: true,
-                    collapsedHeight: 140,
+                    collapsedHeight: 140 - 20 * multiDeviceSupport.isLandscape,
                     expandedHeight: 220,
                     toolbarHeight: 10,
                     floating: false,
@@ -123,127 +257,10 @@ class UserScreenState extends State<UserScreen> {
                                 stops: const [0.0, 1.0],
                                 tileMode: TileMode.clamp),
                           ),
-                          height: 100,
+                          height: 100 - 20 * multiDeviceSupport.isLandscape,
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: screenWidth,
-                                    padding: EdgeInsets.only(
-                                        top:
-                                            25 - 18 * multiDeviceSupport.tablet,
-                                        left: 20,
-                                        bottom: 5),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              width: screenWidth / 1.1,
-                                              child: Text(
-                                                (user.username ?? 'No Name'),
-                                                style: TextStyle(
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  color: colors.titleColor,
-                                                  fontSize:
-                                                      multiDeviceSupport.title,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10, bottom: 10),
-                                              child: Text(
-                                                'USER ID: ' +
-                                                    (user.userId.toString()),
-                                                style: TextStyle(
-                                                  overflow: TextOverflow.clip,
-                                                  color: colors.titleColor,
-                                                  fontSize:
-                                                      multiDeviceSupport.h3,
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 0,
-                                                  left: 20 +
-                                                      multiDeviceSupport
-                                                              .tablet *
-                                                          40),
-                                              child: Text(
-                                                'Since: ' +
-                                                    user.createdAt!
-                                                        .toLocal()
-                                                        .day
-                                                        .toString() +
-                                                    '/' +
-                                                    user.createdAt!
-                                                        .toLocal()
-                                                        .month
-                                                        .toString() +
-                                                    '/' +
-                                                    user.createdAt!
-                                                        .toLocal()
-                                                        .year
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  overflow: TextOverflow.clip,
-                                                  color: colors.titleColor,
-                                                  fontSize:
-                                                      multiDeviceSupport.h3,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.symmetric(
-                                  //       horizontal: 20),
-                                  //   child: Container(
-                                  //     height: 35,
-                                  //     // width: 60,
-                                  //     child: TextButton(
-                                  //       child: Text(
-                                  //         'Edit',
-                                  //         style: TextStyle(
-                                  //           overflow: TextOverflow.clip,
-                                  //           color: colors.titleColor,
-                                  //           fontSize: multiDeviceSupport.h3,
-                                  //           fontWeight: FontWeight.bold,
-                                  //         ),
-                                  //       ),
-                                  //       onPressed: () {
-                                  //         print("HEEEEEEEEEEEEEEEE");
-                                  //       },
-                                  //     ),
-                                  //     decoration: BoxDecoration(
-                                  //         color: Colors.transparent,
-                                  //         border: Border.all(
-                                  //           color: colors.titleColor,
-                                  //           width: 1,
-                                  //         ),
-                                  //         borderRadius: BorderRadius.all(
-                                  //             Radius.circular(15))),
-                                  //   ),
-                                  // ),
-                                ],
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                              ),
-                              // Border line used for separation
+                              ..._buildAppbar(), // Border line used for separation
                             ],
                           ),
                         ),
@@ -484,7 +501,7 @@ class UserScreenState extends State<UserScreen> {
                                   padding: const EdgeInsets.only(
                                       top: 5, bottom: 15, right: 20),
                                   child: Text(
-                                    '1.014.005',
+                                    '1.021.001',
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       color: colors.secondaryTextColor,

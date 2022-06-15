@@ -95,7 +95,9 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
               ),
             ),
             Container(
-              height: 300 + multiDeviceSupport.tablet * 100,
+              height: 300 +
+                  multiDeviceSupport.tablet * 100 -
+                  multiDeviceSupport.isLandscape * 180,
               width: screenWidth,
               child: ScrollConfiguration(
                 behavior: CustomScrollBehavior(),

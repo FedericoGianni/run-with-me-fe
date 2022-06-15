@@ -90,6 +90,7 @@ class TabsScreenState extends State<TabsScreen> {
     final user = Provider.of<User>(context, listen: false);
     var multiDeviceSupport = MultiDeviceSupport(context);
     multiDeviceSupport.init();
+    multiDeviceSupport.setPossibleOrientations();
     locationHelper.setDefaultUserPosition(
       Position(
         longitude: user.cityLong ?? 0.0,
