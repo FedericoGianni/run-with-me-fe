@@ -619,6 +619,12 @@ class SearchScreenState extends State<SearchScreen> {
 
     if (!_areSorted) {
       widget._resultEvents = events.resultEvents;
+      if (!widget.formValues['show_full']) {
+        widget._resultEvents = widget._resultEvents
+            .where((element) =>
+                element.maxParticipants != element.currentParticipants)
+            .toList();
+      }
     }
     _areSorted = false;
 
