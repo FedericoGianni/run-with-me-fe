@@ -238,6 +238,7 @@ class Events with ChangeNotifier {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
+      notifyListeners();
       print(await response.stream.bytesToString());
       return true;
     } else {
@@ -261,6 +262,8 @@ class Events with ChangeNotifier {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
+      notifyListeners();
+
       print(await response.stream.bytesToString());
       return true;
     } else {

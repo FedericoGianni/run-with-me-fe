@@ -79,17 +79,20 @@ class EventItem extends StatelessWidget {
         child: Column(children: [
           // Title row
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Container(
-              padding: EdgeInsets.only(
-                  left: 10.0 + multiDeviceSupport.tablet * 10, top: 10),
-              width: screenWidth / ((2 + multiDeviceSupport.tablet) * view),
-              child: Text(
-                name,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: colors.primaryTextColor,
-                    fontSize: multiDeviceSupport.h2,
-                    fontWeight: FontWeight.w900),
+            Flexible(
+              child: Container(
+                padding: EdgeInsets.only(
+                    left: 10.0 + multiDeviceSupport.tablet * 10, top: 10),
+                // margin: EdgeInsets.only(right: 0),
+                // width: screenWidth / ((2 + multiDeviceSupport.tablet) * view),
+                child: Text(
+                  name,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: colors.primaryTextColor,
+                      fontSize: multiDeviceSupport.h2,
+                      fontWeight: FontWeight.w900),
+                ),
               ),
             ),
             Container(
@@ -120,76 +123,55 @@ class EventItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 10 + multiDeviceSupport.tablet * 10,
-                    vertical: 10),
-                height: 40 + multiDeviceSupport.tablet * 20,
-                width: screenWidth / 3 - multiDeviceSupport.tablet * 80,
-                child: Text(
-                  DateFormat.MEd()
-                          .format(
-                            DateTime.parse(event.date.toString()),
-                          )
-                          .toString() +
-                      ' at ' +
-                      DateFormat.Hm()
-                          .format(
-                            DateTime.parse(event.date.toString()),
-                          )
-                          .toString(),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      height: 1,
-                      color: colors.secondaryTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: multiDeviceSupport.h4),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 10 + multiDeviceSupport.tablet * 10,
+                      vertical: 10),
+                  height: 40 + multiDeviceSupport.tablet * 20,
+                  // width: screenWidth / 3 - multiDeviceSupport.tablet * 80,
+                  child: Text(
+                    DateFormat.MEd()
+                            .format(
+                              DateTime.parse(event.date.toString()),
+                            )
+                            .toString() +
+                        ' at ' +
+                        DateFormat.Hm()
+                            .format(
+                              DateTime.parse(event.date.toString()),
+                            )
+                            .toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        height: 1,
+                        color: colors.secondaryTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: multiDeviceSupport.h4),
+                  ),
                 ),
               ),
             ],
-            // trailing: SizedBox(
-            //   height: double.infinity,
-            //   child: Column(
-            //     children: [
-            //       Text(
-            //         event.currentParticipants.toString() +
-            //             '/' +
-            //             event.maxParticipants.toString(),
-            //         style: TextStyle(
-            //           color: _participantsColor,
-            //           fontWeight: FontWeight.w600,
-            //         ),
-            //       ),
-            //       const SizedBox(height: 10),
-            //       Text(
-            //         event.averageLength.toString() + ' km',
-            //         style: TextStyle(
-            //           color: colorGradient,
-            //           fontSize: 16,
-            //           fontWeight: FontWeight.w600,
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // ),
           ),
           // DIstance and lenght row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 10 + multiDeviceSupport.tablet * 10,
-                    vertical: 0),
-                height: 15,
-                child: Text(
-                  _getDistanceAsString(locationHelper),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      height: 0.3,
-                      color: colors.secondaryTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: multiDeviceSupport.h4),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 10 + multiDeviceSupport.tablet * 10,
+                      vertical: 0),
+                  height: 15 + multiDeviceSupport.isLandscape == 1 ? 20 : 0,
+                  child: Text(
+                    _getDistanceAsString(locationHelper),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        height: 0.3,
+                        color: colors.secondaryTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: multiDeviceSupport.h4),
+                  ),
                 ),
               ),
             ],
@@ -200,27 +182,30 @@ class EventItem extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: 10 + multiDeviceSupport.tablet * 10,
-                    vertical: 2),
+                    vertical: 2 + multiDeviceSupport.isLandscape == 1 ? 20 : 0),
                 child: Rating(
                   value: event.difficultyLevel,
                   color: colorGradient,
                   size: multiDeviceSupport.h4,
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(
-                    left: 10 + multiDeviceSupport.tablet * 10,
-                    top: 10,
-                    right: 10 + multiDeviceSupport.tablet * 10),
-                height: 15,
-                child: Text(
-                  event.averageLength.toString() + ' km',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      height: 0.3,
-                      color: colors.secondaryTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: multiDeviceSupport.h4),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(
+                      left: 10 + multiDeviceSupport.tablet * 10,
+                      top: 10,
+                      right: 10 + multiDeviceSupport.tablet * 10),
+                  height: 15 + multiDeviceSupport.isLandscape == 1 ? 20 : 0,
+                  child: Text(
+                    event.averageLength.toString() + ' km',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        height:
+                            0.3 + multiDeviceSupport.isLandscape == 1 ? 1 : 0,
+                        color: colors.secondaryTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: multiDeviceSupport.h4),
+                  ),
                 ),
               ),
             ],
