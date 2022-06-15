@@ -243,9 +243,11 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
     double _flexibleSpaceBarHeight;
 
     if (widget._sortMenu) {
-      _flexibleSpaceBarHeight = screenHeight / 7.5;
+      _flexibleSpaceBarHeight =
+          screenHeight / 7.5 + multiDeviceSupport.isLandscape * 20;
     } else {
-      _flexibleSpaceBarHeight = screenHeight / 20;
+      _flexibleSpaceBarHeight =
+          screenHeight / 20 + multiDeviceSupport.isLandscape * 20;
     }
 
     if (_rowColor == Colors.deepOrange.shade900) {
@@ -263,11 +265,14 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
             slivers: [
               SliverAppBar(
                 stretch: false,
-                toolbarHeight:
-                    screenHeight / 6 - multiDeviceSupport.tablet * 50,
+                toolbarHeight: screenHeight / 6 -
+                    multiDeviceSupport.tablet * 50 +
+                    multiDeviceSupport.isLandscape * 50,
                 title: Container(
                   color: colors.onPrimary,
-                  height: screenHeight / 6 - multiDeviceSupport.tablet * 50,
+                  height: screenHeight / 6 -
+                      multiDeviceSupport.tablet * 50 +
+                      multiDeviceSupport.isLandscape * 50,
                   width: double.infinity,
                   padding: const EdgeInsets.only(
                     top: 50,
@@ -282,7 +287,8 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
                 titleSpacing: 0,
                 expandedHeight: screenHeight / 6 +
                     _flexibleSpaceBarHeight -
-                    multiDeviceSupport.tablet * 50,
+                    multiDeviceSupport.tablet * 50 +
+                    multiDeviceSupport.isLandscape * 50,
                 backgroundColor: colors.background,
 
                 // back up the list of items.
@@ -306,7 +312,8 @@ class BookedEventsScreenState extends State<BookedEventsScreen> {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.only(left: 10),
-                                      height: screenHeight / 20,
+                                      height: screenHeight / 20 +
+                                          multiDeviceSupport.isLandscape * 10,
                                       width:
                                           80 + multiDeviceSupport.tablet * 35,
                                       child: TextButton(

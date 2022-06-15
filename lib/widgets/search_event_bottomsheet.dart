@@ -90,8 +90,8 @@ class _SearchEventBottomSheetState extends State<SearchEventBottomSheet> {
     return Container(
       // color: colors.onPrimary,
       height: MediaQuery.of(context).size.height /
-          (1.5 + multiDeviceSupport.tablet * 0.2),
-
+              (1.5 + multiDeviceSupport.tablet * 0.2) +
+          250 * multiDeviceSupport.isLandscape,
       decoration: BoxDecoration(
         color: colors.background,
         borderRadius: BorderRadius.only(

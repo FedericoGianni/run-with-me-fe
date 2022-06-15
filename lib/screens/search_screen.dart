@@ -67,6 +67,7 @@ class SearchScreenState extends State<SearchScreen> {
 
   var _isInit = true;
   var _isLoading = false;
+  bool _areSorted = false;
 
   @override
   void initState() {
@@ -126,9 +127,9 @@ class SearchScreenState extends State<SearchScreen> {
               element.maxParticipants != element.currentParticipants)
           .toList();
     }
-    if (mounted) {
-      setState(() {});
-    }
+    // if (mounted) {
+    //   setState(() {});
+    // }
     // }
 
     await events.fetchAndSetSuggestedEvents(
@@ -379,20 +380,26 @@ class SearchScreenState extends State<SearchScreen> {
     }
 
     if (widget._sortMenu) {
-      _flexibleSpaceBarHeight = screenHeight / 7.5;
+      _flexibleSpaceBarHeight =
+          screenHeight / 7.5 + multiDeviceSupport.isLandscape * 20;
     } else {
-      _flexibleSpaceBarHeight = screenHeight / 20;
+      _flexibleSpaceBarHeight =
+          screenHeight / 20 + multiDeviceSupport.isLandscape * 20;
     }
+    var toolbarHeight = screenHeight / 6 -
+        multiDeviceSupport.tablet * 30 +
+        multiDeviceSupport.isLandscape * 50;
 
     return SliverAppBar(
       stretch: false,
-      toolbarHeight: screenHeight / 6 - multiDeviceSupport.tablet * 30,
-
+      toolbarHeight: toolbarHeight,
       title: GradientAppBar(
-        screenHeight / 6 - multiDeviceSupport.tablet * 30,
+        toolbarHeight,
         [
           SizedBox(
-            height: 10 + multiDeviceSupport.tablet * 20,
+            height: 10 +
+                multiDeviceSupport.tablet * 20 -
+                multiDeviceSupport.isLandscape * 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -439,7 +446,8 @@ class SearchScreenState extends State<SearchScreen> {
       titleSpacing: 0,
       expandedHeight: screenHeight / 6 -
           multiDeviceSupport.tablet * 30 +
-          _flexibleSpaceBarHeight,
+          _flexibleSpaceBarHeight +
+          multiDeviceSupport.isLandscape * 50,
       backgroundColor: colors.background,
 
       // back up the list of items.
@@ -461,7 +469,8 @@ class SearchScreenState extends State<SearchScreen> {
                   children: [
                     Container(
                       padding: EdgeInsets.only(left: 10),
-                      height: screenHeight / 20,
+                      height: screenHeight / 20 +
+                          multiDeviceSupport.isLandscape * 20,
                       width: 100 + multiDeviceSupport.tablet * 60,
                       child: TextButton(
                         style: TextButton.styleFrom(
@@ -569,6 +578,7 @@ class SearchScreenState extends State<SearchScreen> {
                         ],
                         onTap: (activeSortButton, eventLists) {
                           setState(() {
+                            _areSorted = true;
                             // print(widget._suggestedEvents[0].name);
                             widget._currentSortButton = activeSortButton;
                             widget._resultEvents = eventLists[0];
@@ -600,10 +610,17 @@ class SearchScreenState extends State<SearchScreen> {
     multiDeviceSupport.init();
 
     if (widget._sortMenu) {
-      _flexibleSpaceBarHeight = screenHeight / 7.5;
+      _flexibleSpaceBarHeight =
+          screenHeight / 7.5 + multiDeviceSupport.isLandscape * 20;
     } else {
-      _flexibleSpaceBarHeight = screenHeight / 20;
+      _flexibleSpaceBarHeight =
+          screenHeight / 20 + multiDeviceSupport.isLandscape * 20;
     }
+
+    if (!_areSorted) {
+      widget._resultEvents = events.resultEvents;
+    }
+    _areSorted = false;
 
     if (_isLoading) {
       return const CustomLoadingAnimation();
@@ -626,7 +643,8 @@ class SearchScreenState extends State<SearchScreen> {
                 width: double.infinity,
                 height: screenHeight / 6 +
                     _flexibleSpaceBarHeight -
-                    multiDeviceSupport.tablet * 12,
+                    multiDeviceSupport.tablet * 12 +
+                    multiDeviceSupport.isLandscape * 40,
                 child: CustomScrollView(
                   slivers: [
                     _buildAppbar(
@@ -642,7 +660,8 @@ class SearchScreenState extends State<SearchScreen> {
                 height: screenHeight -
                     screenHeight / 6 -
                     _flexibleSpaceBarHeight -
-                    58,
+                    58 -
+                    multiDeviceSupport.isLandscape * 40,
               ),
             ],
           ),

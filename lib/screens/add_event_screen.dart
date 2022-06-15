@@ -312,8 +312,12 @@ class AddEventScreenState extends State<AddEventScreen> {
               key: _form,
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: 20 + multiDeviceSupport.tablet * 50,
-                  right: 20 + multiDeviceSupport.tablet * 50,
+                  left: 20 +
+                      multiDeviceSupport.tablet * 50 +
+                      multiDeviceSupport.isLandscape * 100,
+                  right: 20 +
+                      multiDeviceSupport.tablet * 50 +
+                      multiDeviceSupport.isLandscape * 100,
                 ),
                 child: ScrollConfiguration(
                   behavior: CustomScrollBehavior(),
@@ -1024,11 +1028,16 @@ class AddEventAppbar extends StatelessWidget {
     // print(statusBarHeight);
     return GradientAppBar(
         // ((MediaQuery.of(context).size.height / 14) + statusBarHeight), [
-        (75 + statusBarHeight + multiDeviceSupport.tablet * 50),
+        (75 +
+            statusBarHeight +
+            multiDeviceSupport.tablet * 50 -
+            multiDeviceSupport.isLandscape * 30),
         [
           Padding(
             padding: EdgeInsets.only(
-                top: statusBarHeight + multiDeviceSupport.tablet * 25),
+                top: statusBarHeight +
+                    multiDeviceSupport.tablet * 20 -
+                    multiDeviceSupport.isLandscape * 10),
             child: Center(
               child: Text(
                 'Add new Event',
