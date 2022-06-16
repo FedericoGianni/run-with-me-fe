@@ -83,7 +83,7 @@ class EventItem extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.only(
                     left: 10.0 + multiDeviceSupport.tablet * 10, top: 10),
-                // margin: EdgeInsets.only(right: 0),
+                margin: EdgeInsets.only(right: 10),
                 // width: screenWidth / ((2 + multiDeviceSupport.tablet) * view),
                 child: Text(
                   name,
@@ -128,7 +128,7 @@ class EventItem extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                       horizontal: 10 + multiDeviceSupport.tablet * 10,
                       vertical: 10),
-                  height: 40 + multiDeviceSupport.tablet * 20,
+                  height: 40 + multiDeviceSupport.tablet * 15,
                   // width: screenWidth / 3 - multiDeviceSupport.tablet * 80,
                   child: Text(
                     DateFormat.MEd()
@@ -155,14 +155,15 @@ class EventItem extends StatelessWidget {
           ),
           // DIstance and lenght row
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
+            key: const Key("distance"),
             children: [
               Flexible(
                 child: Container(
                   padding: EdgeInsets.symmetric(
                       horizontal: 10 + multiDeviceSupport.tablet * 10,
                       vertical: 0),
-                  height: 15 + multiDeviceSupport.isLandscape == 1 ? 20 : 0,
+                  height: 15 + multiDeviceSupport.tablet * 5,
                   child: Text(
                     _getDistanceAsString(locationHelper),
                     overflow: TextOverflow.ellipsis,
@@ -176,6 +177,7 @@ class EventItem extends StatelessWidget {
               ),
             ],
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
