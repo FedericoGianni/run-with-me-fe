@@ -6,6 +6,7 @@ import '../providers/event.dart';
 import '../providers/color_scheme.dart';
 import 'package:provider/provider.dart';
 import '../widgets/event_card_text_only.dart';
+import 'multi_device_support.dart';
 
 Map<String, Marker> markerGenerator(
     List<Event> resultEventList,
@@ -15,6 +16,8 @@ Map<String, Marker> markerGenerator(
   Map<String, Marker> _markers = {};
   BitmapDescriptor pinLocationIcon = BitmapDescriptor.defaultMarkerWithHue(84);
   final colors = Provider.of<CustomColorScheme>(ctx, listen: false);
+  var multiDeviceSupport = MultiDeviceSupport(ctx);
+  multiDeviceSupport.init();
 
   for (var i = 0; i < suggestedEventList.length; i++) {
     Event event = suggestedEventList[i];
@@ -29,8 +32,12 @@ Map<String, Marker> markerGenerator(
           Stack(
             children: [
               Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 60),
+                  height: 200 + multiDeviceSupport.tablet * 30,
+                  padding: multiDeviceSupport.isLandscape == 1
+                      ? EdgeInsets.only(
+                          left: 20, right: 20, top: 60, bottom: 10)
+                      : EdgeInsets.only(
+                          left: 20, right: 20, top: 65, bottom: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: colors.onPrimary,
@@ -81,8 +88,12 @@ Map<String, Marker> markerGenerator(
           Stack(
             children: [
               Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 60),
+                  height: 200 + multiDeviceSupport.tablet * 30,
+                  padding: multiDeviceSupport.isLandscape == 1
+                      ? EdgeInsets.only(
+                          left: 20, right: 20, top: 60, bottom: 10)
+                      : EdgeInsets.only(
+                          left: 20, right: 20, top: 65, bottom: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: colors.onPrimary,
