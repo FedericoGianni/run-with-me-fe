@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:runwithme/classes/multi_device_support.dart';
 import 'package:runwithme/models/map_style.dart';
 
 /// Controller to add, update and control the custom info window.
@@ -98,7 +99,7 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
         Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1.0;
     double left =
         (screenCoordinate.x.toDouble() / devicePixelRatio) - (widget.width / 2);
-    double top = (screenCoordinate.y.toDouble() / devicePixelRatio) -
+    double top = (screenCoordinate.y.toDouble() / devicePixelRatio + 30) -
         (widget.offset + widget.height);
     setState(() {
       _showNow = true;
@@ -113,6 +114,7 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     assert(latLng != null);
     _child = child;
     _latLng = latLng;
+    // _latLng.latitude = _latLng.latitude
     _updateInfoWindow();
   }
 
@@ -131,9 +133,12 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
 
   @override
   Widget build(BuildContext context) {
+    var multiDeviceSupport = MultiDeviceSupport(context);
+    multiDeviceSupport.init();
+
     return Positioned(
       left: _leftMargin,
-      top: _topMargin,
+      top: _topMargin + multiDeviceSupport.isLandscape * 70,
       child: Visibility(
         visible: (_showNow == false ||
                 (_leftMargin == 0 && _topMargin == 0) ||
