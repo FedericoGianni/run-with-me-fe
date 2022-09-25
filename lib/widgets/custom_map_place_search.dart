@@ -20,7 +20,7 @@ class _CustomMapPlaceSearchState extends State<CustomMapPlaceSearch> {
   var _controller = TextEditingController();
   var uuid = Uuid();
   late Map<String, Object> _place;
-  String kPLACES_API_KEY = "***REMOVED***";
+  String kPLACES_API_KEY = "AIzaSyAIjayoyV5uUd4pCZgGyMttVoZfUo4lKUM";
 
   String _sessionToken = Uuid().v4();
   List<dynamic> _placeList = [];
