@@ -18,7 +18,7 @@ class WeatherWidget extends StatefulWidget {
 
 @visibleForTesting
 class WeatherWidgetState extends State<WeatherWidget> {
-  String key = '************REMOVED************';
+  String key = xxxxxxxx'';
   late WeatherFactory ws;
   List<Weather> _todayData = [];
   List<Weather> _forecastData = [];

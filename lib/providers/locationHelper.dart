@@ -13,7 +13,7 @@ class LocationHelper with ChangeNotifier {
   bool searchingForLocation = false;
   bool keepBackgroundThreadAlive = false;
   late Map<String, Object> _place;
-  String kPLACES_API_KEY = "************REMOVED************";
+  String kPLACES_API_KEY = "AIzaSyAIjayoyV5uUd4pCZgGyMttVoZfUo4lKUM";
 
   Position _lastKnownPosition = Position(
     longitude: 0.0,
