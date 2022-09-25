@@ -1,6 +1,6 @@
 # RunWithMe
 ## Polimi - Design and Implementation of Mobile Applications - 2021
-Federico Dei Cas - federico.deicas@mail.polimi.it
+Federico Dei Cas - federico.deicas@mail.polimi.it  
 Daniele V. De Vincenti - danielevalentino.devincenti@mail.polimi.it
 
 ## Intro
