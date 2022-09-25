@@ -29,6 +29,7 @@ settings, like the chosen theme mode). The data requested from the database thro
 API are then temporarily stored in non-persistent dart classes.
 
 ## Screenshots
+<p float="left" align="middle">
 
 <img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse.png" width="30%" height="30%"/>
 
@@ -80,3 +81,4 @@ API are then temporarily stored in non-persistent dart classes.
 
 <img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/search_bottomsheet_error.png" width="30%" height="30%"/>
 
+</p>
