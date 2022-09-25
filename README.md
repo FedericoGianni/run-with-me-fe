@@ -43,8 +43,6 @@ API are then temporarily stored in non-persistent dart classes.
 
 <img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/New_small.png" width="30%" height="30%"/>
 
-<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/New_tab.png" width="30%" height="30%"/>
-
 <img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/User.png" width="30%" height="30%"/>
 
 <img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/browse_small_phone.png" width="30%" height="30%"/>
