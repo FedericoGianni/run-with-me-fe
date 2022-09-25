@@ -16,3 +16,16 @@ requiring some questions during registration.
 Even if a user is not registered, he/she can still browse events. Registration is then
 required if he/she wants to subscribe. We made this choice because many application
 do not allow to interact without registering first, which can be a deterrent
+
+## Architecture
+![Architecture](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/intro_new.png)
+
+The Architecture of the app is a client/server. We decided to implement a self-hosted
+backend solution with a separated application server and database server, for versatility
+purposes. The client and the application server communicate through REpresentational
+State Transfer (REST) Application Programming Interface (API), which is then connected to the database tier, holding our persistent data safely. We decided not to have
+persistent local storage for the data (except for Authentication (auth) token and user
+settings, like the chosen theme mode). The data requested from the database throught
+API are then temporarily stored in non-persistent dart classes.
+
+## Screenshots
