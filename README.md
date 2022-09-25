@@ -29,65 +29,54 @@ settings, like the chosen theme mode). The data requested from the database thro
 API are then temporarily stored in non-persistent dart classes.
 
 ## Screenshots
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse.png)
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse_b.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse_map.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse_b.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse_tab.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse_map.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Events.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Browse_tab.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/New_small.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/Events.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/New_tab.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/New_small.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/User.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/New_tab.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/browse_small_phone.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/User.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/date_picker.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/browse_small_phone.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/event_detail.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/date_picker.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/event_detail_b.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/event_detail.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/home.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/event_detail_b.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/home_b.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/home.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/home_small.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/home_b.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/home_tab.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/login.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/landscape.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/logout_alert.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/loading.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/map_detail.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/login.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/map_overlay.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/logout_alert.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/no_gps_error.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/map_alert.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/no_internet_error.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/map_detail.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/places.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/map_overlay.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/register.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/no_gps_error.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/search_bottomsheet.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/no_internet_error.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/weather.png" width="30%" height="30%"/>
 
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/places.png)
-
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/register.png)
-
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/register_error.png)
-
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/search_bottomsheet.png)
-
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/weather.png)
-
-![](https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/search_bottomsheet_error.png)
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/search_bottomsheet_error.png" width="30%" height="30%"/>
 
