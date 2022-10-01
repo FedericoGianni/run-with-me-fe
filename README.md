@@ -1,4 +1,9 @@
 # RunWithMe
+
+<p align="center">
+<img src="https://github.com/FedericoGianni/run-with-me-fe/blob/master/deliverables/images/logo_gradient.png">
+</p>
+
 ## Polimi - Design and Implementation of Mobile Applications - 2021
 Federico Dei Cas - federico.deicas@mail.polimi.it  
 Daniele V. De Vincenti - danielevalentino.devincenti@mail.polimi.it
